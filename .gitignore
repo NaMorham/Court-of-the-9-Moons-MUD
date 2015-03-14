@@ -47,3 +47,8 @@ Debug/*
 TestLCD/Release/*
 TestLCD/Debug/*
 
+lib/etc/last
+lib/etc/plrmail
+lib/etc/time
+lib/plrfiles/*/*.plr
+lib/plrobjs/*/*.objs
