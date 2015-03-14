@@ -7,7 +7,7 @@ a strange portal located above you.
 D4
 ~
 ~
-0 0 -1
+0 0 100
 S
 T 1200
 #1
@@ -21,7 +21,7 @@ D5
 A strange portal in the floor is the only exit.
 ~
 ~
-0 0 -1
+0 0 100
 S
 #2
 Welcome to the Builder Academy~
@@ -691,7 +691,7 @@ D3
 D4
 ~
 trapdoor~
-1 68 -1
+1 68 130
 S
 #90
 Epictetus' Prison Cell~

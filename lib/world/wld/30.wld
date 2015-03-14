@@ -74,7 +74,7 @@ You can't see what is down there, it is too dark.  Looks like it would be
 impossible to climb back up.
 ~
 ~
-0 -1 -1
+0 -1 7026
 S
 #3003
 The Bar Of Divination~
@@ -578,7 +578,7 @@ You can't see what is down there, it is too dark.  Looks like it would be
 impossible to climb back up.
 ~
 ~
-0 -1 -1
+0 -1 7048
 S
 #3024
 The Eastern End Of Poor Alley~
@@ -713,7 +713,7 @@ You can't see what is down there, it is too dark.  Looks like it would be
 impossible to climb back up.
 ~
 ~
-0 -1 -1
+0 -1 7043
 S
 #3030
 The Dump~
@@ -731,7 +731,7 @@ D5
 You see the sewers.
 ~
 grate~
-2 3005 -1
+2 3005 7030
 S
 T 3004
 #3031
@@ -1033,7 +1033,7 @@ D2
 You see the river flowing west.
 ~
 ~
-0 -1 -1
+0 -1 3203
 S
 #3050
 The Deserted Warehouse~
@@ -1063,7 +1063,7 @@ D2
 You see the Concourse.
 ~
 ~
-0 -1 -1
+0 -1 3100
 E
 wall~
    It is built from large grey rocks that have been fastened to each other with
@@ -1095,7 +1095,7 @@ D3
 The forest edge is to the west.
 ~
 ~
-0 -1 -1
+0 -1 6092
 E
 wall~
    It is built from large grey rocks that have been fastened to each other with
@@ -1129,7 +1129,7 @@ D1
 You see the plains.
 ~
 ~
-0 -1 -1
+0 -1 3503
 D3
 You see the city gate.
 ~
@@ -1269,7 +1269,7 @@ D1
 There is a strange structure to the east on the edge of the trail.
 ~
 ~
-0 -1 -1
+0 -1 18600
 D2
 You see more of the Field.
 ~
@@ -1420,6 +1420,6 @@ D3
 There is a large rusty gate just to the west.
 ~
 ~
-0 -1 -1
+0 -1 3600
 S
 $~
