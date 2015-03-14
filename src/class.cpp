@@ -74,7 +74,7 @@ int parse_class(char arg)
  * the limit of your bitvector_t, typically 0-31. */
 bitvector_t find_class_bitvector(const char *arg)
 {
-  size_t rpos, ret = 0;
+	bitvector_t rpos, ret = 0;
 
   for (rpos = 0; rpos < strlen(arg); rpos++)
     ret |= (1 << parse_class(arg[rpos]));

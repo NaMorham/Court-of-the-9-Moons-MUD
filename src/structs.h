@@ -114,6 +114,9 @@
 #define EX_CLOSED     (1 << 1)   ///< The door is closed	
 #define EX_LOCKED     (1 << 2)   ///< The door is locked	
 #define EX_PICKPROOF  (1 << 3)   ///< Lock can't be picked	
+#define EX_BREAKABLE  (1 << 4)   /**< The door can be smashed */
+#define EX_BROKEN     (1 << 5)   /**< The exit is broken    */
+#define EX_HIDDEN     (1 << 6)   /**< The exit is hidden    */
 
 // Sector types: used in room_data.sector_type
 #define SECT_INSIDE          0		///< Indoors, connected to SECT macro.

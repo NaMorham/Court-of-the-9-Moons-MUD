@@ -344,28 +344,47 @@ ACMD(do_vnum)
 
   half_chop(argument, buf, buf2);
 
-  if (!*buf || !*buf2) {
+	if (!*buf || !*buf2) 
+	{
     send_to_char(ch, "Usage: vnum { obj | mob | room | trig } <name>\r\n");
     return;
   }
   if (is_abbrev(buf, "mob") && (good_arg = 1))
+	{
     if (!vnum_mobile(buf2, ch))
+		{
       send_to_char(ch, "No mobiles by that name.\r\n");
+		}
+	}
 
   if (is_abbrev(buf, "obj") && (good_arg =1 ))
+	{
     if (!vnum_object(buf2, ch))
+		{
       send_to_char(ch, "No objects by that name.\r\n");
+		}
+	}
 
   if (is_abbrev(buf, "room") && (good_arg = 1))
+	{
     if (!vnum_room(buf2, ch))
+		{
       send_to_char(ch, "No rooms by that name.\r\n");
+		}
+	}
 
   if (is_abbrev(buf, "trig") && (good_arg = 1))
+	{
     if (!vnum_trig(buf2, ch))
+		{
       send_to_char(ch, "No triggers by that name.\r\n");
+		}
+	}
 
   if (!good_arg)
+	{
      send_to_char(ch, "Usage: vnum { obj | mob | room | trig } <name>\r\n");
+	}
  }
 
 #define ZOCMD zone_table[zrnum].cmd[subcmd]
@@ -510,10 +529,13 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
 
   send_to_char(ch, "Description:\r\n%s", rm->description ? rm->description : "  None.\r\n");
 
-  if (rm->ex_description) {
+	if (rm->ex_description) 
+	{
     send_to_char(ch, "Extra descs:%s", CCCYN(ch, C_NRM));
     for (desc = rm->ex_description; desc; desc = desc->next)
+		{
       send_to_char(ch, " [%s]", desc->keyword);
+		}
     send_to_char(ch, "%s\r\n", CCNRM(ch, C_NRM));
   }
 
@@ -521,11 +543,14 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
   column = 14;	// ^^^ strlen ^^^
   for (found = FALSE, k = rm->people; k; k = k->next_in_room) {
     if (!CAN_SEE(ch, k))
+		{
       continue;
+		}
 
     column += send_to_char(ch, "%s %s(%s)", found++ ? "," : "", GET_NAME(k),
 		!IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB"));
-    if (column >= 62) {
+		if (column >= 62) 
+		{
       send_to_char(ch, "%s\r\n", k->next_in_room ? "," : "");
       found = FALSE;
       column = 0;
@@ -533,16 +558,21 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
   }
   send_to_char(ch, "%s", CCNRM(ch, C_NRM));
 
-  if (rm->contents) {
+	if (rm->contents) 
+	{
     send_to_char(ch, "Contents:%s", CCGRN(ch, C_NRM));
     column = 9;	// ^^^ strlen ^^^
 
-    for (found = 0, j = rm->contents; j; j = j->next_content) {
+		for (found = 0, j = rm->contents; j; j = j->next_content) 
+		{
       if (!CAN_SEE_OBJ(ch, j))
+			{
 	continue;
+			}
 
       column += send_to_char(ch, "%s %s", found++ ? "," : "", j->short_description);
-      if (column >= 62) {
+			if (column >= 62) 
+			{
 	send_to_char(ch, "%s\r\n", j->next_content ? "," : "");
 	found = FALSE;
         column = 0;
@@ -551,7 +581,8 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
     send_to_char(ch, "%s", CCNRM(ch, C_NRM));
   }
 
-  for (i = 0; i < NUM_OF_DIRS; i++) {
+	for (i = 0; i < NUM_OF_DIRS; i++) 
+	{
     char buf1[128];
 
     if (!rm->dir_option[i])

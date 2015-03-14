@@ -88,6 +88,9 @@ const char *exit_bits[] = {
   "CLOSED",
   "LOCKED",
   "PICKPROOF",
+  "BREAKABLE",
+  "BROKEN",
+  "HIDDEN",
   "\n"
 };
 

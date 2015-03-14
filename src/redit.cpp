@@ -330,18 +330,38 @@ static void redit_disp_exit_menu(struct descriptor_data *d)
 {
   char door_buf[24];
   /* if exit doesn't exist, alloc/create it */
-  if (OLC_EXIT(d) == NULL) {
+	if (OLC_EXIT(d) == NULL) 
+	{
     CREATE(OLC_EXIT(d), struct room_direction_data, 1);
     OLC_EXIT(d)->to_room = NOWHERE;
   }
   /* Weird door handling! */
-  if (IS_SET(OLC_EXIT(d)->exit_info, EX_ISDOOR)) {
+	if (IS_SET(OLC_EXIT(d)->exit_info, EX_ISDOOR)) 
+	{
     if (IS_SET(OLC_EXIT(d)->exit_info, EX_PICKPROOF))
+		{
       strncpy(door_buf, "Pickproof", sizeof(door_buf)-1);
+		}
     else
+		{
+			if (IS_SET(OLC_EXIT(d)->exit_info, EX_BREAKABLE))
+			{
+				strncpy(door_buf, "Is a breakable door", sizeof(door_buf)-1);
+			}
+			else if (IS_SET(OLC_EXIT(d)->exit_info, EX_BROKEN))
+			{
+				strncpy(door_buf, "Is a broken door", sizeof(door_buf)-1);
+			}
+			else
+			{
       strncpy(door_buf, "Is a door", sizeof(door_buf)-1);
-  } else
+			}
+		}
+	} 
+	else
+	{
     strncpy(door_buf, "No door", sizeof(door_buf)-1);
+	}
 
   get_char_colors(d->character);
   clear_screen(d);
@@ -371,7 +391,11 @@ static void redit_disp_exit_flag_menu(struct descriptor_data *d)
   write_to_output(d, "%s0%s) No door\r\n"
 	  "%s1%s) Closeable door\r\n"
 	  "%s2%s) Pickproof\r\n"
-	  "Enter choice : ", grn, nrm, grn, nrm, grn, nrm);
+	  "%s3%s) Breakable\r\n"
+	  "%s4%s) Hidden\r\n"
+	  "Enter choice : ", 
+      grn, nrm, grn, nrm, grn, nrm, 
+      grn, nrm, grn, nrm);
 }
 
 /* For room flags. */
@@ -467,7 +491,7 @@ static void redit_disp_menu(struct descriptor_data *d)
 /* The main loop*/
 void redit_parse(struct descriptor_data *d, char *arg)
 {
-  int number;
+  int number, value;
   char *oldtext = NULL;
 
   switch (OLC_MODE(d)) {
@@ -715,14 +739,38 @@ void redit_parse(struct descriptor_data *d, char *arg)
 
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if (number < 0 || number > 2) {
+    if (number < 0 || number > 4) {
       write_to_output(d, "That's not a valid choice!\r\n");
       redit_disp_exit_flag_menu(d);
     } else {
       /* Doors are a bit idiotic, don't you think? :) -- I agree. -gg */
-      OLC_EXIT(d)->exit_info = (number == 0 ? 0 :
+      /* 
+	  OLC_EXIT(d)->exit_info = (number == 0 ? 0 :
 				(number == 1 ? EX_ISDOOR :
 				(number == 2 ? EX_ISDOOR | EX_PICKPROOF : 0)));
+	  */
+      value = OLC_EXIT(d)->exit_info;
+      switch (number)
+      {
+      case 0:
+          value = 0;
+          break;
+      case 1:
+          value = EX_ISDOOR;
+          break;
+      case 2:
+          value |= (EX_ISDOOR | EX_PICKPROOF);
+          break;
+      case 3:
+          value |= (EX_ISDOOR | EX_BREAKABLE);
+          break;
+      case 4:
+          VALUE |= EX_HIDDEN;
+          break;
+      default:
+          value = OLC_EXIT(d)->exit_info;
+      }
+
       /* Jump back to the menu system. */
       redit_disp_exit_menu(d);
     }

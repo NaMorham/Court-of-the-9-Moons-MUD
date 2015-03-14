@@ -8,6 +8,14 @@
 
 #define CIRCLE_WINDOWS
 
+/*
+Prevent visual studio 2005 or later from complaining about the string funtions
+
+ */
+#if _MSC_VER >= 1400
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 /* Define to empty if the keyword does not work.  */
 //#undef const
 
