@@ -2801,186 +2801,220 @@ char *fread_string(FILE *fl, const char *error)
   return (strlen(buf) ? strdup(buf) : NULL);
 }
 
-/* Read a numerical value from a given file */
+/** 
+ * Read a numerical value from a given file 
+ */
 int fread_number(FILE *fp)
 {
-  int number;
-  bool sign;
-  char c;
+    int number;
+    bool sign;
+    char c;
 
-  do
-  {
-    if( feof( fp ) )
+    do
     {
-      log( "%s", "fread_number: EOF encountered on read." );
-      return 0;
+        if( feof( fp ) )
+        {
+            log( "%s", "fread_number: EOF encountered on read." );
+            return 0;
+        }
+        c = getc( fp );
     }
-    c = getc( fp );
-  }
-  while( isspace( c ) );
+    while( isspace( c ) );
 
-  number = 0;
+    number = 0;
 
-  sign = FALSE;
-  if( c == '+' )
-    c = getc( fp );
-  else if( c == '-' ) {
-    sign = TRUE;
-    c = getc( fp );
-  }
-
-  if(!isdigit(c)) {
-    log( "fread_number: bad format. (%c)", c );
-    return 0;
-  }
-
-  while(isdigit(c)) {
-    if(feof(fp)) {
-      log( "%s", "fread_number: EOF encountered on read." );
-      return number;
+    sign = FALSE;
+    if( c == '+' )
+    {
+        c = getc( fp );
     }
-    number = number * 10 + c - '0';
-    c = getc( fp );
-  }
+    else if( c == '-' ) 
+    {
+        sign = TRUE;
+        c = getc( fp );
+    }
 
-  if( sign )
-    number = 0 - number;
+    if(!isdigit(c)) 
+    {
+        log( "fread_number: bad format. (%c)", c );
+        return 0;
+    }
 
-  if( c == '|' )
-    number += fread_number( fp );
-  else if( c != ' ' )
-    ungetc( c, fp );
+    while(isdigit(c)) 
+    {
+        if(feof(fp)) 
+        {
+            log( "%s", "fread_number: EOF encountered on read." );
+            return number;
+        }
+        number = number * 10 + c - '0';
+        c = getc( fp );
+    }
 
-  return number;
+    if( sign )
+    {
+        number = 0 - number;
+    }
+
+    if( c == '|' )
+    {
+        number += fread_number( fp );
+    }
+    else if( c != ' ' )
+    {
+        ungetc( c, fp );
+    }
+
+    return number;
 }
 
-/* Read to end of line from a given file into a static buffer */
+/** 
+ * Read to end of line from a given file into a static buffer 
+ */
 char *fread_line(FILE *fp)
 {
-  static char line[MAX_STRING_LENGTH];
-  char *pline;
-  char c;
-  int ln;
+    static char line[MAX_STRING_LENGTH];
+    char *pline;
+    char c;
+    int ln;
 
-  pline = line;
-  line[0] = '\0';
-  ln = 0;
+    pline = line;
+    line[0] = '\0';
+    ln = 0;
 
-  /* Skip blanks.     */
-  /* Read first char. */
-  do {
-    if(feof(fp)) {
-      log("fread_line: EOF encountered on read.");
-      *pline = '\0';
-      return (line);
+    // Skip blanks.
+    // Read first char.
+    do 
+    {
+        if(feof(fp)) 
+        {
+            log("fread_line: EOF encountered on read.");
+            *pline = '\0';
+            return (line);
+        }
+        c = getc( fp );
     }
-    c = getc( fp );
-  }
-  while(isspace(c));
+    while(isspace(c));
 
-  /* Un-Read first char */
-  ungetc( c, fp );
+    // Un-Read first char
+    ungetc( c, fp );
 
-  do {
-    if(feof(fp)) {
-      log("fread_line: EOF encountered on read.");
-      *pline = '\0';
-      return ( line );
+    do 
+    {
+        if(feof(fp)) 
+        {
+            log("fread_line: EOF encountered on read.");
+            *pline = '\0';
+            return ( line );
+        }
+        c = getc( fp );
+        *pline++ = c;
+        ln++;
+        if( ln >= ( MAX_STRING_LENGTH - 1 ) ) 
+        {
+            log("fread_line: line too long");
+            break;
+        }
     }
-    c = getc( fp );
-    *pline++ = c;
-    ln++;
-    if( ln >= ( MAX_STRING_LENGTH - 1 ) ) {
-      log("fread_line: line too long");
-      break;
+    while( (c != '\n') && (c != '\r') );
+
+    do
+    {
+        c = getc(fp);
     }
-  }
-  while( (c != '\n') && (c != '\r') );
+    while( c == '\n' || c == '\r' );
 
-  do
-  {
-    c = getc(fp);
-  }
-  while( c == '\n' || c == '\r' );
+    ungetc( c, fp );
+    pline--;
+    *pline = '\0';
 
-  ungetc( c, fp );
-  pline--;
-  *pline = '\0';
+    // Since tildes generally aren't found at the end of lines, this 
+    // seems workable. Will enable reading old configs. */
+    if ( line[strlen(line) - 1] == '~' )
+    {
+        line[strlen(line) - 1] = '\0';
+    }
 
-  /* Since tildes generally aren't found at the end of lines, this seems workable. Will enable reading old configs. */
-  if( line[strlen(line) - 1] == '~' )
-    line[strlen(line) - 1] = '\0';
-
-  return (line);
+    return (line);
 }
 
 /* Read to end of line from a given file and convert to flag values, then return number of ints */
 int fread_flags(FILE *fp, int *fg, int fg_size)
 {
-  char line[MAX_STRING_LENGTH];
-  char *pline, *tmp_txt, val_txt[MAX_INPUT_LENGTH];
-  char c;
-  int ln,i;
+    char line[MAX_STRING_LENGTH];
+    char *pline, *tmp_txt, val_txt[MAX_INPUT_LENGTH];
+    char c;
+    int ln,i;
 
-  pline = line;
-  line[0] = '\0';
-  ln = 0;
+    pline = line;
+    line[0] = '\0';
+    ln = 0;
 
-  /* Skip blanks.     */
-  /* Read first char. */
-  do {
-    if(feof(fp)) {
-      log("fread_flags: EOF encountered on read.");
-      *pline = '\0';
-      return (0);
+    // Skip blanks.
+    // Read first char.
+    do 
+    {
+        if (feof(fp)) 
+        {
+            log("fread_flags: EOF encountered on read.");
+            *pline = '\0';
+            return (0);
+        }
+        c = getc( fp );
     }
-    c = getc( fp );
-  }
-  while(isspace(c));
+    while (isspace(c));
 
-  /* Un-Read first char */
-  ungetc( c, fp );
+    // Un-Read first char
+    ungetc( c, fp );
 
-  do {
-    if(feof(fp)) {
-      log("fread_flags: EOF encountered on read.");
-      *pline = '\0';
-      return (0);
+    do {
+        if (feof(fp)) 
+        {
+            log("fread_flags: EOF encountered on read.");
+            *pline = '\0';
+            return (0);
+        }
+        c = getc( fp );
+        *pline++ = c;
+        ln++;
+        if ( ln >= ( MAX_STRING_LENGTH - 1 ) ) 
+        {
+            log("fread_flags: line too long");
+            break;
+        }
     }
-    c = getc( fp );
-    *pline++ = c;
-    ln++;
-    if( ln >= ( MAX_STRING_LENGTH - 1 ) ) {
-      log("fread_flags: line too long");
-      break;
+    while ( (c != '\n') && (c != '\r') );
+
+    do
+    {
+        c = getc(fp);
     }
-  }
-  while( (c != '\n') && (c != '\r') );
+    while ( c == '\n' || c == '\r' );
 
-  do
-  {
-    c = getc(fp);
-  }
-  while( c == '\n' || c == '\r' );
+    ungetc( c, fp );
+    pline--;
+    *pline = '\0';
 
-  ungetc( c, fp );
-  pline--;
-  *pline = '\0';
+    // Since tildes generally aren't found at the end of lines, 
+    // this seems workable. Will enable reading old configs.
+    if( line[strlen(line) - 1] == '~' )
+    {
+        line[strlen(line) - 1] = '\0';
+    }
 
-  /* Since tildes generally aren't found at the end of lines, this seems workable. Will enable reading old configs. */
-  if( line[strlen(line) - 1] == '~' )
-    line[strlen(line) - 1] = '\0';
+    // We now have a line of text with all the flags on it - let's convert it
+    for (i=0,tmp_txt=line;tmp_txt && *tmp_txt && i<fg_size;i++) 
+    {
+        tmp_txt = one_argument(tmp_txt,val_txt);  // Grab a number
+        fg[i]   = atoi(val_txt);                  // Convert to int
+    }
 
-  /* We now have a line of text with all the flags on it - let's convert it */
-  for (i=0,tmp_txt=line;tmp_txt && *tmp_txt && i<fg_size;i++) {
-    tmp_txt = one_argument(tmp_txt,val_txt);  /* Grab a number  */
-    fg[i]   = atoi(val_txt);                  /* Convert to int */
-  }
-
-  return (i);
+    return (i);
 }
 
-/* Read one word from a given file (into static buffer). */
+/**
+ * Read one word from a given file (into static buffer). 
+ */
 char *fread_word(FILE *fp)
 {
    static char word[MAX_STRING_LENGTH];
@@ -3031,26 +3065,31 @@ char *fread_word(FILE *fp)
    return NULL;
 }
 
-/* Read to end of line in a given file (for comments) */
+/** 
+ * Read to end of line in a given file (for comments) 
+ */
 void fread_to_eol(FILE *fp)
 {
-  char c;
+    char c;
 
-  do {
-    if(feof(fp)) {
-      log( "%s", "fread_to_eol: EOF encountered on read." );
-      return;
+    do 
+    {
+        if(feof(fp)) 
+        {
+            log( "%s", "fread_to_eol: EOF encountered on read." );
+            return;
+        }
+        c = getc( fp );
     }
-    c = getc( fp );
-  }
-  while( c != '\n' && c != '\r' );
+    while( c != '\n' && c != '\r' );
 
-  do {
-    c = getc( fp );
-  }
-  while( c == '\n' || c == '\r' );
+    do 
+    {
+        c = getc( fp );
+    }
+    while( c == '\n' || c == '\r' );
 
-  ungetc( c, fp );
+    ungetc( c, fp );
 }
 
 /* Called to free all allocated follow_type structs */
@@ -3069,108 +3108,187 @@ static void free_followers(struct follow_type *k)
 /* release memory allocated for a char struct */
 void free_char(struct char_data *ch)
 {
-  int i;
-  struct alias_data *a;
+    int i;
+    struct alias_data *a;
 
-  if (ch->player_specials != NULL && ch->player_specials != &dummy_mob) {
-    while ((a = GET_ALIASES(ch)) != NULL) {
-      GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
-      free_alias(a);
+    if (ch->player_specials != NULL && ch->player_specials != &dummy_mob) 
+    {
+        while ((a = GET_ALIASES(ch)) != NULL) 
+        {
+            GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
+            free_alias(a);
+        }
+        if (ch->player_specials->poofin)
+        {
+            free(ch->player_specials->poofin);
+            ch->player_specials->poofin = NULL;
+        }
+        if (ch->player_specials->poofout)
+        {
+            free(ch->player_specials->poofout);
+            ch->player_specials->poofout = NULL;
+        }
+        if (ch->player_specials->saved.completed_quests)
+        {
+            free(ch->player_specials->saved.completed_quests);
+            ch->player_specials->saved.completed_quests = NULL;
+        }
+        if (GET_HOST(ch))
+        {
+            free(GET_HOST(ch));
+            GET_HOST(ch) = NULL;
+        }
+        if (IS_NPC(ch))
+        {
+            log("SYSERR: Mob %s (#%d) had player_specials allocated!", GET_NAME(ch), GET_MOB_VNUM(ch));
+        }
     }
-    if (ch->player_specials->poofin)
-      free(ch->player_specials->poofin);
-    if (ch->player_specials->poofout)
-      free(ch->player_specials->poofout);
-    if (ch->player_specials->saved.completed_quests)
-      free(ch->player_specials->saved.completed_quests);
-    if (GET_HOST(ch))
-      free(GET_HOST(ch));
-    if (IS_NPC(ch))
-      log("SYSERR: Mob %s (#%d) had player_specials allocated!", GET_NAME(ch), GET_MOB_VNUM(ch));
-  }
-  if (!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == NOBODY)) {
-    /* if this is a player, or a non-prototyped non-player, free all */
-    if (GET_NAME(ch))
-      free(GET_NAME(ch));
-    if (ch->player.title)
-      free(ch->player.title);
-    if (ch->player.short_descr)
-      free(ch->player.short_descr);
-    if (ch->player.long_descr)
-      free(ch->player.long_descr);
-    if (ch->player.description)
-      free(ch->player.description);
-    for (i = 0; i < NUM_HIST; i++)
-      if (GET_HISTORY(ch, i))
-        free(GET_HISTORY(ch, i));
+    if (!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == NOBODY)) 
+    {
+        // if this is a player, or a non-prototyped non-player, free all
+        if (GET_NAME(ch))
+        {
+            free(GET_NAME(ch));
+            GET_NAME(ch) = NULL;
+        }
+        if (ch->player.title)
+        {
+            free(ch->player.title);
+            ch->player.title = NULL;
+        }
+        if (ch->player.short_descr)
+        {
+            free(ch->player.short_descr);
+            ch->player.short_descr = NULL;
+        }
+        if (ch->player.long_descr)
+        {
+            free(ch->player.long_descr);
+            ch->player.long_descr = NULL;
+        }
+        if (ch->player.description)
+        {
+            free(ch->player.description);
+            ch->player.description = NULL;
+        }
+        for (i = 0; i < NUM_HIST; i++)
+        {
+            if (GET_HISTORY(ch, i))
+            {
+                free(GET_HISTORY(ch, i));
+                GET_HISTORY(ch, i) = NULL;
+            }
+        }
 
-    if (ch->player_specials)
-      free(ch->player_specials);
+        if (ch->player_specials)
+        {
+            free(ch->player_specials);
+            ch->player_specials = NULL;
+        }
 
-    /* free script proto list */
-    free_proto_script(ch, MOB_TRIGGER);
+        // free script proto list
+        free_proto_script(ch, MOB_TRIGGER);
+    } 
+    else if ((i = GET_MOB_RNUM(ch)) != NOBODY) 
+    {
+        // otherwise, free strings only if the string is not pointing at proto
+        if (ch->player.name && ch->player.name != mob_proto[i].player.name)
+        {
+            free(ch->player.name);
+            ch->player.name = NULL;
+        }
+        if (ch->player.title && ch->player.title != mob_proto[i].player.title)
+        {
+            free(ch->player.title);
+            ch->player.title = NULL;
+        }
+        if (ch->player.short_descr && ch->player.short_descr != mob_proto[i].player.short_descr)
+        {
+            free(ch->player.short_descr);
+            ch->player.short_descr = NULL;
+        }
+        if (ch->player.long_descr && ch->player.long_descr != mob_proto[i].player.long_descr)
+        {
+            free(ch->player.long_descr);
+            ch->player.long_descr = NULL;
+        }
+        if (ch->player.description && ch->player.description != mob_proto[i].player.description)
+        {
+            free(ch->player.description);
+            ch->player.description = NULL;
+        }
+        // free script proto list if it's not the prototype
+        if (ch->proto_script && ch->proto_script != mob_proto[i].proto_script)
+            free_proto_script(ch, MOB_TRIGGER);
+    }
+    while (ch->affected)
+    {
+        affect_remove(ch, ch->affected);
+    }
 
-  } else if ((i = GET_MOB_RNUM(ch)) != NOBODY) {
-    /* otherwise, free strings only if the string is not pointing at proto */
-    if (ch->player.name && ch->player.name != mob_proto[i].player.name)
-      free(ch->player.name);
-    if (ch->player.title && ch->player.title != mob_proto[i].player.title)
-      free(ch->player.title);
-    if (ch->player.short_descr && ch->player.short_descr != mob_proto[i].player.short_descr)
-      free(ch->player.short_descr);
-    if (ch->player.long_descr && ch->player.long_descr != mob_proto[i].player.long_descr)
-      free(ch->player.long_descr);
-    if (ch->player.description && ch->player.description != mob_proto[i].player.description)
-      free(ch->player.description);
-    /* free script proto list if it's not the prototype */
-    if (ch->proto_script && ch->proto_script != mob_proto[i].proto_script)
-      free_proto_script(ch, MOB_TRIGGER);
-  }
-  while (ch->affected)
-    affect_remove(ch, ch->affected);
+    // free any assigned scripts
+    if (SCRIPT(ch))
+    {
+        extract_script(ch, MOB_TRIGGER);
+    }
 
-  /* free any assigned scripts */
-  if (SCRIPT(ch))
-    extract_script(ch, MOB_TRIGGER);
+    // new version of free_followers take the followers pointer as arg
+    free_followers(ch->followers);
 
-  /* new version of free_followers take the followers pointer as arg */
-  free_followers(ch->followers);
+    if (ch->desc)
+    {
+        ch->desc->character = NULL;
+    }
 
-  if (ch->desc)
-    ch->desc->character = NULL;
+    // find_char helper, when free_char is called with a blank character struct,
+    // ID is set to 0, and has not yet been added to the lookup table.
+    if (GET_ID(ch) != 0)
+    {
+        remove_from_lookup_table(GET_ID(ch));
+    }
 
-  /* find_char helper, when free_char is called with a blank character struct,
-   * ID is set to 0, and has not yet been added to the lookup table. */
-  if (GET_ID(ch) != 0)
-  remove_from_lookup_table(GET_ID(ch));
+    // remove from the room
+    char_from_room(ch);
 
-  free(ch);
+    free(ch);
+    ch = NULL;
 }
 
-/* release memory allocated for an obj struct */
+/** 
+ * release memory allocated for an obj struct 
+ */
 void free_obj(struct obj_data *obj)
 {
-  if (GET_OBJ_RNUM(obj) == NOWHERE) {
-    free_object_strings(obj);
-    /* free script proto list */
-    free_proto_script(obj, OBJ_TRIGGER);
-  } else {
-    free_object_strings_proto(obj);
-    if (obj->proto_script != obj_proto[GET_OBJ_RNUM(obj)].proto_script)
-      free_proto_script(obj, OBJ_TRIGGER);
-  }
+    if (GET_OBJ_RNUM(obj) == NOWHERE) 
+    {
+        free_object_strings(obj);
+        // free script proto list
+        free_proto_script(obj, OBJ_TRIGGER);
+    } 
+    else 
+    {
+        free_object_strings_proto(obj);
+        if (obj->proto_script != obj_proto[GET_OBJ_RNUM(obj)].proto_script)
+        {
+            free_proto_script(obj, OBJ_TRIGGER);
+        }
+    }
 
-  /* free any assigned scripts */
-  if (SCRIPT(obj))
-    extract_script(obj, OBJ_TRIGGER);
+    // free any assigned scripts
+    if (SCRIPT(obj))
+    {
+        extract_script(obj, OBJ_TRIGGER);
+    }
 
-  /* find_obj helper */
-  remove_from_lookup_table(GET_ID(obj));
+    // find_obj helper
+    remove_from_lookup_table(GET_ID(obj));
 
-  free(obj);
+    free(obj);
+    obj = NULL;
 }
 
-/* Steps: 1: Read contents of a text file. 2: Make sure no one is using the
+/** 
+ * Steps: 1: Read contents of a text file. 2: Make sure no one is using the
  * pointer in paging. 3: Allocate space. 4: Point 'buf' to it.
  * We don't want to free() the string that someone may be viewing in the pager.
  * page_string() keeps the internal strdup()'d copy on ->showstr_head and it
@@ -3178,36 +3296,49 @@ void free_obj(struct obj_data *obj)
  * ->showstr_vector but we'll only match if the pointer is to the string we're
  * interested in and not a copy. If someone is reading a global copy we're
  * trying to replace, give everybody using it a different copy so as to avoid
- * special cases. */
+ * special cases. 
+ */
 static int file_to_string_alloc(const char *name, char **buf)
 {
-  int temppage;
-  char temp[MAX_STRING_LENGTH];
-  struct descriptor_data *in_use;
+    int temppage;
+    char temp[MAX_STRING_LENGTH];
+    struct descriptor_data *in_use;
 
-  for (in_use = descriptor_list; in_use; in_use = in_use->next)
-    if (in_use->showstr_vector && *in_use->showstr_vector == *buf)
-      return (-1);
+    for (in_use = descriptor_list; in_use; in_use = in_use->next)
+    {
+        if (in_use->showstr_vector && *in_use->showstr_vector == *buf)
+        {
+            return (-1);
+        }
+    }
 
-  /* Lets not free() what used to be there unless we succeeded. */
-  if (file_to_string(name, temp) < 0)
-    return (-1);
+    // Lets not free() what used to be there unless we succeeded.
+    if (file_to_string(name, temp) < 0)
+    {
+        return (-1);
+    }
 
-  for (in_use = descriptor_list; in_use; in_use = in_use->next) {
-    if (!in_use->showstr_count || *in_use->showstr_vector != *buf)
-      continue;
+    for (in_use = descriptor_list; in_use; in_use = in_use->next) 
+    {
+        if (!in_use->showstr_count || *in_use->showstr_vector != *buf)
+        {
+            continue;
+        }
 
-    /* Let's be nice and leave them at the page they were on. */
-    temppage = in_use->showstr_page;
-    paginate_string((in_use->showstr_head = strdup(*in_use->showstr_vector)), in_use);
-    in_use->showstr_page = temppage;
-  }
+        // Let's be nice and leave them at the page they were on.
+        temppage = in_use->showstr_page;
+        paginate_string((in_use->showstr_head = strdup(*in_use->showstr_vector)), in_use);
+        in_use->showstr_page = temppage;
+    }
 
-  if (*buf)
-    free(*buf);
+    if (*buf)
+    {
+        free(*buf);
+        *buf = NULL;
+    }
 
-  *buf = strdup(temp);
-  return (0);
+    *buf = strdup(temp);
+    return (0);
 }
 
 /* read contents of a text file, and place in buf */
