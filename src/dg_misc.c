@@ -306,8 +306,8 @@ int valid_dg_target(struct char_data *ch, int bitvector)
 		return TRUE;  /* as well as all mortals */
 	}
 	else if (!IS_SET(bitvector, DG_ALLOW_GODS) &&
-	{
 		GET_LEVEL(ch) >= LVL_GRGOD) /* LVL_GOD has the advance command. Can't allow them to be forced. */
+	{
 		return FALSE; /* but not always the highest gods */
 	}
 	else if (!PRF_FLAGGED(ch, PRF_NOHASSLE))
