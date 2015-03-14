@@ -1,14 +1,25 @@
 #include "trackdata.h"
+#include <ctime>
 
+#include "structs.h"
 
 const char *CTrackData::ms_unknownTrackStr = "an unknown creature";
+const size_t CTrackData::ms_TimeBufSize = 96;
 
-CTrackData::CTrackData(const char *name, const byte dir, const byte pct, 
+
+CTrackData::CTrackData(const char *name, const byte dir, const byte pct,
                        const bool enter, const time_t create)
-:   m_name(NULL), m_dir(dir), m_pctCovered(pct), 
+:   m_name(NULL), m_dir(dir), m_pctCovered(pct),
     m_entered(enter), m_created(create)
 {
     setName(name);
+}
+
+CTrackData::CTrackData(const CTrackData &orig)
+:   m_name(NULL), m_dir(NODIRECTION), m_pctCovered(0),
+    m_entered(false), m_created(0)
+{
+    *this = orig;
 }
 
 CTrackData::~CTrackData(void)
@@ -48,8 +59,18 @@ void CTrackData::clearName()
     }
 }
 
+const char *CTrackData::getCreateTimeStr() const
+{
+    // this is only safe for single threaded use
+    static char buf[ms_TimeBufSize];
+    time_t tt = getCreateTime();
+    strcpy(buf, ctime(&tt));
+    return buf;
+}
+
 const CTrackData &CTrackData::operator=(const CTrackData &rhs)
 {
+    setName(rhs.getName());
     setDirection(rhs.getDirection());
     setPctCovered(rhs.getPctCovered());
     setIsEntering(rhs.getIsEntering());
@@ -95,17 +116,36 @@ CTracksList::~CTracksList()
     m_data.clear();
 }
 
-const bool CTracksList::addTrack(const byte dir, const byte pct, 
+const bool CTracksList::addTrack(const char *name, const byte dir, const byte pct,
                 const bool enter, const time_t create)
 {
+    // we are at a max size, so obliterate (remove) the oldest
     if (m_data.size() > ms_maxSize)
     {
+        removeOldest();
     }
+    CTrackData track(name, dir, pct, enter, create);
+    m_data.push_back(track);
 
     return true;
 }
 
 const bool CTracksList::update()
 {
+    // check for expired tracks
+    // work backwards since the list is sorted by time
     return false;
+}
+
+void CTracksList::clearAll()
+{
+    m_data.clear();
+}
+
+void CTracksList::removeOldest()
+{
+    if (!m_data.empty())
+    {
+        m_data.pop_front();
+    }
 }
