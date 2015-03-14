@@ -19,7 +19,8 @@ Small Fish (8301) Schooling~
 0 h 100
 ~
 if %actor.vnum% == 8301
-  follow %actor%
+* use actor.name here since it will resolve to a UID if we do not
+  follow %actor.name%
   detach all %self.id%
 end
 ~

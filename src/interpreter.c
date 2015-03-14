@@ -352,58 +352,60 @@ cpp_extern const struct command_info cmd_info[] = {
   { "\n", "zzzzzzz", 0, 0, 0, 0 } };    /* this must be last */
 
 
-  /* Thanks to Melzaren for this change to allow DG Scripts to be attachable
-   *to player's while still disallowing them to manually use the DG-Commands. */
-  const struct mob_script_command_t mob_script_commands[] = {
+  /* 
+   * Thanks to Melzaren for this change to allow DG Scripts to be attachable
+   * to player's while still disallowing them to manually use the DG-Commands. 
+   */
+  const struct mob_script_command_t mob_script_commands[] = 
+  {
+	  /* DG trigger commands. minimum_level should be set to -1. */
+	  { "masound"  , do_masound  , 0 },
+	  { "mkill"    , do_mkill    , 0 },
+	  { "mjunk"    , do_mjunk    , 0 },
+	  { "mdamage"  , do_mdamage  , 0 },
+	  { "mdoor"    , do_mdoor    , 0 },
+	  { "mecho"    , do_mecho    , 0 },
+	  { "mrecho"   , do_mrecho   , 0 },
+	  { "mechoaround", do_mechoaround , 0 },
+	  { "msend"    , do_msend    , 0 },
+	  { "mload"    , do_mload    , 0 },
+	  { "mpurge"   , do_mpurge   , 0 },
+	  { "mgoto"    , do_mgoto    , 0 },
+	  { "mat"      , do_mat      , 0 },
+	  { "mteleport", do_mteleport, 0 },
+	  { "mforce"   , do_mforce   , 0 },
+	  { "mhunt"    , do_mhunt    , 0 },
+	  { "mremember", do_mremember, 0 },
+	  { "mforget"  , do_mforget  , 0 },
+	  { "mtransform", do_mtransform , 0 },
+	  { "mzoneecho", do_mzoneecho, 0 },
+	  { "mfollow"  , do_mfollow  , 0 },
+	  { "\n" , do_not_here , 0 } 
+  };
 
-  /* DG trigger commands. minimum_level should be set to -1. */
-  { "masound"  , do_masound  , 0 },
-  { "mkill"    , do_mkill    , 0 },
-  { "mjunk"    , do_mjunk    , 0 },
-  { "mdamage"  , do_mdamage  , 0 },
-  { "mdoor"    , do_mdoor    , 0 },
-  { "mecho"    , do_mecho    , 0 },
-  { "mrecho"   , do_mrecho   , 0 },
-  { "mechoaround", do_mechoaround , 0 },
-  { "msend"    , do_msend    , 0 },
-  { "mload"    , do_mload    , 0 },
-  { "mpurge"   , do_mpurge   , 0 },
-  { "mgoto"    , do_mgoto    , 0 },
-  { "mat"      , do_mat      , 0 },
-  { "mteleport", do_mteleport, 0 },
-  { "mforce"   , do_mforce   , 0 },
-  { "mhunt"    , do_mhunt    , 0 },
-  { "mremember", do_mremember, 0 },
-  { "mforget"  , do_mforget  , 0 },
-  { "mtransform", do_mtransform , 0 },
-  { "mzoneecho", do_mzoneecho, 0 },
-  { "mfollow"  , do_mfollow  , 0 },
-  { "\n" , do_not_here , 0 } };
+int script_command_interpreter(struct char_data *ch, char *arg) 
+{
+	/* DG trigger commands */
+	int i;
+	char first_arg[MAX_INPUT_LENGTH];
+	char *line;
 
-int script_command_interpreter(struct char_data *ch, char *arg) {
-  /* DG trigger commands */
+	skip_spaces(&arg);
+	if (!*arg)
+		return 0;
 
-  int i;
-  char first_arg[MAX_INPUT_LENGTH];
-  char *line;
+	line = any_one_arg(arg, first_arg);
 
-  skip_spaces(&arg);
-  if (!*arg)
-  return 0;
+	for (i = 0; *mob_script_commands[i].command_name != '\n'; i++)
+		if (!str_cmp(first_arg, mob_script_commands[i].command_name))
+			break; // NB - only allow full matches.
 
-  line = any_one_arg(arg, first_arg);
+	if (*mob_script_commands[i].command_name == '\n')
+		return 0; // no matching commands.
 
-  for (i = 0; *mob_script_commands[i].command_name != '\n'; i++)
-  if (!str_cmp(first_arg, mob_script_commands[i].command_name))
-  break; // NB - only allow full matches.
-
-  if (*mob_script_commands[i].command_name == '\n')
-  return 0; // no matching commands.
-
-  /* Poiner to the command? */
-  ((*mob_script_commands[i].command_pointer) (ch, line, 0,
-  mob_script_commands[i].subcmd));
-  return 1; // We took care of execution. Let caller know.
+	/* Poiner to the command? */
+	((*mob_script_commands[i].command_pointer) (ch, line, 0, mob_script_commands[i].subcmd));
+	return 1; // We took care of execution. Let caller know.
 }
 
 const char *fill[] =
@@ -460,135 +462,179 @@ void sort_commands(void)
  * then calls the appropriate function. */
 void command_interpreter(struct char_data *ch, char *argument)
 {
-  int cmd, length;
-  char *line;
-  char arg[MAX_INPUT_LENGTH];
+	int cmd, length;
+	char *line;
+	char arg[MAX_INPUT_LENGTH];
 
-  REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_HIDE);
+	REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_HIDE);
 
-  /* just drop to next line for hitting CR */
-  skip_spaces(&argument);
-  if (!*argument)
-    return;
+	/* just drop to next line for hitting CR */
+	skip_spaces(&argument);
+	if (!*argument)
+	{
+		return;
+	}
 
-  /* special case to handle one-character, non-alphanumeric commands; requested
-   * by many people so "'hi" or ";godnet test" is possible. Patch sent by Eric
-   * Green and Stefan Wasilewski. */
-  if (!isalpha(*argument)) {
-    arg[0] = argument[0];
-    arg[1] = '\0';
-    line = argument + 1;
-  } else
-    line = any_one_arg(argument, arg);
+	/* special case to handle one-character, non-alphanumeric commands; requested
+	* by many people so "'hi" or ";godnet test" is possible. Patch sent by Eric
+	* Green and Stefan Wasilewski. */
+	if (!isalpha(*argument)) 
+	{
+		arg[0] = argument[0];
+		arg[1] = '\0';
+		line = argument + 1;
+	} else
+		line = any_one_arg(argument, arg);
 
-  /* Since all command triggers check for valid_dg_target before acting, the levelcheck
-   * here has been removed. Otherwise, find the command. */
-  {
-    int cont;                                            /* continue the command checks */
-    cont = command_wtrigger(ch, arg, line);              /* any world triggers ? */
-    if (!cont) cont = command_mtrigger(ch, arg, line);   /* any mobile triggers ? */
-    if (!cont) cont = command_otrigger(ch, arg, line);   /* any object triggers ? */
-    if (cont) return;                                    /* yes, command trigger took over */
-  }
+	/* Since all command triggers check for valid_dg_target before acting, the levelcheck
+	* here has been removed. Otherwise, find the command. */
+	{
+		int cont;                                            /* continue the command checks */
+		cont = command_wtrigger(ch, arg, line);              /* any world triggers ? */
+		if (!cont) cont = command_mtrigger(ch, arg, line);   /* any mobile triggers ? */
+		if (!cont) cont = command_otrigger(ch, arg, line);   /* any object triggers ? */
+		if (cont) return;                                    /* yes, command trigger took over */
+	}
 
-  /* Allow IMPLs to switch into mobs to test the commands. */
-   if (IS_NPC(ch) && ch->desc && GET_LEVEL(ch->desc->original) >= LVL_IMPL) {
-     if (script_command_interpreter(ch, argument))
-       return;
-   }
+	/* Allow IMPLs to switch into mobs to test the commands. */
+	if (IS_NPC(ch) && ch->desc && GET_LEVEL(ch->desc->original) >= LVL_IMPL) 
+	{
+		if (script_command_interpreter(ch, argument))
+		{
+			return;
+		}
+	}
 
-  for (length = strlen(arg), cmd = 0; *complete_cmd_info[cmd].command != '\n'; cmd++)
-    if(complete_cmd_info[cmd].command_pointer != do_action &&
-       !strncmp(complete_cmd_info[cmd].command, arg, length))
-      if (GET_LEVEL(ch) >= complete_cmd_info[cmd].minimum_level)
-        break;
+	for (length = strlen(arg), cmd = 0; *complete_cmd_info[cmd].command != '\n'; cmd++)
+	{
+		if(complete_cmd_info[cmd].command_pointer != do_action && !strncmp(complete_cmd_info[cmd].command, arg, length))
+		{
+			if (GET_LEVEL(ch) >= complete_cmd_info[cmd].minimum_level)
+			{
+				break;
+			}
+		}
+	}
 
-  /* it's not a 'real' command, so it's a social */
+	// it's not a 'real' command, so it's a social
+	if(*complete_cmd_info[cmd].command == '\n')
+	{
+		for (length = strlen(arg), cmd = 0; *complete_cmd_info[cmd].command != '\n'; cmd++)
+		{
+			if (complete_cmd_info[cmd].command_pointer == do_action && 
+				!strncmp(complete_cmd_info[cmd].command, arg, length))
+			{
+				if (GET_LEVEL(ch) >= complete_cmd_info[cmd].minimum_level)
+				{
+					break;
+				}
+			}
+		}
+	}
 
-  if(*complete_cmd_info[cmd].command == '\n')
-    for (length = strlen(arg), cmd = 0; *complete_cmd_info[cmd].command != '\n'; cmd++)
-      if (complete_cmd_info[cmd].command_pointer == do_action &&
-          !strncmp(complete_cmd_info[cmd].command, arg, length))
-        if (GET_LEVEL(ch) >= complete_cmd_info[cmd].minimum_level)
-          break;
+	if (*complete_cmd_info[cmd].command == '\n') 
+	{
+		int found = 0;
+		send_to_char(ch, "Huh!?!\r\n");
 
-  if (*complete_cmd_info[cmd].command == '\n') {
-    int found = 0;
-    send_to_char(ch, "Huh!?!\r\n");
+		for (cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
+		{
+			if (*arg != *cmd_info[cmd].command || cmd_info[cmd].minimum_level > GET_LEVEL(ch))
+				continue;
 
-    for (cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
-    {
-      if (*arg != *cmd_info[cmd].command || cmd_info[cmd].minimum_level > GET_LEVEL(ch))
-        continue;
-
-      /* Only apply levenshtein counts if the command is not a trigger command. */
-      if ( (levenshtein_distance(arg, cmd_info[cmd].command) <= 2) &&
-           (cmd_info[cmd].minimum_level >= 0) )
-      {
-        if (!found)
-        {
-          send_to_char(ch, "\r\nDid you mean:\r\n");
-          found = 1;
-        }
-        send_to_char(ch, "  %s\r\n", cmd_info[cmd].command);
-      }
-    }
-  }
-  else if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL)
-    send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
-  else if (complete_cmd_info[cmd].command_pointer == NULL)
-    send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
-  else if (IS_NPC(ch) && complete_cmd_info[cmd].minimum_level >= LVL_IMMORT)
-    send_to_char(ch, "You can't use immortal commands while switched.\r\n");
-  else if (GET_POS(ch) < complete_cmd_info[cmd].minimum_position)
-    switch (GET_POS(ch)) {
-    case POS_DEAD:
-      send_to_char(ch, "Lie still; you are DEAD!!! :-(\r\n");
-      break;
-    case POS_INCAP:
-    case POS_MORTALLYW:
-      send_to_char(ch, "You are in a pretty bad shape, unable to do anything!\r\n");
-      break;
-    case POS_STUNNED:
-      send_to_char(ch, "All you can do right now is think about the stars!\r\n");
-      break;
-    case POS_SLEEPING:
-      send_to_char(ch, "In your dreams, or what?\r\n");
-      break;
-    case POS_RESTING:
-      send_to_char(ch, "Nah... You feel too relaxed to do that..\r\n");
-      break;
-    case POS_SITTING:
-      send_to_char(ch, "Maybe you should get on your feet first?\r\n");
-      break;
-    case POS_FIGHTING:
-      send_to_char(ch, "No way!  You're fighting for your life!\r\n");
-      break;
-  } else if (no_specials || !special(ch, cmd, line))
-    ((*complete_cmd_info[cmd].command_pointer) (ch, line, cmd, complete_cmd_info[cmd].subcmd));
+			/* Only apply levenshtein counts if the command is not a trigger command. */
+			if ( (levenshtein_distance(arg, cmd_info[cmd].command) <= 2) &&
+				(cmd_info[cmd].minimum_level >= 0) )
+			{
+				if (!found)
+				{
+					send_to_char(ch, "\r\nDid you mean:\r\n");
+					found = 1;
+				}
+				send_to_char(ch, "  %s\r\n", cmd_info[cmd].command);
+			}
+		}
+	}
+	else if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_FROZEN) && GET_LEVEL(ch) < LVL_IMPL)
+	{
+		send_to_char(ch, "You try, but the mind-numbing cold prevents you...\r\n");
+	}
+	else if (complete_cmd_info[cmd].command_pointer == NULL)
+	{
+		send_to_char(ch, "Sorry, that command hasn't been implemented yet.\r\n");
+	}
+	else if (IS_NPC(ch) && complete_cmd_info[cmd].minimum_level >= LVL_IMMORT)
+	{
+		send_to_char(ch, "You can't use immortal commands while switched.\r\n");
+	}
+	else if (GET_POS(ch) < complete_cmd_info[cmd].minimum_position)
+	{
+		switch (GET_POS(ch)) 
+		{
+		case POS_DEAD:
+			send_to_char(ch, "Lie still; you are DEAD!!! :-(\r\n");
+			break;
+		case POS_INCAP:
+		case POS_MORTALLYW:
+			send_to_char(ch, "You are in a pretty bad shape, unable to do anything!\r\n");
+			break;
+		case POS_STUNNED:
+			send_to_char(ch, "All you can do right now is think about the stars!\r\n");
+			break;
+		case POS_SLEEPING:
+			send_to_char(ch, "In your dreams, or what?\r\n");
+			break;
+		case POS_RESTING:
+			send_to_char(ch, "Nah... You feel too relaxed to do that..\r\n");
+			break;
+		case POS_SITTING:
+			send_to_char(ch, "Maybe you should get on your feet first?\r\n");
+			break;
+		case POS_FIGHTING:
+			send_to_char(ch, "No way!  You're fighting for your life!\r\n");
+			break;
+		}
+	}
+	else if (no_specials || !special(ch, cmd, line))
+	{
+		// run the command
+		((*complete_cmd_info[cmd].command_pointer) (ch, line, cmd, complete_cmd_info[cmd].subcmd));
+	}
 }
 
 /* Routines to handle aliasing. */
 static struct alias_data *find_alias(struct alias_data *alias_list, char *str)
 {
-  while (alias_list != NULL) {
-    if (*str == *alias_list->alias)	/* hey, every little bit counts :-) */
-      if (!strcmp(str, alias_list->alias))
-	return (alias_list);
+	while (alias_list != NULL) 
+	{
+		if (*str == *alias_list->alias)	// hey, every little bit counts :-)
+		{
+			if (!strcmp(str, alias_list->alias))
+			{
+				return (alias_list);
+			}
+		}
 
-    alias_list = alias_list->next;
-  }
+		alias_list = alias_list->next;
+	}
 
-  return (NULL);
+	return (NULL);
 }
 
 void free_alias(struct alias_data *a)
 {
-  if (a->alias)
-    free(a->alias);
-  if (a->replacement)
-    free(a->replacement);
-  free(a);
+	if (a->alias)
+	{
+		free(a->alias);
+		a->alias = NULL;
+	}
+	if (a->replacement)
+	{
+		free(a->replacement);
+		a->replacement = NULL;
+	}
+	free(a);
+	a = NULL;
 }
 
 /* The interface to the outside world: do_alias */

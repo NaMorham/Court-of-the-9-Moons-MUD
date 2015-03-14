@@ -2470,36 +2470,39 @@ int script_driver(void *go_adress, trig_data *trig, int type, int mode)
 	void obj_command_interpreter(obj_data *obj, char *argument);
 	void wld_command_interpreter(struct room_data *room, char *argument);
 
-	switch (type) {
-case MOB_TRIGGER:
-	go = *(char_data **)go_adress;
-	sc = SCRIPT((char_data *) go);
-	break;
-case OBJ_TRIGGER:
-	go = *(obj_data **)go_adress;
-	sc = SCRIPT((obj_data *) go);
-	break;
-case WLD_TRIGGER:
-	go = *(room_data **)go_adress;
-	sc = SCRIPT((room_data *) go);
-	break;
+	switch (type) 
+	{
+	case MOB_TRIGGER:
+		go = *(char_data **)go_adress;
+		sc = SCRIPT((char_data *) go);
+		break;
+	case OBJ_TRIGGER:
+		go = *(obj_data **)go_adress;
+		sc = SCRIPT((obj_data *) go);
+		break;
+	case WLD_TRIGGER:
+		go = *(room_data **)go_adress;
+		sc = SCRIPT((room_data *) go);
+		break;
 	}
 
-	if (depth > MAX_SCRIPT_DEPTH) {
+	if (depth > MAX_SCRIPT_DEPTH) 
+	{
 		script_log("Trigger %d recursed beyond maximum allowed depth.", GET_TRIG_VNUM(trig));
-		switch (type) {
-case MOB_TRIGGER:
-	script_log("It was attached to %s [%d]",
-		GET_NAME((char_data *) go), GET_MOB_VNUM((char_data *) go));
-	break;
-case OBJ_TRIGGER:
-	script_log("It was attached to %s [%d]",
-		((obj_data *) go)->short_description, GET_OBJ_VNUM((obj_data *) go));
-	break;
-case WLD_TRIGGER:
-	script_log("It was attached to %s [%d]",
-		((room_data *) go)->name, ((room_data *) go)->number);
-	break;
+		switch (type) 
+		{
+		case MOB_TRIGGER:
+			script_log("It was attached to %s [%d]",
+				GET_NAME((char_data *) go), GET_MOB_VNUM((char_data *) go));
+			break;
+		case OBJ_TRIGGER:
+			script_log("It was attached to %s [%d]",
+				((obj_data *) go)->short_description, GET_OBJ_VNUM((obj_data *) go));
+			break;
+		case WLD_TRIGGER:
+			script_log("It was attached to %s [%d]",
+				((room_data *) go)->name, ((room_data *) go)->number);
+			break;
 		}
 
 		extract_script(go, type);
@@ -2514,7 +2517,8 @@ case WLD_TRIGGER:
 
 	depth++;
 
-	if (mode == TRIG_NEW) {
+	if (mode == TRIG_NEW) 
+	{
 		GET_TRIG_DEPTH(trig) = 1;
 		GET_TRIG_LOOPS(trig) = 0;
 		sc->context = 0;
@@ -2523,173 +2527,236 @@ case WLD_TRIGGER:
 	dg_owner_purged = 0;
 
 	for (cl = (mode == TRIG_NEW) ? trig->cmdlist : trig->curr_state;
-		cl && GET_TRIG_DEPTH(trig); cl = cl->next) {
-			for (p = cl->cmd; *p && isspace(*p); p++);
+		cl && GET_TRIG_DEPTH(trig); cl = cl->next) 
+	{
+		for (p = cl->cmd; *p && isspace(*p); p++)
+		{
+			; // loop through until we find a non space
+		}
 
-			if (*p == '*') /* comment */
-				continue;
-
-			else if (!strn_cmp(p, "if ", 3)) {
-				if (process_if(p + 3, go, sc, trig, type))
-					GET_TRIG_DEPTH(trig)++;
-				else
-					cl = find_else_end(trig, cl, go, sc, type);
+		if (*p == '*') /* comment */
+		{
+			continue;
+		}
+		else if (!strn_cmp(p, "if ", 3)) 
+		{
+			if (process_if(p + 3, go, sc, trig, type))
+			{
+				GET_TRIG_DEPTH(trig)++;
 			}
-
-			else if (!strn_cmp("elseif ", p, 7) ||
-				!strn_cmp("else", p, 4)) {
-					/* If not in an if-block, ignore the extra 'else[if]' and warn about it. */
-					if (GET_TRIG_DEPTH(trig) == 1) {
-						script_log("Trigger VNum %d has 'else' without 'if'.",
-							GET_TRIG_VNUM(trig));
-						continue;
-					}
-					cl = find_end(trig, cl);
-					GET_TRIG_DEPTH(trig)--;
-			} else if (!strn_cmp("while ", p, 6)) {
-				temp = find_done(cl);
-				if (!temp) {
-					script_log("Trigger VNum %d has 'while' without 'done'.",
-						GET_TRIG_VNUM(trig));
-					return ret_val;
-				}
-				if (process_if(p + 6, go, sc, trig, type)) {
-					temp->original = cl;
-				} else {
-					cl = temp;
-					loops = 0;
-				}
-			} else if (!strn_cmp("switch ", p, 7)) {
-				cl = find_case(trig, cl, go, sc, type, p + 7);
-			} else if (!strn_cmp("end", p, 3)) {
-				/* If not in an if-block, ignore the extra 'end' and warn about it. */
+			else
+			{
+				cl = find_else_end(trig, cl, go, sc, type);
+			}
+		}
+		else if (!strn_cmp("elseif ", p, 7) || !strn_cmp("else", p, 4)) 
+		{
+				/* If not in an if-block, ignore the extra 'else[if]' and warn about it. */
 				if (GET_TRIG_DEPTH(trig) == 1) {
-					script_log("Trigger VNum %d has 'end' without 'if'.",
+					script_log("Trigger VNum %d has 'else' without 'if'.",
 						GET_TRIG_VNUM(trig));
 					continue;
 				}
+				cl = find_end(trig, cl);
 				GET_TRIG_DEPTH(trig)--;
-			} else if (!strn_cmp("done", p, 4)) {
-				/* if in a while loop, cl->original is non-NULL */
-				if (cl->original) {
-					char *orig_cmd = cl->original->cmd;
-					while (*orig_cmd && isspace(*orig_cmd)) orig_cmd++;
-					if (cl->original && process_if(orig_cmd + 6, go, sc, trig,
-						type)) {
-							cl = cl->original;
-							loops++;
-							GET_TRIG_LOOPS(trig)++;
-							if (loops == 30) {
-								process_wait(go, trig, type, "wait 1", cl);
-								depth--;
-								return ret_val;
-							}
-							if (GET_TRIG_LOOPS(trig) >= 100) {
-								script_log("Trigger VNum %d has looped 100 times!!!",
-									GET_TRIG_VNUM(trig));
-								break;
-							}
-					} else {
-						/* if we're falling through a switch statement, this ends it. */
-					}
-				}
-			} else if (!strn_cmp("break", p, 5)) {
-				cl = find_done(cl);
-			} else if (!strn_cmp("case", p, 4)) {
-				/* Do nothing, this allows multiple cases to a single instance */
+		} 
+		else if (!strn_cmp("while ", p, 6)) 
+		{
+			temp = find_done(cl);
+			if (!temp) {
+				script_log("Trigger VNum %d has 'while' without 'done'.",
+					GET_TRIG_VNUM(trig));
+				return ret_val;
 			}
-
-			else {
-				var_subst(go, sc, trig, type, p, cmd);
-
-				if (!strn_cmp(cmd, "eval ", 5))
-					process_eval(go, sc, trig, type, cmd);
-
-				else if (!strn_cmp(cmd, "nop ", 4)); /* nop: do nothing */
-
-				else if (!strn_cmp(cmd, "extract ", 8))
-					extract_value(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "dg_letter ", 10))
-					dg_letter_value(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "makeuid ", 8))
-					makeuid_var(go, sc, trig, type, cmd);
-
-				else if (!strn_cmp(cmd, "halt", 4))
-					break;
-
-				else if (!strn_cmp(cmd, "dg_cast ", 8))
-					do_dg_cast(go, sc, trig, type, cmd);
-
-				else if (!strn_cmp(cmd, "dg_affect ", 10))
-					do_dg_affect(go, sc, trig, type, cmd);
-
-				else if (!strn_cmp(cmd, "global ", 7))
-					process_global(sc, trig, cmd, sc->context);
-
-				else if (!strn_cmp(cmd, "context ", 8))
-					process_context(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "remote ", 7))
-					process_remote(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "rdelete ", 8))
-					process_rdelete(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "return ", 7))
-					ret_val = process_return(trig, cmd);
-
-				else if (!strn_cmp(cmd, "set ", 4))
-					process_set(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "unset ", 6))
-					process_unset(sc, trig, cmd);
-
-				else if (!strn_cmp(cmd, "wait ", 5)) {
-					process_wait(go, trig, type, cmd, cl);
-					depth--;
-					return ret_val;
+			if (process_if(p + 6, go, sc, trig, type)) {
+				temp->original = cl;
+			} else {
+				cl = temp;
+				loops = 0;
+			}
+		} 
+		else if (!strn_cmp("switch ", p, 7)) 
+		{
+			cl = find_case(trig, cl, go, sc, type, p + 7);
+		} 
+		else if (!strn_cmp("end", p, 3)) 
+		{
+			/* If not in an if-block, ignore the extra 'end' and warn about it. */
+			if (GET_TRIG_DEPTH(trig) == 1) {
+				script_log("Trigger VNum %d has 'end' without 'if'.",
+					GET_TRIG_VNUM(trig));
+				continue;
+			}
+			GET_TRIG_DEPTH(trig)--;
+		} 
+		else if (!strn_cmp("done", p, 4)) 
+		{
+			/* if in a while loop, cl->original is non-NULL */
+			if (cl->original) 
+			{
+				char *orig_cmd = cl->original->cmd;
+				while (*orig_cmd && isspace(*orig_cmd)) 
+				{
+					orig_cmd++;
 				}
-
-				else if (!strn_cmp(cmd, "attach ", 7))
-					process_attach(go, sc, trig, type, cmd);
-
-				else if (!strn_cmp(cmd, "detach ", 7))
-					process_detach(go, sc, trig, type, cmd);
-
-				else {
-					switch (type) {
-case MOB_TRIGGER:
-	if (!script_command_interpreter((char_data *) go, cmd))
-		command_interpreter((char_data *) go, cmd);
-	break;
-case OBJ_TRIGGER:
-	obj_command_interpreter((obj_data *) go, cmd);
-	break;
-case WLD_TRIGGER:
-	wld_command_interpreter((struct room_data *) go, cmd);
-	break;
-					}
-					if (dg_owner_purged) {
+				if (cl->original && process_if(orig_cmd + 6, go, sc, trig, type)) 
+				{
+					cl = cl->original;
+					loops++;
+					GET_TRIG_LOOPS(trig)++;
+					if (loops == 30) 
+					{
+						process_wait(go, trig, type, "wait 1", cl);
 						depth--;
-						if (type == OBJ_TRIGGER)
-							*(obj_data **)go_adress = NULL;
 						return ret_val;
 					}
+					if (GET_TRIG_LOOPS(trig) >= 100) 
+					{
+						script_log("Trigger VNum %d has looped 100 times!!!",
+							GET_TRIG_VNUM(trig));
+						break;
+					}
+				} 
+				else 
+				{
+					/* if we're falling through a switch statement, this ends it. */
 				}
 			}
+		} else if (!strn_cmp("break", p, 5)) 
+		{
+			cl = find_done(cl);
+		} 
+		else if (!strn_cmp("case", p, 4)) 
+		{
+			/* Do nothing, this allows multiple cases to a single instance */
+		}
+		else 
+		{
+			var_subst(go, sc, trig, type, p, cmd);
+
+			if (!strn_cmp(cmd, "eval ", 5))
+			{
+				process_eval(go, sc, trig, type, cmd);
+			}
+			else if (!strn_cmp(cmd, "nop ", 4))
+			{	/* nop: do nothing */
+			}
+			else if (!strn_cmp(cmd, "extract ", 8))
+			{
+				extract_value(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "dg_letter ", 10))
+			{
+				dg_letter_value(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "makeuid ", 8))
+			{
+				makeuid_var(go, sc, trig, type, cmd);
+			}
+			else if (!strn_cmp(cmd, "halt", 4))
+			{
+				break;
+			}
+			else if (!strn_cmp(cmd, "dg_cast ", 8))
+			{
+				do_dg_cast(go, sc, trig, type, cmd);
+			}
+			else if (!strn_cmp(cmd, "dg_affect ", 10))
+			{
+				do_dg_affect(go, sc, trig, type, cmd);
+			}
+			else if (!strn_cmp(cmd, "global ", 7))
+			{
+				process_global(sc, trig, cmd, sc->context);
+			}
+			else if (!strn_cmp(cmd, "context ", 8))
+			{
+				process_context(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "remote ", 7))
+			{
+				process_remote(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "rdelete ", 8))
+			{
+				process_rdelete(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "return ", 7))
+			{
+				ret_val = process_return(trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "set ", 4))
+			{
+				process_set(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "unset ", 6))
+			{
+				process_unset(sc, trig, cmd);
+			}
+			else if (!strn_cmp(cmd, "wait ", 5)) 
+			{
+				process_wait(go, trig, type, cmd, cl);
+				depth--;
+				return ret_val;
+			}
+			else if (!strn_cmp(cmd, "attach ", 7))
+			{
+				process_attach(go, sc, trig, type, cmd);
+			}
+			else if (!strn_cmp(cmd, "detach ", 7))
+			{
+				process_detach(go, sc, trig, type, cmd);
+				break;
+			}
+			else 
+			{
+				switch (type) 
+				{
+					case MOB_TRIGGER:
+						if (!script_command_interpreter((char_data *) go, cmd))
+						{
+							command_interpreter((char_data *) go, cmd);
+						}
+						break;
+					case OBJ_TRIGGER:
+						obj_command_interpreter((obj_data *) go, cmd);
+						break;
+					case WLD_TRIGGER:
+						wld_command_interpreter((struct room_data *) go, cmd);
+						break;
+				}
+				if (dg_owner_purged) 
+				{
+					depth--;
+					if (type == OBJ_TRIGGER)
+					{
+						*(obj_data **)go_adress = NULL;
+					}
+					return ret_val;
+				}
+			}
+		}
 	}
 
-	switch (type) { /* the script may have been detached */
-case MOB_TRIGGER:    sc = SCRIPT((char_data *) go);           break;
-case OBJ_TRIGGER:    sc = SCRIPT((obj_data *) go);            break;
-case WLD_TRIGGER:    sc = SCRIPT((room_data *) go);    break;
+	switch (type)		/* the script may have been detached */
+	{
+		case MOB_TRIGGER:
+			sc = SCRIPT((char_data *) go);
+			break;
+		case OBJ_TRIGGER:
+			sc = SCRIPT((obj_data *) go);
+			break;
+		case WLD_TRIGGER:
+			sc = SCRIPT((room_data *) go);
+			break;
 	}
 	if (sc)
+	{
 		free_varlist(GET_TRIG_VARS(trig));
-	GET_TRIG_VARS(trig) = NULL;
-	GET_TRIG_DEPTH(trig) = 0;
+		// these are only safe if we have not detatched.
+		GET_TRIG_VARS(trig) = NULL;
+		GET_TRIG_DEPTH(trig) = 0;
+	}
 
 	depth--;
 	return ret_val;

@@ -31,10 +31,6 @@ The email listing of the gods is pinned against the wall.~
 0 0 0 0
 1 1 0 30 0
 E
-emails listing~
-   HELP CONTACT
-~
-E
 wizlist~
                                  Implementors
                                  ~~~~~~~~~~~ 
@@ -50,6 +46,10 @@ wizlist~
         Kyr   Macros   Meyekul   Mick   Minisham   Mythran   Neela   Poiu
     Santa   Shamra   Shimmer   Silvanos   Smaug   Snowlock   Talgard   Taylor
        Theophilus   Tocamat   Torpidai   Treestump   Tuskony   Zizazat   
+~
+E
+emails listing~
+   HELP CONTACT
 ~
 #5
 foraged berries~
@@ -1089,6 +1089,19 @@ A
 2 -6
 A
 1 6
+#79
+doomsauce hammer namorhams dread~
+the Dread Hammer DOOMSAUCE~
+NaMorham's hammer, 'Doomsauce' is lying here.~
+~
+5 adgq 0 0 0 ano 0 0 0 defglq 0 0 0
+50 42 42 9
+1 2000000 0 33 0
+E
+doomsauce hammer namorhams dread~
+This is the dread hammer Doomsauce, usually wielded by NaMorham.  It's green
+plastic handle and concertina yellow top makes it look like a childrens toy.
+~
 #80
 paintball gun red~
 a red paintball gun~

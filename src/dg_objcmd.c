@@ -811,27 +811,41 @@ const struct obj_command_info obj_cmd_info[] = {
 /* This is the command interpreter used by objects, called by script_driver. */
 void obj_command_interpreter(obj_data *obj, char *argument)
 {
-    int cmd, length;
-    char *line, arg[MAX_INPUT_LENGTH];
+	int cmd, length;
+	char *line, arg[MAX_INPUT_LENGTH];
 
-    skip_spaces(&argument);
+	skip_spaces(&argument);
 
-    /* just drop to next line for hitting CR */
-    if (!*argument)
-        return;
+	/* just drop to next line for hitting CR */
+	if (!*argument)
+	{
+		return;
+	}
 
-    line = any_one_arg(argument, arg);
+	line = any_one_arg(argument, arg);
 
+	/* find the command */
+	for (length = strlen(arg), cmd = 0; *obj_cmd_info[cmd].command != '\n'; cmd++)
+	{	
+#ifdef _DEBUG
+		if (GET_OBJ_VNUM(obj) == 90)
+		{
+			log("DEBUG: obj_command_interpreter: obj 90, argument=\"%s\", arg=\"%s\", line = \"%s\", length=%d, cmd=%d, ocmd=\"%s\"",
+				argument, arg, line, length, cmd, obj_cmd_info[cmd].command);
+		}
+#endif
+		if (!strncmp(obj_cmd_info[cmd].command, arg, length))
+		{
+			break;
+		}
+	}
 
-    /* find the command */
-    for (length = strlen(arg),cmd = 0;
-         *obj_cmd_info[cmd].command != '\n'; cmd++)
-        if (!strncmp(obj_cmd_info[cmd].command, arg, length))
-            break;
-
-    if (*obj_cmd_info[cmd].command == '\n')
-      obj_log(obj, "Unknown object cmd: '%s'", argument);
-    else
-        ((*obj_cmd_info[cmd].command_pointer)
-         (obj, line, cmd, obj_cmd_info[cmd].subcmd));
+	if (*obj_cmd_info[cmd].command == '\n')
+	{
+		obj_log(obj, "Unknown object cmd: '%s'", argument);
+	}
+	else
+	{
+		((*obj_cmd_info[cmd].command_pointer)(obj, line, cmd, obj_cmd_info[cmd].subcmd));
+	}
 }

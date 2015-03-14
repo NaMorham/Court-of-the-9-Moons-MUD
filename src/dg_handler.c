@@ -106,62 +106,66 @@ void extract_trigger(struct trig_data *trig)
   REMOVE_FROM_LIST(trig, trigger_list, next_in_world);
 
   free_trigger(trig);
+  trig = NULL;
 }
 
 /* remove all triggers from a mob/obj/room */
 void extract_script(void *thing, int type)
 {
-  struct script_data *sc = NULL;
-  struct trig_data *trig, *next_trig;
-  char_data *mob;
-  obj_data *obj;
-  room_data *room;
+	struct script_data *sc = NULL;
+	struct trig_data *trig, *next_trig;
+	char_data *mob;
+	obj_data *obj;
+	room_data *room;
 
-  switch (type) {
-    case MOB_TRIGGER:
-      mob = (struct char_data *)thing;
-      sc = SCRIPT(mob);
-      SCRIPT(mob) = NULL;
-      break;
-    case OBJ_TRIGGER:
-      obj = (struct obj_data *)thing;
-      sc = SCRIPT(obj);
-      SCRIPT(obj) = NULL;
-      break;
-    case WLD_TRIGGER:
-      room = (struct room_data *)thing;
-      sc = SCRIPT(room);
-      SCRIPT(room) = NULL;
-      break;
-  }
+	switch (type) 
+	{
+	case MOB_TRIGGER:
+		mob = (struct char_data *)thing;
+		sc = SCRIPT(mob);
+		SCRIPT(mob) = NULL;
+		break;
+	case OBJ_TRIGGER:
+		obj = (struct obj_data *)thing;
+		sc = SCRIPT(obj);
+		SCRIPT(obj) = NULL;
+		break;
+	case WLD_TRIGGER:
+		room = (struct room_data *)thing;
+		sc = SCRIPT(room);
+		SCRIPT(room) = NULL;
+		break;
+	}
 
 #if 1 /* debugging */
-  {
-    struct char_data *i = character_list;
-    struct obj_data *j = object_list;
-    room_rnum k;
-    if (sc) {
-      for ( ; i ; i = i->next)
-        assert(sc != SCRIPT(i));
+	{
+		struct char_data *i = character_list;
+		struct obj_data *j = object_list;
+		room_rnum k;
+		if (sc) {
+			for ( ; i ; i = i->next)
+				assert(sc != SCRIPT(i));
 
-      for ( ; j ; j = j->next)
-        assert(sc != SCRIPT(j));
+			for ( ; j ; j = j->next)
+				assert(sc != SCRIPT(j));
 
-      for (k = 0; k < top_of_world; k++)
-        assert(sc != SCRIPT(&world[k]));
-    }
-  }
+			for (k = 0; k < top_of_world; k++)
+				assert(sc != SCRIPT(&world[k]));
+		}
+	}
 #endif
-  for (trig = TRIGGERS(sc); trig; trig = next_trig) {
-    next_trig = trig->next;
-    extract_trigger(trig);
-  }
-  TRIGGERS(sc) = NULL;
+	for (trig = TRIGGERS(sc); trig; trig = next_trig) {
+		next_trig = trig->next;
+		extract_trigger(trig);
+	}
+	TRIGGERS(sc) = NULL;
 
-  /* Thanks to James Long for tracking down this memory leak */
-  free_varlist(sc->global_vars);
+	/* Thanks to James Long for tracking down this memory leak */
+	free_varlist(sc->global_vars);
+	sc->global_vars = NULL;
 
-  free(sc);
+	free(sc);
+	sc = NULL;
 }
 
 /* erase the script memory of a mob */

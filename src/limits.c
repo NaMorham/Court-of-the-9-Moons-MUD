@@ -430,22 +430,6 @@ void point_update(void)
 	{
 		next_thing = j->next;	/* Next in object list */
 
-#ifdef _DEBUG
-		if (j && (GET_OBJ_VNUM(j) == 90)) // crashy icecream
-		{
-			int breakHere = 1;
-		}
-		{
-			obj_vnum dbgOVNum = NOTHING;
-			const char *dbgOShort = NULL;
-
-			log("Update timers for object in \"void point_update(void)\":%s:%d, ", __FILE__, __LINE__);
-			dbgOVNum = GET_OBJ_VNUM(j);
-			dbgOShort = GET_OBJ_SHORT(j);
-			log("\t\tObj[%d, %s]", dbgOVNum, dbgOShort);
-		}
-#endif
-
 		/* If this is a corpse */
 		if (IS_CORPSE(j)) 
 		{

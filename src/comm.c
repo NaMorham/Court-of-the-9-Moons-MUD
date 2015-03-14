@@ -373,7 +373,10 @@ default:
 		free(last_act_message);
 
 	/* probably should free the entire config here.. */
-	free(CONFIG_CONFFILE);
+	if (CONFIG_CONFFILE)
+	{
+		free(CONFIG_CONFFILE);
+	}
 	CONFIG_CONFFILE = NULL;
 
 	log("Done.");

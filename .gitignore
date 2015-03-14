@@ -52,3 +52,4 @@ lib/etc/plrmail
 lib/etc/time
 lib/plrfiles/*/*.plr
 lib/plrobjs/*/*.objs
+lib/plrfiles/index

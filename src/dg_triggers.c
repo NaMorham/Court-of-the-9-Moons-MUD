@@ -34,8 +34,9 @@ char *one_phrase(char *arg, char *first_arg)
     skip_spaces(&arg);
 
     if (!*arg)
-        *first_arg = '\0';
-
+	{
+		*first_arg = '\0';
+	}
     else if (*arg == '"')
     {
         char *p, c;
@@ -45,9 +46,13 @@ char *one_phrase(char *arg, char *first_arg)
         *p = '\0';
         strcpy(first_arg, arg + 1);
         if (c == '\0')
-            return p;
-        else
-            return p + 1;
+		{
+			return p;
+		}
+		else
+		{
+			return p + 1;
+		}
     }
 
     else
@@ -58,8 +63,9 @@ char *one_phrase(char *arg, char *first_arg)
         p = arg;
 
         while (*p && !isspace(*p) && *p != '"')
-            *s++ = *p++;
-
+		{
+			*s++ = *p++;
+		}
         *s = '\0';
         return p;
     }
@@ -78,11 +84,12 @@ int is_substring(char *sub, char *string)
 
         /* check front */
         if ((s == string || isspace(*(s - 1)) || ispunct(*(s - 1))) &&
-
             /* check end */
             ((s + sublen == string + len) || isspace(s[sublen]) ||
              ispunct(s[sublen])))
+		{
             return 1;
+		}
     }
 
     return 0;
@@ -95,52 +102,64 @@ int word_check(char *str, char *wordlist)
 {
     char words[MAX_INPUT_LENGTH], phrase[MAX_INPUT_LENGTH], *s;
 
-    if (*wordlist=='*') return 1;
-
+    if (*wordlist=='*') 
+	{
+		return 1;
+	}
     strcpy(words, wordlist);
 
     for (s = one_phrase(words, phrase); *phrase; s = one_phrase(s, phrase))
-        if (is_substring(phrase, str))
-            return 1;
-
+	{
+		if (is_substring(phrase, str))
+		{
+			return 1;
+		}
+	}
     return 0;
 }
 
 /*Mob triggers. */
 void random_mtrigger(char_data *ch)
 {
-  trig_data *t;
+	trig_data *t;
 
-  /* This trigger is only called if a char is in the zone without nohassle. */
-  if (!SCRIPT_CHECK(ch, MTRIG_RANDOM) || AFF_FLAGGED(ch, AFF_CHARM))
-    return;
+	/* This trigger is only called if a char is in the zone without nohassle. */
+	if (!SCRIPT_CHECK(ch, MTRIG_RANDOM) || AFF_FLAGGED(ch, AFF_CHARM))
+	{
+		return;
+	}
 
-  for (t = TRIGGERS(SCRIPT(ch)); t; t = t->next) {
-    if (TRIGGER_CHECK(t, MTRIG_RANDOM) &&
-        (rand_number(1, 100) <= GET_TRIG_NARG(t))) {
-      script_driver(&ch, t, MOB_TRIGGER, TRIG_NEW);
-      break;
-    }
-  }
+	for (t = TRIGGERS(SCRIPT(ch)); t; t = t->next) 
+	{
+		if (TRIGGER_CHECK(t, MTRIG_RANDOM) &&
+			(rand_number(1, 100) <= GET_TRIG_NARG(t))) 
+		{
+				script_driver(&ch, t, MOB_TRIGGER, TRIG_NEW);
+				break;
+		}
+	}
 }
 
 void bribe_mtrigger(char_data *ch, char_data *actor, int amount)
 {
-  trig_data *t;
-  char buf[MAX_INPUT_LENGTH];
+	trig_data *t;
+	char buf[MAX_INPUT_LENGTH];
 
-  if (!SCRIPT_CHECK(ch, MTRIG_BRIBE) || AFF_FLAGGED(ch, AFF_CHARM))
-    return;
-
-  for (t = TRIGGERS(SCRIPT(ch)); t; t = t->next) {
-    if (TRIGGER_CHECK(t, MTRIG_BRIBE) && (amount >= GET_TRIG_NARG(t))) {
-      snprintf(buf, sizeof(buf), "%d", amount);
-      add_var(&GET_TRIG_VARS(t), "amount", buf, 0);
-      ADD_UID_VAR(buf, t, actor, "actor", 0);
-      script_driver(&ch, t, MOB_TRIGGER, TRIG_NEW);
-      break;
-    }
-  }
+	if (!SCRIPT_CHECK(ch, MTRIG_BRIBE) || AFF_FLAGGED(ch, AFF_CHARM))
+	{
+		return;
+	}
+	for (t = TRIGGERS(SCRIPT(ch)); t; t = t->next) 
+	{
+		if (TRIGGER_CHECK(t, MTRIG_BRIBE) && (amount >= GET_TRIG_NARG(t))) 
+		{
+			snprintf(buf, sizeof(buf), "%d", amount);
+			add_var(&GET_TRIG_VARS(t), "amount", buf, 0);
+			ADD_UID_VAR(buf, t, actor, "actor", 0);
+			script_driver(&ch, t, MOB_TRIGGER, TRIG_NEW);
+			break;
+		}
+	}
 }
 
 void greet_memory_mtrigger(char_data *actor)
@@ -253,25 +272,27 @@ int greet_mtrigger(char_data *actor, int dir)
                 IS_SET(GET_TRIG_TYPE(t), MTRIG_GREET_ALL)) &&
                 !GET_TRIG_DEPTH(t) && (rand_number(1, 100) <= GET_TRIG_NARG(t))) 
             {
-                    if (dir>=0 && dir < NUM_OF_DIRS)
-                    {
-                        add_var(&GET_TRIG_VARS(t), "direction", dirs[rev_dir[dir]], 0);
-                    }
-                    else
-                    {
-                        add_var(&GET_TRIG_VARS(t), "direction", "none", 0);
-                    }
-                    ADD_UID_VAR(buf, t, actor, "actor", 0);
-#ifdef _DEBUG
-					log("DEBUG: call script driver for ch=(%d:%s), trig=(%d,%s)",
-						GET_MOB_VNUM(ch), GET_SHORT(ch), GET_TRIG_VNUM(t), GET_TRIG_NAME(t));
-#endif
-                    intermediate = script_driver(&ch, t, MOB_TRIGGER, TRIG_NEW);
-                    if (!intermediate) 
-                    {
-                        final = FALSE;
-                    }
-                    continue;
+                if (dir>=0 && dir < NUM_OF_DIRS)
+                {
+                    add_var(&GET_TRIG_VARS(t), "direction", dirs[rev_dir[dir]], 0);
+                }
+                else
+                {
+                    add_var(&GET_TRIG_VARS(t), "direction", "none", 0);
+                }
+                ADD_UID_VAR(buf, t, actor, "actor", 0);
+                intermediate = script_driver(&ch, t, MOB_TRIGGER, TRIG_NEW);
+                if (!intermediate) 
+                {
+                    final = FALSE;
+                }
+ 				// we may have detatched all, check
+				if (SCRIPT(ch) == NULL)
+				{
+					// no scripts left, so exit
+					break;
+				}
+				continue;
             }
         }
     }

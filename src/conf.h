@@ -9,7 +9,7 @@
 #define CIRCLE_WINDOWS
 
 /* Define to empty if the keyword does not work.  */
-#undef const
+//#undef const
 
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT

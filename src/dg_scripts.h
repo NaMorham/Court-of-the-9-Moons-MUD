@@ -63,7 +63,7 @@
 #define MTRIG_RECEIVE          (1 << 9)      /* character is given obj     */
 #define MTRIG_FIGHT            (1 << 10)     /* each pulse while fighting  */
 #define MTRIG_HITPRCNT         (1 << 11)     /* fighting and below some hp */
-#define MTRIG_BRIBE	       (1 << 12)     /* coins are given to mob     */
+#define MTRIG_BRIBE			   (1 << 12)     /* coins are given to mob     */
 #define MTRIG_LOAD             (1 << 13)     /* the mob is loaded          */
 #define MTRIG_MEMORY           (1 << 14)     /* mob see's someone remembered */
 #define MTRIG_CAST             (1 << 15)     /* mob targetted by spell     */
@@ -126,7 +126,7 @@
 #define PULSE_DG_SCRIPT         (13 RL_SEC)
 
 #define MAX_SCRIPT_DEPTH      10          /* maximum depth triggers can
-					     recurse into each other */
+											recurse into each other */
 
 #define SCRIPT_ERROR_CODE     -9999999   /* this shouldn't happen too often */
 
@@ -146,49 +146,53 @@ struct trig_var_data {
 };
 
 /** structure for triggers */
-struct trig_data {
-    IDXTYPE nr;                         /**< trigger's rnum                  */
-    byte attach_type;                   /**< mob/obj/wld intentions          */
-    byte data_type;                     /**< type of game_data for trig      */
-    char *name;                         /**< name of trigger                 */
-    long trigger_type;                  /**< type of trigger (for bitvector) */
-    struct cmdlist_element *cmdlist;    /**< top of command list             */
-    struct cmdlist_element *curr_state;	/**< ptr to current line of trigger  */
-    int narg;                           /**< numerical argument              */
-    char *arglist;                      /**< argument list                   */
-    int depth;                          /**< depth into nest ifs/whiles/etc  */
-    int loops;                          /**< loop iteration counter          */
-    struct event *wait_event;           /**< event to pause the trigger  */
-    ubyte purged;                       /**< trigger is set to be purged     */
-    struct trig_var_data *var_list;	    /**< list of local vars for trigger  */
+struct trig_data 
+{
+    IDXTYPE nr;                         ///< trigger's rnum
+    byte attach_type;                   ///< mob/obj/wld intentions
+    byte data_type;                     ///< type of game_data for trig
+    char *name;                         ///< name of trigger
+    long trigger_type;                  ///< type of trigger (for bitvector)
+    struct cmdlist_element *cmdlist;    ///< top of command list
+    struct cmdlist_element *curr_state;	///< ptr to current line of trigger
+    int narg;                           ///< numerical argument
+    char *arglist;                      ///< argument list
+    int depth;                          ///< depth into nest ifs/whiles/etc
+    int loops;                          ///< loop iteration counter
+    struct event *wait_event;           ///< event to pause the trigger
+    ubyte purged;                       ///< trigger is set to be purged
+    struct trig_var_data *var_list;	    ///< list of local vars for trigger
 
     struct trig_data *next;
-    struct trig_data *next_in_world;    /**< next in the global trigger list */
+    struct trig_data *next_in_world;    ///< next in the global trigger list
 };
 
 /** a complete script (composed of several triggers) */
-struct script_data {
-  long types;                        /**< bitvector of trigger types */
-  struct trig_data *trig_list;       /**< list of triggers           */
-  struct trig_var_data *global_vars; /**< list of global variables   */
-  ubyte purged;                      /**< script is set to be purged */
-  long context;                      /**< current context for statics */
+struct script_data 
+{
+	long types;                        ///< bitvector of trigger types
+	struct trig_data *trig_list;       ///< list of triggers
+	struct trig_var_data *global_vars; ///< list of global variables
+	ubyte purged;                      ///< script is set to be purged
+	long context;                      ///< current context for statics
 
-  struct script_data *next;          /**< used for purged_scripts    */
+	struct script_data *next;          ///< used for purged_scripts
 };
 
 /* The event data for the wait command */
-struct wait_event_data {
-  struct trig_data *trigger;
-  void *go;
-  int type;
+struct wait_event_data 
+{
+	struct trig_data *trigger;
+	void *go;
+	int type;
 };
 
 /* used for actor memory triggers */
-struct script_memory {
-  long id;        /* id of who to remember */
-  char *cmd;        /* command, or NULL for generic */
-  struct script_memory *next;
+struct script_memory 
+{
+	long id;		// id of who to remember
+	char *cmd;		// command, or NULL for generic
+	struct script_memory *next;
 };
 
 /* typedefs that the dg functions rely on */
@@ -403,17 +407,17 @@ void wld_command_interpreter(room_data *room, char *argument);
 
 /* Macros for scripts */
 #define UID_CHAR   '}'
-#define GET_TRIG_NAME(t)          ((t)->name)
-#define GET_TRIG_RNUM(t)          ((t)->nr)
-#define GET_TRIG_VNUM(t)	  (trig_index[(t)->nr]->vnum)
-#define GET_TRIG_TYPE(t)          ((t)->trigger_type)
-#define GET_TRIG_DATA_TYPE(t)	  ((t)->data_type)
-#define GET_TRIG_NARG(t)          ((t)->narg)
-#define GET_TRIG_ARG(t)           ((t)->arglist)
-#define GET_TRIG_VARS(t)	  ((t)->var_list)
-#define GET_TRIG_WAIT(t)	  ((t)->wait_event)
-#define GET_TRIG_DEPTH(t)         ((t)->depth)
-#define GET_TRIG_LOOPS(t)         ((t)->loops)
+#define GET_TRIG_NAME(t)		((t)->name)
+#define GET_TRIG_RNUM(t)		((t)->nr)
+#define GET_TRIG_VNUM(t)		(trig_index[(t)->nr]->vnum)
+#define GET_TRIG_TYPE(t)		((t)->trigger_type)
+#define GET_TRIG_DATA_TYPE(t)	((t)->data_type)
+#define GET_TRIG_NARG(t)		((t)->narg)
+#define GET_TRIG_ARG(t)			((t)->arglist)
+#define GET_TRIG_VARS(t)		((t)->var_list)
+#define GET_TRIG_WAIT(t)		((t)->wait_event)
+#define GET_TRIG_DEPTH(t)		((t)->depth)
+#define GET_TRIG_LOOPS(t)		((t)->loops)
 
 /* player id's: 0 to MOB_ID_BASE - 1
  * mob id's: MOB_ID_BASE to ROOM_ID_BASE - 1
