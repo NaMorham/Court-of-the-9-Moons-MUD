@@ -161,13 +161,18 @@ ACMD(do_put)
 
 static int can_take_obj(struct char_data *ch, struct obj_data *obj)
 {
-  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+	if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) 
+	{
     act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
     return (0);
-  } else if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
+	} 
+	else if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) 
+	{
     act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
     return (0);
-  } else if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE))) {
+	} 
+	else if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE))) 
+	{
     act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
     return (0);
   } else if (OBJ_SAT_IN_BY(obj)){
@@ -472,7 +477,7 @@ static int perform_drop(struct char_data *ch, struct obj_data *obj,
     extract_obj(obj);
     return (value);
   default:
-    log("SYSERR: Incorrect argument %d passed to perform_drop.", mode);
+    WriteLogf("SYSERR: Incorrect argument %d passed to perform_drop.", mode);
     /* SYSERR_DESC: This error comes from perform_drop() and is output when 
      * perform_drop() is called with an illegal 'mode' argument. */
     break;
@@ -747,7 +752,7 @@ void weight_change_object(struct obj_data *obj, int weight)
     GET_OBJ_WEIGHT(obj) += weight;
     obj_to_obj(obj, tmp_obj);
   } else {
-    log("SYSERR: Unknown attempt to subtract weight from an object.");
+    WriteLogf("SYSERR: Unknown attempt to subtract weight from an object.");
     /* SYSERR_DESC: weight_change_object() outputs this error when weight is 
      * attempted to be removed from an object that is not carried or in 
      * another object. */
@@ -766,8 +771,9 @@ void name_from_drinkcon(struct obj_data *obj)
 	}
 
 	liqname = drinknames[GET_OBJ_VAL(obj, 2)];
-	if (!isname(liqname, obj->name)) {
-		log("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
+	if (!isname(liqname, obj->name))
+	{
+		WriteLogf("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
 		/* SYSERR_DESC: From name_from_drinkcon(), this error comes about if the 
 		* object noted (by keywords and item vnum) does not contain the liquid 
 		* string being searched for. */
@@ -783,6 +789,7 @@ void name_from_drinkcon(struct obj_data *obj)
 		{
 			cur_name++;
 		}
+
 		if ((next = strchr(cur_name, ' ')))
 		{
 			cpylen = next - cur_name;
@@ -791,6 +798,7 @@ void name_from_drinkcon(struct obj_data *obj)
 		{
 			cpylen = strlen(cur_name);
 		}
+
 		if (!strn_cmp(cur_name, liqname, liqlen))
 		{
 			continue;
@@ -815,7 +823,9 @@ void name_to_drinkcon(struct obj_data *obj, int type)
 	char *new_name;
 
 	if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
+	{
 		return;
+	}
 
 	CREATE(new_name, char, strlen(obj->name) + strlen(drinknames[type]) + 2);
 	sprintf(new_name, "%s %s", obj->name, drinknames[type]); /* sprintf: OK */
@@ -824,138 +834,176 @@ void name_to_drinkcon(struct obj_data *obj, int type)
 	{
 		free(obj->name);
 	}
+
 	obj->name = new_name;
 }
 
 ACMD(do_drink)
 {
-  char arg[MAX_INPUT_LENGTH];
-  struct obj_data *temp;
-  struct affected_type af;
-  int amount, weight;
-  int on_ground = 0;
+	char arg[MAX_INPUT_LENGTH];
+	struct obj_data *temp;
+	struct affected_type af;
+	int amount, weight;
+	int on_ground = 0;
 
-  one_argument(argument, arg);
+	one_argument(argument, arg);
 
-  if (IS_NPC(ch)) /* Cannot use GET_COND() on mobs. */
-    return;
+	if (IS_NPC(ch)) // Cannot use GET_COND() on mobs.
+	{
+		return;
+	}
 
-  if (!*arg) {
-    char buf[MAX_STRING_LENGTH];
-    switch (SECT(IN_ROOM(ch))) {
-      case SECT_WATER_SWIM:
-      case SECT_WATER_NOSWIM:
-      case SECT_UNDERWATER:
-        if ((GET_COND(ch, HUNGER) > 20) && (GET_COND(ch, THIRST) > 0)) {
-          send_to_char(ch, "Your stomach can't contain anymore!\r\n");
-        }
-        snprintf(buf, sizeof(buf), "$n takes a refreshing drink.");
-        act(buf, TRUE, ch, 0, 0, TO_ROOM);
-        send_to_char(ch, "You take a refreshing drink.\r\n");
-        gain_condition(ch, THIRST, 1);
-        if (GET_COND(ch, THIRST) > 20)
-          send_to_char(ch, "You don't feel thirsty any more.\r\n");
-        return;
-      default:
-    send_to_char(ch, "Drink from what?\r\n");
-    return;
-    }
-  }
-  if (!(temp = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
-    if (!(temp = get_obj_in_list_vis(ch, arg, NULL, world[IN_ROOM(ch)].contents))) {
-      send_to_char(ch, "You can't find it!\r\n");
-      return;
-    } else
-      on_ground = 1;
-  }
-  if ((GET_OBJ_TYPE(temp) != ITEM_DRINKCON) &&
-      (GET_OBJ_TYPE(temp) != ITEM_FOUNTAIN)) {
-    send_to_char(ch, "You can't drink from that!\r\n");
-    return;
-  }
-  if (on_ground && (GET_OBJ_TYPE(temp) == ITEM_DRINKCON)) {
-    send_to_char(ch, "You have to be holding that to drink from it.\r\n");
-    return;
-  }
-  if ((GET_COND(ch, DRUNK) > 10) && (GET_COND(ch, THIRST) > 0)) {
-    /* The pig is drunk */
-    send_to_char(ch, "You can't seem to get close enough to your mouth.\r\n");
-    act("$n tries to drink but misses $s mouth!", TRUE, ch, 0, 0, TO_ROOM);
-    return;
-  }
-  if ((GET_COND(ch, HUNGER) > 20) && (GET_COND(ch, THIRST) > 0)) {
-    send_to_char(ch, "Your stomach can't contain anymore!\r\n");
-    return;
-  }
-  if ((GET_OBJ_VAL(temp, 1) == 0) || (!GET_OBJ_VAL(temp, 0) == 1)) {
-    send_to_char(ch, "It is empty.\r\n");
-    return;
-  }
+	if (!*arg)
+	{
+		char buf[MAX_STRING_LENGTH];
+		switch (SECT(IN_ROOM(ch)))
+		{
+		case SECT_WATER_SWIM:
+		case SECT_WATER_NOSWIM:
+		case SECT_UNDERWATER:
+			if ((GET_COND(ch, HUNGER) > 20) && (GET_COND(ch, THIRST) > 0))
+			{
+				send_to_char(ch, "Your stomach can't contain anymore!\r\n");
+			}
+			snprintf(buf, sizeof(buf), "$n takes a refreshing drink.");
+			act(buf, TRUE, ch, 0, 0, TO_ROOM);
+			send_to_char(ch, "You take a refreshing drink.\r\n");
+			gain_condition(ch, THIRST, 1);
+			if (GET_COND(ch, THIRST) > 20)
+			{
+				send_to_char(ch, "You don't feel thirsty any more.\r\n");
+			}
+			return;
 
-  if (!consume_otrigger(temp, ch, OCMD_DRINK))  /* check trigger */
-    return;
+		default:
+			send_to_char(ch, "Drink from what?\r\n");
+			return;
+		}
+	}
 
-  if (subcmd == SCMD_DRINK) {
-    char buf[MAX_STRING_LENGTH];
+	if (!(temp = get_obj_in_list_vis(ch, arg, NULL, ch->carrying)))
+	{
+		if (!(temp = get_obj_in_list_vis(ch, arg, NULL, world[IN_ROOM(ch)].contents)))
+		{
+			send_to_char(ch, "You can't find it!\r\n");
+			return;
+		}
+		else
+		{
+			on_ground = 1;
+		}
+	}
+	if ((GET_OBJ_TYPE(temp) != ITEM_DRINKCON) &&
+		(GET_OBJ_TYPE(temp) != ITEM_FOUNTAIN))
+	{
+		send_to_char(ch, "You can't drink from that!\r\n");
+		return;
+	}
+	if (on_ground && (GET_OBJ_TYPE(temp) == ITEM_DRINKCON))
+	{
+		send_to_char(ch, "You have to be holding that to drink from it.\r\n");
+		return;
+	}
+	if ((GET_COND(ch, DRUNK) > 10) && (GET_COND(ch, THIRST) > 0))
+	{
+		// The pig is drunk
+		send_to_char(ch, "You can't seem to get close enough to your mouth.\r\n");
+		act("$n tries to drink but misses $s mouth!", TRUE, ch, 0, 0, TO_ROOM);
+		return;
+	}
+	if ((GET_COND(ch, HUNGER) > 20) && (GET_COND(ch, THIRST) > 0))
+	{
+		send_to_char(ch, "Your stomach can't contain anymore!\r\n");
+		return;
+	}
+	if ((GET_OBJ_VAL(temp, 1) == 0) || (!GET_OBJ_VAL(temp, 0) == 1))
+	{
+		send_to_char(ch, "It is empty.\r\n");
+		return;
+	}
 
-    snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinks[GET_OBJ_VAL(temp, 2)]);
-    act(buf, TRUE, ch, temp, 0, TO_ROOM);
+	if (!consume_otrigger(temp, ch, OCMD_DRINK))  // check trigger
+	{
+		return;
+	}
 
-    send_to_char(ch, "You drink the %s.\r\n", drinks[GET_OBJ_VAL(temp, 2)]);
+	if (subcmd == SCMD_DRINK)
+	{
+		char buf[MAX_STRING_LENGTH];
 
-    if (drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK] > 0)
-      amount = (25 - GET_COND(ch, THIRST)) / drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK];
-    else
-      amount = rand_number(3, 10);
+		snprintf(buf, sizeof(buf), "$n drinks %s from $p.", drinks[GET_OBJ_VAL(temp, 2)]);
+		act(buf, TRUE, ch, temp, 0, TO_ROOM);
 
-  } else {
-    act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
-    send_to_char(ch, "It tastes like %s.\r\n", drinks[GET_OBJ_VAL(temp, 2)]);
-    amount = 1;
-  }
+		send_to_char(ch, "You drink the %s.\r\n", drinks[GET_OBJ_VAL(temp, 2)]);
 
-  amount = MIN(amount, GET_OBJ_VAL(temp, 1));
+		if (drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK] > 0)
+		{
+			amount = (25 - GET_COND(ch, THIRST)) / drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK];
+		}
+		else
+		{
+			amount = rand_number(3, 10);
+		}
+	}
+	else
+	{
+		act("$n sips from $p.", TRUE, ch, temp, 0, TO_ROOM);
+		send_to_char(ch, "It tastes like %s.\r\n", drinks[GET_OBJ_VAL(temp, 2)]);
+		amount = 1;
+	}
 
-  /* You can't subtract more than the object weighs, unless its unlimited. */
-  if (GET_OBJ_VAL(temp, 0) > 0) {
-    weight = MIN(amount, GET_OBJ_WEIGHT(temp));
-    weight_change_object(temp, -weight); /* Subtract amount */
-  }
-  
-  gain_condition(ch, DRUNK,  drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK]  * amount / 4);
-  gain_condition(ch, HUNGER,   drink_aff[GET_OBJ_VAL(temp, 2)][HUNGER]   * amount / 4);
-  gain_condition(ch, THIRST, drink_aff[GET_OBJ_VAL(temp, 2)][THIRST] * amount / 4);
+	amount = MIN(amount, GET_OBJ_VAL(temp, 1));
 
-  if (GET_COND(ch, DRUNK) > 10)
-    send_to_char(ch, "You feel drunk.\r\n");
+	// You can't subtract more than the object weighs, unless its unlimited.
+	if (GET_OBJ_VAL(temp, 0) > 0)
+	{
+		weight = MIN(amount, GET_OBJ_WEIGHT(temp));
+		weight_change_object(temp, -weight); // Subtract amount
+	}
 
-  if (GET_COND(ch, THIRST) > 20)
-    send_to_char(ch, "You don't feel thirsty any more.\r\n");
+	gain_condition(ch, DRUNK,  drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK]  * amount / 4);
+	gain_condition(ch, HUNGER,   drink_aff[GET_OBJ_VAL(temp, 2)][HUNGER]   * amount / 4);
+	gain_condition(ch, THIRST, drink_aff[GET_OBJ_VAL(temp, 2)][THIRST] * amount / 4);
 
-  if (GET_COND(ch, HUNGER) > 20)
-    send_to_char(ch, "You are full.\r\n");
+	if (GET_COND(ch, DRUNK) > 10)
+	{
+		send_to_char(ch, "You feel drunk.\r\n");
+	}
 
-  if (GET_OBJ_VAL(temp, 3)) { /* The crap was poisoned ! */
-    send_to_char(ch, "Oops, it tasted rather strange!\r\n");
-    act("$n chokes and utters some strange sounds.", TRUE, ch, 0, 0, TO_ROOM);
+	if (GET_COND(ch, THIRST) > 20)
+	{
+		send_to_char(ch, "You don't feel thirsty any more.\r\n");
+	}
 
-    af.type = SPELL_POISON;
-    af.duration = amount * 3;
-    af.modifier = 0;
-    af.location = APPLY_NONE;
-    af.bitvector = AFF_POISON;
-    affect_join(ch, &af, FALSE, FALSE, FALSE, FALSE);
-  }
-  /* Empty the container (unless unlimited), and no longer poison. */
-  if (GET_OBJ_VAL(temp, 0) > 0) {
-    GET_OBJ_VAL(temp, 1) -= amount;
-    if (!GET_OBJ_VAL(temp, 1)) { /* The last bit */
-      name_from_drinkcon(temp);
-      GET_OBJ_VAL(temp, 2) = 0;
-      GET_OBJ_VAL(temp, 3) = 0;
-    }
-  }
-  return;
+	if (GET_COND(ch, HUNGER) > 20)
+	{
+		send_to_char(ch, "You are full.\r\n");
+	}
+
+	if (GET_OBJ_VAL(temp, 3)) // The crap was poisoned !
+	{
+		send_to_char(ch, "Oops, it tasted rather strange!\r\n");
+		act("$n chokes and utters some strange sounds.", TRUE, ch, 0, 0, TO_ROOM);
+
+		af.type = SPELL_POISON;
+		af.duration = amount * 3;
+		af.modifier = 0;
+		af.location = APPLY_NONE;
+		af.bitvector = AFF_POISON;
+		affect_join(ch, &af, FALSE, FALSE, FALSE, FALSE);
+	}
+	// Empty the container (unless unlimited), and no longer poison.
+	if (GET_OBJ_VAL(temp, 0) > 0)
+	{
+		GET_OBJ_VAL(temp, 1) -= amount;
+		if (!GET_OBJ_VAL(temp, 1)) // The last bit
+		{
+			name_from_drinkcon(temp);
+			GET_OBJ_VAL(temp, 2) = 0;
+			GET_OBJ_VAL(temp, 3) = 0;
+		}
+	}
+	return;
 }
 
 ACMD(do_eat)
@@ -1461,7 +1509,7 @@ static void perform_remove(struct char_data *ch, int pos)
   struct obj_data *obj;
 
   if (!(obj = GET_EQ(ch, pos)))
-    log("SYSERR: perform_remove: bad pos %d passed.", pos);
+    WriteLogf("SYSERR: perform_remove: bad pos %d passed.", pos);
     /*  This error occurs when perform_remove() is passed a bad 'pos'
      *  (location) to remove an object from. */
   else if (OBJ_FLAGGED(obj, ITEM_NODROP) && !PRF_FLAGGED(ch, PRF_NOHASSLE)) 

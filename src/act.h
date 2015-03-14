@@ -32,14 +32,17 @@ ACMD(do_gen_comm);
 #define SCMD_AUCTION  3
 #define SCMD_GRATZ    4
 #define SCMD_GEMOTE   5
+
 /* do_qcomm */
 ACMD(do_qcomm);
 #define SCMD_QSAY     0
 #define SCMD_QECHO    1
+
 /* do_spec_com */
 ACMD(do_spec_comm);
 #define SCMD_WHISPER  0
 #define SCMD_ASK      1
+
 /* functions without subcommands */
 ACMD(do_say);
 ACMD(do_gsay);

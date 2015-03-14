@@ -33,6 +33,7 @@
  */
 /** direct all log() references to basic_mud_log() function. */
 #define log			basic_mud_log
+#define WriteLogf   basic_mud_log
 
 /** Standard line size, used for many string limits. */
 #define READ_SIZE	256
@@ -167,27 +168,27 @@ void char_from_furniture(struct char_data *ch);
 /*
  * defines for mudlog() 
  */
-#define OFF	0  /**< Receive no mudlog messages. */
-#define BRF	1  /**< Receive only the most important mudlog messages. */
-#define NRM	2  /**< Receive the standard mudlog messages. */
-#define CMP	3  /**< Receive every mudlog message. */
+#define OFF	0  ///< Receive no mudlog messages. 
+#define BRF	1  ///< Receive only the most important mudlog messages. 
+#define NRM	2  ///< Receive the standard mudlog messages. 
+#define CMP	3  ///< Receive every mudlog message. 
 
 /* 
  * get_filename() types of files to open 
  */
-#define CRASH_FILE       0 /**< Open up a player crash save file */
-#define ETEXT_FILE       1 /**< ???? */
-#define SCRIPT_VARS_FILE 2 /**< Reference to a global variable file. */
-#define PLR_FILE         3 /**< The standard player file */
+#define CRASH_FILE       0 ///< Open up a player crash save file 
+#define ETEXT_FILE       1 ///< ???? 
+#define SCRIPT_VARS_FILE 2 ///< Reference to a global variable file. 
+#define PLR_FILE         3 ///< The standard player file 
 
-#define MAX_FILES        4 /**< Max number of files types vailable */
+#define MAX_FILES        4 ///< Max number of files types vailable 
 
 /*
  * breadth-first searching for graph function (tracking, etc) 
  */
-#define BFS_ERROR		(-1)        /**< Error in the search. */
-#define BFS_ALREADY_THERE	(-2)    /**< Area traversed already. */
-#define BFS_NO_PATH		(-3)        /**< No path through here. */
+#define BFS_ERROR		(-1)        ///< Error in the search.
+#define BFS_ALREADY_THERE	(-2)    ///< Area traversed already. 
+#define BFS_NO_PATH		(-3)        ///< No path through here. 
 
 /** 
  * Number of real life seconds per mud hour.
@@ -818,7 +819,7 @@ do																		 \
 /** "an" or "a" for text (lowercased) */
 #define TANA(obj) (strchr("aeiouAEIOU", *(obj)) ? "an" : "a")
 
-/* Various macros building up to CAN_SEE */
+// Various macros building up to CAN_SEE
 
 /** Defines if there is enough light for sub to see in. */
 #define LIGHT_OK(sub)	(!AFF_FLAGGED(sub, AFF_BLIND) && \
@@ -846,7 +847,7 @@ do																		 \
 #define CAN_SEE(sub, obj) (SELF(sub, obj) || \
    ((GET_REAL_LEVEL(sub) >= (IS_NPC(obj) ? 0 : GET_INVIS_LEV(obj))) && \
    IMM_CAN_SEE(sub, obj)))
-/* End of CAN_SEE */
+// End of CAN_SEE
 
 /** Can the sub character see the obj if it is invisible? */
 #define INVIS_OK_OBJ(sub, obj) \

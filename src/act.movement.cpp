@@ -54,8 +54,12 @@ static int has_boat(struct char_data *ch)
 
     /* and any boat you're wearing will do it too */
     for (i = 0; i < NUM_WEARS; i++)
+	{
         if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_BOAT)
+		{
             return (1);
+		}
+	}
 
     return (0);
 }
@@ -74,13 +78,21 @@ int has_flight(struct char_data *ch)
 
     /* Non-wearable flying items in inventory will do it. */
     for (obj = ch->carrying; obj; obj = obj->next_content)
+	{
         if (OBJAFF_FLAGGED(obj, AFF_FLYING) && OBJAFF_FLAGGED(obj, AFF_FLYING))
+		{
             return (1);
+		}
+	}
 
     /* Any equipped objects with AFF_FLYING will do it too. */
     for (i = 0; i < NUM_WEARS; i++)
+	{
         if (GET_EQ(ch, i) && OBJAFF_FLAGGED(GET_EQ(ch, i), AFF_FLYING))
+		{
             return (1);
+		}
+	}
 
     return (0);
 }
@@ -99,13 +111,21 @@ int has_scuba(struct char_data *ch)
 
     /* Non-wearable scuba items in inventory will do it. */
     for (obj = ch->carrying; obj; obj = obj->next_content)
+	{
         if (OBJAFF_FLAGGED(obj, AFF_SCUBA) && (find_eq_pos(ch, obj, NULL) < 0))
+		{
             return (1);
+		}
+	}
 
     /* Any equipped objects with AFF_SCUBA will do it too. */
     for (i = 0; i < NUM_WEARS; i++)
+	{
         if (GET_EQ(ch, i) && OBJAFF_FLAGGED(GET_EQ(ch, i), AFF_SCUBA))
+		{
             return (1);
+		}
+	}
 
     return (0);
 }
@@ -135,15 +155,20 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check)
     // Used in our special proc check. By default, we pass a NULL argument
     // when checking for specials 
     char spec_proc_args[MAX_INPUT_LENGTH] = "";
+
     // The room the character is currently in and will move from... 
     room_rnum was_in = IN_ROOM(ch);
+
     // ... and the room the character will move into. 
     room_rnum going_to = EXIT(ch, dir)->to_room;
+
     // How many movement points are required to travel from was_in to going_to.
     // We redefine this later when we need it. 
     int need_movement = 0;
+
     // Contains the "leave" message to display to the was_in room. 
     char leave_message[SMALL_BUFSIZE];
+
     //---------------------------------------------------------------------
     // End Local variable definitions
 
@@ -165,11 +190,11 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check)
 	{
         return 0;
 	}
-	if (!leave_wtrigger(&world[IN_ROOM(ch)], ch, dir) || IN_ROOM(ch) != was_in) // prevent teleport crashes
+	else if (!leave_wtrigger(&world[IN_ROOM(ch)], ch, dir) || IN_ROOM(ch) != was_in) // prevent teleport crashes
 	{
 		return 0;
 	}
-	if (!leave_otrigger(&world[IN_ROOM(ch)], ch, dir) || IN_ROOM(ch) != was_in) // prevent teleport crashes
+	else if (!leave_otrigger(&world[IN_ROOM(ch)], ch, dir) || IN_ROOM(ch) != was_in) // prevent teleport crashes
 	{
 		return 0;
 	}
@@ -307,6 +332,7 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check)
 
     char_from_room(ch);
     char_to_room(ch, going_to);
+
     //---------------------------------------------------------------------
     // End: the leave operation. The character is now in the new room.
 
@@ -363,6 +389,7 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check)
 	{
         greet_memory_mtrigger(ch);
 	}
+
 	//---------------------------------------------------------------------
     // End: Post-move operations. 
 
@@ -895,7 +922,7 @@ ACMD(do_sit)
 			{
 				// Val 1 is current number sitting, 0 is max in sitting.
 				act("$p looks like it's all full.", TRUE, ch, furniture, 0, TO_CHAR);
-				log("SYSERR: Furniture %d holding too many people.", GET_OBJ_VNUM(furniture));
+        WriteLogf("SYSERR: Furniture %d holding too many people.", GET_OBJ_VNUM(furniture));
 				return;
 			} 
 			else if (GET_OBJ_VAL(furniture, 1) == GET_OBJ_VAL(furniture, 0)) 

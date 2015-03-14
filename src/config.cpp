@@ -18,10 +18,12 @@
 #include "config.h"
 #include "asciimap.h"
 
-/* Update:  The following constants and variables are now the default values
+/* 
+ * Update:  The following constants and variables are now the default values
  * for backwards compatibility with the new cedit game configurator.  If you
  * would not like to use the cedit command, you can change the values in
- * this file instead.  - Mythran */
+ * this file instead.  - Mythran 
+ */
 
 /* Below are several constants which you can change to alter certain aspects
  * of the way tbaMUD acts.  Since this is a .c file, all you have to do

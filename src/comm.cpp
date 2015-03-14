@@ -58,9 +58,9 @@
 // end conf.h dependent includes
 
 /* 
- * Note, most includes for all platforms are in sysdep.h.  The list of
- * files that is included is controlled by conf.h for that platform. 
- */
+* Note, most includes for all platforms are in sysdep.h.  The list of
+* files that is included is controlled by conf.h for that platform. 
+*/
 #include "structs.h"
 #include "utils.h"
 #include "comm.h"
@@ -91,8 +91,8 @@ extern time_t motdmod;
 extern time_t newsmod;
 
 /* 
- * locally defined globals, used externally 
- */
+* locally defined globals, used externally 
+*/
 struct descriptor_data *descriptor_list = NULL;   // master desc list
 int buf_largecount = 0;   // # of large buffers which exist
 int buf_overflows = 0;    // # of overflows of output
@@ -109,31 +109,31 @@ socket_t mother_desc;
 long last_webster_teller = -1L;
 
 /* 
- * static local global variable declarations (current file scope only)
- */
+* static local global variable declarations (current file scope only)
+*/
 static struct txt_block *bufpool = 0;  // pool of large output buffers
 static int max_players = 0;   // max descriptors available
 static int tics_passed = 0;     // for extern checkpointing
 static struct timeval null_time; // zero-valued time structure
 static byte reread_wizlist;   // signal: SIGUSR1
 /* 
- * normally signal SIGUSR2, currently orphaned in favor of Webster dictionary
- * lookup
- * static byte emergency_unban;
- */   
+* normally signal SIGUSR2, currently orphaned in favor of Webster dictionary
+* lookup
+* static byte emergency_unban;
+*/   
 static int dg_act_check;            // toggle for act_trigger
 static bool fCopyOver;              // Are we booting in copyover mode?
 static char *last_act_message = NULL;
 static byte webster_file_ready = FALSE;// signal: SIGUSR2
 
 /*
- * static local function prototypes (current file scope only)
- */
+* static local function prototypes (current file scope only)
+*/
 static RETSIGTYPE reread_wizlists(int sig);
 /* 
- * Appears to be orphaned right now...
+* Appears to be orphaned right now...
 static RETSIGTYPE unrestrict_game(int sig);
- */
+*/
 static RETSIGTYPE reap(int sig);
 static RETSIGTYPE checkpointing(int sig);
 static RETSIGTYPE hupsig(int sig);
@@ -186,8 +186,8 @@ static void handle_webster_file();
 #endif
 
 /*
- * main game loop and related stuff
- */
+* main game loop and related stuff
+*/
 #if defined(CIRCLE_WINDOWS) || defined(CIRCLE_MACINTOSH)
 // Windows and Mac do not have gettimeofday, so we'll simulate it. Borland C++ 
 // warns: "Undefined structure 'timezone'"
@@ -436,6 +436,9 @@ int main(int argc, char **argv)
 // Reload players after a copyover
 void copyover_recover()
 {
+#ifdef CIRCLE_WINDOWS
+    basic_mud_log("Attempt to call copyover_recover on windows");
+#else
     struct descriptor_data *d;
     FILE *fp;
     char host[1024];
@@ -448,7 +451,8 @@ void copyover_recover()
 
     fp = fopen (COPYOVER_FILE, "r");
     // there are some descriptors open which will hang forever then ?
-    if (!fp) {
+    if (!fp) 
+    {
         perror ("copyover_recover:fopen");
         log ("Copyover file not found. Exitting.\n\r");
         exit (1);
@@ -460,14 +464,18 @@ void copyover_recover()
     // read boot_time - first line in file
     i = fscanf(fp, "%ld\n", (long *)&boot_time);
 
-    for (;;) {
+    for (;;) 
+    {
         fOld = TRUE;
         i = fscanf (fp, "%d %ld %s %s\n", &desc, &pref, name, host);
         if (desc == -1)
+        {
             break;
+        }
 
         // Write something, and check if it goes error-free
-        if (write_to_descriptor (desc, "\n\rRestoring from copyover...\n\r") < 0) {
+        if (write_to_descriptor (desc, "\n\rRestoring from copyover...\n\r") < 0) 
+        {
             close (desc); // nope
             continue;
         }
@@ -523,6 +531,7 @@ void copyover_recover()
         }
     }
     fclose (fp);
+#endif  // CIRCLE_WINDOWS
 }
 
 // Init sockets, run game, and cleanup sockets
@@ -2382,10 +2391,10 @@ static int process_input(struct descriptor_data *t)
 }
 
 /* 
- * Perform substitution for the '^..^' csh-esque syntax orig is the orig string, 
- * i.e. the one being modified.  subst contains the substition string, i.e. 
- * "^telm^tell" 
- */
+* Perform substitution for the '^..^' csh-esque syntax orig is the orig string, 
+* i.e. the one being modified.  subst contains the substition string, i.e. 
+* "^telm^tell" 
+*/
 static int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 {
     char newsub[MAX_INPUT_LENGTH + 5];
@@ -2575,12 +2584,12 @@ static void check_idle_passwords(void)
 }
 
 /*
- * I tried to universally convert Circle over to POSIX compliance, but
- * alas, some systems are still straggling behind and don't have all the
- * appropriate defines.  In particular, NeXT 2.x defines O_NDELAY but not
- * O_NONBLOCK.  Krusty old NeXT machines!  (Thanks to Michael Jones for
- * this and various other NeXT fixes.) 
- */
+* I tried to universally convert Circle over to POSIX compliance, but
+* alas, some systems are still straggling behind and don't have all the
+* appropriate defines.  In particular, NeXT 2.x defines O_NDELAY but not
+* O_NONBLOCK.  Krusty old NeXT machines!  (Thanks to Michael Jones for
+* this and various other NeXT fixes.) 
+*/
 #if defined(CIRCLE_WINDOWS)
 
 void nonblock(socket_t s)
@@ -2640,8 +2649,8 @@ static void nonblock(socket_t s)
 
 
 /*
- * signal-handling functions (formerly signals.c).  UNIX only. 
- */
+* signal-handling functions (formerly signals.c).  UNIX only. 
+*/
 #if defined(CIRCLE_UNIX) || defined(CIRCLE_MACINTOSH)
 static RETSIGTYPE reread_wizlists(int sig)
 {
@@ -2664,8 +2673,8 @@ static RETSIGTYPE websterlink(int sig)
 #ifdef CIRCLE_UNIX
 
 /* 
- * Clean up our zombie kids to avoid defunct processes 
- */
+* Clean up our zombie kids to avoid defunct processes 
+*/
 static RETSIGTYPE reap(int sig)
 {
     while (waitpid(-1, NULL, WNOHANG) > 0);
@@ -2674,8 +2683,8 @@ static RETSIGTYPE reap(int sig)
 }
 
 /* 
- * Dying anyway... 
- */
+* Dying anyway... 
+*/
 static RETSIGTYPE checkpointing(int sig)
 {
 #ifndef MEMORY_DEBUG
@@ -2692,8 +2701,8 @@ static RETSIGTYPE checkpointing(int sig)
 }
 
 /*
- * Dying anyway... 
- */
+* Dying anyway... 
+*/
 static RETSIGTYPE hupsig(int sig)
 {
     log("SYSERR: Received SIGHUP, SIGINT, or SIGTERM.  Shutting down...");
@@ -2703,16 +2712,16 @@ static RETSIGTYPE hupsig(int sig)
 #endif	// CIRCLE_UNIX
 
 /*
- * This is an implementation of signal() using sigaction() for portability.
- * (sigaction() is POSIX; signal() is not.)  Taken from Stevens' _Advanced
- * Programming in the UNIX Environment_.  We are specifying that all system
- * calls _not_ be automatically restarted for uniformity, because BSD systems
- * do not restart select(), even if SA_RESTART is used.
- * Note that NeXT 2.x is not POSIX and does not have sigaction; therefore,
- * I just define it to be the old signal.  If your system doesn't have
- * sigaction either, you can use the same fix.
- * SunOS Release 4.0.2 (sun386) needs this too, according to Tim Aldric. 
- */
+* This is an implementation of signal() using sigaction() for portability.
+* (sigaction() is POSIX; signal() is not.)  Taken from Stevens' _Advanced
+* Programming in the UNIX Environment_.  We are specifying that all system
+* calls _not_ be automatically restarted for uniformity, because BSD systems
+* do not restart select(), even if SA_RESTART is used.
+* Note that NeXT 2.x is not POSIX and does not have sigaction; therefore,
+* I just define it to be the old signal.  If your system doesn't have
+* sigaction either, you can use the same fix.
+* SunOS Release 4.0.2 (sun386) needs this too, according to Tim Aldric. 
+*/
 
 #ifndef POSIX
 #define my_signal(signo, func) signal(signo, func)
@@ -2771,8 +2780,8 @@ static void signal_setup(void)
 #endif	// CIRCLE_UNIX || CIRCLE_MACINTOSH
 
 /* 
- * Public routines for system-to-player-communication. 
- */
+* Public routines for system-to-player-communication. 
+*/
 size_t send_to_char(struct char_data *ch, const char *messg, ...)
 {
     if (ch->desc && messg && *messg)
@@ -2863,8 +2872,8 @@ void send_to_room(room_rnum room, const char *messg, ...)
 }
 
 /* 
- * Thx to Jamie Nelson of 4D for this contribution 
- */
+* Thx to Jamie Nelson of 4D for this contribution 
+*/
 void send_to_range(room_vnum start, room_vnum finish, const char *messg, ...)
 {
     struct char_data *i;
@@ -2904,8 +2913,8 @@ const char *ACTNULL = "<NULL>";
 #define CHECK_NULL(pointer, expression) \
     if ((pointer) == NULL) i = ACTNULL; else i = (expression);
 /* 
- * higher-level communication: the act() function 
- */
+* higher-level communication: the act() function 
+*/
 void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
                  void *vict_obj, struct char_data *to)
 {
@@ -3050,9 +3059,9 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 }
 
 char *act(const char *str, int hide_invisible, struct char_data *ch,
-          struct obj_data *obj, void *vict_obj, int type)
+struct obj_data *obj, void *vict_obj, int type)
 {
-    struct char_data *to;
+    struct char_data *to = NULL;
     int to_sleeping;
 
     if (!str || !*str)
@@ -3155,8 +3164,8 @@ char *act(const char *str, int hide_invisible, struct char_data *ch,
 }
 
 /* 
- * Prefer the file over the descriptor. 
- */
+* Prefer the file over the descriptor. 
+*/
 static void setup_log(const char *filename, int fd)
 {
     FILE *s_fp;
@@ -3235,8 +3244,8 @@ static int open_logfile(const char *filename, FILE *stderr_fp)
 }
 
 /* 
- * This may not be pretty but it keeps game_loop() neater than if it was inline. 
- */
+* This may not be pretty but it keeps game_loop() neater than if it was inline. 
+*/
 #if defined(CIRCLE_WINDOWS)
 void circle_sleep(struct timeval *timeout)
 {
