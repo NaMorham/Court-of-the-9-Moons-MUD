@@ -538,41 +538,61 @@ bool circle_follow(struct char_data *ch, struct char_data *victim)
  * */
 void stop_follower(struct char_data *ch)
 {
-  struct follow_type *j, *k;
+	struct follow_type *j, *k;
 
-  /* Makes sure this function is not called when it shouldn't be called. */
-  if (ch->master == NULL) {
-    core_dump();
-    return;
-  }
+	/* Makes sure this function is not called when it shouldn't be called. */
+	if (ch->master == NULL) 
+	{
+		log("ERROR: NULL master passed to stop_follower [%d:%s]", __LINE__, __FILE__);
+		core_dump();
+		return;
+	}
 
-  if (AFF_FLAGGED(ch, AFF_CHARM)) {
-    act("You realize that $N is a jerk!", FALSE, ch, 0, ch->master, TO_CHAR);
-    act("$n realizes that $N is a jerk!", FALSE, ch, 0, ch->master, TO_NOTVICT);
-    act("$n hates your guts!", FALSE, ch, 0, ch->master, TO_VICT);
-    if (affected_by_spell(ch, SPELL_CHARM))
-      affect_from_char(ch, SPELL_CHARM);
-  } else {
-    act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
-    act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
-    act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
-  }
+	if (AFF_FLAGGED(ch, AFF_CHARM)) 
+	{
+		act("You realize that $N is a jerk!", FALSE, ch, 0, ch->master, TO_CHAR);
+		act("$n realizes that $N is a jerk!", FALSE, ch, 0, ch->master, TO_NOTVICT);
+		act("$n hates your guts!", FALSE, ch, 0, ch->master, TO_VICT);
+		if (affected_by_spell(ch, SPELL_CHARM))
+		{
+			affect_from_char(ch, SPELL_CHARM);
+		}
+	} 
+	else 
+	{
+		act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
+		act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
+		act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
+	}
 
-  if (ch->master->followers->follower == ch) {	/* Head of follower-list? */
-    k = ch->master->followers;
-    ch->master->followers = k->next;
-    free(k);
-  } else {			/* locate follower who is not head of list */
-    for (k = ch->master->followers; k->next->follower != ch; k = k->next);
+	if (ch->master->followers->follower == ch) // Head of follower-list?
+	{
+		// get the head of the list
+		k = ch->master->followers;
+		// make the next char the head of the list
+		ch->master->followers = k->next;
+		// unlink the char to be removed
+		k->next = NULL; // not needed, just neat
+		free(k);
+		k = NULL;
+	} 
+	else 
+	{			// locate follower who is not head of list
+		for (k = ch->master->followers; k->next->follower != ch; k = k->next)
+		{
+			// nothing to do
+		}
 
-    j = k->next;
-    k->next = j->next;
-    free(j);
-  }
+		j = k->next;
+		k->next = j->next;
+		free(j);
+		j = NULL;
+	}
 
-  ch->master = NULL;
-  REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_CHARM);
-  REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
+	// now we have no master, so we are not part of a group
+	ch->master = NULL;
+	REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_CHARM);
+	REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
 }
 
 /** Finds the number of follows that are following, and charmed by, the
@@ -582,14 +602,17 @@ void stop_follower(struct char_data *ch)
  */
 int num_followers_charmed(struct char_data *ch)
 {
-  struct follow_type *lackey;
-  int total = 0;
+	struct follow_type *lackey;
+	int total = 0;
 
-  for (lackey = ch->followers; lackey; lackey = lackey->next)
-    if (AFF_FLAGGED(lackey->follower, AFF_CHARM) && lackey->follower->master == ch)
-      total++;
-
-  return (total);
+	for (lackey = ch->followers; lackey; lackey = lackey->next)
+	{
+		if (AFF_FLAGGED(lackey->follower, AFF_CHARM) && lackey->follower->master == ch)
+		{
+			total++;
+		}
+	}
+	return (total);
 }
 
 /** Called when a character that follows/is followed dies. If the character
@@ -600,15 +623,17 @@ int num_followers_charmed(struct char_data *ch)
  * */
 void die_follower(struct char_data *ch)
 {
-  struct follow_type *j, *k;
+	struct follow_type *j, *k;
 
-  if (ch->master)
-    stop_follower(ch);
+	if (ch->master)
+	{
+		stop_follower(ch);
+	}
 
-  for (k = ch->followers; k; k = j) {
-    j = k->next;
-    stop_follower(k->follower);
-  }
+	for (k = ch->followers; k; k = j) {
+		j = k->next;
+		stop_follower(k->follower);
+	}
 }
 
 /** Adds a new follower to a group.
