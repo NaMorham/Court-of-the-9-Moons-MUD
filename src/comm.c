@@ -1001,10 +1001,8 @@ void heartbeat(int heart_pulse)
 
 	event_process();
 
-	/*
 	if (!(heart_pulse % PULSE_DG_SCRIPT))
 	script_trigger_check();
-	*/
 
 	if (!(heart_pulse % PULSE_ZONE))
 		zone_update();
