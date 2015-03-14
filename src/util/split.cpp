@@ -35,12 +35,12 @@ int main(void)
     if (*line == MAGIC_CHAR) {
       *(strchr(line, '\n')) = '\0';
       if (outfile) {
-/*	fputs("$\n", outfile);*/
-	fclose(outfile);
+/*    fputs("$\n", outfile);*/
+    fclose(outfile);
       }
       if (!(outfile = fopen((line + 1), "a"))) {
-	perror("Error opening output file");
-	exit(0);
+    perror("Error opening output file");
+    exit(0);
       }
       fputs(line + 1, index);
       fputs("\n", index);

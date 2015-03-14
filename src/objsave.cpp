@@ -242,7 +242,7 @@ static void auto_equip(struct char_data *ch, struct obj_data *obj, int location)
     if (location > 0) {      /* Wearable. */
       if (!GET_EQ(ch,j)) {
         /* Check the characters's alignment to prevent them from being zapped 
-	 * through the auto-equipping. */
+     * through the auto-equipping. */
         if (invalid_align(ch, obj) || invalid_class(ch, obj))
           location = LOC_INVENTORY;
         else
@@ -423,21 +423,21 @@ void Crash_listrent(struct char_data *ch, char *name)
     break;
   }
 
-	loaded = objsave_parse_objects(fl);
+    loaded = objsave_parse_objects(fl);
 
-	for (current = loaded; current != NULL; current=current->next)
-	  len += snprintf(buf+len, sizeof(buf)-len, "[%5d] (%5dau) %-20s\r\n",
+    for (current = loaded; current != NULL; current=current->next)
+      len += snprintf(buf+len, sizeof(buf)-len, "[%5d] (%5dau) %-20s\r\n",
                 GET_OBJ_VNUM(current->obj),
                 GET_OBJ_RENT(current->obj),
                 current->obj->short_description);
 
-	/* Now it's safe to free the obj_save_data list and the objects on it. */
-	while (loaded != NULL) {
-		current = loaded;
-		loaded = loaded->next;
-		extract_obj(current->obj);
-		free(current);
-	}
+    /* Now it's safe to free the obj_save_data list and the objects on it. */
+    while (loaded != NULL) {
+        current = loaded;
+        loaded = loaded->next;
+        extract_obj(current->obj);
+        free(current);
+    }
 
   page_string(ch->desc,buf,0);
   fclose(fl);
@@ -570,7 +570,7 @@ void Crash_crashsave(struct char_data *ch)
     return;
 
   if (!objsave_write_rentcode(fp, RENT_CRASH, 0, ch))
-  	return;
+      return;
 
   for (j = 0; j < NUM_WEARS; j++)
     if (GET_EQ(ch, j)) {
@@ -644,7 +644,7 @@ void Crash_idlesave(struct char_data *ch)
   }
 
   if (!objsave_write_rentcode(fp, RENT_TIMEDOUT, cost, ch))
-  	return;
+      return;
 
   for (j = 0; j < NUM_WEARS; j++) {
     if (GET_EQ(ch, j)) {
@@ -685,7 +685,7 @@ void Crash_rentsave(struct char_data *ch, int cost)
   Crash_extract_norents(ch->carrying);
 
   if (!objsave_write_rentcode(fp, RENT_RENTED, cost, ch))
-  	return;
+      return;
 
   for (j = 0; j < NUM_WEARS; j++)
     if (GET_EQ(ch, j)) {
@@ -746,7 +746,7 @@ static void Crash_cryosave(struct char_data *ch, int cost)
   GET_GOLD(ch) = MAX(0, GET_GOLD(ch) - cost);
 
   if (!objsave_write_rentcode(fp, RENT_CRYO, 0, ch))
-  	return;
+      return;
 
   for (j = 0; j < NUM_WEARS; j++)
     if (GET_EQ(ch, j)) {
@@ -877,7 +877,7 @@ static int gen_receptionist(struct char_data *ch, struct char_data *recep, int c
   int cost;
   char buf[128];
   const char *action_table[] = { "smile", "dance", "sigh", "blush", "burp",
-	  "cough", "fart", "twiddle", "yawn" };
+      "cough", "fart", "twiddle", "yawn" };
 
   if (!cmd && !rand_number(0, 5)) {
     do_action(recep, NULL, find_command(action_table[rand_number(0, 8)]), 0);
@@ -902,7 +902,7 @@ static int gen_receptionist(struct char_data *ch, struct char_data *recep, int c
 
   if (CONFIG_FREE_RENT) {
     act("$n tells you, 'Rent is free here.  Just quit, and your objects will be saved!'",
-	FALSE, recep, 0, ch, TO_VICT);
+    FALSE, recep, 0, ch, TO_VICT);
     return TRUE;
   }
 
@@ -918,7 +918,7 @@ static int gen_receptionist(struct char_data *ch, struct char_data *recep, int c
 
     if (cost > GET_GOLD(ch) + GET_BANK_GOLD(ch)) {
       act("$n tells you, '...which I see you can't afford.'",
-	  FALSE, recep, 0, ch, TO_VICT);
+      FALSE, recep, 0, ch, TO_VICT);
       return (TRUE);
     }
     if (cost && (mode == RENT_FACTOR))
@@ -928,12 +928,12 @@ static int gen_receptionist(struct char_data *ch, struct char_data *recep, int c
       act("$n stores your belongings and helps you into your private chamber.", FALSE, recep, 0, ch, TO_VICT);
       Crash_rentsave(ch, cost);
       mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has rented (%d/day, %d tot.)",
-		GET_NAME(ch), cost, GET_GOLD(ch) + GET_BANK_GOLD(ch));
-    } else {			/* cryo */
+        GET_NAME(ch), cost, GET_GOLD(ch) + GET_BANK_GOLD(ch));
+    } else {            /* cryo */
       act("$n stores your belongings and helps you into your private chamber.\r\n"
-	  "A white mist appears in the room, chilling you to the bone...\r\n"
-	  "You begin to lose consciousness...",
-	  FALSE, recep, 0, ch, TO_VICT);
+      "A white mist appears in the room, chilling you to the bone...\r\n"
+      "You begin to lose consciousness...",
+      FALSE, recep, 0, ch, TO_VICT);
       Crash_cryosave(ch, cost);
       mudlog(NRM, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "%s has cryo-rented.", GET_NAME(ch));
       SET_BIT_AR(PLR_FLAGS(ch), PLR_CRYO);
@@ -942,7 +942,7 @@ static int gen_receptionist(struct char_data *ch, struct char_data *recep, int c
     act("$n helps $N into $S private chamber.", FALSE, recep, 0, ch, TO_NOTVICT);
 
     GET_LOADROOM(ch) = GET_ROOM_VNUM(IN_ROOM(ch));
-    extract_char(ch);	/* It saves. */
+    extract_char(ch);    /* It saves. */
   } else {
     Crash_offer_rent(ch, recep, TRUE, mode);
     act("$N gives $n an offer.", FALSE, ch, 0, recep, TO_ROOM);
@@ -995,14 +995,14 @@ obj_save_data *objsave_parse_objects(FILE *fl)
 
     /* if the file is done, wrap it all up */
     if(get_line(fl, line) == FALSE || (*line == '$' && line[1] == '~')) {
-      if (temp == NULL && current->obj == NULL)	{
+      if (temp == NULL && current->obj == NULL)    {
         /* Remove current from list. */
         tempsave = head;
         if (tempsave == current) {
           free(current);
           head = NULL;
       } else {
-	  while (tempsave) {
+      while (tempsave) {
             if (tempsave->next == current)
               tempsave->next = NULL;
             tempsave = tempsave->next;          }
@@ -1026,20 +1026,20 @@ obj_save_data *objsave_parse_objects(FILE *fl)
       /* check for false alarm. */
       if (sscanf(line, "#%d", &nr) == 1) {
         if (real_object(nr) == NOTHING) { //object does not exist
-        	  log("SYSERR: Protection: deleting object %d.", nr);
+              log("SYSERR: Protection: deleting object %d.", nr);
             continue;
           }
-      	if (temp) {
-      	  current->obj = temp;
-    	  CREATE(current->next, obj_save_data, 1);
+          if (temp) {
+            current->obj = temp;
+          CREATE(current->next, obj_save_data, 1);
           current=current->next;
 
-       	  current->locate = 0;
+             current->locate = 0;
           temp = NULL;
         }
       }
       else
-      	continue;
+          continue;
       /* we have the number, check it, load obj. */
       if (nr == NOTHING) {   /* then it is unique */
         temp = create_obj();
@@ -1049,7 +1049,7 @@ obj_save_data *objsave_parse_objects(FILE *fl)
       } else {
         if(real_object(nr) != NOTHING) {
           temp=read_object(nr,VIRTUAL);
-	/* Go read next line - nothing more to see here. */
+    /* Go read next line - nothing more to see here. */
         } else {
           log("Nonexistent object %d found in rent file.", nr);
         }
@@ -1064,8 +1064,8 @@ obj_save_data *objsave_parse_objects(FILE *fl)
     switch(*tag) {
     case 'A':
       if (!strcmp(tag, "ADes")) {
-      	char error[40];
-      	snprintf(error, sizeof(error)-1, "rent(Ades):%s", temp->name);
+          char error[40];
+          snprintf(error, sizeof(error)-1, "rent(Ades):%s", temp->name);
         temp->action_description = fread_string(fl, error);
       } else if (!strcmp(tag, "Aff ")) {
         sscanf(line, "%d %d %d", &t[0], &t[1], &t[2]);
@@ -1172,7 +1172,7 @@ static int Crash_load_objs(struct char_data *ch) {
   int i, num_of_days, orig_rent_code, cost, num_objs=0;
   struct obj_data *cont_row[MAX_BAG_ROWS];
   int rentcode,timed,netcost,gold,account,nitems;
-	obj_save_data *loaded, *current;
+    obj_save_data *loaded, *current;
 
   if (!get_filename(filename, sizeof(filename), CRASH_FILE, GET_NAME(ch)))
     return 1;
@@ -1236,17 +1236,17 @@ static int Crash_load_objs(struct char_data *ch) {
     break;
   }
 
-	loaded = objsave_parse_objects(fl);
-	for (current = loaded; current != NULL; current=current->next)
-	  num_objs += handle_obj(current->obj, ch, current->locate, cont_row);
+    loaded = objsave_parse_objects(fl);
+    for (current = loaded; current != NULL; current=current->next)
+      num_objs += handle_obj(current->obj, ch, current->locate, cont_row);
 
-	/* now it's safe to free the obj_save_data list - all members of it
-	 * have been put in the correct lists by handle_obj() */
-	while (loaded != NULL) {
-		current = loaded;
-		loaded = loaded->next;
-		free(current);
-	}
+    /* now it's safe to free the obj_save_data list - all members of it
+     * have been put in the correct lists by handle_obj() */
+    while (loaded != NULL) {
+        current = loaded;
+        loaded = loaded->next;
+        free(current);
+    }
 
   /* Little hoarding check. -gg 3/1/98 */
  mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s (level %d) has %d %s (max %d).",

@@ -495,9 +495,9 @@ WCMD(do_wload)
       }
       cnt = get_obj_in_room(room, arg1);
       if (cnt && GET_OBJ_TYPE(cnt) == ITEM_CONTAINER) {
-      	obj_to_obj(object, cnt);
+          obj_to_obj(object, cnt);
         load_otrigger(object);
-      	return;
+          return;
       }
       /* neither char nor container found - just dump it in room */
       obj_to_room(object, real_room(room->number));

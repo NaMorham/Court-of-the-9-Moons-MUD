@@ -12,6 +12,8 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
+#include "mudtypes.h"
+
 /** 
  * Intended use of this macro is to allow external packages to work with a
  * variety of versions without modifications.  For instance, an IS_CORPSE()
@@ -28,35 +30,7 @@
  * it was when players rented, set the define below to 1 because
  * TRUE/FALSE aren't defined yet. 
  */
-#define USE_AUTOEQ	1
-
-// preamble
-/** 
- * As of bpl20, it should be safe to use unsigned data types for the various
- * virtual and real number data types.  There really isn't a reason to use
- * signed anymore so use the unsigned types and get 65,535 objects instead of
- * 32,768. NOTE: This will likely be unconditionally unsigned later.
- * 0 = use signed indexes; 1 = use unsigned indexes 
- */
-#define CIRCLE_UNSIGNED_INDEX	1
-
-#if CIRCLE_UNSIGNED_INDEX
-# define IDXTYPE	ush_int         ///< Index types are unsigned short ints
-# define IDXTYPE_MAX USHRT_MAX      ///< Used for compatibility checks.
-# define IDXTYPE_MIN 0              ///< Used for compatibility checks.
-# define NOWHERE	((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
-# define NOTHING	((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
-# define NOBODY		((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
-# define NOFLAG   ((IDXTYPE)~0)     ///< Sets to ush_int_MAX, or 65,535
-#else
-# define IDXTYPE	sh_int          ///< Index types are unsigned short ints
-# define IDXTYPE_MAX SHRT_MAX       ///< Used for compatibility checks.
-# define IDXTYPE_MIN SHRT_MIN       ///< Used for compatibility checks.
-# define NOWHERE	((IDXTYPE)-1)   ///< nil reference for rooms
-# define NOTHING	((IDXTYPE)-1)   ///< nil reference for objects
-# define NOBODY		((IDXTYPE)-1)	///< nil reference for mobiles 
-# define NOFLAG   ((IDXTYPE)-1)     ///< nil reference for flags  
-#endif
+#define USE_AUTOEQ    1
 
 /** Function macro for the mob, obj and room special functions */
 #define SPECIAL(name) \
@@ -110,25 +84,25 @@
 #define NUM_ZONE_FLAGS    6
 
 // Exit info: used in room_data.dir_option.exit_info
-#define EX_ISDOOR     (1 << 0)   ///< Exit is a door		
-#define EX_CLOSED     (1 << 1)   ///< The door is closed	
-#define EX_LOCKED     (1 << 2)   ///< The door is locked	
-#define EX_PICKPROOF  (1 << 3)   ///< Lock can't be picked	
+#define EX_ISDOOR     (1 << 0)   ///< Exit is a door        
+#define EX_CLOSED     (1 << 1)   ///< The door is closed    
+#define EX_LOCKED     (1 << 2)   ///< The door is locked    
+#define EX_PICKPROOF  (1 << 3)   ///< Lock can't be picked    
 #define EX_BREAKABLE  (1 << 4)   /**< The door can be smashed */
 #define EX_BROKEN     (1 << 5)   /**< The exit is broken    */
 #define EX_HIDDEN     (1 << 6)   /**< The exit is hidden    */
 
 // Sector types: used in room_data.sector_type
-#define SECT_INSIDE          0		///< Indoors, connected to SECT macro.
-#define SECT_CITY            1		///< In a city			
-#define SECT_FIELD           2		///< In a field		
-#define SECT_FOREST          3		///< In a forest		
-#define SECT_HILLS           4		///< In the hills		
-#define SECT_MOUNTAIN        5		///< On a mountain		
-#define SECT_WATER_SWIM      6		///< Swimmable water		
-#define SECT_WATER_NOSWIM    7		///< Water - need a boat	
-#define SECT_FLYING	         8		///< Flying			
-#define SECT_UNDERWATER	     9		///< Underwater		
+#define SECT_INSIDE          0        ///< Indoors, connected to SECT macro.
+#define SECT_CITY            1        ///< In a city            
+#define SECT_FIELD           2        ///< In a field        
+#define SECT_FOREST          3        ///< In a forest        
+#define SECT_HILLS           4        ///< In the hills        
+#define SECT_MOUNTAIN        5        ///< On a mountain        
+#define SECT_WATER_SWIM      6        ///< Swimmable water        
+#define SECT_WATER_NOSWIM    7        ///< Water - need a boat    
+#define SECT_FLYING             8        ///< Flying            
+#define SECT_UNDERWATER         9        ///< Underwater        
 /** The total number of room Sector Types */
 #define NUM_ROOM_SECTORS  10
 
@@ -150,13 +124,13 @@
 #define HISTORY_SIZE   5 ///< Number of last commands kept in each history
 
 // PC classes
-#define CLASS_UNDEFINED	  (-1) ///< PC Class undefined
+#define CLASS_UNDEFINED      (-1) ///< PC Class undefined
 #define CLASS_MAGIC_USER  0    ///< PC Class Magic User
 #define CLASS_CLERIC      1    ///< PC Class Cleric
 #define CLASS_THIEF       2    ///< PC Class Thief
 #define CLASS_WARRIOR     3    ///< PC Class Warrior
 /** Total number of available PC Classes */
-#define NUM_CLASSES	  4
+#define NUM_CLASSES      4
 
 // NPC classes (currently unused - feel free to implement!)
 #define CLASS_OTHER       0    ///< NPC Class Other (or undefined)
@@ -174,15 +148,15 @@
 #define NUM_GENDERS   3
 
 // Positions
-#define POS_DEAD       0	///< Position = dead
-#define POS_MORTALLYW  1	///< Position = mortally wounded
-#define POS_INCAP      2	///< Position = incapacitated
-#define POS_STUNNED    3	///< Position = stunned	
-#define POS_SLEEPING   4	///< Position = sleeping
-#define POS_RESTING    5	///< Position = resting	
-#define POS_SITTING    6	///< Position = sitting	
-#define POS_FIGHTING   7	///< Position = fighting
-#define POS_STANDING   8	///< Position = standing
+#define POS_DEAD       0    ///< Position = dead
+#define POS_MORTALLYW  1    ///< Position = mortally wounded
+#define POS_INCAP      2    ///< Position = incapacitated
+#define POS_STUNNED    3    ///< Position = stunned    
+#define POS_SLEEPING   4    ///< Position = sleeping
+#define POS_RESTING    5    ///< Position = resting    
+#define POS_SITTING    6    ///< Position = sitting    
+#define POS_FIGHTING   7    ///< Position = fighting
+#define POS_STANDING   8    ///< Position = standing
 /** Total number of positions. */
 #define NUM_POSITIONS   9
 
@@ -213,7 +187,7 @@
 #define MOB_SENTINEL        1   ///< Mob should not move
 #define MOB_SCAVENGER       2   ///< Mob picks up stuff on the ground
 #define MOB_ISNPC           3   ///< (R) Automatically set on all Mobs
-#define MOB_AWARE	        4   ///< Mob can't be backstabbed
+#define MOB_AWARE            4   ///< Mob can't be backstabbed
 #define MOB_AGGRESSIVE      5   ///< Mob auto-attacks everybody nearby
 #define MOB_STAY_ZONE       6   ///< Mob shouldn't wander out of zone
 #define MOB_WIMPY           7   ///< Mob flees if severely injured
@@ -298,9 +272,9 @@
 /** Total number of affect flags not including the don't use flag. */
 #define NUM_AFF_FLAGS   22
 
-/* Modes of connectedness: used by descriptor_data.state 		*/
-#define CON_PLAYING       0 ///< Playing - Nominal state 		
-#define CON_CLOSE         1 ///< User disconnect, remove character.	
+/* Modes of connectedness: used by descriptor_data.state         */
+#define CON_PLAYING       0 ///< Playing - Nominal state         
+#define CON_CLOSE         1 ///< User disconnect, remove character.    
 #define CON_GET_NAME      2 ///< Login with name
 #define CON_NAME_CNFRM    3 ///< New character, confirm name
 #define CON_PASSWORD      4 ///< Login with password
@@ -311,19 +285,19 @@
 #define CON_RMOTD         9 ///< Reading the message of the day
 #define CON_MENU         10 ///< At the main menu
 #define CON_PLR_DESC     11 ///< Enter a new character description prompt
-#define CON_CHPWD_GETOLD 12 ///< Changing passwd: Get old		
+#define CON_CHPWD_GETOLD 12 ///< Changing passwd: Get old        
 #define CON_CHPWD_GETNEW 13 ///< Changing passwd: Get new
 #define CON_CHPWD_VRFY   14 ///< Changing passwd: Verify new password
-#define CON_DELCNF1      15 ///< Character Delete: Confirmation 1		
-#define CON_DELCNF2      16 ///< Character Delete: Confirmation 2		
-#define CON_DISCONNECT   17 ///< In-game link loss (leave character)	
-#define CON_OEDIT        18 ///< OLC mode - object editor		
-#define CON_REDIT        19 ///< OLC mode - room editor		
-#define CON_ZEDIT        20 ///< OLC mode - zone info editor		
-#define CON_MEDIT        21 ///< OLC mode - mobile editor		
-#define CON_SEDIT        22 ///< OLC mode - shop editor		
-#define CON_TEDIT        23 ///< OLC mode - text editor		
-#define CON_CEDIT        24 ///< OLC mode - conf editor		
+#define CON_DELCNF1      15 ///< Character Delete: Confirmation 1        
+#define CON_DELCNF2      16 ///< Character Delete: Confirmation 2        
+#define CON_DISCONNECT   17 ///< In-game link loss (leave character)    
+#define CON_OEDIT        18 ///< OLC mode - object editor        
+#define CON_REDIT        19 ///< OLC mode - room editor        
+#define CON_ZEDIT        20 ///< OLC mode - zone info editor        
+#define CON_MEDIT        21 ///< OLC mode - mobile editor        
+#define CON_SEDIT        22 ///< OLC mode - shop editor        
+#define CON_TEDIT        23 ///< OLC mode - text editor        
+#define CON_CEDIT        24 ///< OLC mode - conf editor        
 #define CON_AEDIT        25 ///< OLC mode - social (action) edit     
 #define CON_TRIGEDIT     26 ///< OLC mode - trigger edit             
 #define CON_HEDIT        27 ///< OLC mode - help edit
@@ -363,29 +337,29 @@ only get the generic neck type. */
 
 // object-related defines
 // Item types: used by obj_data.obj_flags.type_flag
-#define ITEM_LIGHT      1		///< Item is a light source	
-#define ITEM_SCROLL     2		///< Item is a scroll		
-#define ITEM_WAND       3		///< Item is a wand		
-#define ITEM_STAFF      4		///< Item is a staff		
-#define ITEM_WEAPON     5		///< Item is a weapon		
-#define ITEM_FURNITURE  6       ///< Sittable Furniture		
-#define ITEM_FREE       7       ///< Unimplemented		
-#define ITEM_TREASURE   8       ///< Item is a treasure, not gold	
-#define ITEM_ARMOR      9       ///< Item is armor		
-#define ITEM_POTION    10       ///< Item is a potion		
-#define ITEM_WORN      11		///< Unimplemented		
-#define ITEM_OTHER     12		///< Misc object			
-#define ITEM_TRASH     13		///< Trash - shopkeepers won't buy	
-#define ITEM_FREE2     14		///< Unimplemented		
-#define ITEM_CONTAINER 15		///< Item is a container		
-#define ITEM_NOTE      16		///< Item is note 		
-#define ITEM_DRINKCON  17		///< Item is a drink container	
-#define ITEM_KEY       18		///< Item is a key		
-#define ITEM_FOOD      19		///< Item is food			
-#define ITEM_MONEY     20		///< Item is money (gold)		
-#define ITEM_PEN       21		///< Item is a pen		
-#define ITEM_BOAT      22		///< Item is a boat		
-#define ITEM_FOUNTAIN  23		///< Item is a fountain		
+#define ITEM_LIGHT      1        ///< Item is a light source    
+#define ITEM_SCROLL     2        ///< Item is a scroll        
+#define ITEM_WAND       3        ///< Item is a wand        
+#define ITEM_STAFF      4        ///< Item is a staff        
+#define ITEM_WEAPON     5        ///< Item is a weapon        
+#define ITEM_FURNITURE  6       ///< Sittable Furniture        
+#define ITEM_FREE       7       ///< Unimplemented        
+#define ITEM_TREASURE   8       ///< Item is a treasure, not gold    
+#define ITEM_ARMOR      9       ///< Item is armor        
+#define ITEM_POTION    10       ///< Item is a potion        
+#define ITEM_WORN      11        ///< Unimplemented        
+#define ITEM_OTHER     12        ///< Misc object            
+#define ITEM_TRASH     13        ///< Trash - shopkeepers won't buy    
+#define ITEM_FREE2     14        ///< Unimplemented        
+#define ITEM_CONTAINER 15        ///< Item is a container        
+#define ITEM_NOTE      16        ///< Item is note         
+#define ITEM_DRINKCON  17        ///< Item is a drink container    
+#define ITEM_KEY       18        ///< Item is a key        
+#define ITEM_FOOD      19        ///< Item is food            
+#define ITEM_MONEY     20        ///< Item is money (gold)        
+#define ITEM_PEN       21        ///< Item is a pen        
+#define ITEM_BOAT      22        ///< Item is a boat        
+#define ITEM_FOUNTAIN  23        ///< Item is a fountain        
 /** Total number of item types.
 * @todo Should this be 23? */
 #define NUM_ITEM_TYPES    24
@@ -398,13 +372,13 @@ only get the generic neck type. */
 #define ITEM_WEAR_HEAD      4   ///< Item can be worn on head
 #define ITEM_WEAR_LEGS      5   ///< Item can be worn on legs
 #define ITEM_WEAR_FEET      6   ///< Item can be worn on feet
-#define ITEM_WEAR_HANDS	    7   ///< Item can be worn on hands	
+#define ITEM_WEAR_HANDS        7   ///< Item can be worn on hands    
 #define ITEM_WEAR_ARMS      8   ///< Item can be worn on arms
 #define ITEM_WEAR_SHIELD    9   ///< Item can be used as a shield
-#define ITEM_WEAR_ABOUT	   10   ///< Item can be worn about body
+#define ITEM_WEAR_ABOUT       10   ///< Item can be worn about body
 #define ITEM_WEAR_WAIST    11   ///< Item can be worn around waist
-#define ITEM_WEAR_WRIST	   12   ///< Item can be worn on wrist
-#define ITEM_WEAR_WIELD	   13   ///< Item can be wielded
+#define ITEM_WEAR_WRIST       12   ///< Item can be worn on wrist
+#define ITEM_WEAR_WIELD       13   ///< Item can be wielded
 #define ITEM_WEAR_HOLD     14   ///< Item can be held
 /** Total number of item wears */
 #define NUM_ITEM_WEARS    15
@@ -414,17 +388,17 @@ only get the generic neck type. */
 #define ITEM_HUM               1   ///< Item is humming
 #define ITEM_NORENT            2   ///< Item cannot be rented
 #define ITEM_NODONATE          3   ///< Item cannot be donated
-#define ITEM_NOINVIS           4   ///< Item cannot be made invis	
+#define ITEM_NOINVIS           4   ///< Item cannot be made invis    
 #define ITEM_INVISIBLE         5   ///< Item is invisible
 #define ITEM_MAGIC             6   ///< Item is magical
 #define ITEM_NODROP            7   ///< Item is cursed: can't drop
 #define ITEM_BLESS             8   ///< Item is blessed
-#define ITEM_ANTI_GOOD         9   ///< Not usable by good people	
-#define ITEM_ANTI_EVIL        10   ///< Not usable by evil people	
+#define ITEM_ANTI_GOOD         9   ///< Not usable by good people    
+#define ITEM_ANTI_EVIL        10   ///< Not usable by evil people    
 #define ITEM_ANTI_NEUTRAL     11   ///< Not usable by neutral people
 #define ITEM_ANTI_MAGIC_USER  12   ///< Not usable by mages
 #define ITEM_ANTI_CLERIC      13   ///< Not usable by clerics
-#define ITEM_ANTI_THIEF	      14   ///< Not usable by thieves
+#define ITEM_ANTI_THIEF          14   ///< Not usable by thieves
 #define ITEM_ANTI_WARRIOR     15   ///< Not usable by warriors
 #define ITEM_NOSELL           16   ///< Shopkeepers won't touch it
 #define ITEM_QUEST            17   ///< Item is a quest item        
@@ -432,31 +406,31 @@ only get the generic neck type. */
 #define NUM_ITEM_FLAGS    18
 
 // Modifier constants used with obj affects ('A' fields)
-#define APPLY_NONE              0	///< No effect			
-#define APPLY_STR               1	///< Apply to strength		
-#define APPLY_DEX               2	///< Apply to dexterity		
-#define APPLY_INT               3	///< Apply to intelligence	
-#define APPLY_WIS               4	///< Apply to wisdom		
-#define APPLY_CON               5	///< Apply to constitution	
-#define APPLY_CHA               6   ///< Apply to charisma		
-#define APPLY_CLASS             7	///< Reserved			
-#define APPLY_LEVEL             8	///< Reserved			
-#define APPLY_AGE               9	///< Apply to age			
-#define APPLY_CHAR_WEIGHT      10	///< Apply to weight		
-#define APPLY_CHAR_HEIGHT      11	///< Apply to height		
-#define APPLY_MANA             12	///< Apply to max mana		
-#define APPLY_HIT              13	///< Apply to max hit points	
-#define APPLY_MOVE             14	///< Apply to max move points	
-#define APPLY_GOLD             15	///< Reserved			
-#define APPLY_EXP              16	///< Reserved			
-#define APPLY_AC               17	///< Apply to Armor Class		
-#define APPLY_HITROLL          18	///< Apply to hitroll		
-#define APPLY_DAMROLL          19	///< Apply to damage roll		
-#define APPLY_SAVING_PARA      20	///< Apply to save throw: paralysis	
-#define APPLY_SAVING_ROD       21	///< Apply to save throw: rods	
-#define APPLY_SAVING_PETRI     22	///< Apply to save throw: petrif	
-#define APPLY_SAVING_BREATH    23	///< Apply to save throw: breath	
-#define APPLY_SAVING_SPELL     24	///< Apply to save throw: spells	
+#define APPLY_NONE              0    ///< No effect            
+#define APPLY_STR               1    ///< Apply to strength        
+#define APPLY_DEX               2    ///< Apply to dexterity        
+#define APPLY_INT               3    ///< Apply to intelligence    
+#define APPLY_WIS               4    ///< Apply to wisdom        
+#define APPLY_CON               5    ///< Apply to constitution    
+#define APPLY_CHA               6   ///< Apply to charisma        
+#define APPLY_CLASS             7    ///< Reserved            
+#define APPLY_LEVEL             8    ///< Reserved            
+#define APPLY_AGE               9    ///< Apply to age            
+#define APPLY_CHAR_WEIGHT      10    ///< Apply to weight        
+#define APPLY_CHAR_HEIGHT      11    ///< Apply to height        
+#define APPLY_MANA             12    ///< Apply to max mana        
+#define APPLY_HIT              13    ///< Apply to max hit points    
+#define APPLY_MOVE             14    ///< Apply to max move points    
+#define APPLY_GOLD             15    ///< Reserved            
+#define APPLY_EXP              16    ///< Reserved            
+#define APPLY_AC               17    ///< Apply to Armor Class        
+#define APPLY_HITROLL          18    ///< Apply to hitroll        
+#define APPLY_DAMROLL          19    ///< Apply to damage roll        
+#define APPLY_SAVING_PARA      20    ///< Apply to save throw: paralysis    
+#define APPLY_SAVING_ROD       21    ///< Apply to save throw: rods    
+#define APPLY_SAVING_PETRI     22    ///< Apply to save throw: petrif    
+#define APPLY_SAVING_BREATH    23    ///< Apply to save throw: breath    
+#define APPLY_SAVING_SPELL     24    ///< Apply to save throw: spells    
 /** Total number of applies */
 #define NUM_APPLIES   25
 
@@ -464,10 +438,10 @@ only get the generic neck type. */
 #define NUM_OF_SAVING_THROWS  5
 
 // Container flags - value[1]
-#define CONT_CLOSEABLE      (1 << 0)	///< Container can be closed	
-#define CONT_PICKPROOF      (1 << 1)	///< Container is pickproof	
-#define CONT_CLOSED         (1 << 2)	///< Container is closed		
-#define CONT_LOCKED         (1 << 3)	///< Container is locked		
+#define CONT_CLOSEABLE      (1 << 0)    ///< Container can be closed    
+#define CONT_PICKPROOF      (1 << 1)    ///< Container is pickproof    
+#define CONT_CLOSED         (1 << 2)    ///< Container is closed        
+#define CONT_LOCKED         (1 << 3)    ///< Container is locked        
 
 // Some different kind of liquids for use in values of drink containers
 #define LIQ_WATER      0   ///< Liquid type water
@@ -496,10 +470,10 @@ only get the generic neck type. */
 #define THIRST       2  ///< Player thirst condition
 
 // Sun state for weather_data
-#define SUN_DARK	0  ///< Night time
-#define SUN_RISE	1  ///< Dawn
-#define SUN_LIGHT	2  ///< Day time
-#define SUN_SET		3  ///< Dusk
+#define SUN_DARK    0  ///< Night time
+#define SUN_RISE    1  ///< Dawn
+#define SUN_LIGHT    2  ///< Day time
+#define SUN_SET        3  ///< Dusk
 
 // Sky conditions for weather_data
 #define SKY_CLOUDLESS  0  ///< Weather = No clouds
@@ -537,13 +511,13 @@ only get the generic neck type. */
 #define LVL_IMPL    34  ///< Level of Implementors
 #define LVL_GRGOD   33  ///< Level of Greater Gods
 #define LVL_GOD     32  ///< Level of Gods
-#define LVL_IMMORT	31  ///< Level of Immortals
+#define LVL_IMMORT    31  ///< Level of Immortals
 
 /** Minimum level to build and to run the saveall command */
-#define LVL_BUILDER	LVL_IMMORT
+#define LVL_BUILDER    LVL_IMMORT
 
 /** Arbitrary number that won't be in a string */
-#define MAGIC_NUMBER	(0x06)
+#define MAGIC_NUMBER    (0x06)
 
 /** 
  * OPT_USEC determines how many commands will be processed by the MUD per
@@ -556,20 +530,20 @@ only get the generic neck type. */
  * @see PASSES_PER_SEC
  * @see RL_SEC
  */
-#define OPT_USEC	100000
+#define OPT_USEC    100000
 /** 
  * How many heartbeats equate to one real second.
  * @see OPT_USEC
  * @see RL_SEC
  */
-#define PASSES_PER_SEC	(1000000 / OPT_USEC)
+#define PASSES_PER_SEC    (1000000 / OPT_USEC)
 /** 
  * Used with other macros to define at how many heartbeats a control loop
  * gets executed. Helps to translate pulse counts to real seconds for
  * human comprehension.
  * @see PASSES_PER_SEC
  */
-#define RL_SEC		* PASSES_PER_SEC
+#define RL_SEC        * PASSES_PER_SEC
 
 /** Controls when a zone update will occur. */
 #define PULSE_ZONE      (10 RL_SEC)
@@ -595,7 +569,7 @@ only get the generic neck type. */
  * Controls when to save the current ingame MUD time to disk.
  * This should be set >= SECS_PER_MUD_HOUR 
  */
-#define PULSE_TIMESAVE	(30 * 60 RL_SEC)
+#define PULSE_TIMESAVE    (30 * 60 RL_SEC)
 
 // Variables for the output buffering system
 #define MAX_SOCK_BUF       (24 * 1024) ///< Size of kernel's sock buf  
@@ -628,19 +602,6 @@ only get the generic neck type. */
  * 16k should be plenty and then some. 
  */
 #define MAX_CMD_LENGTH 16384
-
-// Type Definitions
-typedef signed char sbyte;          ///< 1 byte; vals = -127 to 127
-typedef unsigned char ubyte;        ///< 1 byte; vals = 0 to 255
-typedef signed short int sh_int;    ///< 2 bytes; vals = -32,768 to 32,767
-typedef unsigned short int ush_int; ///< 2 bytes; vals = 0 to 65,535
-#if !defined(__cplusplus)	// Anyone know a portable method?
-typedef char bool; ///< Technically 1 signed byte; vals should only = TRUE or FALSE.
-#endif
-
-#if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)	// Hm, sysdep.h?
-typedef signed char byte; ///< Technically 1 signed byte; vals should only = TRUE or FALSE.
-#endif
 
 // Various virtual (human-reference) number types.
 typedef IDXTYPE room_vnum;  ///< vnum specifically for room
@@ -697,10 +658,10 @@ struct extra_descr_data
 struct obj_flag_data
 {
     int value[NUM_OBJ_VAL_POSITIONS]; ///< Values of the item (see list)   
-    byte type_flag;                   ///< Type of item			   
-    int level;                        ///< Minimum level to use object	   
+    byte type_flag;                   ///< Type of item               
+    int level;                        ///< Minimum level to use object       
     int wear_flags[TW_ARRAY_MAX];     ///< Where you can wear it, if wearable
-    int extra_flags[EF_ARRAY_MAX];    ///< If it hums, glows, etc.	   
+    int extra_flags[EF_ARRAY_MAX];    ///< If it hums, glows, etc.       
     int weight;                       ///< Weight of the object
     int cost;                         ///< Value when sold            
     int cost_per_day;                 ///< Rent cost per real day
@@ -937,7 +898,7 @@ struct char_point_data
     // Armor class.
     sh_int armor;
     int gold;        ///< Current gold carried on character
-    int bank_gold;   ///< Gold the char has in a bank account	
+    int bank_gold;   ///< Gold the char has in a bank account    
     int exp;         ///< The experience points, or value, of the character.
 
     sbyte hitroll;   ///< Any bonus or penalty to the hit roll
@@ -954,7 +915,7 @@ struct char_special_data_saved
     long idnum;                     ///< PC's idnum; -1 for mobiles.
     int act[PM_ARRAY_MAX];          ///< act flags for NPC's; player flag for PC's
     int affected_by[AF_ARRAY_MAX];  ///< Bitvector for spells/skills affected by
-    sh_int apply_saving_throw[5];   ///< Saving throw (Bonuses)		
+    sh_int apply_saving_throw[5];   ///< Saving throw (Bonuses)        
 };
 
 /** 
@@ -1015,7 +976,7 @@ struct player_special_data
 
     char *poofin;           ///< Description displayed to room on arrival of a god.
     char *poofout;          ///< Description displayed to room at a god's exit.
-    struct alias_data *aliases; ///< Command aliases			
+    struct alias_data *aliases; ///< Command aliases            
     long last_tell;         ///< idnum of PC who last told this PC, used to reply
     void *last_olc_targ;    ///< ? Currently Unused ?
     int last_olc_mode;      ///< ? Currently Unused ?
@@ -1073,9 +1034,9 @@ struct char_data
     struct char_ability_data real_abils;    ///< Abilities without modifiers
     struct char_ability_data aff_abils;     ///< Abilities with modifiers
     struct char_point_data points;          ///< Point/statistics
-    struct char_special_data char_specials; ///< PC/NPC specials	 
-    struct player_special_data *player_specials; ///< PC specials		 
-    struct mob_special_data mob_specials;   ///< NPC specials		 
+    struct char_special_data char_specials; ///< PC/NPC specials     
+    struct player_special_data *player_specials; ///< PC specials         
+    struct mob_special_data mob_specials;   ///< NPC specials         
 
     struct affected_type *affected;         ///< affected by what spells   
     struct obj_data *equipment[NUM_WEARS];  ///< Equipment array           
@@ -1127,34 +1088,34 @@ struct descriptor_data
     socket_t descriptor;      ///< file descriptor for socket
     char host[HOST_LENGTH+1]; ///< hostname
     byte bad_pws;             ///< number of bad pw attemps this login
-    byte idle_tics;           ///< tics idle at password prompt		
-    int connected;            ///< mode of 'connectedness'		
-    int desc_num;             ///< unique num assigned to desc		
-    time_t login_time;        ///< when the person connected		
-    char *showstr_head;       ///< for keeping track of an internal str	
-    char **showstr_vector;    ///< for paging through texts		
-    int showstr_count;        ///< number of pages to page through	
-    int showstr_page;         ///< which page are we currently showing?	
-    char **str;               ///< for the modify-str system		
-    char *backstr;            ///< backup string for modify-str system	
-    size_t max_str;           ///< maximum size of string in modify-str	
-    long mail_to;             ///< name for mail system			
+    byte idle_tics;           ///< tics idle at password prompt        
+    int connected;            ///< mode of 'connectedness'        
+    int desc_num;             ///< unique num assigned to desc        
+    time_t login_time;        ///< when the person connected        
+    char *showstr_head;       ///< for keeping track of an internal str    
+    char **showstr_vector;    ///< for paging through texts        
+    int showstr_count;        ///< number of pages to page through    
+    int showstr_page;         ///< which page are we currently showing?    
+    char **str;               ///< for the modify-str system        
+    char *backstr;            ///< backup string for modify-str system    
+    size_t max_str;           ///< maximum size of string in modify-str    
+    long mail_to;             ///< name for mail system            
     int has_prompt;           ///< is the user at a prompt?            
-    char inbuf[MAX_RAW_INPUT_LENGTH];  ///< buffer for raw input		
-    char last_input[MAX_INPUT_LENGTH]; ///< the last input			
-    char small_outbuf[SMALL_BUFSIZE];  ///< standard output buffer		
-    char *output;             ///< ptr to the current output buffer	
-    char **history;           ///< History of commands, for ! mostly.	
-    int history_pos;          ///< Circular array position.		
-    int bufptr;               ///< ptr to end of current output		
-    int bufspace;             ///< space left in the output buffer	
+    char inbuf[MAX_RAW_INPUT_LENGTH];  ///< buffer for raw input        
+    char last_input[MAX_INPUT_LENGTH]; ///< the last input            
+    char small_outbuf[SMALL_BUFSIZE];  ///< standard output buffer        
+    char *output;             ///< ptr to the current output buffer    
+    char **history;           ///< History of commands, for ! mostly.    
+    int history_pos;          ///< Circular array position.        
+    int bufptr;               ///< ptr to end of current output        
+    int bufspace;             ///< space left in the output buffer    
     struct txt_block *large_outbuf; ///< ptr to large buffer, if we need it
-    struct txt_q input;       ///< q of unprocessed input		
-    struct char_data *character; ///< linked to char			
-    struct char_data *original;  ///< original char if switched		
-    struct descriptor_data *snooping; ///< Who is this char snooping	
-    struct descriptor_data *snoop_by; ///< And who is snooping this char	
-    struct descriptor_data *next;     ///< link to next descriptor		
+    struct txt_q input;       ///< q of unprocessed input        
+    struct char_data *character; ///< linked to char            
+    struct char_data *original;  ///< original char if switched        
+    struct descriptor_data *snooping; ///< Who is this char snooping    
+    struct descriptor_data *snoop_by; ///< And who is snooping this char    
+    struct descriptor_data *next;     ///< link to next descriptor        
     struct oasis_olc_data *olc;       ///< OLC info
 };
 
@@ -1189,7 +1150,7 @@ struct message_list
 {
     int a_type;               ///< The id of this attack type.
     int number_of_attacks;    ///< How many attack messages to chose from.
-    struct message_type *msg; ///< List of messages.			
+    struct message_type *msg; ///< List of messages.            
 };
 
 /** 

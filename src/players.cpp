@@ -23,10 +23,10 @@
 #include "dg_scripts.h" /* To enable saving of player variables to disk */
 #include "quest.h"
 
-#define LOAD_HIT	0
-#define LOAD_MANA	1
-#define LOAD_MOVE	2
-#define LOAD_STRENGTH	3
+#define LOAD_HIT    0
+#define LOAD_MANA    1
+#define LOAD_MOVE    2
+#define LOAD_STRENGTH    3
 
 #define PT_PNAME(i) (player_table[(i)].name)
 #define PT_IDNUM(i) (player_table[(i)].id)
@@ -102,10 +102,10 @@ int create_entry(char *name)
 {
   int i, pos;
 
-  if (top_of_p_table == -1) {	/* no table */
+  if (top_of_p_table == -1) {    /* no table */
     pos = top_of_p_table = 0;
     CREATE(player_table, struct player_index_element, 1);
-  } else if ((pos = get_ptable_by_name(name)) == -1) {	/* new name */
+  } else if ((pos = get_ptable_by_name(name)) == -1) {    /* new name */
     i = ++top_of_p_table + 1;
 
     RECREATE(player_table, struct player_index_element, i);
@@ -176,7 +176,7 @@ void save_player_index(void)
     if (*player_table[i].name) {
       sprintascii(bits, player_table[i].flags);
       fprintf(index_file, "%ld %s %d %s %ld\n", player_table[i].id,
-	player_table[i].name, player_table[i].level, *bits ? bits : "0",
+    player_table[i].name, player_table[i].level, *bits ? bits : "0",
         (long)player_table[i].last);
     }
   fprintf(index_file, "~\n");
@@ -321,8 +321,8 @@ int load_char(const char *name, struct char_data *ch)
 
       switch (*tag) {
       case 'A':
-        if (!strcmp(tag, "Ac  "))	GET_AC(ch)		= atoi(line);
-	else if (!strcmp(tag, "Act ")) {
+        if (!strcmp(tag, "Ac  "))    GET_AC(ch)        = atoi(line);
+    else if (!strcmp(tag, "Act ")) {
          if (sscanf(line, "%s %s %s %s", f1, f2, f3, f4) == 4) {
           PLR_FLAGS(ch)[0] = asciiflag_conv(f1);
           PLR_FLAGS(ch)[1] = asciiflag_conv(f2);
@@ -338,77 +338,77 @@ int load_char(const char *name, struct char_data *ch)
           AFF_FLAGS(ch)[3] = asciiflag_conv(f4);
         } else
           AFF_FLAGS(ch)[0] = asciiflag_conv(line);
-	}
-	if (!strcmp(tag, "Affs")) 	load_affects(fl, ch);
-        else if (!strcmp(tag, "Alin"))	GET_ALIGNMENT(ch)	= atoi(line);
-	else if (!strcmp(tag, "Alis"))	read_aliases_ascii(fl, ch, atoi(line));
-	break;
+    }
+    if (!strcmp(tag, "Affs"))     load_affects(fl, ch);
+        else if (!strcmp(tag, "Alin"))    GET_ALIGNMENT(ch)    = atoi(line);
+    else if (!strcmp(tag, "Alis"))    read_aliases_ascii(fl, ch, atoi(line));
+    break;
 
       case 'B':
-	     if (!strcmp(tag, "Badp"))	GET_BAD_PWS(ch)		= atoi(line);
-	else if (!strcmp(tag, "Bank"))	GET_BANK_GOLD(ch)	= atoi(line);
-	else if (!strcmp(tag, "Brth"))	ch->player.time.birth	= atol(line);
-	break;
+         if (!strcmp(tag, "Badp"))    GET_BAD_PWS(ch)        = atoi(line);
+    else if (!strcmp(tag, "Bank"))    GET_BANK_GOLD(ch)    = atoi(line);
+    else if (!strcmp(tag, "Brth"))    ch->player.time.birth    = atol(line);
+    break;
 
       case 'C':
-	     if (!strcmp(tag, "Cha "))	ch->real_abils.cha	= atoi(line);
-	else if (!strcmp(tag, "Clas"))	GET_CLASS(ch)		= atoi(line);
-	else if (!strcmp(tag, "Con "))	ch->real_abils.con	= atoi(line);
-	break;
+         if (!strcmp(tag, "Cha "))    ch->real_abils.cha    = atoi(line);
+    else if (!strcmp(tag, "Clas"))    GET_CLASS(ch)        = atoi(line);
+    else if (!strcmp(tag, "Con "))    ch->real_abils.con    = atoi(line);
+    break;
 
       case 'D':
-	     if (!strcmp(tag, "Desc"))	ch->player.description	= fread_string(fl, buf2);
-	else if (!strcmp(tag, "Dex "))	ch->real_abils.dex	= atoi(line);
-	else if (!strcmp(tag, "Drnk"))	GET_COND(ch, DRUNK)	= atoi(line);
-	else if (!strcmp(tag, "Drol"))	GET_DAMROLL(ch)		= atoi(line);
-	break;
+         if (!strcmp(tag, "Desc"))    ch->player.description    = fread_string(fl, buf2);
+    else if (!strcmp(tag, "Dex "))    ch->real_abils.dex    = atoi(line);
+    else if (!strcmp(tag, "Drnk"))    GET_COND(ch, DRUNK)    = atoi(line);
+    else if (!strcmp(tag, "Drol"))    GET_DAMROLL(ch)        = atoi(line);
+    break;
 
       case 'E':
-	     if (!strcmp(tag, "Exp "))	GET_EXP(ch)		= atoi(line);
-	break;
+         if (!strcmp(tag, "Exp "))    GET_EXP(ch)        = atoi(line);
+    break;
 
       case 'F':
-	     if (!strcmp(tag, "Frez"))	GET_FREEZE_LEV(ch)	= atoi(line);
-	break;
+         if (!strcmp(tag, "Frez"))    GET_FREEZE_LEV(ch)    = atoi(line);
+    break;
 
       case 'G':
-	     if (!strcmp(tag, "Gold"))	GET_GOLD(ch)		= atoi(line);
-	break;
+         if (!strcmp(tag, "Gold"))    GET_GOLD(ch)        = atoi(line);
+    break;
 
       case 'H':
-	     if (!strcmp(tag, "Hit "))	load_HMVS(ch, line, LOAD_HIT);
-	else if (!strcmp(tag, "Hite"))	GET_HEIGHT(ch)		= atoi(line);
+         if (!strcmp(tag, "Hit "))    load_HMVS(ch, line, LOAD_HIT);
+    else if (!strcmp(tag, "Hite"))    GET_HEIGHT(ch)        = atoi(line);
         else if (!strcmp(tag, "Host")) {
           if (GET_HOST(ch))
             free(GET_HOST(ch));
           GET_HOST(ch) = strdup(line);
         }
-        else if (!strcmp(tag, "Hrol"))	GET_HITROLL(ch)		= atoi(line);
-	else if (!strcmp(tag, "Hung"))	GET_COND(ch, HUNGER)	= atoi(line);
-	break;
+        else if (!strcmp(tag, "Hrol"))    GET_HITROLL(ch)        = atoi(line);
+    else if (!strcmp(tag, "Hung"))    GET_COND(ch, HUNGER)    = atoi(line);
+    break;
 
       case 'I':
-	     if (!strcmp(tag, "Id  "))	GET_IDNUM(ch)		= atol(line);
-	else if (!strcmp(tag, "Int "))	ch->real_abils.intel	= atoi(line);
-	else if (!strcmp(tag, "Invs"))	GET_INVIS_LEV(ch)	= atoi(line);
-	break;
+         if (!strcmp(tag, "Id  "))    GET_IDNUM(ch)        = atol(line);
+    else if (!strcmp(tag, "Int "))    ch->real_abils.intel    = atoi(line);
+    else if (!strcmp(tag, "Invs"))    GET_INVIS_LEV(ch)    = atoi(line);
+    break;
 
       case 'L':
-	     if (!strcmp(tag, "Last"))	ch->player.time.logon	= atol(line);
-  else if (!strcmp(tag, "Lern"))	GET_PRACTICES(ch)	= atoi(line);
-	else if (!strcmp(tag, "Levl"))	GET_LEVEL(ch)		= atoi(line);
+         if (!strcmp(tag, "Last"))    ch->player.time.logon    = atol(line);
+  else if (!strcmp(tag, "Lern"))    GET_PRACTICES(ch)    = atoi(line);
+    else if (!strcmp(tag, "Levl"))    GET_LEVEL(ch)        = atoi(line);
         else if (!strcmp(tag, "Lmot"))   GET_LAST_MOTD(ch)   = atoi(line);
         else if (!strcmp(tag, "Lnew"))   GET_LAST_NEWS(ch)   = atoi(line);
-	break;
+    break;
 
       case 'M':
-	     if (!strcmp(tag, "Mana"))	load_HMVS(ch, line, LOAD_MANA);
-	else if (!strcmp(tag, "Move"))	load_HMVS(ch, line, LOAD_MOVE);
-	break;
+         if (!strcmp(tag, "Mana"))    load_HMVS(ch, line, LOAD_MANA);
+    else if (!strcmp(tag, "Move"))    load_HMVS(ch, line, LOAD_MOVE);
+    break;
 
       case 'N':
-	     if (!strcmp(tag, "Name"))	GET_PC_NAME(ch)	= strdup(line);
-	break;
+         if (!strcmp(tag, "Name"))    GET_PC_NAME(ch)    = strdup(line);
+    break;
 
       case 'O':
        if (!strcmp(tag, "Olc "))  GET_OLC_ZONE(ch) = atoi(line);
@@ -416,10 +416,10 @@ int load_char(const char *name, struct char_data *ch)
 
       case 'P':
        if (!strcmp(tag, "Page"))  GET_PAGE_LENGTH(ch) = atoi(line);
-	else if (!strcmp(tag, "Pass"))	strcpy(GET_PASSWD(ch), line);
-	else if (!strcmp(tag, "Plyd"))	ch->player.time.played	= atoi(line);
-	else if (!strcmp(tag, "PfIn"))	POOFIN(ch)		= strdup(line);
-	else if (!strcmp(tag, "PfOt"))	POOFOUT(ch)		= strdup(line);
+    else if (!strcmp(tag, "Pass"))    strcpy(GET_PASSWD(ch), line);
+    else if (!strcmp(tag, "Plyd"))    ch->player.time.played    = atoi(line);
+    else if (!strcmp(tag, "PfIn"))    POOFIN(ch)        = strdup(line);
+    else if (!strcmp(tag, "PfOt"))    POOFOUT(ch)        = strdup(line);
         else if (!strcmp(tag, "Pref")) {
           if (sscanf(line, "%s %s %s %s", f1, f2, f3, f4) == 4) {
             PRF_FLAGS(ch)[0] = asciiflag_conv(f1);
@@ -427,12 +427,12 @@ int load_char(const char *name, struct char_data *ch)
             PRF_FLAGS(ch)[2] = asciiflag_conv(f3);
             PRF_FLAGS(ch)[3] = asciiflag_conv(f4);
           } else
-	    PRF_FLAGS(ch)[0] = asciiflag_conv(f1);
-	  }
+        PRF_FLAGS(ch)[0] = asciiflag_conv(f1);
+      }
         break;
 
       case 'Q':
-	     if (!strcmp(tag, "Qstp"))  GET_QUESTPOINTS(ch)     = atoi(line);
+         if (!strcmp(tag, "Qstp"))  GET_QUESTPOINTS(ch)     = atoi(line);
        else if (!strcmp(tag, "Qpnt")) GET_QUESTPOINTS(ch) = atoi(line); /* Backward compatibility */
        else if (!strcmp(tag, "Qcur")) GET_QUEST(ch) = atoi(line);
        else if (!strcmp(tag, "Qcnt")) GET_QUEST_COUNTER(ch) = atoi(line);
@@ -440,24 +440,24 @@ int load_char(const char *name, struct char_data *ch)
         break;
 
       case 'R':
-	     if (!strcmp(tag, "Room"))	GET_LOADROOM(ch)	= atoi(line);
-	break;
+         if (!strcmp(tag, "Room"))    GET_LOADROOM(ch)    = atoi(line);
+    break;
 
       case 'S':
-	     if (!strcmp(tag, "Sex "))	GET_SEX(ch)		= atoi(line);
+         if (!strcmp(tag, "Sex "))    GET_SEX(ch)        = atoi(line);
   else if (!strcmp(tag, "ScrW"))  GET_SCREEN_WIDTH(ch) = atoi(line);
-	else if (!strcmp(tag, "Skil"))	load_skills(fl, ch);
-	else if (!strcmp(tag, "Str "))	load_HMVS(ch, line, LOAD_STRENGTH);
-	break;
+    else if (!strcmp(tag, "Skil"))    load_skills(fl, ch);
+    else if (!strcmp(tag, "Str "))    load_HMVS(ch, line, LOAD_STRENGTH);
+    break;
 
       case 'T':
-	     if (!strcmp(tag, "Thir"))	GET_COND(ch, THIRST)	= atoi(line);
-	else if (!strcmp(tag, "Thr1"))	GET_SAVE(ch, 0)		= atoi(line);
-	else if (!strcmp(tag, "Thr2"))	GET_SAVE(ch, 1)		= atoi(line);
-	else if (!strcmp(tag, "Thr3"))	GET_SAVE(ch, 2)		= atoi(line);
-	else if (!strcmp(tag, "Thr4"))	GET_SAVE(ch, 3)		= atoi(line);
-	else if (!strcmp(tag, "Thr5"))	GET_SAVE(ch, 4)		= atoi(line);
-	else if (!strcmp(tag, "Titl"))	GET_TITLE(ch)		= strdup(line);
+         if (!strcmp(tag, "Thir"))    GET_COND(ch, THIRST)    = atoi(line);
+    else if (!strcmp(tag, "Thr1"))    GET_SAVE(ch, 0)        = atoi(line);
+    else if (!strcmp(tag, "Thr2"))    GET_SAVE(ch, 1)        = atoi(line);
+    else if (!strcmp(tag, "Thr3"))    GET_SAVE(ch, 2)        = atoi(line);
+    else if (!strcmp(tag, "Thr4"))    GET_SAVE(ch, 3)        = atoi(line);
+    else if (!strcmp(tag, "Thr5"))    GET_SAVE(ch, 4)        = atoi(line);
+    else if (!strcmp(tag, "Titl"))    GET_TITLE(ch)        = strdup(line);
         else if (!strcmp(tag, "Trig") && CONFIG_SCRIPT_PLAYERS) {
           if ((t_rnum = real_trigger(atoi(line))) != NOTHING) {
             t = read_trigger(t_rnum);
@@ -466,20 +466,20 @@ int load_char(const char *name, struct char_data *ch)
           add_trigger(SCRIPT(ch), t, -1);
           }
          }
-	break;
+    break;
 
       case 'V':
-	     if (!strcmp(tag, "Vars"))	read_saved_vars_ascii(fl, ch, atoi(line));
+         if (!strcmp(tag, "Vars"))    read_saved_vars_ascii(fl, ch, atoi(line));
       break;
 
       case 'W':
-	     if (!strcmp(tag, "Wate"))	GET_WEIGHT(ch)		= atoi(line);
-	else if (!strcmp(tag, "Wimp"))	GET_WIMP_LEV(ch)	= atoi(line);
-	else if (!strcmp(tag, "Wis "))	ch->real_abils.wis	= atoi(line);
-	break;
+         if (!strcmp(tag, "Wate"))    GET_WEIGHT(ch)        = atoi(line);
+    else if (!strcmp(tag, "Wimp"))    GET_WIMP_LEV(ch)    = atoi(line);
+    else if (!strcmp(tag, "Wis "))    ch->real_abils.wis    = atoi(line);
+    break;
 
       default:
-	sprintf(buf, "SYSERR: Unknown tag %s in pfile %s", tag, name);
+    sprintf(buf, "SYSERR: Unknown tag %s in pfile %s", tag, name);
       }
     }
   }
@@ -555,7 +555,7 @@ void save_char(struct char_data * ch)
       tmp_aff[i].next = 0;
       aff = aff->next;
     } else {
-      tmp_aff[i].type = 0;	/* Zero signifies not used */
+      tmp_aff[i].type = 0;    /* Zero signifies not used */
       tmp_aff[i].duration = 0;
       tmp_aff[i].modifier = 0;
       tmp_aff[i].location = 0;
@@ -576,19 +576,19 @@ void save_char(struct char_data * ch)
   ch->aff_abils = ch->real_abils;
   /* end char_to_store code */
 
-  if (GET_NAME(ch))				fprintf(fl, "Name: %s\n", GET_NAME(ch));
-  if (GET_PASSWD(ch))				fprintf(fl, "Pass: %s\n", GET_PASSWD(ch));
-  if (GET_TITLE(ch))				fprintf(fl, "Titl: %s\n", GET_TITLE(ch));
+  if (GET_NAME(ch))                fprintf(fl, "Name: %s\n", GET_NAME(ch));
+  if (GET_PASSWD(ch))                fprintf(fl, "Pass: %s\n", GET_PASSWD(ch));
+  if (GET_TITLE(ch))                fprintf(fl, "Titl: %s\n", GET_TITLE(ch));
   if (ch->player.description && *ch->player.description) {
     strcpy(buf, ch->player.description);
     strip_cr(buf);
     fprintf(fl, "Desc:\n%s~\n", buf);
   }
-  if (POOFIN(ch))				fprintf(fl, "PfIn: %s\n", POOFIN(ch));
-  if (POOFOUT(ch))				fprintf(fl, "PfOt: %s\n", POOFOUT(ch));
-  if (GET_SEX(ch)	     != PFDEF_SEX)	fprintf(fl, "Sex : %d\n", GET_SEX(ch));
-  if (GET_CLASS(ch)	   != PFDEF_CLASS)	fprintf(fl, "Clas: %d\n", GET_CLASS(ch));
-  if (GET_LEVEL(ch)	   != PFDEF_LEVEL)	fprintf(fl, "Levl: %d\n", GET_LEVEL(ch));
+  if (POOFIN(ch))                fprintf(fl, "PfIn: %s\n", POOFIN(ch));
+  if (POOFOUT(ch))                fprintf(fl, "PfOt: %s\n", POOFOUT(ch));
+  if (GET_SEX(ch)         != PFDEF_SEX)    fprintf(fl, "Sex : %d\n", GET_SEX(ch));
+  if (GET_CLASS(ch)       != PFDEF_CLASS)    fprintf(fl, "Clas: %d\n", GET_CLASS(ch));
+  if (GET_LEVEL(ch)       != PFDEF_LEVEL)    fprintf(fl, "Levl: %d\n", GET_LEVEL(ch));
 
   fprintf(fl, "Id  : %ld\n", GET_IDNUM(ch));
   fprintf(fl, "Brth: %ld\n", (long)ch->player.time.birth);
@@ -600,10 +600,10 @@ void save_char(struct char_data * ch)
   if (GET_LAST_NEWS(ch) != PFDEF_LASTNEWS)
     fprintf(fl, "Lnew: %d\n", (int)GET_LAST_NEWS(ch));
 
-  if (GET_HOST(ch))				fprintf(fl, "Host: %s\n", GET_HOST(ch));
-  if (GET_HEIGHT(ch)	   != PFDEF_HEIGHT)	fprintf(fl, "Hite: %d\n", GET_HEIGHT(ch));
-  if (GET_WEIGHT(ch)	   != PFDEF_WEIGHT)	fprintf(fl, "Wate: %d\n", GET_WEIGHT(ch));
-  if (GET_ALIGNMENT(ch)  != PFDEF_ALIGNMENT)	fprintf(fl, "Alin: %d\n", GET_ALIGNMENT(ch));
+  if (GET_HOST(ch))                fprintf(fl, "Host: %s\n", GET_HOST(ch));
+  if (GET_HEIGHT(ch)       != PFDEF_HEIGHT)    fprintf(fl, "Hite: %d\n", GET_HEIGHT(ch));
+  if (GET_WEIGHT(ch)       != PFDEF_WEIGHT)    fprintf(fl, "Wate: %d\n", GET_WEIGHT(ch));
+  if (GET_ALIGNMENT(ch)  != PFDEF_ALIGNMENT)    fprintf(fl, "Alin: %d\n", GET_ALIGNMENT(ch));
 
 
   sprintascii(bits,  PLR_FLAGS(ch)[0]);
@@ -624,43 +624,43 @@ void save_char(struct char_data * ch)
   sprintascii(bits4, PRF_FLAGS(ch)[3]);
   fprintf(fl, "Pref: %s %s %s %s\n", bits, bits2, bits3, bits4);
 
- if (GET_SAVE(ch, 0)	   != PFDEF_SAVETHROW)	fprintf(fl, "Thr1: %d\n", GET_SAVE(ch, 0));
-  if (GET_SAVE(ch, 1)	   != PFDEF_SAVETHROW)	fprintf(fl, "Thr2: %d\n", GET_SAVE(ch, 1));
-  if (GET_SAVE(ch, 2)	   != PFDEF_SAVETHROW)	fprintf(fl, "Thr3: %d\n", GET_SAVE(ch, 2));
-  if (GET_SAVE(ch, 3)	   != PFDEF_SAVETHROW)	fprintf(fl, "Thr4: %d\n", GET_SAVE(ch, 3));
-  if (GET_SAVE(ch, 4)	   != PFDEF_SAVETHROW)	fprintf(fl, "Thr5: %d\n", GET_SAVE(ch, 4));
+ if (GET_SAVE(ch, 0)       != PFDEF_SAVETHROW)    fprintf(fl, "Thr1: %d\n", GET_SAVE(ch, 0));
+  if (GET_SAVE(ch, 1)       != PFDEF_SAVETHROW)    fprintf(fl, "Thr2: %d\n", GET_SAVE(ch, 1));
+  if (GET_SAVE(ch, 2)       != PFDEF_SAVETHROW)    fprintf(fl, "Thr3: %d\n", GET_SAVE(ch, 2));
+  if (GET_SAVE(ch, 3)       != PFDEF_SAVETHROW)    fprintf(fl, "Thr4: %d\n", GET_SAVE(ch, 3));
+  if (GET_SAVE(ch, 4)       != PFDEF_SAVETHROW)    fprintf(fl, "Thr5: %d\n", GET_SAVE(ch, 4));
 
-  if (GET_WIMP_LEV(ch)	   != PFDEF_WIMPLEV)	fprintf(fl, "Wimp: %d\n", GET_WIMP_LEV(ch));
-  if (GET_FREEZE_LEV(ch)   != PFDEF_FREEZELEV)	fprintf(fl, "Frez: %d\n", GET_FREEZE_LEV(ch));
-  if (GET_INVIS_LEV(ch)	   != PFDEF_INVISLEV)	fprintf(fl, "Invs: %d\n", GET_INVIS_LEV(ch));
-  if (GET_LOADROOM(ch)	   != PFDEF_LOADROOM)	fprintf(fl, "Room: %d\n", GET_LOADROOM(ch));
+  if (GET_WIMP_LEV(ch)       != PFDEF_WIMPLEV)    fprintf(fl, "Wimp: %d\n", GET_WIMP_LEV(ch));
+  if (GET_FREEZE_LEV(ch)   != PFDEF_FREEZELEV)    fprintf(fl, "Frez: %d\n", GET_FREEZE_LEV(ch));
+  if (GET_INVIS_LEV(ch)       != PFDEF_INVISLEV)    fprintf(fl, "Invs: %d\n", GET_INVIS_LEV(ch));
+  if (GET_LOADROOM(ch)       != PFDEF_LOADROOM)    fprintf(fl, "Room: %d\n", GET_LOADROOM(ch));
 
-  if (GET_BAD_PWS(ch)	   != PFDEF_BADPWS)	fprintf(fl, "Badp: %d\n", GET_BAD_PWS(ch));
-  if (GET_PRACTICES(ch)	   != PFDEF_PRACTICES)	fprintf(fl, "Lern: %d\n", GET_PRACTICES(ch));
+  if (GET_BAD_PWS(ch)       != PFDEF_BADPWS)    fprintf(fl, "Badp: %d\n", GET_BAD_PWS(ch));
+  if (GET_PRACTICES(ch)       != PFDEF_PRACTICES)    fprintf(fl, "Lern: %d\n", GET_PRACTICES(ch));
 
   if (GET_COND(ch, HUNGER)   != PFDEF_HUNGER && GET_LEVEL(ch) < LVL_IMMORT) fprintf(fl, "Hung: %d\n", GET_COND(ch, HUNGER));
   if (GET_COND(ch, THIRST) != PFDEF_THIRST && GET_LEVEL(ch) < LVL_IMMORT) fprintf(fl, "Thir: %d\n", GET_COND(ch, THIRST));
   if (GET_COND(ch, DRUNK)  != PFDEF_DRUNK  && GET_LEVEL(ch) < LVL_IMMORT) fprintf(fl, "Drnk: %d\n", GET_COND(ch, DRUNK));
 
-  if (GET_HIT(ch)	   != PFDEF_HIT  || GET_MAX_HIT(ch)  != PFDEF_MAXHIT)  fprintf(fl, "Hit : %d/%d\n", GET_HIT(ch),  GET_MAX_HIT(ch));
-  if (GET_MANA(ch)	   != PFDEF_MANA || GET_MAX_MANA(ch) != PFDEF_MAXMANA) fprintf(fl, "Mana: %d/%d\n", GET_MANA(ch), GET_MAX_MANA(ch));
-  if (GET_MOVE(ch)	   != PFDEF_MOVE || GET_MAX_MOVE(ch) != PFDEF_MAXMOVE) fprintf(fl, "Move: %d/%d\n", GET_MOVE(ch), GET_MAX_MOVE(ch));
+  if (GET_HIT(ch)       != PFDEF_HIT  || GET_MAX_HIT(ch)  != PFDEF_MAXHIT)  fprintf(fl, "Hit : %d/%d\n", GET_HIT(ch),  GET_MAX_HIT(ch));
+  if (GET_MANA(ch)       != PFDEF_MANA || GET_MAX_MANA(ch) != PFDEF_MAXMANA) fprintf(fl, "Mana: %d/%d\n", GET_MANA(ch), GET_MAX_MANA(ch));
+  if (GET_MOVE(ch)       != PFDEF_MOVE || GET_MAX_MOVE(ch) != PFDEF_MAXMOVE) fprintf(fl, "Move: %d/%d\n", GET_MOVE(ch), GET_MAX_MOVE(ch));
 
-  if (GET_STR(ch)	   != PFDEF_STR  || GET_ADD(ch)      != PFDEF_STRADD)  fprintf(fl, "Str : %d/%d\n", GET_STR(ch),  GET_ADD(ch));
+  if (GET_STR(ch)       != PFDEF_STR  || GET_ADD(ch)      != PFDEF_STRADD)  fprintf(fl, "Str : %d/%d\n", GET_STR(ch),  GET_ADD(ch));
 
 
-  if (GET_INT(ch)	   != PFDEF_INT)	fprintf(fl, "Int : %d\n", GET_INT(ch));
-  if (GET_WIS(ch)	   != PFDEF_WIS)	fprintf(fl, "Wis : %d\n", GET_WIS(ch));
-  if (GET_DEX(ch)	   != PFDEF_DEX)	fprintf(fl, "Dex : %d\n", GET_DEX(ch));
-  if (GET_CON(ch)	   != PFDEF_CON)	fprintf(fl, "Con : %d\n", GET_CON(ch));
-  if (GET_CHA(ch)	   != PFDEF_CHA)	fprintf(fl, "Cha : %d\n", GET_CHA(ch));
+  if (GET_INT(ch)       != PFDEF_INT)    fprintf(fl, "Int : %d\n", GET_INT(ch));
+  if (GET_WIS(ch)       != PFDEF_WIS)    fprintf(fl, "Wis : %d\n", GET_WIS(ch));
+  if (GET_DEX(ch)       != PFDEF_DEX)    fprintf(fl, "Dex : %d\n", GET_DEX(ch));
+  if (GET_CON(ch)       != PFDEF_CON)    fprintf(fl, "Con : %d\n", GET_CON(ch));
+  if (GET_CHA(ch)       != PFDEF_CHA)    fprintf(fl, "Cha : %d\n", GET_CHA(ch));
 
-  if (GET_AC(ch)	   != PFDEF_AC)		fprintf(fl, "Ac  : %d\n", GET_AC(ch));
-  if (GET_GOLD(ch)	   != PFDEF_GOLD)	fprintf(fl, "Gold: %d\n", GET_GOLD(ch));
-  if (GET_BANK_GOLD(ch)	   != PFDEF_BANK)	fprintf(fl, "Bank: %d\n", GET_BANK_GOLD(ch));
-  if (GET_EXP(ch)	   != PFDEF_EXP)	fprintf(fl, "Exp : %d\n", GET_EXP(ch));
-  if (GET_HITROLL(ch)	   != PFDEF_HITROLL)	fprintf(fl, "Hrol: %d\n", GET_HITROLL(ch));
-  if (GET_DAMROLL(ch)	   != PFDEF_DAMROLL)	fprintf(fl, "Drol: %d\n", GET_DAMROLL(ch));
+  if (GET_AC(ch)       != PFDEF_AC)        fprintf(fl, "Ac  : %d\n", GET_AC(ch));
+  if (GET_GOLD(ch)       != PFDEF_GOLD)    fprintf(fl, "Gold: %d\n", GET_GOLD(ch));
+  if (GET_BANK_GOLD(ch)       != PFDEF_BANK)    fprintf(fl, "Bank: %d\n", GET_BANK_GOLD(ch));
+  if (GET_EXP(ch)       != PFDEF_EXP)    fprintf(fl, "Exp : %d\n", GET_EXP(ch));
+  if (GET_HITROLL(ch)       != PFDEF_HITROLL)    fprintf(fl, "Hrol: %d\n", GET_HITROLL(ch));
+  if (GET_DAMROLL(ch)       != PFDEF_DAMROLL)    fprintf(fl, "Drol: %d\n", GET_DAMROLL(ch));
   if (GET_OLC_ZONE(ch)     != PFDEF_OLC)        fprintf(fl, "Olc : %d\n", GET_OLC_ZONE(ch));
   if (GET_PAGE_LENGTH(ch)  != PFDEF_PAGELENGTH) fprintf(fl, "Page: %d\n", GET_PAGE_LENGTH(ch));
   if (GET_SCREEN_WIDTH(ch) != PFDEF_SCREENWIDTH) fprintf(fl, "ScrW: %d\n", GET_SCREEN_WIDTH(ch));
@@ -684,7 +684,7 @@ void save_char(struct char_data * ch)
     fprintf(fl, "Skil:\n");
     for (i = 1; i <= MAX_SKILLS; i++) {
      if (GET_SKILL(ch, i))
-	fprintf(fl, "%d %d\n", i, GET_SKILL(ch, i));
+    fprintf(fl, "%d %d\n", i, GET_SKILL(ch, i));
     }
     fprintf(fl, "0 0\n");
   }
@@ -695,8 +695,8 @@ void save_char(struct char_data * ch)
     for (i = 0; i < MAX_AFFECT; i++) {
       aff = &tmp_aff[i];
       if (aff->type)
-	fprintf(fl, "%d %d %d %d %d\n", aff->type, aff->duration,
-	  aff->modifier, aff->location, (int)aff->bitvector);
+    fprintf(fl, "%d %d %d %d %d\n", aff->type, aff->duration,
+      aff->modifier, aff->location, (int)aff->bitvector);
     }
     fprintf(fl, "0 0 0 0 0\n");
   }
@@ -793,8 +793,8 @@ void remove_player(int pfilepos)
   }
 
   log("PCLEAN: %s Lev: %d Last: %s",
-	player_table[pfilepos].name, player_table[pfilepos].level,
-	asctime(localtime(&player_table[pfilepos].last)));
+    player_table[pfilepos].name, player_table[pfilepos].level,
+    asctime(localtime(&player_table[pfilepos].last)));
   player_table[pfilepos].name[0] = '\0';
 
   /* Update index table. */
@@ -815,19 +815,19 @@ void clean_pfiles(void)
       /* If the player is already flagged for deletion, then go ahead and get
        * rid of him. */
       if (IS_SET(player_table[i].flags, PINDEX_DELETED)) {
-	remove_player(i);
+    remove_player(i);
       } else {
         /* Check to see if the player has overstayed his welcome based on level. */
-	for (ci = 0; pclean_criteria[ci].level > -1; ci++) {
-	  if (player_table[i].level <= pclean_criteria[ci].level &&
-	      ((time(0) - player_table[i].last) >
-	       (pclean_criteria[ci].days * SECS_PER_REAL_DAY))) {
-	    remove_player(i);
-	    break;
-	  }
-	}
+    for (ci = 0; pclean_criteria[ci].level > -1; ci++) {
+      if (player_table[i].level <= pclean_criteria[ci].level &&
+          ((time(0) - player_table[i].last) >
+           (pclean_criteria[ci].days * SECS_PER_REAL_DAY))) {
+        remove_player(i);
+        break;
+      }
+    }
         /* If we got this far and the players hasn't been kicked out, then he
-	 * can stay a little while longer. */
+     * can stay a little while longer. */
       }
     }
   }
@@ -866,7 +866,7 @@ static void load_skills(FILE *fl, struct char_data *ch)
     get_line(fl, line);
     sscanf(line, "%d %d", &num, &num2);
       if (num != 0)
-	GET_SKILL(ch, num) = num2;
+    GET_SKILL(ch, num) = num2;
   } while (num != 0);
 }
 

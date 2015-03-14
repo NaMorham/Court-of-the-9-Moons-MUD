@@ -100,10 +100,10 @@ static void hedit_setup_new(struct descriptor_data *d)
 {
   CREATE(OLC_HELP(d), struct help_index_element, 1);
 
-  OLC_HELP(d)->keywords		= strdup(OLC_STORAGE(d));
-  OLC_HELP(d)->entry		= strdup("KEYWORDS\r\n\r\nThis help file is unfinished.\r\n");
-  OLC_HELP(d)->min_level	= 0;
-  OLC_HELP(d)->duplicate	= 0;
+  OLC_HELP(d)->keywords        = strdup(OLC_STORAGE(d));
+  OLC_HELP(d)->entry        = strdup("KEYWORDS\r\n\r\nThis help file is unfinished.\r\n");
+  OLC_HELP(d)->min_level    = 0;
+  OLC_HELP(d)->duplicate    = 0;
   OLC_VAL(d) = 0;
 
   hedit_disp_menu(d);
@@ -113,10 +113,10 @@ static void hedit_setup_existing(struct descriptor_data *d, int rnum)
 {
   CREATE(OLC_HELP(d), struct help_index_element, 1);
 
-  OLC_HELP(d)->keywords		= str_udup(help_table[rnum].keywords);
-  OLC_HELP(d)->entry		= str_udup(help_table[rnum].entry);
-  OLC_HELP(d)->duplicate	= help_table[rnum].duplicate;
-  OLC_HELP(d)->min_level	= help_table[rnum].min_level;
+  OLC_HELP(d)->keywords        = str_udup(help_table[rnum].keywords);
+  OLC_HELP(d)->entry        = str_udup(help_table[rnum].entry);
+  OLC_HELP(d)->duplicate    = help_table[rnum].duplicate;
+  OLC_HELP(d)->min_level    = help_table[rnum].min_level;
   OLC_VAL(d) = 0;
 
   hedit_disp_menu(d);

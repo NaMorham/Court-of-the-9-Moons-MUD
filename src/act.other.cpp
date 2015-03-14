@@ -75,7 +75,7 @@ ACMD(do_quit)
       ch->desc->snoop_by = NULL;
     }
 
-    extract_char(ch);		/* Char is saved before extracting. */
+    extract_char(ch);        /* Char is saved before extracting. */
   }
 }
 
@@ -112,7 +112,7 @@ ACMD(do_sneak)
   if (AFF_FLAGGED(ch, AFF_SNEAK))
     affect_from_char(ch, SKILL_SNEAK);
 
-  percent = rand_number(1, 101);	/* 101% is a complete failure */
+  percent = rand_number(1, 101);    /* 101% is a complete failure */
 
   if (percent > GET_SKILL(ch, SKILL_SNEAK) + dex_app_skill[GET_DEX(ch)].sneak)
     return;
@@ -139,7 +139,7 @@ ACMD(do_hide)
   if (AFF_FLAGGED(ch, AFF_HIDE))
     REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_HIDE);
 
-  percent = rand_number(1, 101);	/* 101% is a complete failure */
+  percent = rand_number(1, 101);    /* 101% is a complete failure */
 
   if (percent > GET_SKILL(ch, SKILL_HIDE) + dex_app_skill[GET_DEX(ch)].hide)
     return;
@@ -177,73 +177,73 @@ ACMD(do_steal)
   percent = rand_number(1, 101) - dex_app_skill[GET_DEX(ch)].p_pocket;
 
   if (GET_POS(vict) < POS_SLEEPING)
-    percent = -1;		/* ALWAYS SUCCESS, unless heavy object. */
+    percent = -1;        /* ALWAYS SUCCESS, unless heavy object. */
 
   if (!CONFIG_PT_ALLOWED && !IS_NPC(vict))
     pcsteal = 1;
 
-  if (!AWAKE(vict))	/* Easier to steal from sleeping people. */
+  if (!AWAKE(vict))    /* Easier to steal from sleeping people. */
     percent -= 50;
 
   /* No stealing if not allowed. If it is no stealing from Imm's or Shopkeepers. */
   if (GET_LEVEL(vict) >= LVL_IMMORT || pcsteal || GET_MOB_SPEC(vict) == shop_keeper)
-    percent = 101;		/* Failure */
+    percent = 101;        /* Failure */
 
   if (str_cmp(obj_name, "coins") && str_cmp(obj_name, "gold")) {
 
     if (!(obj = get_obj_in_list_vis(ch, obj_name, NULL, vict->carrying))) {
 
       for (eq_pos = 0; eq_pos < NUM_WEARS; eq_pos++)
-	if (GET_EQ(vict, eq_pos) &&
-	    (isname(obj_name, GET_EQ(vict, eq_pos)->name)) &&
-	    CAN_SEE_OBJ(ch, GET_EQ(vict, eq_pos))) {
-	  obj = GET_EQ(vict, eq_pos);
-	  break;
-	}
+    if (GET_EQ(vict, eq_pos) &&
+        (isname(obj_name, GET_EQ(vict, eq_pos)->name)) &&
+        CAN_SEE_OBJ(ch, GET_EQ(vict, eq_pos))) {
+      obj = GET_EQ(vict, eq_pos);
+      break;
+    }
       if (!obj) {
-	act("$E hasn't got that item.", FALSE, ch, 0, vict, TO_CHAR);
-	return;
-      } else {			/* It is equipment */
-	if ((GET_POS(vict) > POS_STUNNED)) {
-	  send_to_char(ch, "Steal the equipment now?  Impossible!\r\n");
-	  return;
-	} else {
+    act("$E hasn't got that item.", FALSE, ch, 0, vict, TO_CHAR);
+    return;
+      } else {            /* It is equipment */
+    if ((GET_POS(vict) > POS_STUNNED)) {
+      send_to_char(ch, "Steal the equipment now?  Impossible!\r\n");
+      return;
+    } else {
           if (!give_otrigger(obj, vict, ch) ||
               !receive_mtrigger(ch, vict, obj) ) {
             send_to_char(ch, "Impossible!\r\n");
             return;
           }
-	  act("You unequip $p and steal it.", FALSE, ch, obj, 0, TO_CHAR);
-	  act("$n steals $p from $N.", FALSE, ch, obj, vict, TO_NOTVICT);
-	  obj_to_char(unequip_char(vict, eq_pos), ch);
-	}
+      act("You unequip $p and steal it.", FALSE, ch, obj, 0, TO_CHAR);
+      act("$n steals $p from $N.", FALSE, ch, obj, vict, TO_NOTVICT);
+      obj_to_char(unequip_char(vict, eq_pos), ch);
+    }
       }
-    } else {			/* obj found in inventory */
+    } else {            /* obj found in inventory */
 
-      percent += GET_OBJ_WEIGHT(obj);	/* Make heavy harder */
+      percent += GET_OBJ_WEIGHT(obj);    /* Make heavy harder */
 
       if (percent > GET_SKILL(ch, SKILL_STEAL)) {
-	ohoh = TRUE;
-	send_to_char(ch, "Oops..\r\n");
-	act("$n tried to steal something from you!", FALSE, ch, 0, vict, TO_VICT);
-	act("$n tries to steal something from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
-      } else {			/* Steal the item */
-	if (IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch)) {
+    ohoh = TRUE;
+    send_to_char(ch, "Oops..\r\n");
+    act("$n tried to steal something from you!", FALSE, ch, 0, vict, TO_VICT);
+    act("$n tries to steal something from $N.", TRUE, ch, 0, vict, TO_NOTVICT);
+      } else {            /* Steal the item */
+    if (IS_CARRYING_N(ch) + 1 < CAN_CARRY_N(ch)) {
           if (!give_otrigger(obj, vict, ch) ||
               !receive_mtrigger(ch, vict, obj) ) {
             send_to_char(ch, "Impossible!\r\n");
             return;
           }
-	  if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) < CAN_CARRY_W(ch)) {
-	    obj_from_char(obj);
-	    obj_to_char(obj, ch);
-	    send_to_char(ch, "Got it!\r\n");
-	  }
-	} else
-	  send_to_char(ch, "You cannot carry that much.\r\n");
+      if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) < CAN_CARRY_W(ch)) {
+        obj_from_char(obj);
+        obj_to_char(obj, ch);
+        send_to_char(ch, "Got it!\r\n");
+      }
+    } else
+      send_to_char(ch, "You cannot carry that much.\r\n");
       }
     }
-  } else {			/* Steal some coins */
+  } else {            /* Steal some coins */
     if (AWAKE(vict) && (percent > GET_SKILL(ch, SKILL_STEAL))) {
       ohoh = TRUE;
       send_to_char(ch, "Oops..\r\n");
@@ -254,14 +254,14 @@ ACMD(do_steal)
       gold = (GET_GOLD(vict) * rand_number(1, 10)) / 100;
       gold = MIN(1782, gold);
       if (gold > 0) {
-	GET_GOLD(ch) += gold;
-	GET_GOLD(vict) -= gold;
+    GET_GOLD(ch) += gold;
+    GET_GOLD(vict) -= gold;
         if (gold > 1)
-	  send_to_char(ch, "Bingo!  You got %d gold coins.\r\n", gold);
-	else
-	  send_to_char(ch, "You manage to swipe a solitary gold coin.\r\n");
+      send_to_char(ch, "Bingo!  You got %d gold coins.\r\n", gold);
+    else
+      send_to_char(ch, "You manage to swipe a solitary gold coin.\r\n");
       } else {
-	send_to_char(ch, "You couldn't get any gold...\r\n");
+    send_to_char(ch, "You couldn't get any gold...\r\n");
       }
     }
   }
@@ -347,17 +347,17 @@ static void print_group(struct char_data *ch)
 
     if (AFF_FLAGGED(k, AFF_GROUP)) {
       snprintf(buf, sizeof(buf), "     [%3dH %3dM %3dV] [%2d %s] $N (Head of group)",
-	      GET_HIT(k), GET_MANA(k), GET_MOVE(k), GET_LEVEL(k), CLASS_ABBR(k));
+          GET_HIT(k), GET_MANA(k), GET_MOVE(k), GET_LEVEL(k), CLASS_ABBR(k));
       act(buf, FALSE, ch, 0, k, TO_CHAR);
     }
 
     for (f = k->followers; f; f = f->next) {
       if (!AFF_FLAGGED(f->follower, AFF_GROUP))
-	continue;
+    continue;
 
       snprintf(buf, sizeof(buf), "     [%3dH %3dM %3dV] [%2d %s] $N", GET_HIT(f->follower),
-	      GET_MANA(f->follower), GET_MOVE(f->follower),
-	      GET_LEVEL(f->follower), CLASS_ABBR(f->follower));
+          GET_MANA(f->follower), GET_MOVE(f->follower),
+          GET_LEVEL(f->follower), CLASS_ABBR(f->follower));
       act(buf, FALSE, ch, 0, f->follower, TO_CHAR);
     }
   }
@@ -379,7 +379,7 @@ ACMD(do_group)
 
   if (ch->master) {
     act("You cannot enroll group members without being head of a group.",
-	FALSE, ch, 0, 0, TO_CHAR);
+    FALSE, ch, 0, 0, TO_CHAR);
     return;
   }
 
@@ -401,7 +401,7 @@ ACMD(do_group)
       perform_group(ch, vict);
     else {
       if (ch != vict)
-	act("$N is no longer a member of your group.", FALSE, ch, 0, vict, TO_CHAR);
+    act("$N is no longer a member of your group.", FALSE, ch, 0, vict, TO_CHAR);
       act("You have been kicked out of $n's group!", FALSE, ch, 0, vict, TO_VICT);
       act("$N has been kicked out of $n's group!", FALSE, ch, 0, vict, TO_NOTVICT);
       REMOVE_BIT_AR(AFF_FLAGS(vict), AFF_GROUP);
@@ -426,10 +426,10 @@ ACMD(do_ungroup)
     for (f = ch->followers; f; f = next_fol) {
       next_fol = f->next;
       if (AFF_FLAGGED(f->follower, AFF_GROUP)) {
-	REMOVE_BIT_AR(AFF_FLAGS(f->follower), AFF_GROUP);
+    REMOVE_BIT_AR(AFF_FLAGS(f->follower), AFF_GROUP);
         act("$N has disbanded the group.", TRUE, f->follower, NULL, ch, TO_CHAR);
         if (!AFF_FLAGGED(f->follower, AFF_CHARM))
-	  stop_follower(f->follower);
+      stop_follower(f->follower);
       }
     }
 
@@ -473,9 +473,9 @@ ACMD(do_report)
   }
 
   snprintf(buf, sizeof(buf), "$n reports: %d/%dH, %d/%dM, %d/%dV\r\n",
-	  GET_HIT(ch), GET_MAX_HIT(ch),
-	  GET_MANA(ch), GET_MAX_MANA(ch),
-	  GET_MOVE(ch), GET_MAX_MOVE(ch));
+      GET_HIT(ch), GET_MAX_HIT(ch),
+      GET_MANA(ch), GET_MAX_MANA(ch),
+      GET_MOVE(ch), GET_MAX_MOVE(ch));
 
   k = (ch->master ? ch->master : ch);
 
@@ -521,9 +521,9 @@ ACMD(do_split)
 
     for (f = k->followers; f; f = f->next)
       if (AFF_FLAGGED(f->follower, AFF_GROUP) &&
-	  (!IS_NPC(f->follower)) &&
-	  (IN_ROOM(f->follower) == IN_ROOM(ch)))
-	num++;
+      (!IS_NPC(f->follower)) &&
+      (IN_ROOM(f->follower) == IN_ROOM(ch)))
+    num++;
 
     if (num && AFF_FLAGGED(ch, AFF_GROUP)) {
       share = amount / num;
@@ -537,34 +537,34 @@ ACMD(do_split)
 
     /* Abusing signed/unsigned to make sizeof work. */
     len = snprintf(buf, sizeof(buf), "%s splits %d coins; you receive %d.\r\n",
-		GET_NAME(ch), amount, share);
+        GET_NAME(ch), amount, share);
     if (rest && len < sizeof(buf)) {
       snprintf(buf + len, sizeof(buf) - len,
-		"%d coin%s %s not splitable, so %s keeps the money.\r\n", rest,
-		(rest == 1) ? "" : "s", (rest == 1) ? "was" : "were", GET_NAME(ch));
+        "%d coin%s %s not splitable, so %s keeps the money.\r\n", rest,
+        (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were", GET_NAME(ch));
     }
     if (AFF_FLAGGED(k, AFF_GROUP) && IN_ROOM(k) == IN_ROOM(ch) &&
-		!IS_NPC(k) && k != ch) {
+        !IS_NPC(k) && k != ch) {
       GET_GOLD(k) += share;
       send_to_char(k, "%s", buf);
     }
 
     for (f = k->followers; f; f = f->next) {
       if (AFF_FLAGGED(f->follower, AFF_GROUP) &&
-	  (!IS_NPC(f->follower)) &&
-	  (IN_ROOM(f->follower) == IN_ROOM(ch)) &&
-	  f->follower != ch) {
+      (!IS_NPC(f->follower)) &&
+      (IN_ROOM(f->follower) == IN_ROOM(ch)) &&
+      f->follower != ch) {
 
-	GET_GOLD(f->follower) += share;
-	send_to_char(f->follower, "%s", buf);
+    GET_GOLD(f->follower) += share;
+    send_to_char(f->follower, "%s", buf);
       }
     }
     send_to_char(ch, "You split %d coins among %d members -- %d coins each.\r\n",
-	    amount, num, share);
+        amount, num, share);
 
     if (rest) {
       send_to_char(ch, "%d coin%s %s not splitable, so you keep the money.\r\n",
-		rest, (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were");
+        rest, (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were");
       GET_GOLD(ch) += rest;
     }
   } else {
@@ -590,8 +590,8 @@ ACMD(do_use)
     case SCMD_RECITE:
     case SCMD_QUAFF:
       if (!(mag_item = get_obj_in_list_vis(ch, arg, NULL, ch->carrying))) {
-	send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
-	return;
+    send_to_char(ch, "You don't seem to have %s %s.\r\n", AN(arg), arg);
+    return;
       }
       break;
     case SCMD_USE:
@@ -619,7 +619,7 @@ ACMD(do_use)
     break;
   case SCMD_USE:
     if ((GET_OBJ_TYPE(mag_item) != ITEM_WAND) &&
-	(GET_OBJ_TYPE(mag_item) != ITEM_STAFF)) {
+    (GET_OBJ_TYPE(mag_item) != ITEM_STAFF)) {
       send_to_char(ch, "You can't seem to figure out how to use it.\r\n");
       return;
     }
@@ -667,16 +667,16 @@ ACMD(do_display)
       switch (LOWER(argument[i])) {
       case 'h':
         SET_BIT_AR(PRF_FLAGS(ch), PRF_DISPHP);
-	break;
+    break;
       case 'm':
         SET_BIT_AR(PRF_FLAGS(ch), PRF_DISPMANA);
-	break;
+    break;
       case 'v':
         SET_BIT_AR(PRF_FLAGS(ch), PRF_DISPMOVE);
-	break;
+    break;
       default:
-	send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }\r\n");
-	return;
+    send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }\r\n");
+    return;
       }
     }
   }

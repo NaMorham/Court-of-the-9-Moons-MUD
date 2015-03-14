@@ -59,15 +59,15 @@ void load_banned(void)
   }
   while (fscanf(fl, " %s %s %d %s ", ban_type, site_name, &date, name) == 4) {
     CREATE(next_node, struct ban_list_element, 1);
-    strncpy(next_node->site, site_name, BANNED_SITE_LENGTH);	/* strncpy: OK (n_n->site:BANNED_SITE_LENGTH+1) */
+    strncpy(next_node->site, site_name, BANNED_SITE_LENGTH);    /* strncpy: OK (n_n->site:BANNED_SITE_LENGTH+1) */
     next_node->site[BANNED_SITE_LENGTH] = '\0';
-    strncpy(next_node->name, name, MAX_NAME_LENGTH);	/* strncpy: OK (n_n->name:MAX_NAME_LENGTH+1) */
+    strncpy(next_node->name, name, MAX_NAME_LENGTH);    /* strncpy: OK (n_n->name:MAX_NAME_LENGTH+1) */
     next_node->name[MAX_NAME_LENGTH] = '\0';
     next_node->date = date;
 
     for (i = BAN_NOT; i <= BAN_ALL; i++)
       if (!strcmp(ban_type, ban_types[i]))
-	next_node->type = i;
+    next_node->type = i;
 
     next_node->next = ban_list;
     ban_list = next_node;
@@ -90,7 +90,7 @@ int isbanned(char *hostname)
     *nextchar = LOWER(*nextchar);
 
   for (banned_node = ban_list; banned_node; banned_node = banned_node->next)
-    if (strstr(hostname, banned_node->site))	/* if hostname is a substring */
+    if (strstr(hostname, banned_node->site))    /* if hostname is a substring */
       i = MAX(i, banned_node->type);
 
   return (i);
@@ -101,7 +101,7 @@ static void _write_one_node(FILE *fp, struct ban_list_element *node)
   if (node) {
     _write_one_node(fp, node->next);
     fprintf(fp, "%s %s %ld %s\n", ban_types[node->type],
-	    node->site, (long) node->date, node->name);
+        node->site, (long) node->date, node->name);
   }
 }
 
@@ -132,22 +132,22 @@ ACMD(do_ban)
       return;
     }
     send_to_char(ch, BAN_LIST_FORMAT,
-	    "Banned Site Name",
-	    "Ban Type",
-	    "Banned On",
-	    "Banned By");
+        "Banned Site Name",
+        "Ban Type",
+        "Banned On",
+        "Banned By");
     send_to_char(ch, BAN_LIST_FORMAT,
-	    "---------------------------------",
-	    "---------------------------------",
-	    "---------------------------------",
-	    "---------------------------------");
+        "---------------------------------",
+        "---------------------------------",
+        "---------------------------------",
+        "---------------------------------");
 
     for (ban_node = ban_list; ban_node; ban_node = ban_node->next) {
       if (ban_node->date) {
-	strlcpy(timestr, asctime(localtime(&(ban_node->date))), 10);
-	timestr[10] = '\0';
+    strlcpy(timestr, asctime(localtime(&(ban_node->date))), 10);
+    timestr[10] = '\0';
       } else
-	strcpy(timestr, "Unknown");	/* strcpy: OK (strlen("Unknown") < 16) */
+    strcpy(timestr, "Unknown");    /* strcpy: OK (strlen("Unknown") < 16) */
 
       send_to_char(ch, BAN_LIST_FORMAT, ban_node->site, ban_types[ban_node->type], timestr, ban_node->name);
     }
@@ -171,11 +171,11 @@ ACMD(do_ban)
   }
 
   CREATE(ban_node, struct ban_list_element, 1);
-  strncpy(ban_node->site, site, BANNED_SITE_LENGTH);	/* strncpy: OK (b_n->site:BANNED_SITE_LENGTH+1) */
+  strncpy(ban_node->site, site, BANNED_SITE_LENGTH);    /* strncpy: OK (b_n->site:BANNED_SITE_LENGTH+1) */
   for (nextchar = ban_node->site; *nextchar; nextchar++)
     *nextchar = LOWER(*nextchar);
   ban_node->site[BANNED_SITE_LENGTH] = '\0';
-  strncpy(ban_node->name, GET_NAME(ch), MAX_NAME_LENGTH);	/* strncpy: OK (b_n->size:MAX_NAME_LENGTH+1) */
+  strncpy(ban_node->name, GET_NAME(ch), MAX_NAME_LENGTH);    /* strncpy: OK (b_n->size:MAX_NAME_LENGTH+1) */
   ban_node->name[MAX_NAME_LENGTH] = '\0';
   ban_node->date = time(0);
 
@@ -187,7 +187,7 @@ ACMD(do_ban)
   ban_list = ban_node;
 
   mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s has banned %s for %s players.",
-	GET_NAME(ch), site, ban_types[ban_node->type]);
+    GET_NAME(ch), site, ban_types[ban_node->type]);
   send_to_char(ch, "Site banned.\r\n");
   write_ban_list();
 }
@@ -219,7 +219,7 @@ ACMD(do_unban)
   REMOVE_FROM_LIST(ban_node, ban_list, next);
   send_to_char(ch, "Site unbanned.\r\n");
   mudlog(NRM, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s removed the %s-player ban on %s.",
-	GET_NAME(ch), ban_types[ban_node->type], ban_node->site);
+    GET_NAME(ch), ban_types[ban_node->type], ban_node->site);
 
   free(ban_node);
   write_ban_list();

@@ -139,19 +139,19 @@ void create_command_list(void)
   k = 0;
   while ((*cmd_info[i].command != '\n') || (j <= top_of_socialt))  {
     if ((i < RESERVE_CMDS) || (j > top_of_socialt) ||
-	(str_cmp(cmd_info[i].sort_as, soc_mess_list[j].sort_as) < 1))
+    (str_cmp(cmd_info[i].sort_as, soc_mess_list[j].sort_as) < 1))
       complete_cmd_info[k++] = cmd_info[i++];
     else {
-      soc_mess_list[j].act_nr		= k;
-      complete_cmd_info[k].command		= soc_mess_list[j].command;
-      complete_cmd_info[k].sort_as		= soc_mess_list[j].sort_as;
-      complete_cmd_info[k].minimum_position	= soc_mess_list[j].min_char_position;
-      complete_cmd_info[k].command_pointer	= do_action;
-      complete_cmd_info[k].minimum_level    	= soc_mess_list[j++].min_level_char;
-      complete_cmd_info[k++].subcmd		= 0;
+      soc_mess_list[j].act_nr        = k;
+      complete_cmd_info[k].command        = soc_mess_list[j].command;
+      complete_cmd_info[k].sort_as        = soc_mess_list[j].sort_as;
+      complete_cmd_info[k].minimum_position    = soc_mess_list[j].min_char_position;
+      complete_cmd_info[k].command_pointer    = do_action;
+      complete_cmd_info[k].minimum_level        = soc_mess_list[j++].min_level_char;
+      complete_cmd_info[k++].subcmd        = 0;
     }
   }
-	complete_cmd_info[k] = cmd_info[i];
+    complete_cmd_info[k] = cmd_info[i];
   log("Command info rebuilt, %d total commands.", k);
 }
 
@@ -163,36 +163,36 @@ void free_command_list(void)
 
 void free_social_messages(void)
 {
-	struct social_messg *mess;
-	int i;
+    struct social_messg *mess;
+    int i;
 
-	for (i = 0;i <= top_of_socialt;i++)  
-	{
-		mess = &soc_mess_list[i];
-		free_action(mess);
-	}
-	free(soc_mess_list);
-	soc_mess_list = NULL;
+    for (i = 0;i <= top_of_socialt;i++)  
+    {
+        mess = &soc_mess_list[i];
+        free_action(mess);
+    }
+    free(soc_mess_list);
+    soc_mess_list = NULL;
 }
 
 void free_action(struct social_messg *mess)  
 {
-	if (mess->command) free(mess->command);
-	if (mess->sort_as) free(mess->sort_as);
-	if (mess->char_no_arg) free(mess->char_no_arg);
-	if (mess->others_no_arg) free(mess->others_no_arg);
-	if (mess->char_found) free(mess->char_found);
-	if (mess->others_found) free(mess->others_found);
-	if (mess->vict_found) free(mess->vict_found);
-	if (mess->char_body_found) free(mess->char_body_found);
-	if (mess->others_body_found) free(mess->others_body_found);
-	if (mess->vict_body_found) free(mess->vict_body_found);
-	if (mess->not_found) free(mess->not_found);
-	if (mess->char_auto) free(mess->char_auto);
-	if (mess->others_auto) free(mess->others_auto);
-	if (mess->char_obj_found) free(mess->char_obj_found);
-	if (mess->others_obj_found) free(mess->others_obj_found);
-	memset(mess, 0, sizeof(struct social_messg));
+    if (mess->command) free(mess->command);
+    if (mess->sort_as) free(mess->sort_as);
+    if (mess->char_no_arg) free(mess->char_no_arg);
+    if (mess->others_no_arg) free(mess->others_no_arg);
+    if (mess->char_found) free(mess->char_found);
+    if (mess->others_found) free(mess->others_found);
+    if (mess->vict_found) free(mess->vict_found);
+    if (mess->char_body_found) free(mess->char_body_found);
+    if (mess->others_body_found) free(mess->others_body_found);
+    if (mess->vict_body_found) free(mess->vict_body_found);
+    if (mess->not_found) free(mess->not_found);
+    if (mess->char_auto) free(mess->char_auto);
+    if (mess->others_auto) free(mess->others_auto);
+    if (mess->char_obj_found) free(mess->char_obj_found);
+    if (mess->others_obj_found) free(mess->others_obj_found);
+    memset(mess, 0, sizeof(struct social_messg));
 }
 
 static int find_action(int cmd)

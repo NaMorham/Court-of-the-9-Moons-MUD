@@ -32,7 +32,7 @@ ASPELL(spell_create_water)
 
   if (ch == NULL || obj == NULL)
     return;
-  /* level = MAX(MIN(level, LVL_IMPL), 1);	 - not used */
+  /* level = MAX(MIN(level, LVL_IMPL), 1);     - not used */
 
   if (GET_OBJ_TYPE(obj) == ITEM_DRINKCON) {
     if ((GET_OBJ_VAL(obj, 2) != LIQ_WATER) && (GET_OBJ_VAL(obj, 1) != 0)) {
@@ -42,13 +42,13 @@ ASPELL(spell_create_water)
     } else {
       water = MAX(GET_OBJ_VAL(obj, 0) - GET_OBJ_VAL(obj, 1), 0);
       if (water > 0) {
-	if (GET_OBJ_VAL(obj, 1) >= 0)
-	  name_from_drinkcon(obj);
-	GET_OBJ_VAL(obj, 2) = LIQ_WATER;
-	GET_OBJ_VAL(obj, 1) += water;
-	name_to_drinkcon(obj, LIQ_WATER);
-	weight_change_object(obj, water);
-	act("$p is filled.", FALSE, ch, obj, 0, TO_CHAR);
+    if (GET_OBJ_VAL(obj, 1) >= 0)
+      name_from_drinkcon(obj);
+    GET_OBJ_VAL(obj, 2) = LIQ_WATER;
+    GET_OBJ_VAL(obj, 1) += water;
+    name_to_drinkcon(obj, LIQ_WATER);
+    weight_change_object(obj, water);
+    act("$p is filled.", FALSE, ch, obj, 0, TO_CHAR);
       }
     }
   }
@@ -123,18 +123,18 @@ ASPELL(spell_summon)
   if (!CONFIG_PK_ALLOWED) {
     if (MOB_FLAGGED(victim, MOB_AGGRESSIVE)) {
       act("As the words escape your lips and $N travels\r\n"
-	  "through time and space towards you, you realize that $E is\r\n"
-	  "aggressive and might harm you, so you wisely send $M back.",
-	  FALSE, ch, 0, victim, TO_CHAR);
+      "through time and space towards you, you realize that $E is\r\n"
+      "aggressive and might harm you, so you wisely send $M back.",
+      FALSE, ch, 0, victim, TO_CHAR);
       return;
     }
     if (!IS_NPC(victim) && !PRF_FLAGGED(victim, PRF_SUMMONABLE) &&
-	!PLR_FLAGGED(victim, PLR_KILLER)) {
+    !PLR_FLAGGED(victim, PLR_KILLER)) {
       send_to_char(victim, "%s just tried to summon you to: %s.\r\n"
-	      "%s failed because you have summon protection on.\r\n"
-	      "Type NOSUMMON to allow other players to summon you.\r\n",
-	      GET_NAME(ch), world[IN_ROOM(ch)].name,
-	      (ch->player.sex == SEX_MALE) ? "He" : "She");
+          "%s failed because you have summon protection on.\r\n"
+          "Type NOSUMMON to allow other players to summon you.\r\n",
+          GET_NAME(ch), world[IN_ROOM(ch)].name,
+          (ch->player.sex == SEX_MALE) ? "He" : "She");
 
       send_to_char(ch, "You failed because %s has summon protection on.\r\n", GET_NAME(victim));
       mudlog(BRF, LVL_IMMORT, TRUE, "%s failed summoning %s to %s.", GET_NAME(ch), GET_NAME(victim), world[IN_ROOM(ch)].name);
@@ -322,19 +322,19 @@ ASPELL(spell_identify)
       len = i = 0;
 
       if (GET_OBJ_VAL(obj, 1) >= 1) {
-	i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 1)));
+    i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 1)));
         if (i >= 0)
           len += i;
       }
 
       if (GET_OBJ_VAL(obj, 2) >= 1 && len < sizeof(bitbuf)) {
-	i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 2)));
+    i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 2)));
         if (i >= 0)
           len += i;
       }
 
       if (GET_OBJ_VAL(obj, 3) >= 1 && len < sizeof(bitbuf)) {
-	i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 3)));
+    i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 3)));
         if (i >= 0)
           len += i;
       }
@@ -344,12 +344,12 @@ ASPELL(spell_identify)
     case ITEM_WAND:
     case ITEM_STAFF:
       send_to_char(ch, "This %s casts: %s\r\nIt has %d maximum charge%s and %d remaining.\r\n",
-		item_types[(int) GET_OBJ_TYPE(obj)], skill_name(GET_OBJ_VAL(obj, 3)),
-		GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 1) == 1 ? "" : "s", GET_OBJ_VAL(obj, 2));
+        item_types[(int) GET_OBJ_TYPE(obj)], skill_name(GET_OBJ_VAL(obj, 3)),
+        GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 1) == 1 ? "" : "s", GET_OBJ_VAL(obj, 2));
       break;
     case ITEM_WEAPON:
       send_to_char(ch, "Damage Dice is '%dD%d' for an average per-round damage of %.1f.\r\n",
-		GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 2), ((GET_OBJ_VAL(obj, 2) + 1) / 2.0) * GET_OBJ_VAL(obj, 1));
+        GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 2), ((GET_OBJ_VAL(obj, 2) + 1) / 2.0) * GET_OBJ_VAL(obj, 1));
       break;
     case ITEM_ARMOR:
       send_to_char(ch, "AC-apply is %d\r\n", GET_OBJ_VAL(obj, 0));
@@ -358,27 +358,27 @@ ASPELL(spell_identify)
     found = FALSE;
     for (i = 0; i < MAX_OBJ_AFFECT; i++) {
       if ((obj->affected[i].location != APPLY_NONE) &&
-	  (obj->affected[i].modifier != 0)) {
-	if (!found) {
-	  send_to_char(ch, "Can affect you as :\r\n");
-	  found = TRUE;
-	}
-	sprinttype(obj->affected[i].location, apply_types, bitbuf, sizeof(bitbuf));
-	send_to_char(ch, "   Affects: %s By %d\r\n", bitbuf, obj->affected[i].modifier);
+      (obj->affected[i].modifier != 0)) {
+    if (!found) {
+      send_to_char(ch, "Can affect you as :\r\n");
+      found = TRUE;
+    }
+    sprinttype(obj->affected[i].location, apply_types, bitbuf, sizeof(bitbuf));
+    send_to_char(ch, "   Affects: %s By %d\r\n", bitbuf, obj->affected[i].modifier);
       }
     }
-  } else if (victim) {		/* victim */
+  } else if (victim) {        /* victim */
     send_to_char(ch, "Name: %s\r\n", GET_NAME(victim));
     if (!IS_NPC(victim))
       send_to_char(ch, "%s is %d years, %d months, %d days and %d hours old.\r\n",
-	      GET_NAME(victim), age(victim)->year, age(victim)->month,
-	      age(victim)->day, age(victim)->hours);
+          GET_NAME(victim), age(victim)->year, age(victim)->month,
+          age(victim)->day, age(victim)->hours);
     send_to_char(ch, "Height %d cm, Weight %d pounds\r\n", GET_HEIGHT(victim), GET_WEIGHT(victim));
     send_to_char(ch, "Level: %d, Hits: %d, Mana: %d\r\n", GET_LEVEL(victim), GET_HIT(victim), GET_MANA(victim));
     send_to_char(ch, "AC: %d, Hitroll: %d, Damroll: %d\r\n", compute_armor_class(victim), GET_HITROLL(victim), GET_DAMROLL(victim));
     send_to_char(ch, "Str: %d/%d, Int: %d, Wis: %d, Dex: %d, Con: %d, Cha: %d\r\n",
-	GET_STR(victim), GET_ADD(victim), GET_INT(victim),
-	GET_WIS(victim), GET_DEX(victim), GET_CON(victim), GET_CHA(victim));
+    GET_STR(victim), GET_ADD(victim), GET_INT(victim),
+    GET_WIS(victim), GET_DEX(victim), GET_CON(victim), GET_CHA(victim));
   }
 }
 
@@ -440,10 +440,10 @@ ASPELL(spell_detect_poison)
     case ITEM_FOUNTAIN:
     case ITEM_FOOD:
       if (GET_OBJ_VAL(obj, 3))
-	act("You sense that $p has been contaminated.",FALSE,ch,obj,0,TO_CHAR);
+    act("You sense that $p has been contaminated.",FALSE,ch,obj,0,TO_CHAR);
       else
-	act("You sense that $p is safe for consumption.", FALSE, ch, obj, 0,
-	    TO_CHAR);
+    act("You sense that $p is safe for consumption.", FALSE, ch, obj, 0,
+        TO_CHAR);
       break;
     default:
       send_to_char(ch, "You sense that it should not be consumed.\r\n");

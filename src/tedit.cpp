@@ -73,21 +73,21 @@ ACMD(do_tedit)
     int  size;
     char *filename;
   } fields[] = {
-	/* edit the lvls to your own needs */
-	{ "credits",	LVL_IMPL,	&credits,	2400,	CREDITS_FILE},
-	{ "news",	LVL_GRGOD,	&news,		8192,	NEWS_FILE},
-	{ "motd",	LVL_GRGOD,	&motd,		2400,	MOTD_FILE},
-	{ "imotd",	LVL_IMPL,	&imotd,		2400,	IMOTD_FILE},
+    /* edit the lvls to your own needs */
+    { "credits",    LVL_IMPL,    &credits,    2400,    CREDITS_FILE},
+    { "news",    LVL_GRGOD,    &news,        8192,    NEWS_FILE},
+    { "motd",    LVL_GRGOD,    &motd,        2400,    MOTD_FILE},
+    { "imotd",    LVL_IMPL,    &imotd,        2400,    IMOTD_FILE},
         { "greetings",  LVL_IMPL,       &GREETINGS,     2400,   GREETINGS_FILE},
         { "help",       LVL_GRGOD,      &help,          2400,   HELP_PAGE_FILE},
-	{ "ihelp",      LVL_GRGOD,	&ihelp, 	2400,	IHELP_PAGE_FILE},
-	{ "info",	LVL_GRGOD,	&info,		8192,	INFO_FILE},
-	{ "background",	LVL_IMPL,	&background,	8192,	BACKGROUND_FILE},
-	{ "handbook",   LVL_IMPL,	&handbook,	8192,   HANDBOOK_FILE},
-	{ "policies",	LVL_IMPL,	&policies,	8192,	POLICIES_FILE},
+    { "ihelp",      LVL_GRGOD,    &ihelp,     2400,    IHELP_PAGE_FILE},
+    { "info",    LVL_GRGOD,    &info,        8192,    INFO_FILE},
+    { "background",    LVL_IMPL,    &background,    8192,    BACKGROUND_FILE},
+    { "handbook",   LVL_IMPL,    &handbook,    8192,   HANDBOOK_FILE},
+    { "policies",    LVL_IMPL,    &policies,    8192,    POLICIES_FILE},
         { "wizlist",    LVL_IMPL,       &wizlist,       2400,   WIZLIST_FILE},
         { "immlist",    LVL_GRGOD,      &immlist,       2400,   IMMLIST_FILE},
-	{ "\n",		0,		NULL,		0,	NULL }
+    { "\n",        0,        NULL,        0,    NULL }
   };
 
   if (ch->desc == NULL)
@@ -99,9 +99,9 @@ ACMD(do_tedit)
     send_to_char(ch, "Files available to be edited:\r\n");
     for (l = 0; *fields[l].cmd != '\n'; l++) {
       if (GET_LEVEL(ch) >= fields[l].level) {
-	send_to_char(ch, "%-11.11s ", fields[l].cmd);
-	if (!(++i % 7))
-	  send_to_char(ch, "\r\n");
+    send_to_char(ch, "%-11.11s ", fields[l].cmd);
+    if (!(++i % 7))
+      send_to_char(ch, "\r\n");
       }
     }
     if (i % 7)

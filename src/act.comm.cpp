@@ -521,8 +521,8 @@ ACMD(do_gen_comm)
     bool emoting = FALSE;
 
     // Array of flags which must _not_ be set in order for comm to be heard.
-	int channels[] = 
-	{
+    int channels[] = 
+    {
         0,
         PRF_NOSHOUT,
         PRF_NOGOSS,
@@ -532,8 +532,8 @@ ACMD(do_gen_comm)
         0
     };
 
-	int hist_type[] = 
-	{
+    int hist_type[] = 
+    {
         HIST_HOLLER,
         HIST_SHOUT,
         HIST_GOSSIP,
@@ -545,8 +545,8 @@ ACMD(do_gen_comm)
     //           [1] name of the action
     //           [2] message if you're not on the channel
     //           [3] a color string.
-	const char *com_msgs[][4] = 
-	{
+    const char *com_msgs[][4] = 
+    {
         {"You cannot holler!!\r\n",
         "holler",
         "",

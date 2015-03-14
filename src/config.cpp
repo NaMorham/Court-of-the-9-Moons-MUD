@@ -14,7 +14,7 @@
 #include "sysdep.h"
 #include "structs.h"
 #include "utils.h"
-#include "interpreter.h"	/* alias_data definition for structs.h */
+#include "interpreter.h"    /* alias_data definition for structs.h */
 #include "config.h"
 #include "asciimap.h"
 
@@ -64,8 +64,8 @@ int holler_move_cost = 20;
 int tunnel_size = 2;
 
 /* Exp change limits. */
-int max_exp_gain = 100000;	/* max gainable per kill */
-int max_exp_loss = 500000;	/* max losable per death */
+int max_exp_gain = 100000;    /* max gainable per kill */
+int max_exp_loss = 500000;    /* max losable per death */
 
 /* Number of tics (usually 75 seconds) before PC/NPC corpses decompose. */
 int max_npc_corpse_time = 5;
@@ -154,14 +154,14 @@ int auto_pwipe = NO;
    * Element 7: Because -2 is less than LVL_IMPL, this is assumed to be the end
      of the criteria.  The days entry is not used in this case. */
 struct pclean_criteria_data pclean_criteria[] = {
-/*	LEVEL		DAYS	*/
-  {	0		,0	}, /* level 0 */
-  {	1		,4	},
-  {	4		,7	},
-  {	10		,30	},
-  {	LVL_IMMORT - 1	,60	}, /* highest mortal */
-  {	LVL_IMPL	,90	}, /* all immortals */
-  {	-1		,0	}  /* no more level checks */
+/*    LEVEL        DAYS    */
+  {    0        ,0    }, /* level 0 */
+  {    1        ,4    },
+  {    4        ,7    },
+  {    10        ,30    },
+  {    LVL_IMMORT - 1    ,60    }, /* highest mortal */
+  {    LVL_IMPL    ,90    }, /* all immortals */
+  {    -1        ,0    }  /* no more level checks */
 };
 
 /* Do you want players who self-delete to be wiped immediately with no backup? */

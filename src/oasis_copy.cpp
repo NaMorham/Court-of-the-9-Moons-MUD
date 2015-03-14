@@ -101,8 +101,8 @@ ACMD(do_oasis_copy)
   for (d = descriptor_list; d; d = d->next) {
     if (STATE(d) == subcmd) {
       if (d->olc && OLC_NUM(d) == dst_vnum) {
-	send_to_char(ch, "The target %s (#%d) is currently being edited by %s.\r\n",
-	oasis_copy_info[i].text, dst_vnum, GET_NAME(d->character));
+    send_to_char(ch, "The target %s (#%d) is currently being edited by %s.\r\n",
+    oasis_copy_info[i].text, dst_vnum, GET_NAME(d->character));
         return;
       }
     }

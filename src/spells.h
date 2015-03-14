@@ -12,27 +12,27 @@
 #ifndef _SPELLS_H_
 #define _SPELLS_H_
 
-#define DEFAULT_STAFF_LVL	12
-#define DEFAULT_WAND_LVL	12
+#define DEFAULT_STAFF_LVL    12
+#define DEFAULT_WAND_LVL    12
 
-#define CAST_UNDEFINED	(-1)
-#define CAST_SPELL	0
-#define CAST_POTION	1
-#define CAST_WAND	2
-#define CAST_STAFF	3
-#define CAST_SCROLL	4
+#define CAST_UNDEFINED    (-1)
+#define CAST_SPELL    0
+#define CAST_POTION    1
+#define CAST_WAND    2
+#define CAST_STAFF    3
+#define CAST_SCROLL    4
 
-#define MAG_DAMAGE	(1 << 0)
-#define MAG_AFFECTS	(1 << 1)
-#define MAG_UNAFFECTS	(1 << 2)
-#define MAG_POINTS	(1 << 3)
-#define MAG_ALTER_OBJS	(1 << 4)
-#define MAG_GROUPS	(1 << 5)
-#define MAG_MASSES	(1 << 6)
-#define MAG_AREAS	(1 << 7)
-#define MAG_SUMMONS	(1 << 8)
-#define MAG_CREATIONS	(1 << 9)
-#define MAG_MANUAL	(1 << 10)
+#define MAG_DAMAGE    (1 << 0)
+#define MAG_AFFECTS    (1 << 1)
+#define MAG_UNAFFECTS    (1 << 2)
+#define MAG_POINTS    (1 << 3)
+#define MAG_ALTER_OBJS    (1 << 4)
+#define MAG_GROUPS    (1 << 5)
+#define MAG_MASSES    (1 << 6)
+#define MAG_AREAS    (1 << 7)
+#define MAG_SUMMONS    (1 << 8)
+#define MAG_CREATIONS    (1 << 9)
+#define MAG_MANUAL    (1 << 10)
 
 #define TYPE_UNDEFINED               (-1)
 #define SPELL_RESERVED_DBC            0  /* SKILL NUMBER ZERO -- RESERVED */
@@ -82,19 +82,19 @@
 #define SPELL_WORD_OF_RECALL         42 /* Reserved Skill[] DO NOT CHANGE */
 #define SPELL_REMOVE_POISON          43 /* Reserved Skill[] DO NOT CHANGE */
 #define SPELL_SENSE_LIFE             44 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_ANIMATE_DEAD	     45 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_DISPEL_GOOD	     46 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_GROUP_ARMOR	     47 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_GROUP_HEAL	     48 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_GROUP_RECALL	     49 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_ANIMATE_DEAD         45 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_DISPEL_GOOD         46 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_GROUP_ARMOR         47 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_GROUP_HEAL         48 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_GROUP_RECALL         49 /* Reserved Skill[] DO NOT CHANGE */
 #define SPELL_INFRAVISION            50 /* Reserved Skill[] DO NOT CHANGE */
 #define SPELL_WATERWALK              51 /* Reserved Skill[] DO NOT CHANGE */
-#define SPELL_IDENTIFY	             52 /* Reserved Skill[] DO NOT CHANGE */
+#define SPELL_IDENTIFY                 52 /* Reserved Skill[] DO NOT CHANGE */
 /** Total Number of defined spells */
 #define NUM_SPELLS    52
 
 /* Insert new spells here, up to MAX_SPELLS */
-#define MAX_SPELLS		    130
+#define MAX_SPELLS            130
 
 /* PLAYER SKILLS - Numbered from MAX_SPELLS+1 to MAX_SKILLS */
 #define SKILL_BACKSTAB              131 /* Reserved Skill[] DO NOT CHANGE */
@@ -106,7 +106,7 @@
 #define SKILL_RESCUE                137 /* Reserved Skill[] DO NOT CHANGE */
 #define SKILL_SNEAK                 138 /* Reserved Skill[] DO NOT CHANGE */
 #define SKILL_STEAL                 139 /* Reserved Skill[] DO NOT CHANGE */
-#define SKILL_TRACK		    140 /* Reserved Skill[] DO NOT CHANGE */
+#define SKILL_TRACK            140 /* Reserved Skill[] DO NOT CHANGE */
 /* New skills may be added here up to MAX_SKILLS (200) */
 
 /* NON-PLAYER AND OBJECT SPELLS AND SKILLS: The practice levels for the spells 
@@ -119,7 +119,7 @@
  * define it with a 'spellname'. */
 #define SPELL_DG_AFFECT              298
 
-#define TOP_SPELL_DEFINE	     299
+#define TOP_SPELL_DEFINE         299
 /* NEW NPC/OBJECT SPELLS can be inserted here up to 299 */
 
 /* WEAPON ATTACK TYPES */
@@ -135,14 +135,14 @@
 #define TYPE_MAUL       309
 #define TYPE_THRASH     310
 #define TYPE_PIERCE     311
-#define TYPE_BLAST		  312
-#define TYPE_PUNCH		  313
-#define TYPE_STAB		    314
+#define TYPE_BLAST          312
+#define TYPE_PUNCH          313
+#define TYPE_STAB            314
 /** The total number of attack types */
 #define NUM_ATTACK_TYPES  15
 
 /* new attack types can be added here - up to TYPE_SUFFERING */
-#define TYPE_SUFFERING		     399
+#define TYPE_SUFFERING             399
 
 #define SAVING_PARA   0
 #define SAVING_ROD    1
@@ -170,24 +170,24 @@
 #define TAR_FIGHT_SELF  (1 << 3)
 #define TAR_FIGHT_VICT  (1 << 4)
 #define TAR_SELF_ONLY   (1 << 5) /* Only a check, use with i.e. TAR_CHAR_ROOM */
-#define TAR_NOT_SELF   	(1 << 6) /* Only a check, use with i.e. TAR_CHAR_ROOM */
+#define TAR_NOT_SELF       (1 << 6) /* Only a check, use with i.e. TAR_CHAR_ROOM */
 #define TAR_OBJ_INV     (1 << 7)
 #define TAR_OBJ_ROOM    (1 << 8)
 #define TAR_OBJ_WORLD   (1 << 9)
-#define TAR_OBJ_EQUIP	  (1 << 10)
+#define TAR_OBJ_EQUIP      (1 << 10)
 
 struct spell_info_type {
-   byte min_position;	/* Position for caster	 */
-   int mana_min;	/* Min amount of mana used by a spell (highest lev) */
-   int mana_max;	/* Max amount of mana used by a spell (lowest lev) */
-   int mana_change;	/* Change in mana used by spell from lev to lev */
+   byte min_position;    /* Position for caster     */
+   int mana_min;    /* Min amount of mana used by a spell (highest lev) */
+   int mana_max;    /* Max amount of mana used by a spell (lowest lev) */
+   int mana_change;    /* Change in mana used by spell from lev to lev */
 
    int min_level[NUM_CLASSES];
    int routines;
    byte violent;
    int targets;         /* See below for use with TAR_XXX  */
-   const char *name;	/* Input size not limited. Originates from string constants. */
-   const char *wear_off_msg;	/* Input size not limited. Originates from string constants. */
+   const char *name;    /* Input size not limited. Originates from string constants. */
+   const char *wear_off_msg;    /* Input size not limited. Originates from string constants. */
 };
 
 /* Possible Targets:
@@ -208,10 +208,10 @@ struct spell_info_type {
 #define SPELL_TYPE_SCROLL  4
 
 #define ASPELL(spellname) \
-void	spellname(int level, struct char_data *ch, \
-		  struct char_data *victim, struct obj_data *obj)
+void    spellname(int level, struct char_data *ch, \
+          struct char_data *victim, struct obj_data *obj)
 
-#define MANUAL_SPELL(spellname)	spellname(level, caster, cvict, ovict);
+#define MANUAL_SPELL(spellname)    spellname(level, caster, cvict, ovict);
 
 ASPELL(spell_create_water);
 ASPELL(spell_recall);
@@ -254,13 +254,13 @@ void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj,
 
 void mag_creations(int level, struct char_data *ch, int spellnum);
 
-int	call_magic(struct char_data *caster, struct char_data *cvict,
+int    call_magic(struct char_data *caster, struct char_data *cvict,
   struct obj_data *ovict, int spellnum, int level, int casttype);
 
-void	mag_objectmagic(struct char_data *ch, struct obj_data *obj,
-			char *argument);
+void    mag_objectmagic(struct char_data *ch, struct obj_data *obj,
+            char *argument);
 
-int	cast_spell(struct char_data *ch, struct char_data *tch,
+int    cast_spell(struct char_data *ch, struct char_data *tch,
   struct obj_data *tobj, int spellnum);
 
 /* other prototypes */

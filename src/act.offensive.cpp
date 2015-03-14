@@ -45,8 +45,8 @@ ACMD(do_assist)
       opponent = FIGHTING(helpee);
     else
       for (opponent = world[IN_ROOM(ch)].people;
-	   opponent && (FIGHTING(opponent) != helpee);
-	   opponent = opponent->next_in_room);
+       opponent && (FIGHTING(opponent) != helpee);
+       opponent = opponent->next_in_room);
 
     if (!opponent)
       act("But nobody is fighting $M!", FALSE, ch, 0, helpee, TO_CHAR);
@@ -82,7 +82,7 @@ ACMD(do_hit)
     act("$N is just such a good friend, you simply can't hit $M.", FALSE, ch, 0, vict, TO_CHAR);
   else {
     if (!CONFIG_PK_ALLOWED && !IS_NPC(vict) && !IS_NPC(ch)) 
-	check_killer(ch, vict);
+    check_killer(ch, vict);
 
     if ((GET_POS(ch) == POS_STANDING) && (vict != FIGHTING(ch))) {
       hit(ch, vict, TYPE_UNDEFINED);
@@ -161,7 +161,7 @@ ACMD(do_backstab)
     return;
   }
 
-  percent = rand_number(1, 101);	/* 101% is a complete failure */
+  percent = rand_number(1, 101);    /* 101% is a complete failure */
   prob = GET_SKILL(ch, SKILL_BACKSTAB);
 
   if (AWAKE(vict) && (percent > prob))
@@ -200,28 +200,28 @@ ACMD(do_order)
       act("$n gives $N an order.", FALSE, ch, 0, vict, TO_ROOM);
 
       if ((vict->master != ch) || !AFF_FLAGGED(vict, AFF_CHARM))
-	act("$n has an indifferent look.", FALSE, vict, 0, 0, TO_ROOM);
+    act("$n has an indifferent look.", FALSE, vict, 0, 0, TO_ROOM);
       else {
-	send_to_char(ch, "%s", CONFIG_OK);
-	command_interpreter(vict, message);
+    send_to_char(ch, "%s", CONFIG_OK);
+    command_interpreter(vict, message);
       }
-    } else {			/* This is order "followers" */
+    } else {            /* This is order "followers" */
       char buf[MAX_STRING_LENGTH];
 
       snprintf(buf, sizeof(buf), "$n issues the order '%s'.", message);
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
 
       for (k = ch->followers; k; k = k->next) {
-	if (IN_ROOM(ch) == IN_ROOM(k->follower))
-	  if (AFF_FLAGGED(k->follower, AFF_CHARM)) {
-	    found = TRUE;
-	    command_interpreter(k->follower, message);
-	  }
+    if (IN_ROOM(ch) == IN_ROOM(k->follower))
+      if (AFF_FLAGGED(k->follower, AFF_CHARM)) {
+        found = TRUE;
+        command_interpreter(k->follower, message);
+      }
       }
       if (found)
-	send_to_char(ch, "%s", CONFIG_OK);
+    send_to_char(ch, "%s", CONFIG_OK);
       else
-	send_to_char(ch, "Nobody here is a loyal subject of yours!\r\n");
+    send_to_char(ch, "Nobody here is a loyal subject of yours!\r\n");
     }
   }
 }
@@ -237,24 +237,24 @@ ACMD(do_flee)
   }
 
   for (i = 0; i < 6; i++) {
-    attempt = rand_number(0, NUM_OF_DIRS - 1);	/* Select a random direction */
+    attempt = rand_number(0, NUM_OF_DIRS - 1);    /* Select a random direction */
     if (CAN_GO(ch, attempt) &&
-	!ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
+    !ROOM_FLAGGED(EXIT(ch, attempt)->to_room, ROOM_DEATH)) {
       act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
       was_fighting = FIGHTING(ch);
       if (do_simple_move(ch, attempt, TRUE)) {
-	send_to_char(ch, "You flee head over heels.\r\n");
+    send_to_char(ch, "You flee head over heels.\r\n");
         if (was_fighting && !IS_NPC(ch)) {
-	  loss = GET_MAX_HIT(was_fighting) - GET_HIT(was_fighting);
-	  loss *= GET_LEVEL(was_fighting);
-	  gain_exp(ch, -loss);
+      loss = GET_MAX_HIT(was_fighting) - GET_HIT(was_fighting);
+      loss *= GET_LEVEL(was_fighting);
+      gain_exp(ch, -loss);
         }
       if (FIGHTING(ch)) 
         stop_fighting(ch); 
       if (was_fighting && ch == FIGHTING(was_fighting))
         stop_fighting(was_fighting); 
       } else {
-	act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
+    act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
       }
       return;
     }
@@ -299,7 +299,7 @@ ACMD(do_bash)
     return;
   }
 
-  percent = rand_number(1, 101);	/* 101% is a complete failure */
+  percent = rand_number(1, 101);    /* 101% is a complete failure */
   prob = GET_SKILL(ch, SKILL_BASH);
 
   if (MOB_FLAGGED(vict, MOB_NOBASH))
@@ -315,7 +315,7 @@ ACMD(do_bash)
      * first to make sure they don't flee, then we can't bash them!  So now
      * we only set them sitting if they didn't flee. -gg 9/21/98
      */
-    if (damage(ch, vict, 1, SKILL_BASH) > 0) {	/* -1 = dead, 0 = miss */
+    if (damage(ch, vict, 1, SKILL_BASH) > 0) {    /* -1 = dead, 0 = miss */
       WAIT_STATE(vict, PULSE_VIOLENCE);
       if (IN_ROOM(ch) == IN_ROOM(vict))
         GET_POS(vict) = POS_SITTING;
@@ -364,7 +364,7 @@ ACMD(do_rescue)
     act("But nobody is fighting $M!", FALSE, ch, 0, vict, TO_CHAR);
     return;
   }
-  percent = rand_number(1, 101);	/* 101% is a complete failure */
+  percent = rand_number(1, 101);    /* 101% is a complete failure */
   prob = GET_SKILL(ch, SKILL_RESCUE);
 
   if (percent > prob) {

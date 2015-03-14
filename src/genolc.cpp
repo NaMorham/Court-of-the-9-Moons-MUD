@@ -342,7 +342,7 @@ ACMD(do_export_zone)
     sprintf(sysbuf, "mkdir %s", path); 
     i = system(sysbuf); 
   } 
-						      
+                              
   if (!(success = export_info_file(zrnum))) 
     send_to_char(ch, "Info file not saved!\r\n"); 
   if (!(success = export_save_shops(zrnum))) 
@@ -482,7 +482,7 @@ static int export_save_shops(zone_rnum zrnum)
             obj_index[S_PRODUCT(shop, j)].vnum > zone_table[zrnum].top)
           continue;
 
-	fprintf(shop_file, "QQ%02d\n", obj_index[S_PRODUCT(shop, j)].vnum%100);
+    fprintf(shop_file, "QQ%02d\n", obj_index[S_PRODUCT(shop, j)].vnum%100);
       }
       fprintf(shop_file, "-1\n");
 
@@ -496,34 +496,34 @@ static int export_save_shops(zone_rnum zrnum)
       for (j = 0;S_BUYTYPE(shop, j) != NOTHING; j++)
         fprintf(shop_file, "%d%s\n",
                 S_BUYTYPE(shop, j),
-		S_BUYWORD(shop, j) ? S_BUYWORD(shop, j) : "");
+        S_BUYWORD(shop, j) ? S_BUYWORD(shop, j) : "");
       fprintf(shop_file, "-1\n");
 
       /* Save messages. Added some defaults as sanity checks. */
       fprintf(shop_file,
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%d\n"
-	      "%ld\n"
-	      "QQ%02d\n"
-	      "%d\n",
-	      S_NOITEM1(shop) ? S_NOITEM1(shop) : "%s Ke?!",
-	      S_NOITEM2(shop) ? S_NOITEM2(shop) : "%s Ke?!",
-	      S_NOBUY(shop) ? S_NOBUY(shop) : "%s Ke?!",
-	      S_NOCASH1(shop) ? S_NOCASH1(shop) : "%s Ke?!",
-	      S_NOCASH2(shop) ? S_NOCASH2(shop) : "%s Ke?!",
-	      S_BUY(shop) ? S_BUY(shop) : "%s Ke?! %d?",
-	      S_SELL(shop) ? S_SELL(shop) : "%s Ke?! %d?",
-	      S_BROKE_TEMPER(shop),
-	      S_BITVECTOR(shop),
-	      mob_index[S_KEEPER(shop)].vnum%100,
-	      S_NOTRADE(shop)
-	      );
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%d\n"
+          "%ld\n"
+          "QQ%02d\n"
+          "%d\n",
+          S_NOITEM1(shop) ? S_NOITEM1(shop) : "%s Ke?!",
+          S_NOITEM2(shop) ? S_NOITEM2(shop) : "%s Ke?!",
+          S_NOBUY(shop) ? S_NOBUY(shop) : "%s Ke?!",
+          S_NOCASH1(shop) ? S_NOCASH1(shop) : "%s Ke?!",
+          S_NOCASH2(shop) ? S_NOCASH2(shop) : "%s Ke?!",
+          S_BUY(shop) ? S_BUY(shop) : "%s Ke?! %d?",
+          S_SELL(shop) ? S_SELL(shop) : "%s Ke?! %d?",
+          S_BROKE_TEMPER(shop),
+          S_BITVECTOR(shop),
+          mob_index[S_KEEPER(shop)].vnum%100,
+          S_NOTRADE(shop)
+          );
 
       /* Save the rooms. */
       for (j = 0;S_ROOM(shop, j) != NOWHERE; j++) {
@@ -537,7 +537,7 @@ static int export_save_shops(zone_rnum zrnum)
 
       /* Save open/closing times. */
       fprintf(shop_file, "%d\n%d\n%d\n%d\n", S_OPEN1(shop), S_CLOSE1(shop),
-		S_OPEN2(shop), S_CLOSE2(shop));
+        S_OPEN2(shop), S_CLOSE2(shop));
     }
   }
   fprintf(shop_file, "$~\n");
@@ -581,16 +581,16 @@ static int export_mobile_record(mob_vnum mvnum, struct char_data *mob, FILE *fd)
   strip_cr(strncpy(ldesc, GET_LDESC(mob), MAX_STRING_LENGTH - 1));
   strip_cr(strncpy(ddesc, GET_DDESC(mob), MAX_STRING_LENGTH - 1));
 
-  fprintf(fd,	"#QQ%02d\n"
-		"%s%c\n"
-		"%s%c\n"
-		"%s%c\n"
-		"%s%c\n",
-	mvnum%100,
-	GET_ALIAS(mob), STRING_TERMINATOR,
-	GET_SDESC(mob), STRING_TERMINATOR,
-	ldesc, STRING_TERMINATOR,
-	ddesc, STRING_TERMINATOR
+  fprintf(fd,    "#QQ%02d\n"
+        "%s%c\n"
+        "%s%c\n"
+        "%s%c\n"
+        "%s%c\n",
+    mvnum%100,
+    GET_ALIAS(mob), STRING_TERMINATOR,
+    GET_SDESC(mob), STRING_TERMINATOR,
+    ldesc, STRING_TERMINATOR,
+    ddesc, STRING_TERMINATOR
   );
 
   fprintf(fd, "%d %d %d %d %d %d %d %d %d E\n"
@@ -604,10 +604,10 @@ static int export_mobile_record(mob_vnum mvnum, struct char_data *mob, FILE *fd)
       GET_MANA(mob), GET_MOVE(mob), GET_NDD(mob), GET_SDD(mob),
       GET_DAMROLL(mob));
 
-  fprintf(fd, 	"%d %d\n"
-		"%d %d %d\n",
-		GET_GOLD(mob), GET_EXP(mob),
-		GET_POS(mob), GET_DEFAULT_POS(mob), GET_SEX(mob)
+  fprintf(fd,     "%d %d\n"
+        "%d %d %d\n",
+        GET_GOLD(mob), GET_EXP(mob),
+        GET_POS(mob), GET_DEFAULT_POS(mob), GET_SEX(mob)
   );
 
   if (write_mobile_espec(mvnum, mob, fd) < 0)
@@ -633,94 +633,94 @@ static int export_save_zone(zone_rnum zrnum)
                  "%s~\n"
                  "%s~\n"
                  "QQ%02d QQ%02d %d %d\n",
-	  (zone_table[zrnum].builders && *zone_table[zrnum].builders)
-		? zone_table[zrnum].builders : "None.",
-	  (zone_table[zrnum].name && *zone_table[zrnum].name)
-		? zone_table[zrnum].name : "undefined",
+      (zone_table[zrnum].builders && *zone_table[zrnum].builders)
+        ? zone_table[zrnum].builders : "None.",
+      (zone_table[zrnum].name && *zone_table[zrnum].name)
+        ? zone_table[zrnum].name : "undefined",
           genolc_zone_bottom(zrnum)%100,
-	  zone_table[zrnum].top%100,
-	  zone_table[zrnum].lifespan,
-	  zone_table[zrnum].reset_mode
-	  );
+      zone_table[zrnum].top%100,
+      zone_table[zrnum].lifespan,
+      zone_table[zrnum].reset_mode
+      );
 
-	/* Handy Quick Reference Chart for Zone Values.
-	 *
-	 * Field #1    Field #3   Field #4  Field #5
-	 * -------------------------------------------------
-	 * M (Mobile)  Mob-Vnum   Wld-Max   Room-Vnum
-	 * O (Object)  Obj-Vnum   Wld-Max   Room-Vnum
-	 * G (Give)    Obj-Vnum   Wld-Max   Unused
-	 * E (Equip)   Obj-Vnum   Wld-Max   EQ-Position
-	 * P (Put)     Obj-Vnum   Wld-Max   Target-Obj-Vnum
-	 * D (Door)    Room-Vnum  Door-Dir  Door-State
-	 * R (Remove)  Room-Vnum  Obj-Vnum  Unused
+    /* Handy Quick Reference Chart for Zone Values.
+     *
+     * Field #1    Field #3   Field #4  Field #5
+     * -------------------------------------------------
+     * M (Mobile)  Mob-Vnum   Wld-Max   Room-Vnum
+     * O (Object)  Obj-Vnum   Wld-Max   Room-Vnum
+     * G (Give)    Obj-Vnum   Wld-Max   Unused
+     * E (Equip)   Obj-Vnum   Wld-Max   EQ-Position
+     * P (Put)     Obj-Vnum   Wld-Max   Target-Obj-Vnum
+     * D (Door)    Room-Vnum  Door-Dir  Door-State
+     * R (Remove)  Room-Vnum  Obj-Vnum  Unused
          * T (Trigger) Trig-type  Trig-Vnum Room-Vnum
          * V (var)     Trig-type  Context   Room-Vnum Varname Value
-	 * ------------------------------------------------- */
+     * ------------------------------------------------- */
 
   for (subcmd = 0; ZCMD(zrnum, subcmd).command != 'S'; subcmd++) {
     switch (ZCMD(zrnum, subcmd).command) {
     case 'M':
       fprintf(zone_file, "M %d QQ%02d %d QQ%02d \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		mob_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
-		ZCMD(zrnum, subcmd).arg2,
-		world[ZCMD(zrnum, subcmd).arg3].number%100,
-		mob_proto[ZCMD(zrnum, subcmd).arg1].player.short_descr);
+        ZCMD(zrnum, subcmd).if_flag,
+        mob_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
+        ZCMD(zrnum, subcmd).arg2,
+        world[ZCMD(zrnum, subcmd).arg3].number%100,
+        mob_proto[ZCMD(zrnum, subcmd).arg1].player.short_descr);
       break;
     case 'O':
       fprintf(zone_file, "O %d QQ%02d %d QQ%02d \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
-		ZCMD(zrnum, subcmd).arg2,
-		world[ZCMD(zrnum, subcmd).arg3].number%100,
-		obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
+        ZCMD(zrnum, subcmd).if_flag,
+        obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
+        ZCMD(zrnum, subcmd).arg2,
+        world[ZCMD(zrnum, subcmd).arg3].number%100,
+        obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
       break;
     case 'G':
       fprintf(zone_file, "G %d QQ%02d %d -1 \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
+        ZCMD(zrnum, subcmd).if_flag,
                 obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
                 ZCMD(zrnum, subcmd).arg2,
                 obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
       break;
     case 'E':
       fprintf(zone_file, "E %d QQ%02d %d %d \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		 obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
-		 ZCMD(zrnum, subcmd).arg2,
-		 ZCMD(zrnum, subcmd).arg3,
-		 obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
+        ZCMD(zrnum, subcmd).if_flag,
+         obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
+         ZCMD(zrnum, subcmd).arg2,
+         ZCMD(zrnum, subcmd).arg3,
+         obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
       break;
     case 'P':
       fprintf(zone_file, "P %d QQ%02d %d QQ%02d \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
-		ZCMD(zrnum, subcmd).arg2,
-		obj_index[ZCMD(zrnum, subcmd).arg3].vnum%100,
-		obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
+        ZCMD(zrnum, subcmd).if_flag,
+        obj_index[ZCMD(zrnum, subcmd).arg1].vnum%100,
+        ZCMD(zrnum, subcmd).arg2,
+        obj_index[ZCMD(zrnum, subcmd).arg3].vnum%100,
+        obj_proto[ZCMD(zrnum, subcmd).arg1].short_description);
       break;
     case 'D':
       fprintf(zone_file, "D %d QQ%02d %d %d \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		world[ZCMD(zrnum, subcmd).arg1].number%100,
-		ZCMD(zrnum, subcmd).arg2,
-		ZCMD(zrnum, subcmd).arg3,
-		world[ZCMD(zrnum, subcmd).arg1].name);
+        ZCMD(zrnum, subcmd).if_flag,
+        world[ZCMD(zrnum, subcmd).arg1].number%100,
+        ZCMD(zrnum, subcmd).arg2,
+        ZCMD(zrnum, subcmd).arg3,
+        world[ZCMD(zrnum, subcmd).arg1].name);
       break;
     case 'R':
       fprintf(zone_file, "R %d QQ%02d QQ%02d -1 \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		world[ZCMD(zrnum, subcmd).arg1].number%100,
-		obj_index[ZCMD(zrnum, subcmd).arg2].vnum%100,
-		obj_proto[ZCMD(zrnum, subcmd).arg2].short_description);
+        ZCMD(zrnum, subcmd).if_flag,
+        world[ZCMD(zrnum, subcmd).arg1].number%100,
+        obj_index[ZCMD(zrnum, subcmd).arg2].vnum%100,
+        obj_proto[ZCMD(zrnum, subcmd).arg2].short_description);
       break;
     case 'T':
       fprintf(zone_file, "T %d %d QQ%02d QQ%02d \t(%s)\n",
-		ZCMD(zrnum, subcmd).if_flag,
-		ZCMD(zrnum, subcmd).arg1,
-		trig_index[ZCMD(zrnum, subcmd).arg2]->vnum%100,
-		world[ZCMD(zrnum, subcmd).arg3].number%100,
-		GET_TRIG_NAME(trig_index[ZCMD(zrnum, subcmd).arg2]->proto));
+        ZCMD(zrnum, subcmd).if_flag,
+        ZCMD(zrnum, subcmd).arg1,
+        trig_index[ZCMD(zrnum, subcmd).arg2]->vnum%100,
+        world[ZCMD(zrnum, subcmd).arg3].number%100,
+        GET_TRIG_NAME(trig_index[ZCMD(zrnum, subcmd).arg2]->proto));
       break;
     case 'V':
       fprintf(zone_file, "V %d %d %d QQ%02d %s %s\n",
@@ -766,23 +766,23 @@ static int export_save_objects(zone_rnum zrnum)
   for (ovnum = genolc_zone_bottom(zrnum); ovnum <= zone_table[zrnum].top; ovnum++) {
     if ((ornum = real_object(ovnum)) != NOTHING) {
       if ((obj = &obj_proto[ornum])->action_description) {
-	strncpy(buf, obj->action_description, sizeof(buf) - 1);
-	strip_cr(buf);
+    strncpy(buf, obj->action_description, sizeof(buf) - 1);
+    strip_cr(buf);
       } else
-	*buf = '\0';
+    *buf = '\0';
 
       fprintf(obj_file,
-	      "#QQ%02d\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n",
+          "#QQ%02d\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n",
 
-	      GET_OBJ_VNUM(obj)%100,
-	      (obj->name && *obj->name) ? obj->name : "undefined",
-	      (obj->short_description && *obj->short_description) ? obj->short_description : "undefined",
-	      (obj->description && *obj->description) ?	obj->description : "undefined",
-	      buf);
+          GET_OBJ_VNUM(obj)%100,
+          (obj->name && *obj->name) ? obj->name : "undefined",
+          (obj->short_description && *obj->short_description) ? obj->short_description : "undefined",
+          (obj->description && *obj->description) ?    obj->description : "undefined",
+          buf);
 
       sprintascii(ebuf1, GET_OBJ_EXTRA(obj)[0]);
       sprintascii(ebuf2, GET_OBJ_EXTRA(obj)[1]);
@@ -807,45 +807,45 @@ static int export_save_objects(zone_rnum zrnum)
       if (GET_OBJ_TYPE(obj) != ITEM_CONTAINER)
         fprintf(obj_file,
                 "%d %d %d %d\n",
-	        GET_OBJ_VAL(obj, 0), GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 3));
+            GET_OBJ_VAL(obj, 0), GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 3));
       else
         fprintf(obj_file,
                 "%d %d %s%02d %d\n",
-	        GET_OBJ_VAL(obj, 0),
-	        GET_OBJ_VAL(obj, 1),
-	        GET_OBJ_VAL(obj, 2) == -1 ? "" : "QQ", /* key */
-	        GET_OBJ_VAL(obj, 2) == -1 ? -1 : GET_OBJ_VAL(obj, 2)%100,
-	        GET_OBJ_VAL(obj, 3));
+            GET_OBJ_VAL(obj, 0),
+            GET_OBJ_VAL(obj, 1),
+            GET_OBJ_VAL(obj, 2) == -1 ? "" : "QQ", /* key */
+            GET_OBJ_VAL(obj, 2) == -1 ? -1 : GET_OBJ_VAL(obj, 2)%100,
+            GET_OBJ_VAL(obj, 3));
 
       fprintf(obj_file,
-	      "%d %d %d %d\n",
-	      GET_OBJ_WEIGHT(obj), GET_OBJ_COST(obj), GET_OBJ_RENT(obj), GET_OBJ_LEVEL(obj));
+          "%d %d %d %d\n",
+          GET_OBJ_WEIGHT(obj), GET_OBJ_COST(obj), GET_OBJ_RENT(obj), GET_OBJ_LEVEL(obj));
 
       /* Do we have script(s) attached? */
       export_script_save_to_disk(obj_file, obj, OBJ_TRIGGER);
 
       /* Do we have extra descriptions? */
-      if (obj->ex_description) {	/* Yes, save them too. */
-	for (ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
-	  /* Sanity check to prevent nasty protection faults. */
-	  if (!ex_desc->keyword || !ex_desc->description || !*ex_desc->keyword || !*ex_desc->description) {
-	    mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: OLC: export_save_objects: Corrupt ex_desc!");
-	    continue;
-	  }
-	  strncpy(buf, ex_desc->description, sizeof(buf) - 1);
-	  strip_cr(buf);
-	  fprintf(obj_file, "E\n"
-		  "%s~\n"
-		  "%s~\n", ex_desc->keyword, buf);
-	}
+      if (obj->ex_description) {    /* Yes, save them too. */
+    for (ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
+      /* Sanity check to prevent nasty protection faults. */
+      if (!ex_desc->keyword || !ex_desc->description || !*ex_desc->keyword || !*ex_desc->description) {
+        mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: OLC: export_save_objects: Corrupt ex_desc!");
+        continue;
+      }
+      strncpy(buf, ex_desc->description, sizeof(buf) - 1);
+      strip_cr(buf);
+      fprintf(obj_file, "E\n"
+          "%s~\n"
+          "%s~\n", ex_desc->keyword, buf);
+    }
       }
       /* Do we have affects? */
       for (i = 0; i < MAX_OBJ_AFFECT; i++)
-	if (obj->affected[i].modifier)
-	  fprintf(obj_file, "A\n"
-		            "%d %d\n",
-		  obj->affected[i].location,
-		  obj->affected[i].modifier);
+    if (obj->affected[i].modifier)
+      fprintf(obj_file, "A\n"
+                    "%d %d\n",
+          obj->affected[i].location,
+          obj->affected[i].modifier);
     }
   }
 
@@ -882,82 +882,82 @@ static int export_save_rooms(zone_rnum zrnum)
       strip_cr(buf);
 
       /* Save the numeric and string section of the file. */
-      fprintf(room_file, 	"#QQ%02d\n"
-			"%s%c\n"
-			"%s%c\n"
-			"QQ %d %d %d %d %d\n",
-		room->number%100,
-		room->name ? room->name : "Untitled", STRING_TERMINATOR,
-		buf, STRING_TERMINATOR,
-		room->room_flags[0], room->room_flags[1],
+      fprintf(room_file,     "#QQ%02d\n"
+            "%s%c\n"
+            "%s%c\n"
+            "QQ %d %d %d %d %d\n",
+        room->number%100,
+        room->name ? room->name : "Untitled", STRING_TERMINATOR,
+        buf, STRING_TERMINATOR,
+        room->room_flags[0], room->room_flags[1],
                 room->room_flags[2], room->room_flags[3], room->sector_type
       );
 
       /* Now you write out the exits for the room. */
       for (j = 0; j < NUM_OF_DIRS; j++) {
-	if (R_EXIT(room, j)) {
-	  int dflag;
-	  if (R_EXIT(room, j)->general_description) {
-	    strncpy(buf, R_EXIT(room, j)->general_description, sizeof(buf)-1);
-	    strip_cr(buf);
-	  } else
-	    *buf = '\0';
+    if (R_EXIT(room, j)) {
+      int dflag;
+      if (R_EXIT(room, j)->general_description) {
+        strncpy(buf, R_EXIT(room, j)->general_description, sizeof(buf)-1);
+        strip_cr(buf);
+      } else
+        *buf = '\0';
 
-	  /* Figure out door flag. */
-	  if (IS_SET(R_EXIT(room, j)->exit_info, EX_ISDOOR)) {
-	    if (IS_SET(R_EXIT(room, j)->exit_info, EX_PICKPROOF))
-	      dflag = 2;
-	    else
-	      dflag = 1;
-	  } else
-	    dflag = 0;
+      /* Figure out door flag. */
+      if (IS_SET(R_EXIT(room, j)->exit_info, EX_ISDOOR)) {
+        if (IS_SET(R_EXIT(room, j)->exit_info, EX_PICKPROOF))
+          dflag = 2;
+        else
+          dflag = 1;
+      } else
+        dflag = 0;
 
-	  if (R_EXIT(room, j)->keyword)
-	    strncpy(buf1, R_EXIT(room, j)->keyword, sizeof(buf1)-1 );
-	  else
-	    *buf1 = '\0';
+      if (R_EXIT(room, j)->keyword)
+        strncpy(buf1, R_EXIT(room, j)->keyword, sizeof(buf1)-1 );
+      else
+        *buf1 = '\0';
 
-	  /* Now write the exit to the file. */
+      /* Now write the exit to the file. */
           if (R_EXIT(room, j)->to_room == NOWHERE || world[R_EXIT(room, j)->to_room].zone == zrnum)
-	    fprintf(room_file,"D%d\n"
-		              "%s~\n"
-			      "%s~\n"
-        		      "%d %s%02d %s%02d\n",
-			      j,
-			      buf,
-			      buf1,
-			      dflag,
-			      R_EXIT(room, j)->key == NOTHING ? "" : "QQ",
-			      R_EXIT(room, j)->key == NOTHING ? -1 : R_EXIT(room, j)->key % 100 ,
-			      R_EXIT(room, j)->to_room == NOTHING ? "" : "QQ",
-			      R_EXIT(room, j)->to_room != NOTHING ? (world[R_EXIT(room, j)->to_room].number%100) : -1);
+        fprintf(room_file,"D%d\n"
+                      "%s~\n"
+                  "%s~\n"
+                      "%d %s%02d %s%02d\n",
+                  j,
+                  buf,
+                  buf1,
+                  dflag,
+                  R_EXIT(room, j)->key == NOTHING ? "" : "QQ",
+                  R_EXIT(room, j)->key == NOTHING ? -1 : R_EXIT(room, j)->key % 100 ,
+                  R_EXIT(room, j)->to_room == NOTHING ? "" : "QQ",
+                  R_EXIT(room, j)->to_room != NOTHING ? (world[R_EXIT(room, j)->to_room].number%100) : -1);
           else {
-	    fprintf(room_file,"D%d\n"
-		              "%s~\n"
-			      "%s~\n"
-        		      "%d %s%02d ZZ%02d\n",
-			      j,
-			      buf,
-			      buf1,
-			      dflag,
-			      R_EXIT(room, j)->key == NOTHING ? "" : "QQ",
-			      R_EXIT(room, j)->key == NOTHING ? -1 : R_EXIT(room, j)->key % 100 ,
-			      world[R_EXIT(room, j)->to_room].number%100);
+        fprintf(room_file,"D%d\n"
+                      "%s~\n"
+                  "%s~\n"
+                      "%d %s%02d ZZ%02d\n",
+                  j,
+                  buf,
+                  buf1,
+                  dflag,
+                  R_EXIT(room, j)->key == NOTHING ? "" : "QQ",
+                  R_EXIT(room, j)->key == NOTHING ? -1 : R_EXIT(room, j)->key % 100 ,
+                  world[R_EXIT(room, j)->to_room].number%100);
             zone_exits++;
           }
-	}
+    }
       }
 
       if (room->ex_description) {
         struct extra_descr_data *xdesc;
 
-	for (xdesc = room->ex_description; xdesc; xdesc = xdesc->next) {
-	  strncpy(buf, xdesc->description, sizeof(buf));
-	  strip_cr(buf);
-	  fprintf(room_file,	"E\n"
-			"%s~\n"
-			"%s~\n", xdesc->keyword, buf);
-	}
+    for (xdesc = room->ex_description; xdesc; xdesc = xdesc->next) {
+      strncpy(buf, xdesc->description, sizeof(buf));
+      strip_cr(buf);
+      fprintf(room_file,    "E\n"
+            "%s~\n"
+            "%s~\n", xdesc->keyword, buf);
+    }
       }
       fprintf(room_file, "S\n");
       export_script_save_to_disk(room_file, room, WLD_TRIGGER);

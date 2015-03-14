@@ -49,7 +49,7 @@ static void perform_mortal_where(struct char_data *ch, char *arg);
 static void print_object_location(int num, struct obj_data *obj, struct char_data *ch, int recur);
 
 // Subcommands
-// For show_obj_to_char 'mode'.	/-- arbitrary
+// For show_obj_to_char 'mode'.    /-- arbitrary
 #define SHOW_OBJ_LONG     0
 #define SHOW_OBJ_SHORT    1
 #define SHOW_OBJ_ACTION   2
@@ -273,14 +273,14 @@ static void diag_char_to_char(struct char_data *i, struct char_data *ch)
         const char *text;
     } 
     diagnosis[] = {
-        { 100, "is in excellent condition."			},
-        {  90, "has a few scratches."			},
-        {  75, "has some small wounds and bruises."		},
-        {  50, "has quite a few wounds."			},
-        {  30, "has some big nasty wounds and scratches."	},
-        {  15, "looks pretty hurt."				},
-        {   0, "is in awful condition."			},
-        {  -1, "is bleeding awfully from big wounds."	},
+        { 100, "is in excellent condition."            },
+        {  90, "has a few scratches."            },
+        {  75, "has some small wounds and bruises."        },
+        {  50, "has quite a few wounds."            },
+        {  30, "has some big nasty wounds and scratches."    },
+        {  15, "looks pretty hurt."                },
+        {   0, "is in awful condition."            },
+        {  -1, "is bleeding awfully from big wounds."    },
     };
     int percent, ar_index;
     const char *pers = PERS(i, ch);
@@ -291,7 +291,7 @@ static void diag_char_to_char(struct char_data *i, struct char_data *ch)
     }
     else
     {
-        percent = -1;		// How could MAX_HIT be < 1??
+        percent = -1;        // How could MAX_HIT be < 1??
     }
     for (ar_index = 0; diagnosis[ar_index].percent >= 0; ar_index++)
     {
@@ -333,7 +333,7 @@ static void look_at_char(struct char_data *i, struct char_data *ch)
 
     if (found) 
     {
-        send_to_char(ch, "\r\n");	// act() does capitalization.
+        send_to_char(ch, "\r\n");    // act() does capitalization.
         act("$n is using:", FALSE, i, 0, ch, TO_VICT);
         for (j = 0; j < NUM_WEARS; j++)
         {
@@ -484,7 +484,7 @@ static void list_one_char(struct char_data *i, struct char_data *ch)
                 }
             }
         }
-        else			// NIL fighting pointer
+        else            // NIL fighting pointer
         {
             send_to_char(ch, " is here struggling with thin air.");
         }
@@ -753,7 +753,7 @@ static void look_in_obj(struct char_data *ch, char *arg)
                 list_obj_to_char(obj->contains, ch, SHOW_OBJ_SHORT, TRUE);
             }
         } 
-        else 		// item must be a fountain or drink container
+        else         // item must be a fountain or drink container
         {
             if ((GET_OBJ_VAL(obj, 1) == 0) && (GET_OBJ_VAL(obj, 0) != -1))
             {
@@ -929,7 +929,7 @@ ACMD(do_look)
     else if (IS_DARK(IN_ROOM(ch)) && !CAN_SEE_IN_DARK(ch)) 
     {
         send_to_char(ch, "It is pitch black...\r\n");
-        list_char_to_char(world[IN_ROOM(ch)].people, ch);	// glowing red eyes
+        list_char_to_char(world[IN_ROOM(ch)].people, ch);    // glowing red eyes
     } 
     else 
     {
@@ -945,7 +945,7 @@ ACMD(do_look)
                 look_at_target(ch, arg);
             return;
         }
-        if (!*arg)			// "look" alone, without an argument at all
+        if (!*arg)            // "look" alone, without an argument at all
         {
             look_at_room(ch, 1);
         }
@@ -1001,7 +1001,7 @@ ACMD(do_examine)
     }
 
     // look_at_target() eats the number.
-    look_at_target(ch, strcpy(tempsave, arg));	// strcpy: OK
+    look_at_target(ch, strcpy(tempsave, arg));    // strcpy: OK
 
     generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
         FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
@@ -1667,7 +1667,7 @@ ACMD(do_users)
 
     host_search[0] = name_search[0] = '\0';
 
-    strcpy(buf, argument);	// strcpy: OK (sizeof: argument == buf)
+    strcpy(buf, argument);    // strcpy: OK (sizeof: argument == buf)
     while (*buf) 
     {
         char buf1[MAX_INPUT_LENGTH];
@@ -1682,15 +1682,15 @@ ACMD(do_users)
             case 'k':
                 outlaws = 1;
                 playing = 1;
-                strcpy(buf, buf1);	// strcpy: OK (sizeof: buf1 == buf)
+                strcpy(buf, buf1);    // strcpy: OK (sizeof: buf1 == buf)
                 break;
             case 'p':
                 playing = 1;
-                strcpy(buf, buf1);	// strcpy: OK (sizeof: buf1 == buf)
+                strcpy(buf, buf1);    // strcpy: OK (sizeof: buf1 == buf)
                 break;
             case 'd':
                 deadweight = 1;
-                strcpy(buf, buf1);	// strcpy: OK (sizeof: buf1 == buf)
+                strcpy(buf, buf1);    // strcpy: OK (sizeof: buf1 == buf)
                 break;
             case 'l':
                 playing = 1;
@@ -1713,14 +1713,14 @@ ACMD(do_users)
             default:
                 send_to_char(ch, "%s", USERS_FORMAT);
                 return;
-            }				// end of switch
-        } 			// endif
+            }                // end of switch
+        }             // endif
         else 
         {
             send_to_char(ch, "%s", USERS_FORMAT);
             return;
         }
-    }				// end while (parser)
+    }                // end while (parser)
     send_to_char(ch,
         "Num Class   Name         State          Idl   Login@@   Site\r\n"
         "--- ------- ------------ -------------- ----- -------- ------------------------\r\n");
@@ -1892,7 +1892,7 @@ static void perform_mortal_where(struct char_data *ch, char *arg)
                 continue;
             send_to_char(ch, "%-20s%s - %s%s\r\n", GET_NAME(i), QNRM, world[IN_ROOM(i)].name, QNRM);
         }
-    } 			// print only FIRST char, not all.
+    }             // print only FIRST char, not all.
     else 
     {
         for (i = character_list; i; i = i->next) 

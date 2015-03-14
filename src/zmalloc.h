@@ -20,11 +20,11 @@ void zmalloc_init(void);
 void zmalloc_check(void);
 char *zstrdup(const char *, char *, int);
 
-#define malloc(x)	zmalloc((x),__FILE__,__LINE__)
-#define calloc(n,x)	zmalloc((n*x),__FILE__,__LINE__)
-#define realloc(r,x)	zrealloc((unsigned char *)(r),(x),__FILE__,__LINE__)
-#define free(x)		zfree((unsigned char *)(x),__FILE__,__LINE__)
+#define malloc(x)    zmalloc((x),__FILE__,__LINE__)
+#define calloc(n,x)    zmalloc((n*x),__FILE__,__LINE__)
+#define realloc(r,x)    zrealloc((unsigned char *)(r),(x),__FILE__,__LINE__)
+#define free(x)        zfree((unsigned char *)(x),__FILE__,__LINE__)
 #undef  strdup
-#define strdup(x)	zstrdup((x), __FILE__, __LINE__)
+#define strdup(x)    zstrdup((x), __FILE__, __LINE__)
 
 #endif /* _ZMALLOC_H_ */

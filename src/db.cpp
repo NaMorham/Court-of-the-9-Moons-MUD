@@ -40,20 +40,20 @@
 #include <sys/stat.h>
 
 /*  declarations of most of the 'global' variables */
-struct config_data config_info; /* Game configuration list.	 */
+struct config_data config_info; /* Game configuration list.     */
 
-struct room_data *world = NULL;	/* array of rooms		 */
-room_rnum top_of_world = 0;	/* ref to top element of world	 */
+struct room_data *world = NULL;    /* array of rooms         */
+room_rnum top_of_world = 0;    /* ref to top element of world     */
 
-struct char_data *character_list = NULL; /* global linked list of chars	*/
-struct index_data *mob_index;	/* index table for mobile file	 */
-struct char_data *mob_proto;	/* prototypes for mobs		 */
-mob_rnum top_of_mobt = 0;	/* top of mobile index table	 */
+struct char_data *character_list = NULL; /* global linked list of chars    */
+struct index_data *mob_index;    /* index table for mobile file     */
+struct char_data *mob_proto;    /* prototypes for mobs         */
+mob_rnum top_of_mobt = 0;    /* top of mobile index table     */
 
-struct obj_data *object_list = NULL;	/* global linked list of objs	*/
-struct index_data *obj_index;	/* index table for object file	 */
-struct obj_data *obj_proto;	/* prototypes for objs		 */
-obj_rnum top_of_objt = 0;	/* top of object index table	 */
+struct obj_data *object_list = NULL;    /* global linked list of objs    */
+struct index_data *obj_index;    /* index table for object file     */
+struct obj_data *obj_proto;    /* prototypes for objs         */
+obj_rnum top_of_objt = 0;    /* top of object index table     */
 
 struct zone_data *zone_table; /* zone table      */
 zone_rnum top_of_zone_table = 0;/* top element of zone tab   */
@@ -65,7 +65,7 @@ int top_of_p_file = 0;    /* ref of size of p file   */
 long top_idnum = 0;       /* highest idnum in use    */
 /* end previously located in players.c */
 
-struct message_list fight_messages[MAX_MESSAGES];	/* fighting messages	 */
+struct message_list fight_messages[MAX_MESSAGES];    /* fighting messages     */
 
 struct index_data **trig_index; /* index table for triggers      */
 struct trig_data *trigger_list = NULL;  /* all attached triggers */
@@ -80,28 +80,28 @@ qst_rnum total_quests = 0;      /* top of autoquest table        */
 struct shop_data *shop_index;   /* index table for shops         */
 int top_shop = -1;              /* top of shop table             */
 
-int no_mail = 0;                /* mail disabled?		 */
-int mini_mud = 0;               /* mini-mud mode?		 */
-int no_rent_check = 0;          /* skip rent check on boot?	 */
-time_t boot_time = 0;           /* time of mud boot		 */
-int circle_restrict = 0;        /* level of game restriction	 */
-room_rnum r_mortal_start_room;	/* rnum of mortal start room	 */
-room_rnum r_immort_start_room;	/* rnum of immort start room	 */
-room_rnum r_frozen_start_room;	/* rnum of frozen start room	 */
+int no_mail = 0;                /* mail disabled?         */
+int mini_mud = 0;               /* mini-mud mode?         */
+int no_rent_check = 0;          /* skip rent check on boot?     */
+time_t boot_time = 0;           /* time of mud boot         */
+int circle_restrict = 0;        /* level of game restriction     */
+room_rnum r_mortal_start_room;    /* rnum of mortal start room     */
+room_rnum r_immort_start_room;    /* rnum of immort start room     */
+room_rnum r_frozen_start_room;    /* rnum of frozen start room     */
 
-char *credits = NULL;		/* game credits			 */
-char *news = NULL;		/* mud news			 */
-char *motd = NULL;		/* message of the day - mortals  */
-char *imotd = NULL;		/* message of the day - immorts  */
-char *GREETINGS = NULL;		/* opening credits screen        */
-char *help = NULL;		/* help screen			 */
+char *credits = NULL;        /* game credits             */
+char *news = NULL;        /* mud news             */
+char *motd = NULL;        /* message of the day - mortals  */
+char *imotd = NULL;        /* message of the day - immorts  */
+char *GREETINGS = NULL;        /* opening credits screen        */
+char *help = NULL;        /* help screen             */
 char *ihelp = NULL;             /* help screen (immortals)       */
-char *info = NULL;		/* info page			 */
-char *wizlist = NULL;		/* list of higher gods		 */
-char *immlist = NULL;		/* list of peon gods		 */
-char *background = NULL;	/* background story		 */
-char *handbook = NULL;		/* handbook for new immortals	 */
-char *policies = NULL;		/* policies page		 */
+char *info = NULL;        /* info page             */
+char *wizlist = NULL;        /* list of higher gods         */
+char *immlist = NULL;        /* list of peon gods         */
+char *background = NULL;    /* background story         */
+char *handbook = NULL;        /* handbook for new immortals     */
+char *policies = NULL;        /* policies page         */
 char *bugs = NULL;              /* bugs file                     */
 char *typos = NULL;             /* typos file                    */
 char *ideas = NULL;             /* ideas file                    */
@@ -116,9 +116,9 @@ int top_of_socialt = -1;                        /* number of socials */
  time_t motdmod; /* Time motd file was last modified. */
 
 struct time_info_data time_info;  /* the infomation about the time    */
-struct weather_data weather_info;	/* the infomation about the weather */
-struct player_special_data dummy_mob;	/* dummy spec area for mobs	*/
-struct reset_q_type reset_q;	    /* queue of zones to be reset	 */
+struct weather_data weather_info;    /* the infomation about the weather */
+struct player_special_data dummy_mob;    /* dummy spec area for mobs    */
+struct reset_q_type reset_q;        /* queue of zones to be reset     */
 
 
 /* declaration of local (file scope) variables */
@@ -222,7 +222,7 @@ void boot_social_messages(void)
 
     if (CONFIG_NEW_SOCIALS == TRUE) {
       if (fscanf(fl, " %s %d %d %d %d \n",
-  		sorted, &hide, &min_char_pos, &min_pos, &min_lvl) != 5) {
+          sorted, &hide, &min_char_pos, &min_pos, &min_lvl) != 5) {
       log("SYSERR: format error in social file near social '%s'", next_soc);
       /* SYSERR_DESC: From boot_social_messages(), this error is output when
        * the server is expecting to find the remainder of the first line of the
@@ -310,8 +310,8 @@ void reboot_wizlists(void)
 void free_text_files(void)
 {
   char **textfiles[] = {
-	&wizlist, &immlist, &news, &credits, &motd, &imotd, &help, &ihelp, &info,
-	&policies, &handbook, &background, &GREETINGS, &bugs, &typos, &ideas, NULL
+    &wizlist, &immlist, &news, &credits, &motd, &imotd, &help, &ihelp, &info,
+    &policies, &handbook, &background, &GREETINGS, &bugs, &typos, &ideas, NULL
   };
   int rf;
 
@@ -750,7 +750,7 @@ void boot_db(void)
 
   for (i = 0; i <= top_of_zone_table; i++) {
     log("Resetting #%d: %s (rooms %d-%d).", zone_table[i].number,
-	zone_table[i].name, zone_table[i].bot, zone_table[i].top);
+    zone_table[i].name, zone_table[i].bot, zone_table[i].top);
     reset_zone(i);
   }
 
@@ -793,7 +793,7 @@ time_info = *mud_time_passed(time(0), beginning_of_time);
     weather_info.sunlight = SUN_DARK;
 
   log("   Current Gametime: %dH %dD %dM %dY.", time_info.hours,
-	  time_info.day, time_info.month, time_info.year);
+      time_info.day, time_info.month, time_info.year);
 
   weather_info.pressure = 960;
   if ((time_info.month >= 7) && (time_info.month <= 12))
@@ -842,7 +842,7 @@ static int count_alias_records(FILE *fl)
     do {
       get_one_line(fl, line);
       if (feof(fl))
-	goto ackeof;
+    goto ackeof;
     } while (*line != '#');
 
     /* now count keywords */
@@ -865,7 +865,7 @@ static int count_alias_records(FILE *fl)
   /* No, they are not evil. -gg 6/24/98 */
 ackeof:
   log("SYSERR: Unexpected end of help file.");
-  exit(1);	/* Some day we hope to handle these things better... */
+  exit(1);    /* Some day we hope to handle these things better... */
 }
 
 /* function to count how many hash-mark delimited records exist in a file */
@@ -883,238 +883,238 @@ int count_hash_records(FILE *fl)
 
 void index_boot(int mode)
 {
-	const char *index_filename, *prefix = NULL;	/* NULL or egcs 1.1 complains */
-	FILE *db_index, *db_file;
-	int rec_count = 0, size[2], i;
-	char buf2[PATH_MAX], buf1[MAX_STRING_LENGTH];
+    const char *index_filename, *prefix = NULL;    /* NULL or egcs 1.1 complains */
+    FILE *db_index, *db_file;
+    int rec_count = 0, size[2], i;
+    char buf2[PATH_MAX], buf1[MAX_STRING_LENGTH];
 
-	switch (mode) {
+    switch (mode) {
   case DB_BOOT_WLD:
-	  prefix = WLD_PREFIX;
-	  break;
+      prefix = WLD_PREFIX;
+      break;
   case DB_BOOT_MOB:
-	  prefix = MOB_PREFIX;
-	  break;
+      prefix = MOB_PREFIX;
+      break;
   case DB_BOOT_OBJ:
-	  prefix = OBJ_PREFIX;
-	  break;
+      prefix = OBJ_PREFIX;
+      break;
   case DB_BOOT_ZON:
-	  prefix = ZON_PREFIX;
-	  break;
+      prefix = ZON_PREFIX;
+      break;
   case DB_BOOT_SHP:
-	  prefix = SHP_PREFIX;
-	  break;
+      prefix = SHP_PREFIX;
+      break;
   case DB_BOOT_HLP:
-	  prefix = HLP_PREFIX;
-	  break;
+      prefix = HLP_PREFIX;
+      break;
   case DB_BOOT_TRG:
-	  prefix = TRG_PREFIX;
-	  break;
+      prefix = TRG_PREFIX;
+      break;
   case DB_BOOT_QST:
-	  prefix = QST_PREFIX;
-	  break;
+      prefix = QST_PREFIX;
+      break;
   default:
-	  log("SYSERR: Unknown subcommand %d to index_boot!", mode);
-	  exit(1);
-	}
+      log("SYSERR: Unknown subcommand %d to index_boot!", mode);
+      exit(1);
+    }
 
-	if (mini_mud)
-		index_filename = MINDEX_FILE;
-	else
-		index_filename = INDEX_FILE;
+    if (mini_mud)
+        index_filename = MINDEX_FILE;
+    else
+        index_filename = INDEX_FILE;
 
-	snprintf(buf2, sizeof(buf2), "%s%s", prefix, index_filename);
-	if (!(db_index = fopen(buf2, "r"))) {
-		log("SYSERR: opening index file '%s': %s", buf2, strerror(errno));
-		exit(1);
-	}
+    snprintf(buf2, sizeof(buf2), "%s%s", prefix, index_filename);
+    if (!(db_index = fopen(buf2, "r"))) {
+        log("SYSERR: opening index file '%s': %s", buf2, strerror(errno));
+        exit(1);
+    }
 
-	/* first, count the number of records in the file so we can malloc */
-	i = fscanf(db_index, "%s\n", buf1);
-	while (*buf1 != '$') {
-		snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
-		if (!(db_file = fopen(buf2, "r"))) {
-			log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
-				index_filename, strerror(errno));
-			i = fscanf(db_index, "%s\n", buf1);
-			continue;
-		} else {
-			if (mode == DB_BOOT_ZON)
-				rec_count++;
-			else if (mode == DB_BOOT_HLP)
-				rec_count += count_alias_records(db_file);
-			else
-				rec_count += count_hash_records(db_file);
-		}
+    /* first, count the number of records in the file so we can malloc */
+    i = fscanf(db_index, "%s\n", buf1);
+    while (*buf1 != '$') {
+        snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
+        if (!(db_file = fopen(buf2, "r"))) {
+            log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
+                index_filename, strerror(errno));
+            i = fscanf(db_index, "%s\n", buf1);
+            continue;
+        } else {
+            if (mode == DB_BOOT_ZON)
+                rec_count++;
+            else if (mode == DB_BOOT_HLP)
+                rec_count += count_alias_records(db_file);
+            else
+                rec_count += count_hash_records(db_file);
+        }
 
-		fclose(db_file);
-		i = fscanf(db_index, "%s\n", buf1);
-	}
+        fclose(db_file);
+        i = fscanf(db_index, "%s\n", buf1);
+    }
 
-	/* Exit if 0 records, unless this is shops */
-	if (!rec_count) {
-		if (mode == DB_BOOT_SHP || mode == DB_BOOT_QST)
-			return;
-		log("SYSERR: boot error - 0 records counted in %s/%s.", prefix,
-			index_filename);
-		exit(1);
-	}
+    /* Exit if 0 records, unless this is shops */
+    if (!rec_count) {
+        if (mode == DB_BOOT_SHP || mode == DB_BOOT_QST)
+            return;
+        log("SYSERR: boot error - 0 records counted in %s/%s.", prefix,
+            index_filename);
+        exit(1);
+    }
 
-	/* "bytes" does _not_ include strings or other later malloc'd things. */
-	switch (mode) {
+    /* "bytes" does _not_ include strings or other later malloc'd things. */
+    switch (mode) {
   case DB_BOOT_TRG:
-	  CREATE(trig_index, struct index_data *, rec_count);
-	  break;
+      CREATE(trig_index, struct index_data *, rec_count);
+      break;
   case DB_BOOT_WLD:
-	  CREATE(world, struct room_data, rec_count);
-	  size[0] = sizeof(struct room_data) * rec_count;
-	  log("   %d rooms, %d bytes.", rec_count, size[0]);
-	  break;
+      CREATE(world, struct room_data, rec_count);
+      size[0] = sizeof(struct room_data) * rec_count;
+      log("   %d rooms, %d bytes.", rec_count, size[0]);
+      break;
   case DB_BOOT_MOB:
-	  CREATE(mob_proto, struct char_data, rec_count);
-	  CREATE(mob_index, struct index_data, rec_count);
-	  size[0] = sizeof(struct index_data) * rec_count;
-	  size[1] = sizeof(struct char_data) * rec_count;
-	  log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
-	  break;
+      CREATE(mob_proto, struct char_data, rec_count);
+      CREATE(mob_index, struct index_data, rec_count);
+      size[0] = sizeof(struct index_data) * rec_count;
+      size[1] = sizeof(struct char_data) * rec_count;
+      log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
+      break;
   case DB_BOOT_OBJ:
-	  CREATE(obj_proto, struct obj_data, rec_count);
-	  CREATE(obj_index, struct index_data, rec_count);
-	  size[0] = sizeof(struct index_data) * rec_count;
-	  size[1] = sizeof(struct obj_data) * rec_count;
-	  log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
-	  break;
+      CREATE(obj_proto, struct obj_data, rec_count);
+      CREATE(obj_index, struct index_data, rec_count);
+      size[0] = sizeof(struct index_data) * rec_count;
+      size[1] = sizeof(struct obj_data) * rec_count;
+      log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
+      break;
   case DB_BOOT_ZON:
-	  CREATE(zone_table, struct zone_data, rec_count);
-	  size[0] = sizeof(struct zone_data) * rec_count;
-	  log("   %d zones, %d bytes.", rec_count, size[0]);
-	  break;
+      CREATE(zone_table, struct zone_data, rec_count);
+      size[0] = sizeof(struct zone_data) * rec_count;
+      log("   %d zones, %d bytes.", rec_count, size[0]);
+      break;
   case DB_BOOT_HLP:
-	  CREATE(help_table, struct help_index_element, rec_count);
-	  size[0] = sizeof(struct help_index_element) * rec_count;
-	  log("   %d entries, %d bytes.", rec_count, size[0]);
-	  break;
+      CREATE(help_table, struct help_index_element, rec_count);
+      size[0] = sizeof(struct help_index_element) * rec_count;
+      log("   %d entries, %d bytes.", rec_count, size[0]);
+      break;
   case DB_BOOT_QST:
-	  CREATE(aquest_table, struct aq_data, rec_count);
-	  size[0] = sizeof(struct aq_data) * rec_count;
-	  log("   %d entries, %d bytes.", rec_count, size[0]);
-	  break;
-	}
+      CREATE(aquest_table, struct aq_data, rec_count);
+      size[0] = sizeof(struct aq_data) * rec_count;
+      log("   %d entries, %d bytes.", rec_count, size[0]);
+      break;
+    }
 
-	rewind(db_index);
-	i = fscanf(db_index, "%s\n", buf1);
-	while (*buf1 != '$') {
-		snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
-		if (!(db_file = fopen(buf2, "r"))) {
-			log("SYSERR: %s: %s", buf2, strerror(errno));
-			exit(1);
-		}
-		switch (mode) {
-	case DB_BOOT_WLD:
-	case DB_BOOT_OBJ:
-	case DB_BOOT_MOB:
-	case DB_BOOT_TRG:
-	case DB_BOOT_QST:
-		discrete_load(db_file, mode, buf2);
-		break;
-	case DB_BOOT_ZON:
-		load_zones(db_file, buf2);
-		break;
-	case DB_BOOT_HLP:
-		load_help(db_file, buf2);
-		break;
-	case DB_BOOT_SHP:
-		boot_the_shops(db_file, buf2, rec_count);
-		break;
-		}
+    rewind(db_index);
+    i = fscanf(db_index, "%s\n", buf1);
+    while (*buf1 != '$') {
+        snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
+        if (!(db_file = fopen(buf2, "r"))) {
+            log("SYSERR: %s: %s", buf2, strerror(errno));
+            exit(1);
+        }
+        switch (mode) {
+    case DB_BOOT_WLD:
+    case DB_BOOT_OBJ:
+    case DB_BOOT_MOB:
+    case DB_BOOT_TRG:
+    case DB_BOOT_QST:
+        discrete_load(db_file, mode, buf2);
+        break;
+    case DB_BOOT_ZON:
+        load_zones(db_file, buf2);
+        break;
+    case DB_BOOT_HLP:
+        load_help(db_file, buf2);
+        break;
+    case DB_BOOT_SHP:
+        boot_the_shops(db_file, buf2, rec_count);
+        break;
+        }
 
-		fclose(db_file);
-		i = fscanf(db_index, "%s\n", buf1);
-	}
-	fclose(db_index);
+        fclose(db_file);
+        i = fscanf(db_index, "%s\n", buf1);
+    }
+    fclose(db_index);
 
-	/* Sort the help index. */
-	if (mode == DB_BOOT_HLP) {
-		qsort(help_table, top_of_helpt, sizeof(struct help_index_element), hsort);
-	}
+    /* Sort the help index. */
+    if (mode == DB_BOOT_HLP) {
+        qsort(help_table, top_of_helpt, sizeof(struct help_index_element), hsort);
+    }
 }
 
 void discrete_load(FILE *fl, int mode, char *filename)
 {
-	int nr = -1, last;
-	char line[READ_SIZE];
+    int nr = -1, last;
+    char line[READ_SIZE];
 
-	const char *modes[] = {"world", "mob", "obj", "ZON", "SHP", "HLP", "trg", "qst"};
-	/* modes positions correspond to DB_BOOT_xxx in db.h */
+    const char *modes[] = {"world", "mob", "obj", "ZON", "SHP", "HLP", "trg", "qst"};
+    /* modes positions correspond to DB_BOOT_xxx in db.h */
 
-	for (;;) 
-	{
-		/* We have to do special processing with the obj files because they have no
-		* end-of-record marker. */
-		if (mode != DB_BOOT_OBJ || nr < 0)
-		{
-			if (!get_line(fl, line)) 
-			{
-				if (nr == -1) 
-				{
-					log("SYSERR: %s file %s is empty!", modes[mode], filename);
-				} 
-				else 
-				{
-					log("SYSERR: Format error in %s after %s #%d\n"
-						"...expecting a new %s, but file ended!\n"
-						"(maybe the file is not terminated with '$'?)", filename,
-						modes[mode], nr, modes[mode]);
-				}
-				exit(1);
-			}
-		}
-		if (*line == '$')
-		{
-			return;
-		}
-		if (*line == '#') 
-		{
-			last = nr;
-			if (sscanf(line, "#%d", &nr) != 1) 
-			{
-				log("SYSERR: Format error after %s #%d", modes[mode], last);
-				exit(1);
-			}
-			if (nr >= 99999)
-			{
-				return;
-			}
-			else
-			{
-				switch (mode) 
-				{
-				case DB_BOOT_WLD:
-					parse_room(fl, nr);
-					break;
-				case DB_BOOT_MOB:
-					parse_mobile(fl, nr);
-					break;
-				case DB_BOOT_TRG:
-					parse_trigger(fl, nr);
-					break;
-				case DB_BOOT_OBJ:
-					strlcpy(line, parse_object(fl, nr), sizeof(line));
-					break;
-				case DB_BOOT_QST:
-					parse_quest(fl, nr);
-					break;
-				}
-			}
-		} 
-		else 
-		{
-			log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
-				filename, modes[mode], nr);
-			log("SYSERR: ... offending line: '%s'", line);
-			exit(1);
-		}
-	}
+    for (;;) 
+    {
+        /* We have to do special processing with the obj files because they have no
+        * end-of-record marker. */
+        if (mode != DB_BOOT_OBJ || nr < 0)
+        {
+            if (!get_line(fl, line)) 
+            {
+                if (nr == -1) 
+                {
+                    log("SYSERR: %s file %s is empty!", modes[mode], filename);
+                } 
+                else 
+                {
+                    log("SYSERR: Format error in %s after %s #%d\n"
+                        "...expecting a new %s, but file ended!\n"
+                        "(maybe the file is not terminated with '$'?)", filename,
+                        modes[mode], nr, modes[mode]);
+                }
+                exit(1);
+            }
+        }
+        if (*line == '$')
+        {
+            return;
+        }
+        if (*line == '#') 
+        {
+            last = nr;
+            if (sscanf(line, "#%d", &nr) != 1) 
+            {
+                log("SYSERR: Format error after %s #%d", modes[mode], last);
+                exit(1);
+            }
+            if (nr >= 99999)
+            {
+                return;
+            }
+            else
+            {
+                switch (mode) 
+                {
+                case DB_BOOT_WLD:
+                    parse_room(fl, nr);
+                    break;
+                case DB_BOOT_MOB:
+                    parse_mobile(fl, nr);
+                    break;
+                case DB_BOOT_TRG:
+                    parse_trigger(fl, nr);
+                    break;
+                case DB_BOOT_OBJ:
+                    strlcpy(line, parse_object(fl, nr), sizeof(line));
+                    break;
+                case DB_BOOT_QST:
+                    parse_quest(fl, nr);
+                    break;
+                }
+            }
+        } 
+        else 
+        {
+            log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
+                filename, modes[mode], nr);
+            log("SYSERR: ... offending line: '%s'", line);
+            exit(1);
+        }
+    }
 }
 
 static char fread_letter(FILE *fp)
@@ -1201,7 +1201,7 @@ void parse_room(FILE *fl, int virtual_nr)
 
   if (!get_line(fl, line)) {
     log("SYSERR: Expecting roomflags/sector type of room #%d but file ended!",
-	virtual_nr);
+    virtual_nr);
     exit(1);
   }
 
@@ -1222,7 +1222,7 @@ void parse_room(FILE *fl, int virtual_nr)
     /* In the old-style files, the 3rd item was the sector-type */
     world[room_nr].sector_type = atoi(flags2);
 
-   sprintf(flags, "room #%d", virtual_nr);	/* sprintf: OK (until 399-bit integers) */
+   sprintf(flags, "room #%d", virtual_nr);    /* sprintf: OK (until 399-bit integers) */
 
     /* No need to scan the other three sections; they're 0 anyway. */
     check_bitvector_names(world[room_nr].room_flags[0], room_bits_count, flags, "room");
@@ -1241,7 +1241,7 @@ void parse_room(FILE *fl, int virtual_nr)
     world[room_nr].room_flags[2] = asciiflag_conv(flags3);
     world[room_nr].room_flags[3] = asciiflag_conv(flags4);
 
-    sprintf(flags, "object #%d", virtual_nr);	/* sprintf: OK (until 399-bit integers) */
+    sprintf(flags, "object #%d", virtual_nr);    /* sprintf: OK (until 399-bit integers) */
     for(taeller=0; taeller < AF_ARRAY_MAX; taeller++)
       check_bitvector_names(world[room_nr].room_flags[taeller], room_bits_count, flags, "room");
 
@@ -1257,7 +1257,7 @@ void parse_room(FILE *fl, int virtual_nr)
   world[room_nr].func = NULL;
   world[room_nr].contents = NULL;
   world[room_nr].people = NULL;
-  world[room_nr].light = 0;	/* Zero light sources */
+  world[room_nr].light = 0;    /* Zero light sources */
 
   for (i = 0; i < NUM_OF_DIRS; i++)
     world[room_nr].dir_option[i] = NULL;
@@ -1282,18 +1282,18 @@ void parse_room(FILE *fl, int virtual_nr)
       /* Fix for crashes in the editor when formatting. E-descs are assumed to
        * end with a \r\n. -Welcor */
       {
-      	char *end = strchr(new_descr->description, '\0');
-      	if (end > new_descr->description && *(end-1) != '\n') {
-      	  CREATE(end, char, strlen(new_descr->description)+3);
-      	  sprintf(end, "%s\r\n", new_descr->description); /* snprintf ok : size checked above*/
-      	  free(new_descr->description);
-      	  new_descr->description = end;
-      	}
+          char *end = strchr(new_descr->description, '\0');
+          if (end > new_descr->description && *(end-1) != '\n') {
+            CREATE(end, char, strlen(new_descr->description)+3);
+            sprintf(end, "%s\r\n", new_descr->description); /* snprintf ok : size checked above*/
+            free(new_descr->description);
+            new_descr->description = end;
+          }
       }
       new_descr->next = world[room_nr].ex_description;
       world[room_nr].ex_description = new_descr;
       break;
-    case 'S':			/* end of room */
+    case 'S':            /* end of room */
       /* DG triggers -- script is defined after the end of the room */
       letter = fread_letter(fl);
       ungetc(letter, fl);
@@ -1369,9 +1369,9 @@ void renum_world(void)
   for (room = 0; room <= top_of_world; room++)
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (world[room].dir_option[door])
-	if (world[room].dir_option[door]->to_room != NOWHERE)
-	  world[room].dir_option[door]->to_room =
-	    real_room(world[room].dir_option[door]->to_room);
+    if (world[room].dir_option[door]->to_room != NOWHERE)
+      world[room].dir_option[door]->to_room =
+        real_room(world[room].dir_option[door]->to_room);
 }
 
 /** This is not the same ZCMD as used elsewhere. GRUMBLE... namespace conflict
@@ -1402,30 +1402,30 @@ static void renum_zone_table(void)
       oldc = ZCMD.arg3;
       switch (ZCMD.command) {
       case 'M':
-	a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
-	c = ZCMD.arg3 = real_room(ZCMD.arg3);
-	break;
+    a = ZCMD.arg1 = real_mobile(ZCMD.arg1);
+    c = ZCMD.arg3 = real_room(ZCMD.arg3);
+    break;
       case 'O':
-	a = ZCMD.arg1 = real_object(ZCMD.arg1);
-	if (ZCMD.arg3 != NOWHERE)
-	  c = ZCMD.arg3 = real_room(ZCMD.arg3);
-	break;
+    a = ZCMD.arg1 = real_object(ZCMD.arg1);
+    if (ZCMD.arg3 != NOWHERE)
+      c = ZCMD.arg3 = real_room(ZCMD.arg3);
+    break;
       case 'G':
-	a = ZCMD.arg1 = real_object(ZCMD.arg1);
-	break;
+    a = ZCMD.arg1 = real_object(ZCMD.arg1);
+    break;
       case 'E':
-	a = ZCMD.arg1 = real_object(ZCMD.arg1);
-	break;
+    a = ZCMD.arg1 = real_object(ZCMD.arg1);
+    break;
       case 'P':
-	a = ZCMD.arg1 = real_object(ZCMD.arg1);
-	c = ZCMD.arg3 = real_object(ZCMD.arg3);
-	break;
+    a = ZCMD.arg1 = real_object(ZCMD.arg1);
+    c = ZCMD.arg3 = real_object(ZCMD.arg3);
+    break;
       case 'D':
-	a = ZCMD.arg1 = real_room(ZCMD.arg1);
-	break;
+    a = ZCMD.arg1 = real_room(ZCMD.arg1);
+    break;
       case 'R': /* rem obj from room */
         a = ZCMD.arg1 = real_room(ZCMD.arg1);
-	b = ZCMD.arg2 = real_object(ZCMD.arg2);
+    b = ZCMD.arg2 = real_object(ZCMD.arg2);
         break;
       case 'T': /* a trigger */
         b = ZCMD.arg2 = real_trigger(ZCMD.arg2);
@@ -1436,12 +1436,12 @@ static void renum_zone_table(void)
         break;
       }
       if (a == NOWHERE || b == NOWHERE || c == NOWHERE) {
-	if (!mini_mud) {
-	  snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
-			 a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
-	  log_zone_error(zone, cmd_no, buf);
-	}
-	ZCMD.command = '*';
+    if (!mini_mud) {
+      snprintf(buf, sizeof(buf), "Invalid vnum %d, cmd disabled",
+             a == NOWHERE ? olda : b == NOWHERE ? oldb : oldc);
+      log_zone_error(zone, cmd_no, buf);
+    }
+    ZCMD.command = '*';
       }
     }
 }
@@ -1464,9 +1464,9 @@ static void parse_simple_mob(FILE *mob_f, int i, int nr)
   }
 
   if (sscanf(line, " %d %d %d %dd%d+%d %dd%d+%d ",
-	  t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
+      t, t + 1, t + 2, t + 3, t + 4, t + 5, t + 6, t + 7, t + 8) != 9) {
     log("SYSERR: Format error in mob #%d, first line after S flag\n"
-	"...expecting line of form '# # # #d#+# #d#+#'", nr);
+    "...expecting line of form '# # # #d#+# #d#+#'", nr);
     exit(1);
   }
 
@@ -1489,13 +1489,13 @@ static void parse_simple_mob(FILE *mob_f, int i, int nr)
 
   if (!get_line(mob_f, line)) {
       log("SYSERR: Format error in mob #%d, second line after S flag\n"
-	  "...expecting line of form '# #', but file ended!", nr);
+      "...expecting line of form '# #', but file ended!", nr);
       exit(1);
     }
 
   if (sscanf(line, " %d %d ", t, t + 1) != 2) {
     log("SYSERR: Format error in mob #%d, second line after S flag\n"
-	"...expecting line of form '# #'", nr);
+    "...expecting line of form '# #'", nr);
     exit(1);
   }
 
@@ -1504,13 +1504,13 @@ static void parse_simple_mob(FILE *mob_f, int i, int nr)
 
   if (!get_line(mob_f, line)) {
     log("SYSERR: Format error in last line of mob #%d\n"
-	"...expecting line of form '# # #', but file ended!", nr);
+    "...expecting line of form '# # #', but file ended!", nr);
     exit(1);
   }
 
   if (sscanf(line, " %d %d %d ", t, t + 1, t + 2) != 3) {
     log("SYSERR: Format error in last line of mob #%d\n"
-	"...expecting line of form '# # #'", nr);
+    "...expecting line of form '# # #'", nr);
     exit(1);
   }
 
@@ -1532,14 +1532,14 @@ static void parse_simple_mob(FILE *mob_f, int i, int nr)
  * assigns the correct value to the mob as appropriate.  Adding new e-specs is
  * absurdly easy -- just add a new CASE statement to this function! No other
  * changes need to be made anywhere in the code.
- * CASE		: Requires a parameter through 'value'.
- * BOOL_CASE	: Being specified at all is its value. */
-#define CASE(test)	\
-	if (value && !matched && !str_cmp(keyword, test) && (matched = TRUE))
-#define BOOL_CASE(test)	\
-	if (!value && !matched && !str_cmp(keyword, test) && (matched = TRUE))
-#define RANGE(low, high)	\
-	(num_arg = MAX((low), MIN((high), (num_arg))))
+ * CASE        : Requires a parameter through 'value'.
+ * BOOL_CASE    : Being specified at all is its value. */
+#define CASE(test)    \
+    if (value && !matched && !str_cmp(keyword, test) && (matched = TRUE))
+#define BOOL_CASE(test)    \
+    if (!value && !matched && !str_cmp(keyword, test) && (matched = TRUE))
+#define RANGE(low, high)    \
+    (num_arg = MAX((low), MIN((high), (num_arg))))
 
 static void interpret_espec(const char *keyword, const char *value, int i, int nr)
 {
@@ -1617,7 +1617,7 @@ static void interpret_espec(const char *keyword, const char *value, int i, int n
 
   if (!matched) {
     log("SYSERR: Warning: unrecognized espec keyword %s in mob #%d",
-	    keyword, nr);
+        keyword, nr);
   }
 }
 
@@ -1644,9 +1644,9 @@ static void parse_enhanced_mob(FILE *mob_f, int i, int nr)
   parse_simple_mob(mob_f, i, nr);
 
   while (get_line(mob_f, line)) {
-    if (!strcmp(line, "E"))	/* end of the enhanced section */
+    if (!strcmp(line, "E"))    /* end of the enhanced section */
       return;
-    else if (*line == '#') {	/* we've hit the next mob, maybe? */
+    else if (*line == '#') {    /* we've hit the next mob, maybe? */
       log("SYSERR: Unterminated E section in mob #%d", nr);
       exit(1);
     } else
@@ -1674,14 +1674,14 @@ void parse_mobile(FILE *mob_f, int nr)
    * The only reason we have every mob in the game share this copy of the
    * structure is to save newbie coders from themselves. -gg */
   mob_proto[i].player_specials = &dummy_mob;
-  sprintf(buf2, "mob vnum %d", nr);	/* sprintf: OK (for 'buf2 >= 19') */
+  sprintf(buf2, "mob vnum %d", nr);    /* sprintf: OK (for 'buf2 >= 19') */
 
   /* String data */
   mob_proto[i].player.name = fread_string(mob_f, buf2);
   tmpptr = mob_proto[i].player.short_descr = fread_string(mob_f, buf2);
   if (tmpptr && *tmpptr)
     if (!str_cmp(fname(tmpptr), "a") || !str_cmp(fname(tmpptr), "an") ||
-	!str_cmp(fname(tmpptr), "the"))
+    !str_cmp(fname(tmpptr), "the"))
       *tmpptr = LOWER(*tmpptr);
   mob_proto[i].player.long_descr = fread_string(mob_f, buf2);
   mob_proto[i].player.description = fread_string(mob_f, buf2);
@@ -1690,7 +1690,7 @@ void parse_mobile(FILE *mob_f, int nr)
   /* Numeric data */
   if (!get_line(mob_f, line)) {
     log("SYSERR: Format error after string section of mob #%d\n"
-	"...expecting line of form '# # # {S | E}', but file ended!", nr);
+    "...expecting line of form '# # # {S | E}', but file ended!", nr);
     exit(1);
   }
 
@@ -1771,10 +1771,10 @@ void parse_mobile(FILE *mob_f, int nr)
   }
 
   switch (UPPER(letter)) {
-  case 'S':	/* Simple monsters */
+  case 'S':    /* Simple monsters */
     parse_simple_mob(mob_f, i, nr);
     break;
-  case 'E':	/* Circle3 Enhanced monsters */
+  case 'E':    /* Circle3 Enhanced monsters */
     parse_enhanced_mob(mob_f, i, nr);
     break;
   /* add new mob types here.. */
@@ -1821,7 +1821,7 @@ char *parse_object(FILE *obj_f, int nr)
   clear_object(obj_proto + i);
   obj_proto[i].item_number = i;
 
-  sprintf(buf2, "object #%d", nr);	/* sprintf: OK (for 'buf2 >= 19') */
+  sprintf(buf2, "object #%d", nr);    /* sprintf: OK (for 'buf2 >= 19') */
 
   /* string data */
   if ((obj_proto[i].name = fread_string(obj_f, buf2)) == NULL) {
@@ -1831,7 +1831,7 @@ char *parse_object(FILE *obj_f, int nr)
   tmpptr = obj_proto[i].short_description = fread_string(obj_f, buf2);
   if (tmpptr && *tmpptr)
     if (!str_cmp(fname(tmpptr), "a") || !str_cmp(fname(tmpptr), "an") ||
-	!str_cmp(fname(tmpptr), "the"))
+    !str_cmp(fname(tmpptr), "the"))
       *tmpptr = LOWER(*tmpptr);
 
   tmpptr = obj_proto[i].description = fread_string(obj_f, buf2);
@@ -1951,7 +1951,7 @@ char *parse_object(FILE *obj_f, int nr)
   }
 
   strcat(buf2, ", after numeric constants\n" /* strcat: OK (for 'buf2 >= 87') */
-	 "...expecting 'E', 'A', '$', or next object number");
+     "...expecting 'E', 'A', '$', or next object number");
   j = 0;
 
   for (;;) {
@@ -1969,20 +1969,20 @@ char *parse_object(FILE *obj_f, int nr)
       break;
     case 'A':
       if (j >= MAX_OBJ_AFFECT) {
-	log("SYSERR: Too many A fields (%d max), %s", MAX_OBJ_AFFECT, buf2);
-	exit(1);
+    log("SYSERR: Too many A fields (%d max), %s", MAX_OBJ_AFFECT, buf2);
+    exit(1);
       }
       if (!get_line(obj_f, line)) {
-	log("SYSERR: Format error in 'A' field, %s\n"
-	    "...expecting 2 numeric constants but file ended!", buf2);
-	exit(1);
+    log("SYSERR: Format error in 'A' field, %s\n"
+        "...expecting 2 numeric constants but file ended!", buf2);
+    exit(1);
       }
 
       if ((retval = sscanf(line, " %d %d ", t, t + 1)) != 2) {
-	log("SYSERR: Format error in 'A' field, %s\n"
-	    "...expecting 2 numeric arguments, got %d\n"
-	    "...offending line: '%s'", buf2, retval, line);
-	exit(1);
+    log("SYSERR: Format error in 'A' field, %s\n"
+        "...expecting 2 numeric arguments, got %d\n"
+        "...offending line: '%s'", buf2, retval, line);
+    exit(1);
       }
       obj_proto[i].affected[j].location = t[0];
       obj_proto[i].affected[j].modifier = t[1];
@@ -2004,7 +2004,7 @@ char *parse_object(FILE *obj_f, int nr)
   }
 }
 
-#define Z	zone_table[zone]
+#define Z    zone_table[zone]
 /* load the zone table and command tables */
 static void load_zones(FILE *fl, char *zonename)
 {
@@ -2051,7 +2051,7 @@ static void load_zones(FILE *fl, char *zonename)
   Z.builders = strdup(buf);
 
   line_num += get_line(fl, buf);
-  if ((ptr = strchr(buf, '~')) != NULL)	/* take off the '~' if it's there */
+  if ((ptr = strchr(buf, '~')) != NULL)    /* take off the '~' if it's there */
     *ptr = '\0';
   Z.name = strdup(buf);
 
@@ -2123,21 +2123,21 @@ static void load_zones(FILE *fl, char *zonename)
       break;
     }
     error = 0;
-    if (strchr("MOGEPDTV", ZCMD.command) == NULL) {	/* a 3-arg command */
+    if (strchr("MOGEPDTV", ZCMD.command) == NULL) {    /* a 3-arg command */
       if (sscanf(ptr, " %d %d %d ", &tmp, &ZCMD.arg1, &ZCMD.arg2) != 3)
-	error = 1;
+    error = 1;
     } else if (ZCMD.command=='V') { /* a string-arg command */
       if (sscanf(ptr, " %d %d %d %d %79s %79[^\f\n\r\t\v]", &tmp, &ZCMD.arg1, &ZCMD.arg2,
-		 &ZCMD.arg3, t1, t2) != 6)
-	error = 1;
+         &ZCMD.arg3, t1, t2) != 6)
+    error = 1;
       else {
         ZCMD.sarg1 = strdup(t1);
         ZCMD.sarg2 = strdup(t2);
       }
     } else {
       if (sscanf(ptr, " %d %d %d %d ", &tmp, &ZCMD.arg1, &ZCMD.arg2,
-		 &ZCMD.arg3) != 4)
-	error = 1;
+         &ZCMD.arg3) != 4)
+    error = 1;
     }
 
     ZCMD.if_flag = tmp;
@@ -2441,49 +2441,49 @@ void zone_update(void)
     /* since one minute has passed, increment zone ages */
     for (i = 0; i <= top_of_zone_table; i++) {
       if (zone_table[i].age < zone_table[i].lifespan &&
-	  zone_table[i].reset_mode)
-	(zone_table[i].age)++;
+      zone_table[i].reset_mode)
+    (zone_table[i].age)++;
 
       if (zone_table[i].age >= zone_table[i].lifespan &&
-	  zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
-	/* enqueue zone */
+      zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode) {
+    /* enqueue zone */
 
-	CREATE(update_u, struct reset_q_element, 1);
+    CREATE(update_u, struct reset_q_element, 1);
 
-	update_u->zone_to_reset = i;
-	update_u->next = 0;
+    update_u->zone_to_reset = i;
+    update_u->next = 0;
 
-	if (!reset_q.head)
-	  reset_q.head = reset_q.tail = update_u;
-	else {
-	  reset_q.tail->next = update_u;
-	  reset_q.tail = update_u;
-	}
+    if (!reset_q.head)
+      reset_q.head = reset_q.tail = update_u;
+    else {
+      reset_q.tail->next = update_u;
+      reset_q.tail = update_u;
+    }
 
-	zone_table[i].age = ZO_DEAD;
+    zone_table[i].age = ZO_DEAD;
       }
     }
-  }	/* end - one minute has passed */
+  }    /* end - one minute has passed */
 
   /* Dequeue zones (if possible) and reset. This code is executed every 10
    * seconds (i.e. PULSE_ZONE). */
   for (update_u = reset_q.head; update_u; update_u = update_u->next)
     if (zone_table[update_u->zone_to_reset].reset_mode == 2 ||
-	is_empty(update_u->zone_to_reset)) {
+    is_empty(update_u->zone_to_reset)) {
       reset_zone(update_u->zone_to_reset);
       mudlog(CMP, LVL_IMPL, FALSE, "Auto zone reset: %s (Zone %d)",
           zone_table[update_u->zone_to_reset].name, zone_table[update_u->zone_to_reset].number);
       /* dequeue */
       if (update_u == reset_q.head)
-	reset_q.head = reset_q.head->next;
+    reset_q.head = reset_q.head->next;
       else {
-	for (temp = reset_q.head; temp->next != update_u;
-	     temp = temp->next);
+    for (temp = reset_q.head; temp->next != update_u;
+         temp = temp->next);
 
-	if (!update_u->next)
-	  reset_q.tail = temp;
+    if (!update_u->next)
+      reset_q.tail = temp;
 
-	temp->next = update_u->next;
+    temp->next = update_u->next;
       }
 
       free(update_u);
@@ -2495,11 +2495,11 @@ static void log_zone_error(zone_rnum zone, int cmd_no, const char *message)
 {
   mudlog(NRM, LVL_GOD, TRUE, "SYSERR: zone file: %s", message);
   mudlog(NRM, LVL_GOD, TRUE, "SYSERR: ...offending cmd: '%c' cmd in zone #%d, line %d",
-	ZCMD.command, zone_table[zone].number, ZCMD.line);
+    ZCMD.command, zone_table[zone].number, ZCMD.line);
 }
 
 #define ZONE_ERROR(message) \
-	{ log_zone_error(zone, cmd_no, message); last_cmd = 0; }
+    { log_zone_error(zone, cmd_no, message); last_cmd = 0; }
 
 /* execute the reset command table of a given zone */
 void reset_zone(zone_rnum zone)
@@ -2521,92 +2521,92 @@ void reset_zone(zone_rnum zone)
      * added to the game, be certain to update the list of commands in load_zone
      * () so that the counting will still be correct. - ae. */
     switch (ZCMD.command) {
-    case '*':			/* ignore command */
+    case '*':            /* ignore command */
       last_cmd = 0;
       break;
 
-    case 'M':			/* read a mobile */
+    case 'M':            /* read a mobile */
       if (mob_index[ZCMD.arg1].number < ZCMD.arg2) {
-	mob = read_mobile(ZCMD.arg1, REAL);
-	char_to_room(mob, ZCMD.arg3);
+    mob = read_mobile(ZCMD.arg1, REAL);
+    char_to_room(mob, ZCMD.arg3);
         load_mtrigger(mob);
         tmob = mob;
-	last_cmd = 1;
+    last_cmd = 1;
       } else
-	last_cmd = 0;
+    last_cmd = 0;
       tobj = NULL;
       break;
 
-    case 'O':			/* read an object */
+    case 'O':            /* read an object */
       if (obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-	if (ZCMD.arg3 != NOWHERE) {
-	  obj = read_object(ZCMD.arg1, REAL);
-	  obj_to_room(obj, ZCMD.arg3);
-	  last_cmd = 1;
+    if (ZCMD.arg3 != NOWHERE) {
+      obj = read_object(ZCMD.arg1, REAL);
+      obj_to_room(obj, ZCMD.arg3);
+      last_cmd = 1;
           load_otrigger(obj);
           tobj = obj;
-	} else {
-	  obj = read_object(ZCMD.arg1, REAL);
-	  IN_ROOM(obj) = NOWHERE;
-	  last_cmd = 1;
+    } else {
+      obj = read_object(ZCMD.arg1, REAL);
+      IN_ROOM(obj) = NOWHERE;
+      last_cmd = 1;
           tobj = obj;
-	}
+    }
       } else
-	last_cmd = 0;
+    last_cmd = 0;
       tmob = NULL;
       break;
 
-    case 'P':			/* object to object */
+    case 'P':            /* object to object */
       if (obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-	obj = read_object(ZCMD.arg1, REAL);
-	if (!(obj_to = get_obj_num(ZCMD.arg3))) {
-	  ZONE_ERROR("target obj not found, command disabled");
-	  ZCMD.command = '*';
-	  break;
-	}
-	obj_to_obj(obj, obj_to);
-	last_cmd = 1;
+    obj = read_object(ZCMD.arg1, REAL);
+    if (!(obj_to = get_obj_num(ZCMD.arg3))) {
+      ZONE_ERROR("target obj not found, command disabled");
+      ZCMD.command = '*';
+      break;
+    }
+    obj_to_obj(obj, obj_to);
+    last_cmd = 1;
         load_otrigger(obj);
         tobj = obj;
       } else
-	last_cmd = 0;
+    last_cmd = 0;
       tmob = NULL;
       break;
 
-    case 'G':			/* obj_to_char */
+    case 'G':            /* obj_to_char */
       if (!mob) {
-	char error[MAX_INPUT_LENGTH];
-	snprintf(error, sizeof(error), "attempt to give obj #%d to non-existant mob, command disabled", obj_index[ZCMD.arg1].vnum);
-	ZONE_ERROR(error);
-	ZCMD.command = '*';
-	break;
+    char error[MAX_INPUT_LENGTH];
+    snprintf(error, sizeof(error), "attempt to give obj #%d to non-existant mob, command disabled", obj_index[ZCMD.arg1].vnum);
+    ZONE_ERROR(error);
+    ZCMD.command = '*';
+    break;
       }
       if (obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-	obj = read_object(ZCMD.arg1, REAL);
-	obj_to_char(obj, mob);
-	last_cmd = 1;
+    obj = read_object(ZCMD.arg1, REAL);
+    obj_to_char(obj, mob);
+    last_cmd = 1;
         load_otrigger(obj);
         tobj = obj;
       } else
-	last_cmd = 0;
+    last_cmd = 0;
       tmob = NULL;
       break;
 
-    case 'E':			/* object to equipment list */
+    case 'E':            /* object to equipment list */
       if (!mob) {
-	char error[MAX_INPUT_LENGTH];
-	snprintf(error, sizeof(error), "trying to equip non-existant mob with obj #%d, command disabled", obj_index[ZCMD.arg1].vnum);
-	ZONE_ERROR(error);
-	ZCMD.command = '*';
-	break;
+    char error[MAX_INPUT_LENGTH];
+    snprintf(error, sizeof(error), "trying to equip non-existant mob with obj #%d, command disabled", obj_index[ZCMD.arg1].vnum);
+    ZONE_ERROR(error);
+    ZCMD.command = '*';
+    break;
       }
       if (obj_index[ZCMD.arg1].number < ZCMD.arg2) {
-	if (ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
+    if (ZCMD.arg3 < 0 || ZCMD.arg3 >= NUM_WEARS) {
           char error[MAX_INPUT_LENGTH];
-	  snprintf(error, sizeof(error), "invalid equipment pos number (mob %s, obj %d, pos %d)", GET_NAME(mob), obj_index[ZCMD.arg2].vnum, ZCMD.arg3);
-	  ZONE_ERROR(error);
-	} else {
-	  obj = read_object(ZCMD.arg1, REAL);
+      snprintf(error, sizeof(error), "invalid equipment pos number (mob %s, obj %d, pos %d)", GET_NAME(mob), obj_index[ZCMD.arg2].vnum, ZCMD.arg3);
+      ZONE_ERROR(error);
+    } else {
+      obj = read_object(ZCMD.arg1, REAL);
           IN_ROOM(obj) = IN_ROOM(mob);
           load_otrigger(obj);
           if (wear_otrigger(obj, mob, ZCMD.arg3)) {
@@ -2615,10 +2615,10 @@ void reset_zone(zone_rnum zone)
           } else
             obj_to_char(obj, mob);
           tobj = obj;
-	  last_cmd = 1;
-	}
+      last_cmd = 1;
+    }
       } else
-	last_cmd = 0;
+    last_cmd = 0;
       tmob = NULL;
       break;
 
@@ -2631,34 +2631,34 @@ void reset_zone(zone_rnum zone)
       break;
 
 
-    case 'D':			/* set state of door */
+    case 'D':            /* set state of door */
       if (ZCMD.arg2 < 0 || ZCMD.arg2 >= NUM_OF_DIRS ||
-	  (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
+      (world[ZCMD.arg1].dir_option[ZCMD.arg2] == NULL)) {
         char error[MAX_INPUT_LENGTH];
         snprintf(error, sizeof(error), "door does not exist in room %d - dir %d, command disabled",  world[ZCMD.arg1].number, ZCMD.arg2);
-	ZONE_ERROR(error);
-	ZCMD.command = '*';
+    ZONE_ERROR(error);
+    ZCMD.command = '*';
       } else
-	switch (ZCMD.arg3) {
-	case 0:
-	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-		     EX_LOCKED);
-	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-		     EX_CLOSED);
-	  break;
-	case 1:
-	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-		  EX_CLOSED);
-	  REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-		     EX_LOCKED);
-	  break;
-	case 2:
-	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-		  EX_LOCKED);
-	  SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
-		  EX_CLOSED);
-	  break;
-	}
+    switch (ZCMD.arg3) {
+    case 0:
+      REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+             EX_LOCKED);
+      REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+             EX_CLOSED);
+      break;
+    case 1:
+      SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+          EX_CLOSED);
+      REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+             EX_LOCKED);
+      break;
+    case 2:
+      SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+          EX_LOCKED);
+      SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info,
+          EX_CLOSED);
+      break;
+    }
       last_cmd = 1;
       tmob = NULL;
       tobj = NULL;
@@ -2792,7 +2792,7 @@ char *fread_string(FILE *fl, const char *error)
       log("%s", error);
       exit(1);
     } else {
-      strcat(buf + length, tmp);	/* strcat: OK (size checked above) */
+      strcat(buf + length, tmp);    /* strcat: OK (size checked above) */
       length += templength;
     }
   } while (!done);
@@ -3238,11 +3238,11 @@ static int file_to_string(const char *name, char *buf)
    }
 
   for (;;) {
-    if (!fgets(tmp, READ_SIZE, fl))	/* EOF check */
+    if (!fgets(tmp, READ_SIZE, fl))    /* EOF check */
       break;
     if ((len = strlen(tmp)) > 0)
       tmp[len - 1] = '\0'; /* take off the trailing \n */
-    strcat(tmp, "\r\n");	/* strcat: OK (tmp:READ_SIZE+3) */
+    strcat(tmp, "\r\n");    /* strcat: OK (tmp:READ_SIZE+3) */
 
     if (strlen(buf) + strlen(tmp) + 1 > MAX_STRING_LENGTH) {
       log("SYSERR: %s: string too big (%d max)", name, MAX_STRING_LENGTH);
@@ -3250,7 +3250,7 @@ static int file_to_string(const char *name, char *buf)
       fclose(fl);
       return (-1);
     }
-    strcat(buf, tmp);	/* strcat: OK (size checked above) */
+    strcat(buf, tmp);    /* strcat: OK (size checked above) */
   }
 
   fclose(fl);
@@ -3302,7 +3302,7 @@ void clear_char(struct char_data *ch)
   GET_POS(ch) = POS_STANDING;
   ch->mob_specials.default_pos = POS_STANDING;
 
-  GET_AC(ch) = 100;		/* Basic Armor */
+  GET_AC(ch) = 100;        /* Basic Armor */
   if (ch->points.max_mana < 100)
     ch->points.max_mana = 100;
 }
@@ -3510,11 +3510,11 @@ static int check_object(struct obj_data *obj)
 
   if (GET_OBJ_WEIGHT(obj) < 0 && (error = TRUE))
     log("SYSERR: Object #%d (%s) has negative weight (%d).",
-	GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_WEIGHT(obj));
+    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_WEIGHT(obj));
 
   if (GET_OBJ_RENT(obj) < 0 && (error = TRUE))
     log("SYSERR: Object #%d (%s) has negative cost/day (%d).",
-	GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
+    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_RENT(obj));
 
   snprintf(objname, sizeof(objname), "Object #%d (%s)", GET_OBJ_VNUM(obj), obj->short_description);
   for(y = 0; y < TW_ARRAY_MAX; y++) {
@@ -3531,15 +3531,15 @@ static int check_object(struct obj_data *obj)
     strlcpy(onealias, space ? space + 1 : obj->name, sizeof(onealias));
     if (search_block(onealias, drinknames, TRUE) < 0 && (error = TRUE))
       log("SYSERR: Object #%d (%s) doesn't have drink type as last keyword. (%s)",
-		GET_OBJ_VNUM(obj), obj->short_description, obj->name);
+        GET_OBJ_VNUM(obj), obj->short_description, obj->name);
   }
   /* Fall through. */
   case ITEM_FOUNTAIN:
     if ((GET_OBJ_VAL(obj,0) > 0) && (GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0)
         && (error = TRUE)))
       log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
-		GET_OBJ_VNUM(obj), obj->short_description,
-		GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
+        GET_OBJ_VNUM(obj), obj->short_description,
+        GET_OBJ_VAL(obj, 1), GET_OBJ_VAL(obj, 0));
     break;
   case ITEM_SCROLL:
   case ITEM_POTION:
@@ -3554,19 +3554,19 @@ static int check_object(struct obj_data *obj)
     error |= check_object_spell_number(obj, 3);
     if (GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(obj, 1) && (error = TRUE))
       log("SYSERR: Object #%d (%s) has more charges (%d) than maximum (%d).",
-		GET_OBJ_VNUM(obj), obj->short_description,
-		GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 1));
+        GET_OBJ_VNUM(obj), obj->short_description,
+        GET_OBJ_VAL(obj, 2), GET_OBJ_VAL(obj, 1));
     break;
   case ITEM_NOTE:
     if (obj->ex_description) {
       char onealias[MAX_INPUT_LENGTH],*next_name;
       next_name = any_one_arg(obj->name, onealias);
       do {
-  	if (find_exdesc(onealias, obj->ex_description) && (error = TRUE)) {
-	log("SYSERR: Object #%d (%s) is type NOTE and has extra description with same name. (%s)",
-	  GET_OBJ_VNUM(obj), obj->short_description, obj->name);
+      if (find_exdesc(onealias, obj->ex_description) && (error = TRUE)) {
+    log("SYSERR: Object #%d (%s) is type NOTE and has extra description with same name. (%s)",
+      GET_OBJ_VNUM(obj), obj->short_description, obj->name);
         }
-  	next_name = any_one_arg(next_name, onealias);
+      next_name = any_one_arg(next_name, onealias);
       } while (*onealias);
     }
   break;
@@ -3574,7 +3574,7 @@ static int check_object(struct obj_data *obj)
     if (GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(obj, 0) && (error = TRUE))
       log("SYSERR: Object #%d (%s) contains (%d) more than maximum (%d).",
           GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, 1),
-	  GET_OBJ_VAL(obj, 0));
+      GET_OBJ_VAL(obj, 0));
     break;
   }
 
@@ -3599,9 +3599,9 @@ static int check_object_spell_number(struct obj_data *obj, int val)
     error = TRUE;
   if (error)
     log("SYSERR: Object #%d (%s) has out of range spell #%d.",
-	GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
+    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
 
-  if (scheck)		/* Spell names don't exist in syntax check mode. */
+  if (scheck)        /* Spell names don't exist in syntax check mode. */
     return (error);
 
   /* Now check for unnamed spells. */
@@ -3609,8 +3609,8 @@ static int check_object_spell_number(struct obj_data *obj, int val)
 
   if ((spellname == unused_spellname || !str_cmp("UNDEFINED", spellname)) && (error = TRUE))
     log("SYSERR: Object #%d (%s) uses '%s' spell #%d.",
-		GET_OBJ_VNUM(obj), obj->short_description, spellname,
-		GET_OBJ_VAL(obj, val));
+        GET_OBJ_VNUM(obj), obj->short_description, spellname,
+        GET_OBJ_VAL(obj, val));
 
   return (error);
 }
@@ -3621,7 +3621,7 @@ static int check_object_level(struct obj_data *obj, int val)
 
   if ((GET_OBJ_VAL(obj, val) < 0 || GET_OBJ_VAL(obj, val) > LVL_IMPL) && (error = TRUE))
     log("SYSERR: Object #%d (%s) has out of range level #%d.",
-	GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
+    GET_OBJ_VNUM(obj), obj->short_description, GET_OBJ_VAL(obj, val));
 
   return (error);
 }
@@ -3649,25 +3649,25 @@ static void load_default_config( void )
   /* This function is called only once, at boot-time. We assume config_info is
    * empty. -Welcor */
   /* Game play options. */
-  CONFIG_PK_ALLOWED 	        = pk_allowed;
+  CONFIG_PK_ALLOWED             = pk_allowed;
   CONFIG_PT_ALLOWED             = pt_allowed;
-  CONFIG_LEVEL_CAN_SHOUT 	= level_can_shout;
-  CONFIG_HOLLER_MOVE_COST 	= holler_move_cost;
-  CONFIG_TUNNEL_SIZE 	        = tunnel_size;
-  CONFIG_MAX_EXP_GAIN	        = max_exp_gain;
-  CONFIG_MAX_EXP_LOSS 	        = max_exp_loss;
+  CONFIG_LEVEL_CAN_SHOUT     = level_can_shout;
+  CONFIG_HOLLER_MOVE_COST     = holler_move_cost;
+  CONFIG_TUNNEL_SIZE             = tunnel_size;
+  CONFIG_MAX_EXP_GAIN            = max_exp_gain;
+  CONFIG_MAX_EXP_LOSS             = max_exp_loss;
   CONFIG_MAX_NPC_CORPSE_TIME    = max_npc_corpse_time;
-  CONFIG_MAX_PC_CORPSE_TIME	= max_pc_corpse_time;
-  CONFIG_IDLE_VOID		= idle_void;
-  CONFIG_IDLE_RENT_TIME	        = idle_rent_time;
-  CONFIG_IDLE_MAX_LEVEL	        = idle_max_level;
-  CONFIG_DTS_ARE_DUMPS	        = dts_are_dumps;
+  CONFIG_MAX_PC_CORPSE_TIME    = max_pc_corpse_time;
+  CONFIG_IDLE_VOID        = idle_void;
+  CONFIG_IDLE_RENT_TIME            = idle_rent_time;
+  CONFIG_IDLE_MAX_LEVEL            = idle_max_level;
+  CONFIG_DTS_ARE_DUMPS            = dts_are_dumps;
   CONFIG_LOAD_INVENTORY         = load_into_inventory;
-  CONFIG_OK			= strdup(OK);
-  CONFIG_NOPERSON		= strdup(NOPERSON);
-  CONFIG_NOEFFECT		= strdup(NOEFFECT);
+  CONFIG_OK            = strdup(OK);
+  CONFIG_NOPERSON        = strdup(NOPERSON);
+  CONFIG_NOEFFECT        = strdup(NOEFFECT);
   CONFIG_TRACK_T_DOORS          = track_through_doors;
-  CONFIG_NO_MORT_TO_IMMORT	= no_mort_to_immort;
+  CONFIG_NO_MORT_TO_IMMORT    = no_mort_to_immort;
   CONFIG_DISP_CLOSED_DOORS      = display_closed_doors;
   CONFIG_MAP                    = map_option;
   CONFIG_MAP_SIZE               = default_map_size;
@@ -3677,11 +3677,11 @@ static void load_default_config( void )
   /* Rent / crashsave options. */
   CONFIG_FREE_RENT              = free_rent;
   CONFIG_MAX_OBJ_SAVE           = max_obj_save;
-  CONFIG_MIN_RENT_COST	        = min_rent_cost;
-  CONFIG_AUTO_SAVE		= auto_save;
-  CONFIG_AUTOSAVE_TIME	        = autosave_time;
+  CONFIG_MIN_RENT_COST            = min_rent_cost;
+  CONFIG_AUTO_SAVE        = auto_save;
+  CONFIG_AUTOSAVE_TIME            = autosave_time;
   CONFIG_CRASH_TIMEOUT          = crash_file_timeout;
-  CONFIG_RENT_TIMEOUT	        = rent_file_timeout;
+  CONFIG_RENT_TIMEOUT            = rent_file_timeout;
 
   /* Room numbers. */
   CONFIG_MORTAL_START           = mortal_start_room;

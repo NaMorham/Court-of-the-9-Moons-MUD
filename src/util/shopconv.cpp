@@ -36,12 +36,12 @@ char *fread_string(FILE * fl, const char *error)
       strcat(buf, tmp);
 
     for (point = buf + strlen(buf) - 2; point >= buf && isspace(*point);
-	 point--);
+     point--);
     if ((flag = (*point == '~'))) {
       if (*(buf + strlen(buf) - 3) == '\n')
-	*(buf + strlen(buf) - 2) = '\0';
+    *(buf + strlen(buf) - 2) = '\0';
       else
-	*(buf + strlen(buf) - 2) = '\0';
+    *(buf + strlen(buf) - 2) = '\0';
     }
   } while (!flag);
 
@@ -114,38 +114,38 @@ static int boot_the_shops_conv(FILE * shop_f, FILE * newshop_f, char *filename)
   fprintf(newshop_f, "CircleMUD %s Shop File~\n", VERSION3_TAG);
   for (;;) {
     buf = fread_string(shop_f, buf2);
-    if (*buf == '#') {		/* New shop */
+    if (*buf == '#') {        /* New shop */
       sscanf(buf, "#%d\n", &temp);
       sprintf(buf2, "shop #%d in shop file %s", temp, filename);
       fprintf(newshop_f, "#%d~\n", temp);
-      free(buf);		/* Plug memory leak! */
+      free(buf);        /* Plug memory leak! */
       printf("   #%d\n", temp);
 
-      do_list(shop_f, newshop_f, MAX_PROD);	/* Produced Items */
+      do_list(shop_f, newshop_f, MAX_PROD);    /* Produced Items */
 
-      do_float(shop_f, newshop_f);	/* Ratios */
+      do_float(shop_f, newshop_f);    /* Ratios */
       do_float(shop_f, newshop_f);
 
-      do_list(shop_f, newshop_f, MAX_TRADE);	/* Bought Items */
+      do_list(shop_f, newshop_f, MAX_TRADE);    /* Bought Items */
 
-      for (count = 0; count < 7; count++)	/* Keeper msgs */
-	do_string(shop_f, newshop_f, buf2);
+      for (count = 0; count < 7; count++)    /* Keeper msgs */
+    do_string(shop_f, newshop_f, buf2);
 
-      for (count = 0; count < 5; count++)	/* Misc   */
-	do_int(shop_f, newshop_f);
+      for (count = 0; count < 5; count++)    /* Misc   */
+    do_int(shop_f, newshop_f);
       fprintf(newshop_f, "-1\n");
-      for (count = 0; count < 4; count++)	/* Open/Close     */
-	do_int(shop_f, newshop_f);
+      for (count = 0; count < 4; count++)    /* Open/Close     */
+    do_int(shop_f, newshop_f);
 
     } else {
-      if (*buf == '$') {	/* EOF */
-	free(buf);		/* Plug memory leak! */
-	fprintf(newshop_f, "$~\n");
-	break;
+      if (*buf == '$') {    /* EOF */
+    free(buf);        /* Plug memory leak! */
+    fprintf(newshop_f, "$~\n");
+    break;
       } else if (strstr(buf, VERSION3_TAG)) {
-	printf("%s: New format detected, conversion aborted!\n", filename);
-	free(buf);		/* Plug memory leak! */
-	return (1);
+    printf("%s: New format detected, conversion aborted!\n", filename);
+    free(buf);        /* Plug memory leak! */
+    return (1);
       }
     }
   }
@@ -173,20 +173,20 @@ int main(int argc, char *argv[])
       perror(fn);
     } else {
       if ((nsfp = fopen(fn, "w")) == NULL) {
-	printf("Error writing to %s.\n", fn);
-	continue;
+    printf("Error writing to %s.\n", fn);
+    continue;
       }
       printf("%s:\n", fn);
       result = boot_the_shops_conv(sfp, nsfp, fn);
       fclose(nsfp);
       fclose(sfp);
       if (result) {
-	sprintf(part, "mv %s.tmp %s", fn, fn);
-	i = system(part);
+    sprintf(part, "mv %s.tmp %s", fn, fn);
+    i = system(part);
       } else {
-	sprintf(part, "mv %s.tmp %s.bak", fn, fn);
-	i = system(part);
-	printf("Done!\n");
+    sprintf(part, "mv %s.tmp %s.bak", fn, fn);
+    i = system(part);
+    printf("Done!\n");
       }
     }
   }

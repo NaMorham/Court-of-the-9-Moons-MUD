@@ -13,7 +13,7 @@
 #ifndef _COMM_H_
 #define _COMM_H_
 
-#define NUM_RESERVED_DESCS	8
+#define NUM_RESERVED_DESCS    8
 #define COPYOVER_FILE "copyover.dat"
 
 /* comm.c */
@@ -35,7 +35,7 @@ void send_to_range(room_vnum start, room_vnum finish, const char *messg, ...)
 #define TO_NOTVICT  3   /**< act() type: to everyone in room, not ch or vict_obj. */
 #define TO_CHAR     4   /**< act() type: to ch. */
 #define TO_GMOTE    5   /**< act() type: to gemote channel (global emote) */
-#define TO_SLEEP    128	/**< act() flag: to char, even if sleeping */
+#define TO_SLEEP    128    /**< act() flag: to char, even if sleeping */
 #define DG_NO_TRIG  256 /**< act() flag: don't check act trigger   */
 
 
@@ -44,10 +44,10 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj, v
 char * act(const char *str, int hide_invisible, struct char_data *ch, struct obj_data *obj, void *vict_obj, int type);
 
 /* I/O functions */
-void	write_to_q(const char *txt, struct txt_q *queue, int aliased);
-int	write_to_descriptor(socket_t desc, const char *txt);
-size_t	write_to_output(struct descriptor_data *d, const char *txt, ...) __attribute__ ((format (printf, 2, 3)));
-size_t	vwrite_to_output(struct descriptor_data *d, const char *format, va_list args);
+void    write_to_q(const char *txt, struct txt_q *queue, int aliased);
+int    write_to_descriptor(socket_t desc, const char *txt);
+size_t    write_to_output(struct descriptor_data *d, const char *txt, ...) __attribute__ ((format (printf, 2, 3)));
+size_t    vwrite_to_output(struct descriptor_data *d, const char *format, va_list args);
 
 typedef RETSIGTYPE sigfunc(int);
 

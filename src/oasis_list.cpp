@@ -210,14 +210,14 @@ ACMD(do_oasis_links)
   for (nr = 0; nr <= top_of_world && (GET_ROOM_VNUM(nr) <= last); nr++) {
     if (GET_ROOM_VNUM(nr) >= first) {
       for (j = 0; j < NUM_OF_DIRS; j++) {
-	if (world[nr].dir_option[j]) {
-	  to_room = world[nr].dir_option[j]->to_room;
-	  if (to_room != NOWHERE && (zrnum != world[to_room].zone))
-	    send_to_char(ch, "%3d %-30s%s at %5d (%-5s) ---> %5d\r\n",
-	      zone_table[world[to_room].zone].number,
-	      zone_table[world[to_room].zone].name, QNRM,
-	      GET_ROOM_VNUM(nr), dirs[j], world[to_room].number);
-	}
+    if (world[nr].dir_option[j]) {
+      to_room = world[nr].dir_option[j]->to_room;
+      if (to_room != NOWHERE && (zrnum != world[to_room].zone))
+        send_to_char(ch, "%3d %-30s%s at %5d (%-5s) ---> %5d\r\n",
+          zone_table[world[to_room].zone].number,
+          zone_table[world[to_room].zone].name, QNRM,
+          GET_ROOM_VNUM(nr), dirs[j], world[to_room].number);
+    }
       }
     }
   }

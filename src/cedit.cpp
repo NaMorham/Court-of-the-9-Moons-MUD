@@ -20,7 +20,7 @@
 
 
 #define CHECK_VAR(var)  ((var == YES) ? "Yes" : "No")
-#define TOGGLE_VAR(var)	if (var == YES) { var = NO; } else { var = YES; }
+#define TOGGLE_VAR(var)    if (var == YES) { var = NO; } else { var = YES; }
 
 /* local scope functions, not used externally */
 static void cedit_disp_menu(struct descriptor_data *d);
@@ -330,11 +330,11 @@ int save_config( IDXTYPE nowhere )
   fprintf(fl, "* Is player killing allowed on the mud?\n"
               "pk_allowed = %d\n\n", CONFIG_PK_ALLOWED);
   fprintf(fl, "* Is player thieving allowed on the mud?\n"
-  	      "pt_allowed = %d\n\n", CONFIG_PT_ALLOWED);
+            "pt_allowed = %d\n\n", CONFIG_PT_ALLOWED);
   fprintf(fl, "* What is the minimum level a player can shout/gossip/etc?\n"
               "level_can_shout = %d\n\n", CONFIG_LEVEL_CAN_SHOUT);
   fprintf(fl, "* How many movement points does shouting cost the player?\n"
-  	      "holler_move_cost = %d\n\n", CONFIG_HOLLER_MOVE_COST);
+            "holler_move_cost = %d\n\n", CONFIG_HOLLER_MOVE_COST);
   fprintf(fl, "* How many players can fit in a tunnel?\n"
               "tunnel_size = %d\n\n", CONFIG_TUNNEL_SIZE);
   fprintf(fl, "* Maximum experience gainable per kill?\n"
@@ -397,7 +397,7 @@ int save_config( IDXTYPE nowhere )
               "free_rent = %d\n\n", CONFIG_FREE_RENT);
 
   fprintf(fl, "* Maximum number of items players are allowed to rent.\n"
-   	      "max_obj_save = %d\n\n", CONFIG_MAX_OBJ_SAVE);
+             "max_obj_save = %d\n\n", CONFIG_MAX_OBJ_SAVE);
 
   fprintf(fl, "* Should the game automatically save people?\n"
               "auto_save = %d\n\n", CONFIG_AUTO_SAVE);
@@ -415,13 +415,13 @@ int save_config( IDXTYPE nowhere )
   fprintf(fl, "\n\n\n* [ Room Numbers ]\n");
 
   fprintf(fl, "* The virtual number of the room that mortals should enter at.\n"
-  	      "mortal_start_room = %d\n\n", CONFIG_MORTAL_START);
+            "mortal_start_room = %d\n\n", CONFIG_MORTAL_START);
 
   fprintf(fl, "* The virtual number of the room that immorts should enter at.\n"
               "immort_start_room = %d\n\n", CONFIG_IMMORTAL_START);
 
   fprintf(fl, "* The virtual number of the room that frozen people should enter at.\n"
-	      "frozen_start_room = %d\n\n", CONFIG_FROZEN_START);
+          "frozen_start_room = %d\n\n", CONFIG_FROZEN_START);
 
   fprintf(fl, "* The virtual numbers of the donation rooms.  Note: Add donation rooms\n"
               "* sequentially (1 & 2 before 3). If you don't, you might not be able to\n"
@@ -552,10 +552,10 @@ static void cedit_disp_menu(struct descriptor_data *d)
 
   /* Menu header. */
   write_to_output(d,
-  	  "OasisOLC MUD Configuration Editor\r\n"
-  	  "%sG%s) Game Play Options\r\n"
-  	  "%sC%s) Crashsave/Rent Options\r\n"
-  	  "%sR%s) Room Numbers\r\n"
+        "OasisOLC MUD Configuration Editor\r\n"
+        "%sG%s) Game Play Options\r\n"
+        "%sC%s) Crashsave/Rent Options\r\n"
+        "%sR%s) Room Numbers\r\n"
           "%sO%s) Operation Options\r\n"
           "%sA%s) Autowiz Options\r\n"
           "%sQ%s) Quit\r\n"
@@ -599,7 +599,7 @@ static void cedit_disp_game_play_options(struct descriptor_data *d)
         "%sO%s) Track Through Doors         : %s%s\r\n"
         "%sP%s) Display Closed Doors        : %s%s\r\n"
         "%sR%s) Mortals Level To Immortal   : %s%s\r\n"
-	      "%s1%s) OK Message Text         : %s%s"
+          "%s1%s) OK Message Text         : %s%s"
         "%s2%s) NOPERSON Message Text   : %s%s"
         "%s3%s) NOEFFECT Message Text   : %s%s"
         "%s4%s) Map/Automap Option      : %s%s\r\n"
@@ -647,24 +647,24 @@ static void cedit_disp_crash_save_options(struct descriptor_data *d)
   clear_screen(d);
 
   write_to_output(d, "\r\n\r\n"
-  	"%sA%s) Free Rent          : %s%s\r\n"
-  	"%sB%s) Max Objects Saved  : %s%d\r\n"
-  	"%sC%s) Minimum Rent Cost  : %s%d\r\n"
-  	"%sD%s) Auto Save          : %s%s\r\n"
-  	"%sE%s) Auto Save Time     : %s%d minute(s)\r\n"
-  	"%sF%s) Crash File Timeout : %s%d day(s)\r\n"
-  	"%sG%s) Rent File Timeout  : %s%d day(s)\r\n"
-  	"%sQ%s) Exit To The Main Menu\r\n"
-  	"Enter your choice : ",
-  	grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->csd.free_rent),
-  	grn, nrm, cyn, OLC_CONFIG(d)->csd.max_obj_save,
-  	grn, nrm, cyn, OLC_CONFIG(d)->csd.min_rent_cost,
-  	grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->csd.auto_save),
-  	grn, nrm, cyn, OLC_CONFIG(d)->csd.autosave_time,
-  	grn, nrm, cyn, OLC_CONFIG(d)->csd.crash_file_timeout,
-  	grn, nrm, cyn, OLC_CONFIG(d)->csd.rent_file_timeout,
-  	grn, nrm
-  	);
+      "%sA%s) Free Rent          : %s%s\r\n"
+      "%sB%s) Max Objects Saved  : %s%d\r\n"
+      "%sC%s) Minimum Rent Cost  : %s%d\r\n"
+      "%sD%s) Auto Save          : %s%s\r\n"
+      "%sE%s) Auto Save Time     : %s%d minute(s)\r\n"
+      "%sF%s) Crash File Timeout : %s%d day(s)\r\n"
+      "%sG%s) Rent File Timeout  : %s%d day(s)\r\n"
+      "%sQ%s) Exit To The Main Menu\r\n"
+      "Enter your choice : ",
+      grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->csd.free_rent),
+      grn, nrm, cyn, OLC_CONFIG(d)->csd.max_obj_save,
+      grn, nrm, cyn, OLC_CONFIG(d)->csd.min_rent_cost,
+      grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->csd.auto_save),
+      grn, nrm, cyn, OLC_CONFIG(d)->csd.autosave_time,
+      grn, nrm, cyn, OLC_CONFIG(d)->csd.crash_file_timeout,
+      grn, nrm, cyn, OLC_CONFIG(d)->csd.rent_file_timeout,
+      grn, nrm
+      );
 
   OLC_MODE(d) = CEDIT_CRASHSAVE_OPTIONS_MENU;
 }
@@ -675,22 +675,22 @@ static void cedit_disp_room_numbers(struct descriptor_data *d)
   clear_screen(d);
 
   write_to_output(d, "\r\n\r\n"
-  	"%sA%s) Mortal Start Room   : %s%d\r\n"
-  	"%sB%s) Immortal Start Room : %s%d\r\n"
-  	"%sC%s) Frozen Start Room   : %s%d\r\n"
-  	"%s1%s) Donation Room #1    : %s%d\r\n"
-  	"%s2%s) Donation Room #2    : %s%d\r\n"
-  	"%s3%s) Donation Room #3    : %s%d\r\n"
-  	"%sQ%s) Exit To The Main Menu\r\n"
-  	"Enter your choice : ",
-  	grn, nrm, cyn, OLC_CONFIG(d)->room_nums.mortal_start_room,
-  	grn, nrm, cyn, OLC_CONFIG(d)->room_nums.immort_start_room,
-  	grn, nrm, cyn, OLC_CONFIG(d)->room_nums.frozen_start_room,
-  	grn, nrm, cyn, OLC_CONFIG(d)->room_nums.donation_room_1,
-  	grn, nrm, cyn, OLC_CONFIG(d)->room_nums.donation_room_2,
-  	grn, nrm, cyn, OLC_CONFIG(d)->room_nums.donation_room_3,
-  	grn, nrm
-  	);
+      "%sA%s) Mortal Start Room   : %s%d\r\n"
+      "%sB%s) Immortal Start Room : %s%d\r\n"
+      "%sC%s) Frozen Start Room   : %s%d\r\n"
+      "%s1%s) Donation Room #1    : %s%d\r\n"
+      "%s2%s) Donation Room #2    : %s%d\r\n"
+      "%s3%s) Donation Room #3    : %s%d\r\n"
+      "%sQ%s) Exit To The Main Menu\r\n"
+      "Enter your choice : ",
+      grn, nrm, cyn, OLC_CONFIG(d)->room_nums.mortal_start_room,
+      grn, nrm, cyn, OLC_CONFIG(d)->room_nums.immort_start_room,
+      grn, nrm, cyn, OLC_CONFIG(d)->room_nums.frozen_start_room,
+      grn, nrm, cyn, OLC_CONFIG(d)->room_nums.donation_room_1,
+      grn, nrm, cyn, OLC_CONFIG(d)->room_nums.donation_room_2,
+      grn, nrm, cyn, OLC_CONFIG(d)->room_nums.donation_room_3,
+      grn, nrm
+      );
 
   OLC_MODE(d) = CEDIT_ROOM_NUMBERS_MENU;
 }
@@ -701,21 +701,21 @@ static void cedit_disp_operation_options(struct descriptor_data *d)
   clear_screen(d);
 
   write_to_output(d, "\r\n\r\n"
-  	"%sA%s) Default Port : %s%d\r\n"
-  	"%sB%s) Default IP   : %s%s\r\n"
-  	"%sC%s) Default Directory   : %s%s\r\n"
-  	"%sD%s) Logfile Name : %s%s\r\n"
-  	"%sE%s) Max Players  : %s%d\r\n"
-  	"%sF%s) Max Filesize : %s%d\r\n"
-  	"%sG%s) Max Bad Pws  : %s%d\r\n"
-  	"%sH%s) Site Ok Everyone : %s%s\r\n"
-  	"%sI%s) Name Server Is Slow : %s%s\r\n"
+      "%sA%s) Default Port : %s%d\r\n"
+      "%sB%s) Default IP   : %s%s\r\n"
+      "%sC%s) Default Directory   : %s%s\r\n"
+      "%sD%s) Logfile Name : %s%s\r\n"
+      "%sE%s) Max Players  : %s%d\r\n"
+      "%sF%s) Max Filesize : %s%d\r\n"
+      "%sG%s) Max Bad Pws  : %s%d\r\n"
+      "%sH%s) Site Ok Everyone : %s%s\r\n"
+      "%sI%s) Name Server Is Slow : %s%s\r\n"
         "%sJ%s) Use new socials file: %s%s\r\n"
         "%sK%s) OLC autosave to disk: %s%s\r\n"
-  	"%sL%s) Main Menu           : \r\n%s%s\r\n"
-  	"%sM%s) Welcome Message     : \r\n%s%s\r\n"
-  	"%sN%s) Start Message       : \r\n%s%s\r\n"
-  	"%sO%s) Medit Stats Menu    : %s%s\r\n"
+      "%sL%s) Main Menu           : \r\n%s%s\r\n"
+      "%sM%s) Welcome Message     : \r\n%s%s\r\n"
+      "%sN%s) Start Message       : \r\n%s%s\r\n"
+      "%sO%s) Medit Stats Menu    : %s%s\r\n"
     "%sQ%s) Exit To The Main Menu\r\n"
     "Enter your choice : ",
     grn, nrm, cyn, OLC_CONFIG(d)->operation.DFLT_PORT,
@@ -771,10 +771,10 @@ void cedit_parse(struct descriptor_data *d, char *arg)
           mudlog(CMP, MAX(LVL_BUILDER, GET_INVIS_LEV(d->character)), TRUE,
                  "OLC: %s modifies the game configuration.", GET_NAME(d->character));
           cleanup_olc(d, CLEANUP_CONFIG);
-	  if (CONFIG_AUTO_SAVE) {
-	    cedit_save_to_disk();
-	    write_to_output(d, "Game configuration saved to disk.\r\n");
-	  } else
+      if (CONFIG_AUTO_SAVE) {
+        cedit_save_to_disk();
+        write_to_output(d, "Game configuration saved to disk.\r\n");
+      } else
             write_to_output(d, "Game configuration saved to memory.\r\n");
           return;
         case 'n':
@@ -927,7 +927,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
         case 'r':
         case 'R':
-	  TOGGLE_VAR(OLC_CONFIG(d)->play.no_mort_to_immort);
+      TOGGLE_VAR(OLC_CONFIG(d)->play.no_mort_to_immort);
           break;
 
         case '1':

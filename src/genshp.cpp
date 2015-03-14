@@ -374,7 +374,7 @@ int save_shops(zone_rnum zone_num)
 
       /* Save the products. */
       for (j = 0; S_PRODUCT(shop, j) != NOTHING; j++)
-	fprintf(shop_file, "%d\n", obj_index[S_PRODUCT(shop, j)].vnum);
+    fprintf(shop_file, "%d\n", obj_index[S_PRODUCT(shop, j)].vnum);
       fprintf(shop_file, "-1\n");
 
       /* Save the rates. */
@@ -387,34 +387,34 @@ int save_shops(zone_rnum zone_num)
       for (j = 0;S_BUYTYPE(shop, j) != NOTHING; j++)
         fprintf(shop_file, "%d%s\n",
                 S_BUYTYPE(shop, j),
-		S_BUYWORD(shop, j) ? S_BUYWORD(shop, j) : "");
+        S_BUYWORD(shop, j) ? S_BUYWORD(shop, j) : "");
       fprintf(shop_file, "-1\n");
 
       /* Save messages. Added some defaults as sanity checks. */
       fprintf(shop_file,
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%d\n"
-	      "%ld\n"
-	      "%d\n"
-	      "%d\n",
-	      S_NOITEM1(shop) ? S_NOITEM1(shop) : "%s Ke?!",
-	      S_NOITEM2(shop) ? S_NOITEM2(shop) : "%s Ke?!",
-	      S_NOBUY(shop) ? S_NOBUY(shop) : "%s Ke?!",
-	      S_NOCASH1(shop) ? S_NOCASH1(shop) : "%s Ke?!",
-	      S_NOCASH2(shop) ? S_NOCASH2(shop) : "%s Ke?!",
-	      S_BUY(shop) ? S_BUY(shop) : "%s Ke?! %d?",
-	      S_SELL(shop) ? S_SELL(shop) : "%s Ke?! %d?",
-	      S_BROKE_TEMPER(shop),
-	      S_BITVECTOR(shop),
-	      S_KEEPER(shop) == NOBODY ? -1 : mob_index[S_KEEPER(shop)].vnum,
-	      S_NOTRADE(shop)
-	      );
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%d\n"
+          "%ld\n"
+          "%d\n"
+          "%d\n",
+          S_NOITEM1(shop) ? S_NOITEM1(shop) : "%s Ke?!",
+          S_NOITEM2(shop) ? S_NOITEM2(shop) : "%s Ke?!",
+          S_NOBUY(shop) ? S_NOBUY(shop) : "%s Ke?!",
+          S_NOCASH1(shop) ? S_NOCASH1(shop) : "%s Ke?!",
+          S_NOCASH2(shop) ? S_NOCASH2(shop) : "%s Ke?!",
+          S_BUY(shop) ? S_BUY(shop) : "%s Ke?! %d?",
+          S_SELL(shop) ? S_SELL(shop) : "%s Ke?! %d?",
+          S_BROKE_TEMPER(shop),
+          S_BITVECTOR(shop),
+          S_KEEPER(shop) == NOBODY ? -1 : mob_index[S_KEEPER(shop)].vnum,
+          S_NOTRADE(shop)
+          );
 
       /* Save the rooms. */
       for (j = 0;S_ROOM(shop, j) != NOWHERE; j++)

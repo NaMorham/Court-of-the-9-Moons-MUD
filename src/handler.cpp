@@ -245,9 +245,9 @@ void affect_total(struct char_data *ch)
   for (i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i))
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
-	affect_modify_ar(ch, GET_EQ(ch, i)->affected[j].location,
-		      GET_EQ(ch, i)->affected[j].modifier,
-		      GET_OBJ_AFFECT(GET_EQ(ch, i)), FALSE);
+    affect_modify_ar(ch, GET_EQ(ch, i)->affected[j].location,
+              GET_EQ(ch, i)->affected[j].modifier,
+              GET_OBJ_AFFECT(GET_EQ(ch, i)), FALSE);
   }
 
   for (af = ch->affected; af; af = af->next)
@@ -258,9 +258,9 @@ void affect_total(struct char_data *ch)
   for (i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i))
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
-	affect_modify_ar(ch, GET_EQ(ch, i)->affected[j].location,
-		      GET_EQ(ch, i)->affected[j].modifier,
-		      GET_OBJ_AFFECT(GET_EQ(ch, i)), TRUE);
+    affect_modify_ar(ch, GET_EQ(ch, i)->affected[j].location,
+              GET_EQ(ch, i)->affected[j].modifier,
+              GET_OBJ_AFFECT(GET_EQ(ch, i)), TRUE);
   }
 
   for (af = ch->affected; af; af = af->next)
@@ -347,7 +347,7 @@ bool affected_by_spell(struct char_data *ch, int type)
 }
 
 void affect_join(struct char_data *ch, struct affected_type *af,
-		      bool add_dur, bool avg_dur, bool add_mod, bool avg_mod)
+              bool add_dur, bool avg_dur, bool add_mod, bool avg_mod)
 {
   struct affected_type *hjp, *next;
   bool found = FALSE;
@@ -357,11 +357,11 @@ void affect_join(struct char_data *ch, struct affected_type *af,
 
     if ((hjp->type == af->type) && (hjp->location == af->location)) {
       if (add_dur)
-	af->duration += hjp->duration;
+    af->duration += hjp->duration;
       else if (avg_dur)
         af->duration = (af->duration+hjp->duration)/2;
       if (add_mod)
-	af->modifier += hjp->modifier;
+    af->modifier += hjp->modifier;
       else if (avg_mod)
         af->modifier = (af->modifier+hjp->modifier)/2;
 
@@ -391,8 +391,8 @@ void char_from_room(struct char_data *ch)
 
   if (GET_EQ(ch, WEAR_LIGHT) != NULL)
     if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))	/* Light is ON */
-	world[IN_ROOM(ch)].light--;
+      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))    /* Light is ON */
+    world[IN_ROOM(ch)].light--;
 
   REMOVE_FROM_LIST(ch, world[IN_ROOM(ch)].people, next_in_room);
   IN_ROOM(ch) = NOWHERE;
@@ -404,7 +404,7 @@ void char_to_room(struct char_data *ch, room_rnum room)
 {
   if (ch == NULL || room == NOWHERE || room > top_of_world)
     log("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
-		room, top_of_world, ch);
+        room, top_of_world, ch);
   else {
     ch->next_in_room = world[room].people;
     world[room].people = ch;
@@ -415,8 +415,8 @@ void char_to_room(struct char_data *ch, room_rnum room)
 
     if (GET_EQ(ch, WEAR_LIGHT))
       if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
-	if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))	/* Light ON */
-	  world[room].light++;
+    if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))    /* Light ON */
+      world[room].light++;
 
     /* Stop fighting now, if we left. */
     if (FIGHTING(ch) && IN_ROOM(ch) != IN_ROOM(FIGHTING(ch))) {
@@ -484,16 +484,16 @@ static int apply_ac(struct char_data *ch, int eq_pos)
 
   case WEAR_BODY:
     factor = 3;
-    break;			/* 30% */
+    break;            /* 30% */
   case WEAR_HEAD:
     factor = 2;
-    break;			/* 20% */
+    break;            /* 20% */
   case WEAR_LEGS:
     factor = 2;
-    break;			/* 20% */
+    break;            /* 20% */
   default:
     factor = 1;
-    break;			/* all others 10% */
+    break;            /* all others 10% */
   }
 
   return (factor * GET_OBJ_VAL(GET_EQ(ch, eq_pos), 0));
@@ -521,7 +521,7 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos)
 
   if (GET_EQ(ch, pos)) {
     log("SYSERR: Char is already equipped: %s, %s", GET_NAME(ch),
-	    obj->short_description);
+        obj->short_description);
     return;
   }
   if (obj->carried_by) {
@@ -549,15 +549,15 @@ void equip_char(struct char_data *ch, struct obj_data *obj, int pos)
 
   if (IN_ROOM(ch) != NOWHERE) {
     if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(obj, 2))	/* if light is ON */
-	world[IN_ROOM(ch)].light++;
+      if (GET_OBJ_VAL(obj, 2))    /* if light is ON */
+    world[IN_ROOM(ch)].light++;
   } else
     log("SYSERR: IN_ROOM(ch) = NOWHERE when equipping char %s.", GET_NAME(ch));
 
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
     affect_modify_ar(ch, obj->affected[j].location,
-		  obj->affected[j].modifier,
-		  GET_OBJ_AFFECT(obj), TRUE);
+          obj->affected[j].modifier,
+          GET_OBJ_AFFECT(obj), TRUE);
 
   affect_total(ch);
 }
@@ -581,8 +581,8 @@ struct obj_data *unequip_char(struct char_data *ch, int pos)
 
   if (IN_ROOM(ch) != NOWHERE) {
     if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(obj, 2))	/* if light is ON */
-	world[IN_ROOM(ch)].light--;
+      if (GET_OBJ_VAL(obj, 2))    /* if light is ON */
+    world[IN_ROOM(ch)].light--;
   } else
     log("SYSERR: IN_ROOM(ch) = NOWHERE when unequipping char %s.", GET_NAME(ch));
 
@@ -590,8 +590,8 @@ struct obj_data *unequip_char(struct char_data *ch, int pos)
 
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
     affect_modify_ar(ch, obj->affected[j].location,
-		  obj->affected[j].modifier,
-		  GET_OBJ_AFFECT(obj), FALSE);
+          obj->affected[j].modifier,
+          GET_OBJ_AFFECT(obj), FALSE);
 
   affect_total(ch);
 
@@ -609,11 +609,11 @@ int get_number(char **name)
   if ((ppos = strchr(*name, '.')) != NULL) {
     *ppos++ = '\0';
     strlcpy(number, *name, sizeof(number));
-    strcpy(*name, ppos);	/* strcpy: OK (always smaller) */
+    strcpy(*name, ppos);    /* strcpy: OK (always smaller) */
 
     for (i = 0; *(number + i); i++)
       if (!isdigit(*(number + i)))
-	return (0);
+    return (0);
 
     return (atoi(number));
   }
@@ -661,7 +661,7 @@ struct char_data *get_char_room(char *name, int *number, room_rnum room)
   for (i = world[room].people; i && *number; i = i->next_in_room)
     if (isname(name, i->player.name))
       if (--(*number) == 0)
-	return (i);
+    return (i);
 
   return (NULL);
 }
@@ -683,7 +683,7 @@ void obj_to_room(struct obj_data *object, room_rnum room)
 {
   if (!object || room == NOWHERE || room > top_of_world)
     log("SYSERR: Illegal value(s) passed to obj_to_room. (Room #%d/%d, obj %p)",
-	room, top_of_world, object);
+    room, top_of_world, object);
   else {
     object->next_content = world[room].contents;
     world[room].contents = object;
@@ -702,7 +702,7 @@ void obj_from_room(struct obj_data *object)
 
   if (!object || IN_ROOM(object) == NOWHERE) {
     log("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room",
-	object, IN_ROOM(object));
+    object, IN_ROOM(object));
     return;
   }
 
@@ -730,7 +730,7 @@ void obj_to_obj(struct obj_data *obj, struct obj_data *obj_to)
 
   if (!obj || !obj_to || obj == obj_to) {
     log("SYSERR: NULL object (%p) or same source (%p) and target (%p) obj passed to obj_to_obj.",
-	obj, obj, obj_to);
+    obj, obj, obj_to);
     return;
   }
 
@@ -851,15 +851,15 @@ void update_char_objects(struct char_data *ch)
   if (GET_EQ(ch, WEAR_LIGHT) != NULL)
     if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
       if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2) > 0) {
-	i = --GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2);
-	if (i == 1) {
-	  send_to_char(ch, "Your light begins to flicker and fade.\r\n");
-	  act("$n's light begins to flicker and fade.", FALSE, ch, 0, 0, TO_ROOM);
-	} else if (i == 0) {
-	  send_to_char(ch, "Your light sputters out and dies.\r\n");
-	  act("$n's light sputters out and dies.", FALSE, ch, 0, 0, TO_ROOM);
-	  world[IN_ROOM(ch)].light--;
-	}
+    i = --GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2);
+    if (i == 1) {
+      send_to_char(ch, "Your light begins to flicker and fade.\r\n");
+      act("$n's light begins to flicker and fade.", FALSE, ch, 0, 0, TO_ROOM);
+    } else if (i == 0) {
+      send_to_char(ch, "Your light sputters out and dies.\r\n");
+      act("$n's light sputters out and dies.", FALSE, ch, 0, 0, TO_ROOM);
+      world[IN_ROOM(ch)].light--;
+    }
       }
 
   for (i = 0; i < NUM_WEARS; i++)
@@ -890,7 +890,7 @@ void extract_char_final(struct char_data *ch)
   if (!IS_NPC(ch) && !ch->desc) {
     for (d = descriptor_list; d; d = d->next)
       if (d->original == ch) {
-	do_return(d->character, NULL, 0, 0);
+    do_return(d->character, NULL, 0, 0);
         break;
       }
   }
@@ -951,7 +951,7 @@ void extract_char_final(struct char_data *ch)
   char_from_room(ch);
 
   if (IS_NPC(ch)) {
-    if (GET_MOB_RNUM(ch) != NOTHING)	/* prototyped */
+    if (GET_MOB_RNUM(ch) != NOTHING)    /* prototyped */
       mob_index[GET_MOB_RNUM(ch)].number--;
     clearMemory(ch);
 
@@ -1077,8 +1077,8 @@ struct char_data *get_char_room_vis(struct char_data *ch, char *name, int *numbe
   for (i = world[IN_ROOM(ch)].people; i && *number; i = i->next_in_room)
     if (isname(name, i->player.name))
       if (CAN_SEE(ch, i))
-	if (--(*number) == 0)
-	  return (i);
+    if (--(*number) == 0)
+      return (i);
 
   return (NULL);
 }
@@ -1140,8 +1140,8 @@ struct obj_data *get_obj_in_list_vis(struct char_data *ch, char *name, int *numb
   for (i = list; i && *number; i = i->next_content)
     if (isname(name, i->name))
       if (CAN_SEE_OBJ(ch, i))
-	if (--(*number) == 0)
-	  return (i);
+    if (--(*number) == 0)
+      return (i);
 
   return (NULL);
 }
@@ -1172,8 +1172,8 @@ struct obj_data *get_obj_vis(struct char_data *ch, char *name, int *number)
   for (i = object_list; i && *number; i = i->next)
     if (isname(name, i->name))
       if (CAN_SEE_OBJ(ch, i))
-	if (--(*number) == 0)
-	  return (i);
+    if (--(*number) == 0)
+      return (i);
 
   return (NULL);
 }
@@ -1225,21 +1225,21 @@ const char *money_desc(int amount)
     int limit;
     const char *description;
   } money_table[] = {
-    {          1, "a gold coin"				},
-    {         10, "a tiny pile of gold coins"		},
-    {         20, "a handful of gold coins"		},
-    {         75, "a little pile of gold coins"		},
-    {        200, "a small pile of gold coins"		},
-    {       1000, "a pile of gold coins"		},
-    {       5000, "a big pile of gold coins"		},
-    {      10000, "a large heap of gold coins"		},
-    {      20000, "a huge mound of gold coins"		},
-    {      75000, "an enormous mound of gold coins"	},
-    {     150000, "a small mountain of gold coins"	},
-    {     250000, "a mountain of gold coins"		},
-    {     500000, "a huge mountain of gold coins"	},
-    {    1000000, "an enormous mountain of gold coins"	},
-    {          0, NULL					},
+    {          1, "a gold coin"                },
+    {         10, "a tiny pile of gold coins"        },
+    {         20, "a handful of gold coins"        },
+    {         75, "a little pile of gold coins"        },
+    {        200, "a small pile of gold coins"        },
+    {       1000, "a pile of gold coins"        },
+    {       5000, "a big pile of gold coins"        },
+    {      10000, "a large heap of gold coins"        },
+    {      20000, "a huge mound of gold coins"        },
+    {      75000, "an enormous mound of gold coins"    },
+    {     150000, "a small mountain of gold coins"    },
+    {     250000, "a mountain of gold coins"        },
+    {     500000, "a huge mountain of gold coins"    },
+    {    1000000, "an enormous mountain of gold coins"    },
+    {          0, NULL                    },
   };
 
   if (amount <= 0) {
@@ -1289,9 +1289,9 @@ struct obj_data *create_money(int amount)
       snprintf(buf, sizeof(buf), "It looks to be about %d coins.", 100 * (amount / 100));
     else if (amount < 100000)
       snprintf(buf, sizeof(buf), "You guess there are, maybe, %d coins.",
-	      1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
+          1000 * ((amount / 1000) + rand_number(0, (amount / 1000))));
     else
-      strcpy(buf, "There are a LOT of coins.");	/* strcpy: OK (is < 200) */
+      strcpy(buf, "There are a LOT of coins.");    /* strcpy: OK (is < 200) */
     new_descr->description = strdup(buf);
   }
 
@@ -1323,7 +1323,7 @@ struct obj_data *create_money(int amount)
  * like the one_argument routine), but now it returns an integer that
  * describes what it filled in. */
 int generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
-		     struct char_data **tar_ch, struct obj_data **tar_obj)
+             struct char_data **tar_ch, struct obj_data **tar_obj)
 {
   int i, found, number;
   char name_val[MAX_INPUT_LENGTH];
@@ -1339,7 +1339,7 @@ int generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
   if (!(number = get_number(&name)))
     return (0);
 
-  if (IS_SET(bitvector, FIND_CHAR_ROOM)) {	/* Find person in room */
+  if (IS_SET(bitvector, FIND_CHAR_ROOM)) {    /* Find person in room */
     if ((*tar_ch = get_char_room_vis(ch, name, &number)) != NULL)
       return (FIND_CHAR_ROOM);
   }
@@ -1352,8 +1352,8 @@ int generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
   if (IS_SET(bitvector, FIND_OBJ_EQUIP)) {
     for (found = FALSE, i = 0; i < NUM_WEARS && !found; i++)
       if (GET_EQ(ch, i) && isname(name, GET_EQ(ch, i)->name) && --number == 0) {
-	*tar_obj = GET_EQ(ch, i);
-	found = TRUE;
+    *tar_obj = GET_EQ(ch, i);
+    found = TRUE;
       }
     if (found)
       return (FIND_OBJ_EQUIP);
@@ -1383,7 +1383,7 @@ int find_all_dots(char *arg)
   if (!strcmp(arg, "all"))
     return (FIND_ALL);
   else if (!strncmp(arg, "all.", 4)) {
-    strcpy(arg, arg + 4);	/* strcpy: OK (always less) */
+    strcpy(arg, arg + 4);    /* strcpy: OK (always less) */
     return (FIND_ALLDOT);
   } else
     return (FIND_INDIV);

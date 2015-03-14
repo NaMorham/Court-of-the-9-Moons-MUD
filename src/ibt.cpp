@@ -388,7 +388,7 @@ bool free_ibt(int mode, IBT_DATA *ibtData)
 
   /* If this IBT is in the IBT list, take it out */
   if (ibt_in_list(mode, ibtData)) {
-	switch(mode) {
+    switch(mode) {
       case SCMD_BUG : UNLINK(ibtData,first_bug,last_bug,next,prev);
                       break;
       case SCMD_IDEA: UNLINK(ibtData,first_idea,last_idea,next,prev);
@@ -550,7 +550,7 @@ ACMD(do_ibt)
                       break;
       default       : log("Invalid subcmd (%d) in do_ibt", subcmd);
                       return;
-	}
+    }
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
     ibtData = new_ibt();
@@ -850,7 +850,7 @@ static void ibtedit_disp_flags(struct descriptor_data *d)
 
   sprintbitarray(OLC_IBT(d)->flags, ibt_bits, IBT_ARRAY_MAX, buf);
   write_to_output(d, "\r\nCurrent flags : %s%s%s\r\nEnter flags (0 to quit) : ",
-		  cyn, buf, nrm);
+          cyn, buf, nrm);
 
   OLC_MODE(d) = IBTEDIT_FLAGS;
 }
@@ -887,7 +887,7 @@ void ibtedit_parse(struct descriptor_data *d, char *arg)
       switch (*arg) {
         case 'q':
         case 'Q':
-          if (OLC_ZNUM(d)) {	/* Anything been changed? */
+          if (OLC_ZNUM(d)) {    /* Anything been changed? */
             write_to_output(d, "Do you wish to save your changes? : ");
             OLC_MODE(d) = IBTEDIT_CONFIRM_SAVESTRING;
           } else

@@ -267,8 +267,8 @@ void create_world_index(int znum, const char *type)
     } else if (!found) {
       sscanf(buf, "%d", &num);
       if (num > znum) {
-	found = TRUE;
-	fprintf(newfile, "%s\n", buf1);
+    found = TRUE;
+    fprintf(newfile, "%s\n", buf1);
       } else if (num == znum) {
         /* index file already had an entry for this zone. */
         fclose(oldfile);
@@ -389,20 +389,20 @@ int save_zone(zone_rnum zone_num)
           );
   }
 
-	/* Handy Quick Reference Chart for Zone Values.
-	 *
-	 * Field #1    Field #3   Field #4  Field #5
-	 * -------------------------------------------------
-	 * M (Mobile)  Mob-Vnum   Wld-Max   Room-Vnum
-	 * O (Object)  Obj-Vnum   Wld-Max   Room-Vnum
-	 * G (Give)    Obj-Vnum   Wld-Max   Unused
-	 * E (Equip)   Obj-Vnum   Wld-Max   EQ-Position
-	 * P (Put)     Obj-Vnum   Wld-Max   Target-Obj-Vnum
-	 * D (Door)    Room-Vnum  Door-Dir  Door-State
-	 * R (Remove)  Room-Vnum  Obj-Vnum  Unused
+    /* Handy Quick Reference Chart for Zone Values.
+     *
+     * Field #1    Field #3   Field #4  Field #5
+     * -------------------------------------------------
+     * M (Mobile)  Mob-Vnum   Wld-Max   Room-Vnum
+     * O (Object)  Obj-Vnum   Wld-Max   Room-Vnum
+     * G (Give)    Obj-Vnum   Wld-Max   Unused
+     * E (Equip)   Obj-Vnum   Wld-Max   EQ-Position
+     * P (Put)     Obj-Vnum   Wld-Max   Target-Obj-Vnum
+     * D (Door)    Room-Vnum  Door-Dir  Door-State
+     * R (Remove)  Room-Vnum  Obj-Vnum  Unused
          * T (Trigger) Trig-type  Trig-Vnum Room-Vnum
          * V (var)     Trig-type  Context   Room-Vnum Varname Value
-	 * ------------------------------------------------- */
+     * ------------------------------------------------- */
 
   for (subcmd = 0; ZCMD(zone_num, subcmd).command != 'S'; subcmd++) {
     switch (ZCMD(zone_num, subcmd).command) {
@@ -468,7 +468,7 @@ int save_zone(zone_rnum zone_num)
     }
     if (ZCMD(zone_num, subcmd).command != 'V')
       fprintf(zfile, "%c %d %d %d %d \t(%s)\n",
-		ZCMD(zone_num, subcmd).command, ZCMD(zone_num, subcmd).if_flag, arg1, arg2, arg3, comment);
+        ZCMD(zone_num, subcmd).command, ZCMD(zone_num, subcmd).if_flag, arg1, arg2, arg3, comment);
     else
       fprintf(zfile, "%c %d %d %d %d %s %s\n",
               ZCMD(zone_num, subcmd).command, ZCMD(zone_num, subcmd).if_flag, arg1, arg2, arg3,

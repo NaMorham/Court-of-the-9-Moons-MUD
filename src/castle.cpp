@@ -102,29 +102,29 @@ static room_rnum castle_real_room(room_vnum roomoffset)
  * in the Kings Castle. Called from spec_assign.c. */
 void assign_kings_castle(void)
 {
-  castle_mob_spec(0, CastleGuard);	/* Gwydion */
-  castle_mob_spec(1, king_welmar);	/* Our dear friend, the King */
-  castle_mob_spec(3, CastleGuard);	/* Jim */
-  castle_mob_spec(4, CastleGuard);	/* Brian */
-  castle_mob_spec(5, CastleGuard);	/* Mick */
-  castle_mob_spec(6, CastleGuard);	/* Matt */
-  castle_mob_spec(7, CastleGuard);	/* Jochem */
-  castle_mob_spec(8, CastleGuard);	/* Anne */
-  castle_mob_spec(9, CastleGuard);	/* Andrew */
-  castle_mob_spec(10, CastleGuard);	/* Bertram */
-  castle_mob_spec(11, CastleGuard);	/* Jeanette */
-  castle_mob_spec(12, peter);		/* Peter */
-  castle_mob_spec(13, training_master);	/* The training master */
-  castle_mob_spec(16, James);		/* James the Butler */
-  castle_mob_spec(17, cleaning);	/* Ze Cleaning Fomen */
-  castle_mob_spec(20, tim);		/* Tim, Tom's twin */
-  castle_mob_spec(21, tom);		/* Tom, Tim's twin */
-  castle_mob_spec(24, DicknDavid);	/* Dick, guard of the Treasury */
-  castle_mob_spec(25, DicknDavid);	/* David, Dicks brother */
-  castle_mob_spec(26, jerry);		/* Jerry, the Gambler */
-  castle_mob_spec(27, CastleGuard);	/* Michael */
-  castle_mob_spec(28, CastleGuard);	/* Hans */
-  castle_mob_spec(29, CastleGuard);	/* Boris */
+  castle_mob_spec(0, CastleGuard);    /* Gwydion */
+  castle_mob_spec(1, king_welmar);    /* Our dear friend, the King */
+  castle_mob_spec(3, CastleGuard);    /* Jim */
+  castle_mob_spec(4, CastleGuard);    /* Brian */
+  castle_mob_spec(5, CastleGuard);    /* Mick */
+  castle_mob_spec(6, CastleGuard);    /* Matt */
+  castle_mob_spec(7, CastleGuard);    /* Jochem */
+  castle_mob_spec(8, CastleGuard);    /* Anne */
+  castle_mob_spec(9, CastleGuard);    /* Andrew */
+  castle_mob_spec(10, CastleGuard);    /* Bertram */
+  castle_mob_spec(11, CastleGuard);    /* Jeanette */
+  castle_mob_spec(12, peter);        /* Peter */
+  castle_mob_spec(13, training_master);    /* The training master */
+  castle_mob_spec(16, James);        /* James the Butler */
+  castle_mob_spec(17, cleaning);    /* Ze Cleaning Fomen */
+  castle_mob_spec(20, tim);        /* Tim, Tom's twin */
+  castle_mob_spec(21, tom);        /* Tom, Tim's twin */
+  castle_mob_spec(24, DicknDavid);    /* Dick, guard of the Treasury */
+  castle_mob_spec(25, DicknDavid);    /* David, Dicks brother */
+  castle_mob_spec(26, jerry);        /* Jerry, the Gambler */
+  castle_mob_spec(27, CastleGuard);    /* Michael */
+  castle_mob_spec(28, CastleGuard);    /* Hans */
+  castle_mob_spec(29, CastleGuard);    /* Boris */
 }
 
 /* Routine: member_of_staff. Used to see if a character is a member of the 
@@ -179,7 +179,7 @@ static int member_of_royal_guard(struct char_data *chChar)
 /* Function: find_npc_by_name. Returns a pointer to an npc by the given name.
  * Used by Tim and Tom. */
 static struct char_data *find_npc_by_name(struct char_data *chAtChar,
-		const char *pszName, int iLen)
+        const char *pszName, int iLen)
 {
   struct char_data *ch;
 
@@ -218,7 +218,7 @@ static struct char_data *get_victim(struct char_data *chAtChar)
   if (!iNum_bad_guys)
     return (NULL);
 
-  iVictim = rand_number(0, iNum_bad_guys);	/* How nice, we give them a chance */
+  iVictim = rand_number(0, iNum_bad_guys);    /* How nice, we give them a chance */
   if (!iVictim)
     return (NULL);
 
@@ -250,7 +250,7 @@ static int banzaii(struct char_data *ch)
     return (FALSE);
 
   act("$n roars: 'Protect the Kingdom of Great King Welmar!  BANZAIIII!!!'",
-	FALSE, ch, 0, 0, TO_ROOM);
+    FALSE, ch, 0, 0, TO_ROOM);
   hit(ch, chOpponent, TYPE_UNDEFINED);
   return (TRUE);
 }
@@ -270,7 +270,7 @@ static int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim)
 
   act("You bravely rescue $N.\r\n", FALSE, ch_hero, 0, ch_victim, TO_CHAR);
   act("You are rescued by $N, your loyal friend!\r\n",
-	FALSE, ch_victim, 0, ch_hero, TO_CHAR);
+    FALSE, ch_victim, 0, ch_hero, TO_CHAR);
   act("$n heroically rescues $N.", FALSE, ch_hero, 0, ch_victim, TO_NOTVICT);
 
   if (FIGHTING(ch_bad_guy))
@@ -286,7 +286,7 @@ static int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim)
 /* Procedure to block a person trying to enter a room. Used by Tim/Tom at Kings 
  * bedroom and Dick/David at treasury. */
 static int block_way(struct char_data *ch, int cmd, char *arg, room_vnum iIn_room,
-	          int iProhibited_direction)
+              int iProhibited_direction)
 {
   if (cmd != ++iProhibited_direction)
     return (FALSE);
@@ -459,13 +459,13 @@ SPECIAL(king_welmar)
     break;
 
   case 'o':
-    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_UNLOCK);	/* strcpy: OK */
-    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_OPEN);	/* strcpy: OK */
+    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_UNLOCK);    /* strcpy: OK */
+    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_OPEN);    /* strcpy: OK */
     break;
 
   case 'c':
-    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_CLOSE);	/* strcpy: OK */
-    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_LOCK);	/* strcpy: OK */
+    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_CLOSE);    /* strcpy: OK */
+    do_gen_door(ch, strcpy(actbuf, "door"), 0, SCMD_LOCK);    /* strcpy: OK */
     break;
 
   case '.':
@@ -590,7 +590,7 @@ static int castle_twin_proc(struct char_data *ch, int cmd, char *arg, int ctlnum
     char actbuf[MAX_INPUT_LENGTH];
 
     if (!ch->master)
-      do_follow(ch, strcpy(actbuf, "King Welmar"), 0, 0);	/* strcpy: OK */
+      do_follow(ch, strcpy(actbuf, "King Welmar"), 0, 0);    /* strcpy: OK */
     if (FIGHTING(king))
       do_npc_rescue(ch, king);
   }
@@ -680,47 +680,47 @@ SPECIAL(peter)
     switch (rand_number(0, 5)) {
     case 0:
       act("$N comes sharply into attention as $n inspects $M.",
-	  FALSE, ch, 0, ch_guard, TO_NOTVICT);
+      FALSE, ch, 0, ch_guard, TO_NOTVICT);
       act("$N comes sharply into attention as you inspect $M.",
-	  FALSE, ch, 0, ch_guard, TO_CHAR);
+      FALSE, ch, 0, ch_guard, TO_CHAR);
       act("You go sharply into attention as $n inspects you.",
-	  FALSE, ch, 0, ch_guard, TO_VICT);
+      FALSE, ch, 0, ch_guard, TO_VICT);
       break;
     case 1:
       act("$N looks very small, as $n roars at $M.",
-	  FALSE, ch, 0, ch_guard, TO_NOTVICT);
+      FALSE, ch, 0, ch_guard, TO_NOTVICT);
       act("$N looks very small as you roar at $M.",
-	  FALSE, ch, 0, ch_guard, TO_CHAR);
+      FALSE, ch, 0, ch_guard, TO_CHAR);
       act("You feel very small as $N roars at you.",
-	  FALSE, ch, 0, ch_guard, TO_VICT);
+      FALSE, ch, 0, ch_guard, TO_VICT);
       break;
     case 2:
       act("$n gives $N some Royal directions.",
-	  FALSE, ch, 0, ch_guard, TO_NOTVICT);
+      FALSE, ch, 0, ch_guard, TO_NOTVICT);
       act("You give $N some Royal directions.",
-	  FALSE, ch, 0, ch_guard, TO_CHAR);
+      FALSE, ch, 0, ch_guard, TO_CHAR);
       act("$n gives you some Royal directions.",
-	  FALSE, ch, 0, ch_guard, TO_VICT);
+      FALSE, ch, 0, ch_guard, TO_VICT);
       break;
     case 3:
       act("$n looks at you.", FALSE, ch, 0, ch_guard, TO_VICT);
       act("$n looks at $N.", FALSE, ch, 0, ch_guard, TO_NOTVICT);
       act("$n growls: 'Those boots need polishing!'",
-	  FALSE, ch, 0, ch_guard, TO_ROOM);
+      FALSE, ch, 0, ch_guard, TO_ROOM);
       act("You growl at $N.", FALSE, ch, 0, ch_guard, TO_CHAR);
       break;
     case 4:
       act("$n looks at you.", FALSE, ch, 0, ch_guard, TO_VICT);
       act("$n looks at $N.", FALSE, ch, 0, ch_guard, TO_NOTVICT);
       act("$n growls: 'Straighten that collar!'",
-	  FALSE, ch, 0, ch_guard, TO_ROOM);
+      FALSE, ch, 0, ch_guard, TO_ROOM);
       act("You growl at $N.", FALSE, ch, 0, ch_guard, TO_CHAR);
       break;
     default:
       act("$n looks at you.", FALSE, ch, 0, ch_guard, TO_VICT);
       act("$n looks at $N.", FALSE, ch, 0, ch_guard, TO_NOTVICT);
       act("$n growls: 'That chain mail looks rusty!  CLEAN IT !!!'",
-	  FALSE, ch, 0, ch_guard, TO_ROOM);
+      FALSE, ch, 0, ch_guard, TO_ROOM);
       act("You growl at $N.", FALSE, ch, 0, ch_guard, TO_CHAR);
       break;
     }
@@ -761,51 +761,51 @@ SPECIAL(jerry)
   switch (rand_number(0, 5)) {
   case 0:
     act("$n rolls the dice and cheers loudly at the result.",
-	    FALSE, gambler1, 0, gambler2, TO_NOTVICT);
+        FALSE, gambler1, 0, gambler2, TO_NOTVICT);
     act("You roll the dice and cheer. GREAT!",
-	    FALSE, gambler1, 0, gambler2, TO_CHAR);
+        FALSE, gambler1, 0, gambler2, TO_CHAR);
     act("$n cheers loudly as $e rolls the dice.",
-	    FALSE, gambler1, 0, gambler2, TO_VICT);
+        FALSE, gambler1, 0, gambler2, TO_VICT);
     break;
   case 1:
     act("$n curses the Goddess of Luck roundly as he sees $N's roll.",
-	    FALSE, gambler1, 0, gambler2, TO_NOTVICT);
+        FALSE, gambler1, 0, gambler2, TO_NOTVICT);
     act("You curse the Goddess of Luck as $N rolls.",
-	    FALSE, gambler1, 0, gambler2, TO_CHAR);
+        FALSE, gambler1, 0, gambler2, TO_CHAR);
     act("$n swears angrily. You are in luck!",
-	    FALSE, gambler1, 0, gambler2, TO_VICT);
+        FALSE, gambler1, 0, gambler2, TO_VICT);
     break;
   case 2:
     act("$n sighs loudly and gives $N some gold.",
-	    FALSE, gambler1, 0, gambler2, TO_NOTVICT);
+        FALSE, gambler1, 0, gambler2, TO_NOTVICT);
     act("You sigh loudly at the pain of having to give $N some gold.",
-	    FALSE, gambler1, 0, gambler2, TO_CHAR);
+        FALSE, gambler1, 0, gambler2, TO_CHAR);
     act("$n sighs loudly as $e gives you your rightful win.",
-	    FALSE, gambler1, 0, gambler2, TO_VICT);
+        FALSE, gambler1, 0, gambler2, TO_VICT);
     break;
   case 3:
     act("$n smiles remorsefully as $N's roll tops $s.",
-	    FALSE, gambler1, 0, gambler2, TO_NOTVICT);
+        FALSE, gambler1, 0, gambler2, TO_NOTVICT);
     act("You smile sadly as you see that $N beats you. Again.",
-	    FALSE, gambler1, 0, gambler2, TO_CHAR);
+        FALSE, gambler1, 0, gambler2, TO_CHAR);
     act("$n smiles remorsefully as your roll tops $s.",
-	    FALSE, gambler1, 0, gambler2, TO_VICT);
+        FALSE, gambler1, 0, gambler2, TO_VICT);
     break;
   case 4:
     act("$n excitedly follows the dice with $s eyes.",
-	    FALSE, gambler1, 0, gambler2, TO_NOTVICT);
+        FALSE, gambler1, 0, gambler2, TO_NOTVICT);
     act("You excitedly follow the dice with your eyes.",
-	    FALSE, gambler1, 0, gambler2, TO_CHAR);
+        FALSE, gambler1, 0, gambler2, TO_CHAR);
     act("$n excitedly follows the dice with $s eyes.",
-	    FALSE, gambler1, 0, gambler2, TO_VICT);
+        FALSE, gambler1, 0, gambler2, TO_VICT);
     break;
   default:
     act("$n says 'Well, my luck has to change soon', as he shakes the dice.",
-	    FALSE, gambler1, 0, gambler2, TO_NOTVICT);
+        FALSE, gambler1, 0, gambler2, TO_NOTVICT);
     act("You say 'Well, my luck has to change soon' and shake the dice.",
-	    FALSE, gambler1, 0, gambler2, TO_CHAR);
+        FALSE, gambler1, 0, gambler2, TO_CHAR);
     act("$n says 'Well, my luck has to change soon', as he shakes the dice.",
-	    FALSE, gambler1, 0, gambler2, TO_VICT);
+        FALSE, gambler1, 0, gambler2, TO_VICT);
     break;
   }
   return (FALSE);

@@ -209,14 +209,14 @@ static OCMD(do_ozoneecho)
     skip_spaces(&msg);
 
     if (!*room_number || !*msg)
-	obj_log(obj, "ozoneecho called with too few args");
+    obj_log(obj, "ozoneecho called with too few args");
 
     else if ((zone = real_zone_by_thing(atoi(room_number))) == NOWHERE)
-	obj_log(obj, "ozoneecho called for nonexistant zone");
+    obj_log(obj, "ozoneecho called for nonexistant zone");
 
     else {
-	sprintf(buf, "%s\r\n", msg);
-	send_to_zone(buf, zone);
+    sprintf(buf, "%s\r\n", msg);
+    send_to_zone(buf, zone);
     }
 }
 
@@ -522,9 +522,9 @@ static OCMD(do_dgoload)
       }
       cnt = get_obj_near_obj(obj, arg1);
       if (cnt && GET_OBJ_TYPE(cnt) == ITEM_CONTAINER) {
-      	obj_to_obj(object, cnt);
+          obj_to_obj(object, cnt);
         load_otrigger(object);
-      	return;
+          return;
       }
       /* neither char nor container found - just dump it in room */
       obj_to_room(object, room);
@@ -811,41 +811,41 @@ const struct obj_command_info obj_cmd_info[] = {
 /* This is the command interpreter used by objects, called by script_driver. */
 void obj_command_interpreter(obj_data *obj, char *argument)
 {
-	int cmd, length;
-	char *line, arg[MAX_INPUT_LENGTH];
+    int cmd, length;
+    char *line, arg[MAX_INPUT_LENGTH];
 
-	skip_spaces(&argument);
+    skip_spaces(&argument);
 
-	/* just drop to next line for hitting CR */
-	if (!*argument)
-	{
-		return;
-	}
+    /* just drop to next line for hitting CR */
+    if (!*argument)
+    {
+        return;
+    }
 
-	line = any_one_arg(argument, arg);
+    line = any_one_arg(argument, arg);
 
-	/* find the command */
-	for (length = strlen(arg), cmd = 0; *obj_cmd_info[cmd].command != '\n'; cmd++)
-	{	
+    /* find the command */
+    for (length = strlen(arg), cmd = 0; *obj_cmd_info[cmd].command != '\n'; cmd++)
+    {    
 #ifdef _DEBUG
-		if (GET_OBJ_VNUM(obj) == 90)
-		{
-			log("DEBUG: obj_command_interpreter: obj 90, argument=\"%s\", arg=\"%s\", line = \"%s\", length=%d, cmd=%d, ocmd=\"%s\"",
-				argument, arg, line, length, cmd, obj_cmd_info[cmd].command);
-		}
+        if (GET_OBJ_VNUM(obj) == 90)
+        {
+            log("DEBUG: obj_command_interpreter: obj 90, argument=\"%s\", arg=\"%s\", line = \"%s\", length=%d, cmd=%d, ocmd=\"%s\"",
+                argument, arg, line, length, cmd, obj_cmd_info[cmd].command);
+        }
 #endif
-		if (!strncmp(obj_cmd_info[cmd].command, arg, length))
-		{
-			break;
-		}
-	}
+        if (!strncmp(obj_cmd_info[cmd].command, arg, length))
+        {
+            break;
+        }
+    }
 
-	if (*obj_cmd_info[cmd].command == '\n')
-	{
-		obj_log(obj, "Unknown object cmd: '%s'", argument);
-	}
-	else
-	{
-		((*obj_cmd_info[cmd].command_pointer)(obj, line, cmd, obj_cmd_info[cmd].subcmd));
-	}
+    if (*obj_cmd_info[cmd].command == '\n')
+    {
+        obj_log(obj, "Unknown object cmd: '%s'", argument);
+    }
+    else
+    {
+        ((*obj_cmd_info[cmd].command_pointer)(obj, line, cmd, obj_cmd_info[cmd].subcmd));
+    }
 }

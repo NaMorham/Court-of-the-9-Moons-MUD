@@ -63,16 +63,16 @@ void affect_update(void)
     for (af = i->affected; af; af = next) {
       next = af->next;
       if (af->duration >= 1)
-	af->duration--;
-      else if (af->duration == -1)	/* No action */
-	;
+    af->duration--;
+      else if (af->duration == -1)    /* No action */
+    ;
       else {
-	if ((af->type > 0) && (af->type <= MAX_SPELLS))
-	  if (!af->next || (af->next->type != af->type) ||
-	      (af->next->duration > 0))
-	    if (spell_info[af->type].wear_off_msg)
-	      send_to_char(i, "%s\r\n", spell_info[af->type].wear_off_msg);
-	affect_remove(i, af);
+    if ((af->type > 0) && (af->type <= MAX_SPELLS))
+      if (!af->next || (af->next->type != af->type) ||
+          (af->next->duration > 0))
+        if (spell_info[af->type].wear_off_msg)
+          send_to_char(i, "%s\r\n", spell_info[af->type].wear_off_msg);
+    affect_remove(i, af);
       }
     }
 }
@@ -192,7 +192,7 @@ static int mag_materials(struct char_data *ch, IDXTYPE item0,
  * of damage, adds in any modifiers, determines what the saves are, tests for 
  * save and calls damage(). -1 = dead, otherwise the amount of damage done. */
 int mag_damage(int level, struct char_data *ch, struct char_data *victim,
-		     int spellnum, int savetype)
+             int spellnum, int savetype)
 {
   int dam = 0;
 
@@ -202,7 +202,7 @@ int mag_damage(int level, struct char_data *ch, struct char_data *victim,
   switch (spellnum) {
     /* Mostly mages */
   case SPELL_MAGIC_MISSILE:
-  case SPELL_CHILL_TOUCH:	/* chill touch also has an affect */
+  case SPELL_CHILL_TOUCH:    /* chill touch also has an affect */
     if (IS_MAGIC_USER(ch))
       dam = dice(1, 8) + 1;
     else
@@ -297,10 +297,10 @@ int mag_damage(int level, struct char_data *ch, struct char_data *victim,
 /* Every spell that does an affect comes through here.  This determines the 
  * effect, whether it is added or replacement, whether it is legal or not, etc.
  * affect_join(vict, aff, add_dur, avg_dur, add_mod, avg_mod) */
-#define MAX_SPELL_AFFECTS 5	/* change if more needed */
+#define MAX_SPELL_AFFECTS 5    /* change if more needed */
 
 void mag_affects(int level, struct char_data *ch, struct char_data *victim,
-		      int spellnum, int savetype)
+              int spellnum, int savetype)
 {
   struct affected_type af[MAX_SPELL_AFFECTS];
   bool accum_affect = FALSE, accum_duration = FALSE;
@@ -517,8 +517,8 @@ void mag_affects(int level, struct char_data *ch, struct char_data *victim,
   if (IS_NPC(victim) && !affected_by_spell(victim, spellnum))
     for (i = 0; i < MAX_SPELL_AFFECTS; i++)
       if (AFF_FLAGGED(victim, af[i].bitvector) && (af[i].bitvector > 0)) {
-	send_to_char(ch, "%s", CONFIG_NOEFFECT);
-	return;
+    send_to_char(ch, "%s", CONFIG_NOEFFECT);
+    return;
       }
 
   /* If the victim is already affected by this spell, and the spell does not 
@@ -541,7 +541,7 @@ void mag_affects(int level, struct char_data *ch, struct char_data *victim,
 /* This function is used to provide services to mag_groups.  This function is 
  * the one you should change to add new group spells. */
 static void perform_mag_groups(int level, struct char_data *ch,
-			struct char_data *tch, int spellnum, int savetype)
+            struct char_data *tch, int spellnum, int savetype)
 {
   switch (spellnum) {
     case SPELL_GROUP_HEAL:
@@ -700,7 +700,7 @@ static const char *mag_summon_fail_msgs[] = {
 #define MOB_ZOMBIE           11   /**< vnum for the zombie mob. */
 
 void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
-		      int spellnum, int savetype)
+              int spellnum, int savetype)
 {
   struct char_data *mob = NULL;
   struct obj_data *tobj, *next_obj;
@@ -713,7 +713,7 @@ void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
   switch (spellnum) {
   case SPELL_CLONE:
     msg = 10;
-    fmsg = rand_number(2, 6);	/* Random fail message. */
+    fmsg = rand_number(2, 6);    /* Random fail message. */
     mob_num = MOB_CLONE;
     /* 
      * We have designated the clone spell as the example for how to use the
@@ -727,7 +727,7 @@ void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
     if( !mag_materials(ch, OBJ_CLONE, NOTHING, NOTHING, TRUE, TRUE) )
       pfail = 102; /* No materials, spell fails. */
     else
-      pfail = 0;	/* We have the entrails, spell is successfully cast. */
+      pfail = 0;    /* We have the entrails, spell is successfully cast. */
     break;
 
   case SPELL_ANIMATE_DEAD:
@@ -737,9 +737,9 @@ void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
     }
     handle_corpse = TRUE;
     msg = 11;
-    fmsg = rand_number(2, 6);	/* Random fail message. */
+    fmsg = rand_number(2, 6);    /* Random fail message. */
     mob_num = MOB_ZOMBIE;
-    pfail = 10;	/* 10% failure, should vary in the future. */
+    pfail = 10;    /* 10% failure, should vary in the future. */
     break;
 
   default:
@@ -793,7 +793,7 @@ void mag_summons(int level, struct char_data *ch, struct obj_data *obj,
 
 
 void mag_points(int level, struct char_data *ch, struct char_data *victim,
-		     int spellnum, int savetype)
+             int spellnum, int savetype)
 {
   int healing = 0, move = 0;
 
@@ -820,7 +820,7 @@ void mag_points(int level, struct char_data *ch, struct char_data *victim,
 }
 
 void mag_unaffects(int level, struct char_data *ch, struct char_data *victim,
-		        int spellnum, int type)
+                int spellnum, int type)
 {
   int spell = 0, msg_not_affected = TRUE;
   const char *to_vict = NULL, *to_room = NULL;
@@ -867,7 +867,7 @@ void mag_unaffects(int level, struct char_data *ch, struct char_data *victim,
 }
 
 void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj,
-		         int spellnum, int savetype)
+                 int spellnum, int savetype)
 {
   const char *to_char = NULL, *to_room = NULL;
 
@@ -877,17 +877,17 @@ void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj,
   switch (spellnum) {
     case SPELL_BLESS:
       if (!OBJ_FLAGGED(obj, ITEM_BLESS) &&
-	  (GET_OBJ_WEIGHT(obj) <= 5 * GET_LEVEL(ch))) {
-	SET_BIT_AR(GET_OBJ_EXTRA(obj), ITEM_BLESS);
-	to_char = "$p glows briefly.";
+      (GET_OBJ_WEIGHT(obj) <= 5 * GET_LEVEL(ch))) {
+    SET_BIT_AR(GET_OBJ_EXTRA(obj), ITEM_BLESS);
+    to_char = "$p glows briefly.";
       }
       break;
     case SPELL_CURSE:
       if (!OBJ_FLAGGED(obj, ITEM_NODROP)) {
-	SET_BIT_AR(GET_OBJ_EXTRA(obj), ITEM_NODROP);
-	if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
-	  GET_OBJ_VAL(obj, 2)--;
-	to_char = "$p briefly glows red.";
+    SET_BIT_AR(GET_OBJ_EXTRA(obj), ITEM_NODROP);
+    if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+      GET_OBJ_VAL(obj, 2)--;
+    to_char = "$p briefly glows red.";
       }
       break;
     case SPELL_INVISIBLE:
@@ -954,7 +954,7 @@ void mag_creations(int level, struct char_data *ch, int spellnum)
   if (!(tobj = read_object(z, VIRTUAL))) {
     send_to_char(ch, "I seem to have goofed.\r\n");
     log("SYSERR: spell_creations, spell %d, obj %d: obj not found",
-	    spellnum, z);
+        spellnum, z);
     return;
   }
   obj_to_char(tobj, ch);

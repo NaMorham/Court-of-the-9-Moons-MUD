@@ -247,15 +247,15 @@ void oedit_save_internally(struct descriptor_data *d)
   }
   /* end trigger update */
 
-  if (!i)	/* If it's not a new object, don't renumber. */
+  if (!i)    /* If it's not a new object, don't renumber. */
     return;
 
   /* Renumber produce in shops being edited. */
   for (dsc = descriptor_list; dsc; dsc = dsc->next)
     if (STATE(dsc) == CON_SEDIT)
       for (i = 0; S_PRODUCT(OLC_SHOP(dsc), i) != NOTHING; i++)
-	if (S_PRODUCT(OLC_SHOP(dsc), i) >= robj_num)
-	  S_PRODUCT(OLC_SHOP(dsc), i)++;
+    if (S_PRODUCT(OLC_SHOP(dsc), i) >= robj_num)
+      S_PRODUCT(OLC_SHOP(dsc), i)++;
 
 
   /* Update other people in zedit too. From: C.Raehl 4/27/99 */
@@ -294,13 +294,13 @@ static void oedit_disp_container_flags_menu(struct descriptor_data *d)
 
   sprintbit(GET_OBJ_VAL(OLC_OBJ(d), 1), container_bits, bits, sizeof(bits));
   write_to_output(d,
-	  "%s1%s) CLOSEABLE\r\n"
-	  "%s2%s) PICKPROOF\r\n"
-	  "%s3%s) CLOSED\r\n"
-	  "%s4%s) LOCKED\r\n"
-	  "Container flags: %s%s%s\r\n"
-	  "Enter flag, 0 to quit : ",
-	  grn, nrm, grn, nrm, grn, nrm, grn, nrm, cyn, bits, nrm);
+      "%s1%s) CLOSEABLE\r\n"
+      "%s2%s) PICKPROOF\r\n"
+      "%s3%s) CLOSED\r\n"
+      "%s4%s) LOCKED\r\n"
+      "Container flags: %s%s%s\r\n"
+      "Enter flag, 0 to quit : ",
+      grn, nrm, grn, nrm, grn, nrm, grn, nrm, cyn, bits, nrm);
 }
 
 /* For extra descriptions. */
@@ -311,16 +311,16 @@ static void oedit_disp_extradesc_menu(struct descriptor_data *d)
   get_char_colors(d->character);
   clear_screen(d);
   write_to_output(d,
-	  "Extra desc menu\r\n"
-	  "%s1%s) Keywords: %s%s\r\n"
-	  "%s2%s) Description:\r\n%s%s\r\n"
-	  "%s3%s) Goto next description: %s\r\n"
-	  "%s0%s) Quit\r\n"
-	  "Enter choice : ",
+      "Extra desc menu\r\n"
+      "%s1%s) Keywords: %s%s\r\n"
+      "%s2%s) Description:\r\n%s%s\r\n"
+      "%s3%s) Goto next description: %s\r\n"
+      "%s0%s) Quit\r\n"
+      "Enter choice : ",
 
-     	  grn, nrm, yel, (extra_desc->keyword && *extra_desc->keyword) ? extra_desc->keyword : "<NONE>",
-	  grn, nrm, yel, (extra_desc->description && *extra_desc->description) ? extra_desc->description : "<NONE>",
-	  grn, nrm, !extra_desc->next ? "Not set." : "Set.", grn, nrm);
+           grn, nrm, yel, (extra_desc->keyword && *extra_desc->keyword) ? extra_desc->keyword : "<NONE>",
+      grn, nrm, yel, (extra_desc->description && *extra_desc->description) ? extra_desc->description : "<NONE>",
+      grn, nrm, !extra_desc->next ? "Not set." : "Set.", grn, nrm);
   OLC_MODE(d) = OEDIT_EXTRADESC_MENU;
 }
 
@@ -337,7 +337,7 @@ static void oedit_disp_prompt_apply_menu(struct descriptor_data *d)
     if (OLC_OBJ(d)->affected[counter].modifier) {
       sprinttype(OLC_OBJ(d)->affected[counter].location, apply_types, apply_buf, sizeof(apply_buf));
       write_to_output(d, " %s%d%s) %+d to %s\r\n", grn, counter + 1, nrm,
-	      OLC_OBJ(d)->affected[counter].modifier, apply_buf);
+          OLC_OBJ(d)->affected[counter].modifier, apply_buf);
     } else {
       write_to_output(d, " %s%d%s) None.\r\n", grn, counter + 1, nrm);
     }
@@ -376,8 +376,8 @@ static void oedit_disp_weapon_menu(struct descriptor_data *d)
 
   for (counter = 0; counter < NUM_ATTACK_TYPES; counter++) {
     write_to_output(d, "%s%2d%s) %-20.20s %s", grn, counter, nrm,
-		attack_hit_text[counter].singular,
-		!(++columns % 2) ? "\r\n" : "");
+        attack_hit_text[counter].singular,
+        !(++columns % 2) ? "\r\n" : "");
   }
   write_to_output(d, "\r\nEnter weapon type : ");
 }
@@ -392,7 +392,7 @@ static void oedit_disp_spells_menu(struct descriptor_data *d)
 
   for (counter = 1; counter <= NUM_SPELLS; counter++) {
     write_to_output(d, "%s%2d%s) %s%-20.20s %s", grn, counter, nrm, yel,
-		spell_info[counter].name, !(++columns % 3) ? "\r\n" : "");
+        spell_info[counter].name, !(++columns % 3) ? "\r\n" : "");
   }
   write_to_output(d, "\r\n%sEnter spell choice (-1 for none) : ", nrm);
 }
@@ -549,7 +549,7 @@ static void oedit_disp_type_menu(struct descriptor_data *d)
 
   for (counter = 0; counter < NUM_ITEM_TYPES; counter++) {
     write_to_output(d, "%s%2d%s) %-20.20s %s", grn, counter, nrm,
-		item_types[counter], !(++columns % 2) ? "\r\n" : "");
+        item_types[counter], !(++columns % 2) ? "\r\n" : "");
   }
   write_to_output(d, "\r\nEnter object type : ");
 }
@@ -565,12 +565,12 @@ static void oedit_disp_extra_menu(struct descriptor_data *d)
 
   for (counter = 0; counter < NUM_ITEM_FLAGS; counter++) {
     write_to_output(d, "%s%2d%s) %-20.20s %s", grn, counter + 1, nrm,
-		extra_bits[counter], !(++columns % 2) ? "\r\n" : "");
+        extra_bits[counter], !(++columns % 2) ? "\r\n" : "");
   }
   sprintbitarray(GET_OBJ_EXTRA(OLC_OBJ(d)), extra_bits, EF_ARRAY_MAX, bits);
   write_to_output(d, "\r\nObject flags: %s%s%s\r\n"
-	  "Enter object extra flag (0 to quit) : ",
-	  cyn, bits, nrm);
+      "Enter object extra flag (0 to quit) : ",
+      cyn, bits, nrm);
 }
 
 /* Object perm flags. */
@@ -601,11 +601,11 @@ static void oedit_disp_wear_menu(struct descriptor_data *d)
 
   for (counter = 0; counter < NUM_ITEM_WEARS; counter++) {
     write_to_output(d, "%s%2d%s) %-20.20s %s", grn, counter + 1, nrm,
-		wear_bits[counter], !(++columns % 2) ? "\r\n" : "");
+        wear_bits[counter], !(++columns % 2) ? "\r\n" : "");
   }
   sprintbitarray(GET_OBJ_WEAR(OLC_OBJ(d)), wear_bits, TW_ARRAY_MAX, bits);
   write_to_output(d, "\r\nWear flags: %s%s%s\r\n"
-	  "Enter wear flag, 0 to quit : ", cyn, bits, nrm);
+      "Enter wear flag, 0 to quit : ", cyn, bits, nrm);
 }
 
 /* Display main menu. */
@@ -625,56 +625,56 @@ static void oedit_disp_menu(struct descriptor_data *d)
 
   /* Build first half of menu. */
   write_to_output(d,
-	  "-- Item number : [%s%d%s]\r\n"
-	  "%s1%s) Keywords : %s%s\r\n"
-	  "%s2%s) S-Desc   : %s%s\r\n"
-	  "%s3%s) L-Desc   :-\r\n%s%s\r\n"
-	  "%s4%s) A-Desc   :-\r\n%s%s"
-	  "%s5%s) Type        : %s%s\r\n"
-	  "%s6%s) Extra flags : %s%s\r\n",
+      "-- Item number : [%s%d%s]\r\n"
+      "%s1%s) Keywords : %s%s\r\n"
+      "%s2%s) S-Desc   : %s%s\r\n"
+      "%s3%s) L-Desc   :-\r\n%s%s\r\n"
+      "%s4%s) A-Desc   :-\r\n%s%s"
+      "%s5%s) Type        : %s%s\r\n"
+      "%s6%s) Extra flags : %s%s\r\n",
 
-	  cyn, OLC_NUM(d), nrm,
-	  grn, nrm, yel, (obj->name && *obj->name) ? obj->name : "undefined",
-	  grn, nrm, yel, (obj->short_description && *obj->short_description) ? obj->short_description : "undefined",
-	  grn, nrm, yel, (obj->description && *obj->description) ? obj->description : "undefined",
-	  grn, nrm, yel, (obj->action_description && *obj->action_description) ? obj->action_description : "Not Set.\r\n",
-	  grn, nrm, cyn, buf1,
-	  grn, nrm, cyn, buf2
-	  );
+      cyn, OLC_NUM(d), nrm,
+      grn, nrm, yel, (obj->name && *obj->name) ? obj->name : "undefined",
+      grn, nrm, yel, (obj->short_description && *obj->short_description) ? obj->short_description : "undefined",
+      grn, nrm, yel, (obj->description && *obj->description) ? obj->description : "undefined",
+      grn, nrm, yel, (obj->action_description && *obj->action_description) ? obj->action_description : "Not Set.\r\n",
+      grn, nrm, cyn, buf1,
+      grn, nrm, cyn, buf2
+      );
   /* Send first half then build second half of menu. */
   sprintbitarray(GET_OBJ_WEAR(OLC_OBJ(d)), wear_bits, EF_ARRAY_MAX, buf1);
   sprintbitarray(GET_OBJ_PERM(OLC_OBJ(d)), affected_bits, EF_ARRAY_MAX, buf2);
 
   write_to_output(d,
-	  "%s7%s) Wear flags  : %s%s\r\n"
-	  "%s8%s) Weight      : %s%d\r\n"
-	  "%s9%s) Cost        : %s%d\r\n"
-	  "%sA%s) Cost/Day    : %s%d\r\n"
-	  "%sB%s) Timer       : %s%d\r\n"
-	  "%sC%s) Values      : %s%d %d %d %d\r\n"
-	  "%sD%s) Applies menu\r\n"
-	  "%sE%s) Extra descriptions menu: %s%s%s\r\n"
+      "%s7%s) Wear flags  : %s%s\r\n"
+      "%s8%s) Weight      : %s%d\r\n"
+      "%s9%s) Cost        : %s%d\r\n"
+      "%sA%s) Cost/Day    : %s%d\r\n"
+      "%sB%s) Timer       : %s%d\r\n"
+      "%sC%s) Values      : %s%d %d %d %d\r\n"
+      "%sD%s) Applies menu\r\n"
+      "%sE%s) Extra descriptions menu: %s%s%s\r\n"
           "%sM%s) Min Level   : %s%d\r\n"
           "%sP%s) Perm Affects: %s%s\r\n"
-	  "%sS%s) Script      : %s%s\r\n"
+      "%sS%s) Script      : %s%s\r\n"
           "%sW%s) Copy object\r\n"
-	  "%sQ%s) Quit\r\n"
-	  "Enter choice : ",
+      "%sQ%s) Quit\r\n"
+      "Enter choice : ",
 
-	  grn, nrm, cyn, buf1,
-	  grn, nrm, cyn, GET_OBJ_WEIGHT(obj),
-	  grn, nrm, cyn, GET_OBJ_COST(obj),
-	  grn, nrm, cyn, GET_OBJ_RENT(obj),
-	  grn, nrm, cyn, GET_OBJ_TIMER(obj),
-	  grn, nrm, cyn, GET_OBJ_VAL(obj, 0),
-	  GET_OBJ_VAL(obj, 1),
-	  GET_OBJ_VAL(obj, 2),
-	  GET_OBJ_VAL(obj, 3),
-	  grn, nrm, grn, nrm, cyn, GET_OBJ_EXTRA(obj) ? "Set." : "Not Set.", grn,
+      grn, nrm, cyn, buf1,
+      grn, nrm, cyn, GET_OBJ_WEIGHT(obj),
+      grn, nrm, cyn, GET_OBJ_COST(obj),
+      grn, nrm, cyn, GET_OBJ_RENT(obj),
+      grn, nrm, cyn, GET_OBJ_TIMER(obj),
+      grn, nrm, cyn, GET_OBJ_VAL(obj, 0),
+      GET_OBJ_VAL(obj, 1),
+      GET_OBJ_VAL(obj, 2),
+      GET_OBJ_VAL(obj, 3),
+      grn, nrm, grn, nrm, cyn, GET_OBJ_EXTRA(obj) ? "Set." : "Not Set.", grn,
           grn, nrm, cyn, GET_OBJ_LEVEL(obj),
           grn, nrm, cyn, buf2,
           grn, nrm, cyn, OLC_SCRIPT(d) ? "Set." : "Not Set.",
-	  grn, nrm,
+      grn, nrm,
           grn, nrm
   );
   OLC_MODE(d) = OEDIT_MAIN_MENU;
@@ -724,11 +724,11 @@ void oedit_parse(struct descriptor_data *d, char *arg)
     switch (*arg) {
     case 'q':
     case 'Q':
-      if (OLC_VAL(d)) {	/* Something has been modified. */
-	write_to_output(d, "Do you wish to save your changes? : ");
-	OLC_MODE(d) = OEDIT_CONFIRM_SAVESTRING;
+      if (OLC_VAL(d)) {    /* Something has been modified. */
+    write_to_output(d, "Do you wish to save your changes? : ");
+    OLC_MODE(d) = OEDIT_CONFIRM_SAVESTRING;
       } else
-	cleanup_olc(d, CLEANUP_ALL);
+    cleanup_olc(d, CLEANUP_ALL);
       return;
     case '1':
       write_to_output(d, "Enter keywords : ");
@@ -747,8 +747,8 @@ void oedit_parse(struct descriptor_data *d, char *arg)
       send_editor_help(d);
       write_to_output(d, "Enter action description:\r\n\r\n");
       if (OLC_OBJ(d)->action_description) {
-	write_to_output(d, "%s", OLC_OBJ(d)->action_description);
-	oldtext = strdup(OLC_OBJ(d)->action_description);
+    write_to_output(d, "%s", OLC_OBJ(d)->action_description);
+    oldtext = strdup(OLC_OBJ(d)->action_description);
       }
       string_write(d, &OLC_OBJ(d)->action_description, MAX_MESSAGE_LENGTH, 0, oldtext);
       OLC_VAL(d) = 1;
@@ -801,8 +801,8 @@ void oedit_parse(struct descriptor_data *d, char *arg)
     case 'E':
       /* If extra descriptions don't exist. */
       if (OLC_OBJ(d)->ex_description == NULL) {
-	CREATE(OLC_OBJ(d)->ex_description, struct extra_descr_data, 1);
-	OLC_OBJ(d)->ex_description->next = NULL;
+    CREATE(OLC_OBJ(d)->ex_description, struct extra_descr_data, 1);
+    OLC_OBJ(d)->ex_description->next = NULL;
       }
       OLC_DESC(d) = OLC_OBJ(d)->ex_description;
       oedit_disp_extradesc_menu(d);
@@ -897,7 +897,7 @@ void oedit_parse(struct descriptor_data *d, char *arg)
       write_to_output(d, "That's not a valid choice!\r\n");
       oedit_disp_wear_menu(d);
       return;
-    } else if (number == 0)	/* Quit. */
+    } else if (number == 0)    /* Quit. */
       break;
     else {
       TOGGLE_BIT_AR(GET_OBJ_WEAR(OLC_OBJ(d)), (number - 1));
@@ -967,22 +967,22 @@ void oedit_parse(struct descriptor_data *d, char *arg)
     case ITEM_SCROLL:
     case ITEM_POTION:
       if (number == 0 || number == -1)
-	GET_OBJ_VAL(OLC_OBJ(d), 1) = -1;
+    GET_OBJ_VAL(OLC_OBJ(d), 1) = -1;
       else
-	GET_OBJ_VAL(OLC_OBJ(d), 1) = LIMIT(number, 1, NUM_SPELLS);
+    GET_OBJ_VAL(OLC_OBJ(d), 1) = LIMIT(number, 1, NUM_SPELLS);
 
       oedit_disp_val3_menu(d);
       break;
     case ITEM_CONTAINER:
       /* Needs some special handling since we are dealing with flag values here. */
       if (number < 0 || number > 4)
-	oedit_disp_container_flags_menu(d);
+    oedit_disp_container_flags_menu(d);
       else if (number != 0) {
         TOGGLE_BIT(GET_OBJ_VAL(OLC_OBJ(d), 1), 1 << (number - 1));
         OLC_VAL(d) = 1;
-	oedit_disp_val2_menu(d);
+    oedit_disp_val2_menu(d);
       } else
-	oedit_disp_val3_menu(d);
+    oedit_disp_val3_menu(d);
       break;
     case ITEM_WEAPON:
       GET_OBJ_VAL(OLC_OBJ(d), 1) = LIMIT(number, 1, MAX_WEAPON_NDICE);
@@ -1002,9 +1002,9 @@ void oedit_parse(struct descriptor_data *d, char *arg)
     case ITEM_SCROLL:
     case ITEM_POTION:
       if (number == 0 || number == -1) {
-	GET_OBJ_VAL(OLC_OBJ(d), 2) = -1;
-	oedit_disp_val4_menu(d);
-	return;
+    GET_OBJ_VAL(OLC_OBJ(d), 2) = -1;
+    oedit_disp_val4_menu(d);
+    return;
       }
       min_val = 1;
       max_val = NUM_SPELLS;
@@ -1042,9 +1042,9 @@ void oedit_parse(struct descriptor_data *d, char *arg)
     case ITEM_SCROLL:
     case ITEM_POTION:
       if (number == 0 || number == -1) {
-	GET_OBJ_VAL(OLC_OBJ(d), 3) = -1;
+    GET_OBJ_VAL(OLC_OBJ(d), 3) = -1;
         oedit_disp_menu(d);
-	return;
+    return;
       }
       min_val = 1;
       max_val = NUM_SPELLS;
@@ -1124,15 +1124,15 @@ void oedit_parse(struct descriptor_data *d, char *arg)
       if (!OLC_DESC(d)->keyword || !OLC_DESC(d)->description) {
         struct extra_descr_data *temp;
 
-	if (OLC_DESC(d)->keyword)
-	  free(OLC_DESC(d)->keyword);
-	if (OLC_DESC(d)->description)
-	  free(OLC_DESC(d)->description);
+    if (OLC_DESC(d)->keyword)
+      free(OLC_DESC(d)->keyword);
+    if (OLC_DESC(d)->description)
+      free(OLC_DESC(d)->description);
 
-	/* Clean up pointers */
-	REMOVE_FROM_LIST(OLC_DESC(d), OLC_OBJ(d)->ex_description, next);
-	free(OLC_DESC(d));
-	OLC_DESC(d) = NULL;
+    /* Clean up pointers */
+    REMOVE_FROM_LIST(OLC_DESC(d), OLC_OBJ(d)->ex_description, next);
+    free(OLC_DESC(d));
+    OLC_DESC(d) = NULL;
       }
     break;
 
@@ -1146,8 +1146,8 @@ void oedit_parse(struct descriptor_data *d, char *arg)
       send_editor_help(d);
       write_to_output(d, "Enter the extra description:\r\n\r\n");
       if (OLC_DESC(d)->description) {
-	write_to_output(d, "%s", OLC_DESC(d)->description);
-	oldtext = strdup(OLC_DESC(d)->description);
+    write_to_output(d, "%s", OLC_DESC(d)->description);
+    oldtext = strdup(OLC_DESC(d)->description);
       }
       string_write(d, &OLC_DESC(d)->description, MAX_MESSAGE_LENGTH, 0, oldtext);
       OLC_VAL(d) = 1;
@@ -1156,15 +1156,15 @@ void oedit_parse(struct descriptor_data *d, char *arg)
     case 3:
       /* Only go to the next description if this one is finished. */
       if (OLC_DESC(d)->keyword && OLC_DESC(d)->description) {
-	struct extra_descr_data *new_extra;
+    struct extra_descr_data *new_extra;
 
-	if (OLC_DESC(d)->next)
-	  OLC_DESC(d) = OLC_DESC(d)->next;
-	else {	/* Make new extra description and attach at end. */
-	  CREATE(new_extra, struct extra_descr_data, 1);
-	  OLC_DESC(d)->next = new_extra;
-	  OLC_DESC(d) = OLC_DESC(d)->next;
-	}
+    if (OLC_DESC(d)->next)
+      OLC_DESC(d) = OLC_DESC(d)->next;
+    else {    /* Make new extra description and attach at end. */
+      CREATE(new_extra, struct extra_descr_data, 1);
+      OLC_DESC(d)->next = new_extra;
+      OLC_DESC(d) = OLC_DESC(d)->next;
+    }
       }
       /* No break - drop into default case. */
     default:

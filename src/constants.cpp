@@ -17,7 +17,7 @@
 #include "sysdep.h"
 #include "structs.h"
 #include "utils.h"
-#include "interpreter.h"	/* alias_data */
+#include "interpreter.h"    /* alias_data */
 
 /** Current tbaMUD version.
  * @todo defined with _TBAMUD so we don't have multiple constants to change.
@@ -62,7 +62,7 @@ const char *room_bits[] = {
   "HCRSH",
   "ATRIUM",
   "OLC",
-  "*",				/* The BFS Mark. */
+  "*",                /* The BFS Mark. */
   "WORLDMAP",
   "\n"
 };
@@ -585,167 +585,167 @@ const char *fullness[] =
  * The fields are hit mod, damage mod, weight carried mod, and weight wielded
  * mod. */
 cpp_extern const struct str_app_type str_app[] = {
-  {-5, -4, 0, 0},	/* str = 0 */
-  {-5, -4, 3, 1},	/* str = 1 */
+  {-5, -4, 0, 0},    /* str = 0 */
+  {-5, -4, 3, 1},    /* str = 1 */
   {-3, -2, 3, 2},
   {-3, -1, 10, 3},
   {-2, -1, 25, 4},
-  {-2, -1, 55, 5},	/* str = 5 */
+  {-2, -1, 55, 5},    /* str = 5 */
   {-1, 0, 80, 6},
   {-1, 0, 90, 7},
   {0, 0, 100, 8},
   {0, 0, 100, 9},
-  {0, 0, 115, 10},	/* str = 10 */
+  {0, 0, 115, 10},    /* str = 10 */
   {0, 0, 115, 11},
   {0, 0, 140, 12},
   {0, 0, 140, 13},
   {0, 0, 170, 14},
-  {0, 0, 170, 15},	/* str = 15 */
+  {0, 0, 170, 15},    /* str = 15 */
   {0, 1, 195, 16},
   {1, 1, 220, 18},
-  {1, 2, 255, 20},	/* str = 18 */
+  {1, 2, 255, 20},    /* str = 18 */
   {3, 7, 640, 40},
-  {3, 8, 700, 40},	/* str = 20 */
+  {3, 8, 700, 40},    /* str = 20 */
   {4, 9, 810, 40},
   {4, 10, 970, 40},
   {5, 11, 1130, 40},
   {6, 12, 1440, 40},
-  {7, 14, 1750, 40},	/* str = 25 */
-  {1, 3, 280, 22},	/* str = 18/0 - 18-50 */
-  {2, 3, 305, 24},	/* str = 18/51 - 18-75 */
-  {2, 4, 330, 26},	/* str = 18/76 - 18-90 */
-  {2, 5, 380, 28},	/* str = 18/91 - 18-99 */
-  {3, 6, 480, 30}	/* str = 18/100 */
+  {7, 14, 1750, 40},    /* str = 25 */
+  {1, 3, 280, 22},    /* str = 18/0 - 18-50 */
+  {2, 3, 305, 24},    /* str = 18/51 - 18-75 */
+  {2, 4, 330, 26},    /* str = 18/76 - 18-90 */
+  {2, 5, 380, 28},    /* str = 18/91 - 18-99 */
+  {3, 6, 480, 30}    /* str = 18/100 */
 };
 
 /** Dexterity skill modifiers for thieves.
  * The fields are for pick pockets, pick locks, find traps, sneak and hide. */
 cpp_extern const struct dex_skill_type dex_app_skill[] = {
-  {-99, -99, -90, -99, -60},	/* dex = 0 */
-  {-90, -90, -60, -90, -50},	/* dex = 1 */
+  {-99, -99, -90, -99, -60},    /* dex = 0 */
+  {-90, -90, -60, -90, -50},    /* dex = 1 */
   {-80, -80, -40, -80, -45},
   {-70, -70, -30, -70, -40},
   {-60, -60, -30, -60, -35},
-  {-50, -50, -20, -50, -30},	/* dex = 5 */
+  {-50, -50, -20, -50, -30},    /* dex = 5 */
   {-40, -40, -20, -40, -25},
   {-30, -30, -15, -30, -20},
   {-20, -20, -15, -20, -15},
   {-15, -10, -10, -20, -10},
-  {-10, -5, -10, -15, -5},	/* dex = 10 */
+  {-10, -5, -10, -15, -5},    /* dex = 10 */
   {-5, 0, -5, -10, 0},
   {0, 0, 0, -5, 0},
   {0, 0, 0, 0, 0},
   {0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0},		/* dex = 15 */
+  {0, 0, 0, 0, 0},        /* dex = 15 */
   {0, 5, 0, 0, 0},
   {5, 10, 0, 5, 5},
-  {10, 15, 5, 10, 10},		/* dex = 18 */
+  {10, 15, 5, 10, 10},        /* dex = 18 */
   {15, 20, 10, 15, 15},
-  {15, 20, 10, 15, 15},		/* dex = 20 */
+  {15, 20, 10, 15, 15},        /* dex = 20 */
   {20, 25, 10, 15, 20},
   {20, 25, 15, 20, 20},
   {25, 25, 15, 20, 20},
   {25, 30, 15, 25, 25},
-  {25, 30, 15, 25, 25}		/* dex = 25 */
+  {25, 30, 15, 25, 25}        /* dex = 25 */
 };
 
 /** Dexterity attribute affects.
  * The fields are reaction, missile attacks, and defensive (armor class). */
 cpp_extern const struct dex_app_type dex_app[] = {
-  {-7, -7, 6},		/* dex = 0 */
-  {-6, -6, 5},		/* dex = 1 */
+  {-7, -7, 6},        /* dex = 0 */
+  {-6, -6, 5},        /* dex = 1 */
   {-4, -4, 5},
   {-3, -3, 4},
   {-2, -2, 3},
-  {-1, -1, 2},		/* dex = 5 */
+  {-1, -1, 2},        /* dex = 5 */
   {0, 0, 1},
   {0, 0, 0},
   {0, 0, 0},
   {0, 0, 0},
-  {0, 0, 0},		/* dex = 10 */
+  {0, 0, 0},        /* dex = 10 */
   {0, 0, 0},
   {0, 0, 0},
   {0, 0, 0},
   {0, 0, 0},
-  {0, 0, -1},		/* dex = 15 */
+  {0, 0, -1},        /* dex = 15 */
   {1, 1, -2},
   {2, 2, -3},
-  {2, 2, -4},		/* dex = 18 */
+  {2, 2, -4},        /* dex = 18 */
   {3, 3, -4},
-  {3, 3, -4},		/* dex = 20 */
+  {3, 3, -4},        /* dex = 20 */
   {4, 4, -5},
   {4, 4, -5},
   {4, 4, -5},
   {5, 5, -6},
-  {5, 5, -6}		/* dex = 25 */
+  {5, 5, -6}        /* dex = 25 */
 };
 
 /** Constitution attribute affects.
  * The field referenced is for hitpoint bonus. */
 cpp_extern const struct con_app_type con_app[] = {
-  {-4},		/* con = 0 */
-  {-3},		/* con = 1 */
+  {-4},        /* con = 0 */
+  {-3},        /* con = 1 */
   {-2},
   {-2},
   {-1},
-  {-1},		/* con = 5 */
+  {-1},        /* con = 5 */
   {-1},
   {0},
   {0},
   {0},
-  {0},		/* con = 10 */
+  {0},        /* con = 10 */
   {0},
   {0},
   {0},
   {0},
-  {1},		/* con = 15 */
+  {1},        /* con = 15 */
   {2},
   {2},
-  {3},		/* con = 18 */
+  {3},        /* con = 18 */
   {3},
-  {4},		/* con = 20 */
+  {4},        /* con = 20 */
   {5},
   {5},
   {5},
   {6},
-  {6}		/* con = 25 */
+  {6}        /* con = 25 */
 };
 
 /** Intelligence attribute affects.
  * The field shows how much practicing affects a skill/spell. */
 cpp_extern const struct int_app_type int_app[] = {
-  {3},		/* int = 0 */
-  {5},		/* int = 1 */
+  {3},        /* int = 0 */
+  {5},        /* int = 1 */
   {7},
   {8},
   {9},
-  {10},		/* int = 5 */
+  {10},        /* int = 5 */
   {11},
   {12},
   {13},
   {15},
-  {17},		/* int = 10 */
+  {17},        /* int = 10 */
   {19},
   {22},
   {25},
   {30},
-  {35},		/* int = 15 */
+  {35},        /* int = 15 */
   {40},
   {45},
-  {50},		/* int = 18 */
+  {50},        /* int = 18 */
   {53},
-  {55},		/* int = 20 */
+  {55},        /* int = 20 */
   {56},
   {57},
   {58},
   {59},
-  {60}		/* int = 25 */
+  {60}        /* int = 25 */
 };
 
 /** Wisdom attribute affects.
  * The field represents how many extra practice points are gained per level. */
 cpp_extern const struct wis_app_type wis_app[] = {
-  {0},	/* wis = 0 */
+  {0},    /* wis = 0 */
   {0},  /* wis = 1 */
   {0},
   {0},
@@ -763,7 +763,7 @@ cpp_extern const struct wis_app_type wis_app[] = {
   {3},  /* wis = 15 */
   {3},
   {4},
-  {5},	/* wis = 18 */
+  {5},    /* wis = 18 */
   {6},
   {6},  /* wis = 20 */
   {6},
@@ -787,15 +787,15 @@ int rev_dir[] =
 /** How much movement is lost moving through a particular sector type. */
 int movement_loss[] =
 {
-  1,	/* Inside     */
-  1,	/* City       */
-  2,	/* Field      */
-  3,	/* Forest     */
-  4,	/* Hills      */
-  6,	/* Mountains  */
-  4,	/* Swimming   */
-  1,	/* Unswimable */
-  1,	/* Flying     */
+  1,    /* Inside     */
+  1,    /* City       */
+  2,    /* Field      */
+  3,    /* Forest     */
+  4,    /* Hills      */
+  6,    /* Mountains  */
+  4,    /* Swimming   */
+  1,    /* Unswimable */
+  1,    /* Flying     */
   5   /* Underwater */
 };
 
@@ -812,7 +812,7 @@ const char *weekdays[] = {
 
 /** The names of the mud months. Not used in sprinttype(). */
 const char *month_name[] = {
-  "Month of Winter",		/* 0 */
+  "Month of Winter",        /* 0 */
   "Month of the Winter Wolf",
   "Month of the Frost Giant",
   "Month of the Old Forces",
@@ -934,13 +934,13 @@ const char *ibt_bits[] = {
 /* Various arrays we count so we can check the world files.  These
  * must be at the bottom of the file so they're pre-declared. */
   /** Number of defined room bit descriptions. */
-  size_t	room_bits_count = sizeof(room_bits) / sizeof(room_bits[0]) - 1,
+  size_t    room_bits_count = sizeof(room_bits) / sizeof(room_bits[0]) - 1,
   /** Number of defined action bit descriptions. */
-	action_bits_count = sizeof(action_bits) / sizeof(action_bits[0]) - 1,
-	/** Number of defined affected bit descriptions. */
-	affected_bits_count = sizeof(affected_bits) / sizeof(affected_bits[0]) - 1,
-	/** Number of defined extra bit descriptions. */
-	extra_bits_count = sizeof(extra_bits) / sizeof(extra_bits[0]) - 1,
-	/** Number of defined wear bit descriptions. */
-	wear_bits_count = sizeof(wear_bits) / sizeof(wear_bits[0]) - 1;
+    action_bits_count = sizeof(action_bits) / sizeof(action_bits[0]) - 1,
+    /** Number of defined affected bit descriptions. */
+    affected_bits_count = sizeof(affected_bits) / sizeof(affected_bits[0]) - 1,
+    /** Number of defined extra bit descriptions. */
+    extra_bits_count = sizeof(extra_bits) / sizeof(extra_bits[0]) - 1,
+    /** Number of defined wear bit descriptions. */
+    wear_bits_count = sizeof(wear_bits) / sizeof(wear_bits[0]) - 1;
 

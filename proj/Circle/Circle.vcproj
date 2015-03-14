@@ -470,6 +470,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\trackdata.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\utils.cpp"
 				>
 			</File>
@@ -612,6 +616,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\src\mudtypes.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\src\oasis.h"
 				>
 			</File>
@@ -653,6 +661,10 @@
 			</File>
 			<File
 				RelativePath="..\..\src\telnet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\trackdata.h"
 				>
 			</File>
 			<File

@@ -33,17 +33,17 @@ static struct olc_scmd_info_t {
   const char *text;
   int con_type;
 } olc_scmd_info[] = {
-  { "room",	CON_REDIT },
-  { "object",	CON_OEDIT },
-  { "zone",	CON_ZEDIT },
-  { "mobile",	CON_MEDIT },
-  { "shop",	CON_SEDIT },
+  { "room",    CON_REDIT },
+  { "object",    CON_OEDIT },
+  { "zone",    CON_ZEDIT },
+  { "mobile",    CON_MEDIT },
+  { "shop",    CON_SEDIT },
   { "config",   CON_CEDIT },
   { "trigger",  CON_TRIGEDIT },
   { "action",   CON_AEDIT },
   { "help",     CON_HEDIT },
   { "quest",     CON_QEDIT },
-  { "\n",	-1	  }
+  { "\n",    -1      }
 };
 */
 
@@ -148,14 +148,14 @@ void cleanup_olc(struct descriptor_data *d, byte cleanup_type)
   if (OLC_ACTION(d))  {
     switch(cleanup_type)  {
       case CLEANUP_ALL:
- 	free_action(OLC_ACTION(d));
- 	break;
+     free_action(OLC_ACTION(d));
+     break;
       case CLEANUP_STRUCTS:
         free(OLC_ACTION(d));
         break;
       default:
         /* Caller has screwed up */
- 	break;
+     break;
     }
   }
 
@@ -163,13 +163,13 @@ void cleanup_olc(struct descriptor_data *d, byte cleanup_type)
   if (OLC_HELP(d))  {
     switch(cleanup_type)  {
       case CLEANUP_ALL:
- 	free_help(OLC_HELP(d));
- 	break;
+     free_help(OLC_HELP(d));
+     break;
       case CLEANUP_STRUCTS:
         free(OLC_HELP(d));
         break;
       default:
- 	break;
+     break;
     }
   }
 

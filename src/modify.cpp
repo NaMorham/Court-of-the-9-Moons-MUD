@@ -118,14 +118,14 @@ void string_add(struct descriptor_data *d, char *str)
   else if (!(*d->str)) {
     if (strlen(str) + 3 > d->max_str) { /* \r\n\0 */
       send_to_char(d->character, "String too long - Truncated.\r\n");
-      strcpy(&str[d->max_str - 3], "\r\n");	/* strcpy: OK (size checked) */
+      strcpy(&str[d->max_str - 3], "\r\n");    /* strcpy: OK (size checked) */
       CREATE(*d->str, char, d->max_str);
-      strcpy(*d->str, str);	/* strcpy: OK (size checked) */
+      strcpy(*d->str, str);    /* strcpy: OK (size checked) */
       if (!using_improved_editor)
         action = STRINGADD_SAVE;
     } else {
       CREATE(*d->str, char, strlen(str) + 3);
-      strcpy(*d->str, str);	/* strcpy: OK (size checked) */
+      strcpy(*d->str, str);    /* strcpy: OK (size checked) */
     }
   } else {
     if (strlen(str) + strlen(*d->str) + 3 > d->max_str) { /* \r\n\0 */
@@ -136,7 +136,7 @@ void string_add(struct descriptor_data *d, char *str)
         action = STRINGADD_ACTION;    /* No appending \r\n\0, but still let them save. */
     } else {
       RECREATE(*d->str, char, strlen(*d->str) + strlen(str) + 3); /* \r\n\0 */
-      strcat(*d->str, str);	/* strcat: OK (size precalculated) */
+      strcat(*d->str, str);    /* strcat: OK (size precalculated) */
     }
   }
 
@@ -154,7 +154,7 @@ void string_add(struct descriptor_data *d, char *str)
         case CON_HEDIT:
         case CON_QEDIT:
         case CON_IBTEDIT:
-	  free(*d->str);
+      free(*d->str);
           *d->str = d->backstr;
           d->backstr = NULL;
           d->str = NULL;
@@ -282,15 +282,15 @@ ACMD(do_skillset)
 
   argument = one_argument(argument, name);
 
-  if (!*name) {			/* no arguments. print an informative text */
+  if (!*name) {            /* no arguments. print an informative text */
     send_to_char(ch, "Syntax: skillset <name> '<skill>' <value>\r\n"
-		"Skill being one of the following:\r\n");
+        "Skill being one of the following:\r\n");
     for (qend = 0, i = 0; i <= TOP_SPELL_DEFINE; i++) {
-      if (spell_info[i].name == unused_spellname)	/* This is valid. */
-	continue;
+      if (spell_info[i].name == unused_spellname)    /* This is valid. */
+    continue;
       send_to_char(ch, "%18s", spell_info[i].name);
       if (qend++ % 4 == 3)
-	send_to_char(ch, "\r\n");
+    send_to_char(ch, "\r\n");
     }
     if (qend % 4 != 0)
       send_to_char(ch, "\r\n");
@@ -321,13 +321,13 @@ ACMD(do_skillset)
     send_to_char(ch, "Skill must be enclosed in: ''\r\n");
     return;
   }
-  strcpy(helpbuf, (argument + 1));	/* strcpy: OK (MAX_INPUT_LENGTH <= MAX_STRING_LENGTH) */
+  strcpy(helpbuf, (argument + 1));    /* strcpy: OK (MAX_INPUT_LENGTH <= MAX_STRING_LENGTH) */
   helpbuf[qend - 1] = '\0';
   if ((skill = find_skill_num(helpbuf)) <= 0) {
     send_to_char(ch, "Unrecognized skill.\r\n");
     return;
   }
-  argument += qend + 1;		/* skip to next parameter */
+  argument += qend + 1;        /* skip to next parameter */
   argument = one_argument(argument, buf);
 
   if (!*buf) {
@@ -501,19 +501,19 @@ void show_string(struct descriptor_data *d, char *input)
     diff = d->showstr_vector[d->showstr_page + 1] - d->showstr_vector[d->showstr_page];
     if (diff > MAX_STRING_LENGTH - 3) /* 3=\r\n\0 */
       diff = MAX_STRING_LENGTH - 3;
-    strncpy(buffer, d->showstr_vector[d->showstr_page], diff);	/* strncpy: OK (size truncated above) */
+    strncpy(buffer, d->showstr_vector[d->showstr_page], diff);    /* strncpy: OK (size truncated above) */
     /* Fix for prompt overwriting last line in compact mode by Peter Ajamian */
     if (buffer[diff - 2] == '\r' && buffer[diff - 1]=='\n')
       buffer[diff] = '\0';
     else if (buffer[diff - 2] == '\n' && buffer[diff - 1] == '\r')
       /* This is backwards.  Fix it. */
-      strcpy(buffer + diff - 2, "\r\n");	/* strcpy: OK (size checked) */
+      strcpy(buffer + diff - 2, "\r\n");    /* strcpy: OK (size checked) */
     else if (buffer[diff - 1] == '\r' || buffer[diff - 1] == '\n')
       /* Just one of \r\n.  Overwrite it. */
-      strcpy(buffer + diff - 1, "\r\n");	/* strcpy: OK (size checked) */
+      strcpy(buffer + diff - 1, "\r\n");    /* strcpy: OK (size checked) */
     else
       /* Tack \r\n onto the end to fix bug with prompt overwriting last line. */
-      strcpy(buffer + diff, "\r\n");	/* strcpy: OK (size checked) */
+      strcpy(buffer + diff, "\r\n");    /* strcpy: OK (size checked) */
     send_to_char(d->character, "%s", buffer);
     d->showstr_page++;
   }

@@ -77,7 +77,7 @@
 #define C_NRM   2 
 #define C_CMP   3 
 #define _clrlevel(ch) (!IS_NPC(ch) ? (PRF_FLAGGED((ch), PRF_COLOR_1) ? 1 : 0) + \
-			(PRF_FLAGGED((ch), PRF_COLOR_2) ? 2 : 0) : 0) 
+            (PRF_FLAGGED((ch), PRF_COLOR_2) ? 2 : 0) : 0) 
 #define clr(ch,lvl) (_clrlevel(ch) >= (lvl)) 
 
 /* Player dependant foreground color codes */ 

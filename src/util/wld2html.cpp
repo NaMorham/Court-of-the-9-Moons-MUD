@@ -13,7 +13,7 @@
 #include "sysdep.h"
 
 
-#define NOWHERE    -1		/* nil reference for room-database         */
+#define NOWHERE    -1        /* nil reference for room-database         */
 
 /* The cardinal directions: used as index to room_data.dir_option[] */
 #define NORTH          0
@@ -23,20 +23,20 @@
 #define UP             4
 #define DOWN           5
 
-#define NUM_OF_DIRS	6
+#define NUM_OF_DIRS    6
 
 #define CREATE(result, type, number)  do {\
-	if (!((result) = (type *) calloc ((number), sizeof(type))))\
-		{ perror("malloc failure"); abort(); } } while(0)
+    if (!((result) = (type *) calloc ((number), sizeof(type))))\
+        { perror("malloc failure"); abort(); } } while(0)
 
 
 /* Exit info: used in room_data.dir_option.exit_info */
-#define EX_ISDOOR		(1 << 0)	/* Exit is a door          */
-#define EX_CLOSED		(1 << 1)	/* The door is closed      */
-#define EX_LOCKED		(1 << 2)	/* The door is locked      */
-#define EX_PICKPROOF		(1 << 3)	/* Lock can't be picked    */
+#define EX_ISDOOR        (1 << 0)    /* Exit is a door          */
+#define EX_CLOSED        (1 << 1)    /* The door is closed      */
+#define EX_LOCKED        (1 << 2)    /* The door is locked      */
+#define EX_PICKPROOF        (1 << 3)    /* Lock can't be picked    */
 
-#define MAX_STRING_LENGTH	8192
+#define MAX_STRING_LENGTH    8192
 
 typedef signed char sbyte;
 typedef unsigned char ubyte;
@@ -61,28 +61,28 @@ int real_room(int virtual, int reference);
 
 
 struct room_direction_data {
-  char *general_description;	/* When look DIR.                        */
+  char *general_description;    /* When look DIR.                        */
 
-  char *keyword;		/* for open/close                        */
+  char *keyword;        /* for open/close                        */
 
-  sh_int exit_info;		/* Exit info                             */
-  obj_num key;			/* Key's number (-1 for no key)          */
-  room_num to_room;		/* Where direction leads (NOWHERE)       */
+  sh_int exit_info;        /* Exit info                             */
+  obj_num key;            /* Key's number (-1 for no key)          */
+  room_num to_room;        /* Where direction leads (NOWHERE)       */
 };
 
 struct extra_descr_data {
-  char *keyword;		/* Keyword in look/examine          */
-  char *description;		/* What to see                      */
-  struct extra_descr_data *next;	/* Next in list                     */
+  char *keyword;        /* Keyword in look/examine          */
+  char *description;        /* What to see                      */
+  struct extra_descr_data *next;    /* Next in list                     */
 };
 
 struct reset_com {
-  char command;			/* current command                      */
+  char command;            /* current command                      */
 
-  bool if_flag;			/* if TRUE: exe only if preceding exe'd */
-  int arg1;			/* */
-  int arg2;			/* Arguments to the command             */
-  int arg3;			/* */
+  bool if_flag;            /* if TRUE: exe only if preceding exe'd */
+  int arg1;            /* */
+  int arg2;            /* Arguments to the command             */
+  int arg3;            /* */
 
   /*
    * Commands:              * 'M': Read a mobile     * 'O': Read an object    *
@@ -94,14 +94,14 @@ struct reset_com {
 
 
 struct zone_data {
-  char *name;			/* name of this zone                  */
-  int lifespan;			/* how long between resets (minutes)  */
-  int age;			/* current age of this zone (minutes) */
-  int top;			/* upper limit for rooms in this zone */
+  char *name;            /* name of this zone                  */
+  int lifespan;            /* how long between resets (minutes)  */
+  int age;            /* current age of this zone (minutes) */
+  int top;            /* upper limit for rooms in this zone */
 
-  int reset_mode;		/* conditions for reset (see below)   */
-  int number;			/* virtual number of this zone    */
-  struct reset_com *cmd;	/* command table for reset                */
+  int reset_mode;        /* conditions for reset (see below)   */
+  int number;            /* virtual number of this zone    */
+  struct reset_com *cmd;    /* command table for reset                */
 
   /*
    * Reset mode:                              * 0: Don't reset, and don't
@@ -112,16 +112,16 @@ struct zone_data {
 
 /* ================== Memory Structure for room ======================= */
 struct room_data {
-  room_num number;		/* Rooms number (vnum)                */
-  sh_int zone;			/* Room zone (for resetting)          */
-  int sector_type;		/* sector type (move/hide)            */
-  char *name;			/* Rooms name 'You are ...'           */
-  char *description;		/* Shown when entered                 */
-  struct extra_descr_data *ex_description;	/* for examine/look       */
-  struct room_direction_data *dir_option[NUM_OF_DIRS];	/* Directions */
-  int room_flags;		/* DEATH,DARK ... etc                 */
+  room_num number;        /* Rooms number (vnum)                */
+  sh_int zone;            /* Room zone (for resetting)          */
+  int sector_type;        /* sector type (move/hide)            */
+  char *name;            /* Rooms name 'You are ...'           */
+  char *description;        /* Shown when entered                 */
+  struct extra_descr_data *ex_description;    /* for examine/look       */
+  struct room_direction_data *dir_option[NUM_OF_DIRS];    /* Directions */
+  int room_flags;        /* DEATH,DARK ... etc                 */
 
-  byte light;			/* Number of lightsources in room     */
+  byte light;            /* Number of lightsources in room     */
 };
 
 /* ====================================================================== */
@@ -131,8 +131,8 @@ struct room_data {
 *  declarations of most of the 'global' variables                         *
 ************************************************************************ */
 
-struct room_data *world = NULL;	/* array of rooms                */
-int top_of_world = 0;		/* ref to top element of world   */
+struct room_data *world = NULL;    /* array of rooms                */
+int top_of_world = 0;        /* ref to top element of world   */
 
 
 
@@ -203,12 +203,12 @@ void write_output(void)
     found = 0;
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (world[i].dir_option[door] &&
-	  world[i].dir_option[door]->to_room != NOWHERE) {
-	found = 1;
-	fprintf(fl, "<a href = \"%d.html\"> %s to %s</a> <p>\n",
-		world[world[i].dir_option[door]->to_room].number,
-		dir_names[door],
-		world[world[i].dir_option[door]->to_room].name);
+      world[i].dir_option[door]->to_room != NOWHERE) {
+    found = 1;
+    fprintf(fl, "<a href = \"%d.html\"> %s to %s</a> <p>\n",
+        world[world[i].dir_option[door]->to_room].number,
+        dir_names[door],
+        world[world[i].dir_option[door]->to_room].name);
       }
     if (!found)
       fprintf(fl, "None!");
@@ -263,13 +263,13 @@ void discrete_load(FILE * fl)
     if (*line == '#') {
       last = nr;
       if (sscanf(line, "#%d", &nr) != 1) {
-	fprintf(stderr, "Format error after room #%d\n", last);
-	exit(1);
+    fprintf(stderr, "Format error after room #%d\n", last);
+    exit(1);
       }
       if (nr >= 99999)
-	return;
+    return;
       else
-	parse_room(fl, nr);
+    parse_room(fl, nr);
     } else {
       fprintf(stderr, "Format error in world file near room #%d\n", nr);
       fprintf(stderr, "Offending line: '%s'\n", line);
@@ -323,7 +323,7 @@ void parse_room(FILE * fl, int virtual_nr)
   world[room_nr].room_flags = asciiflag_conv(flags);
   world[room_nr].sector_type = t[2];
 
-  world[room_nr].light = 0;	/* Zero light sources */
+  world[room_nr].light = 0;    /* Zero light sources */
 
   for (i = 0; i < NUM_OF_DIRS; i++)
     world[room_nr].dir_option[i] = NULL;
@@ -348,7 +348,7 @@ void parse_room(FILE * fl, int virtual_nr)
       new_descr->next = world[room_nr].ex_description;
       world[room_nr].ex_description = new_descr;
       break;
-    case 'S':			/* end of room */
+    case 'S':            /* end of room */
       top_of_world = room_nr++;
       return;
       break;
@@ -402,16 +402,16 @@ void renum_world(void)
   for (room = 0; room <= top_of_world; room++)
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (world[room].dir_option[door])
-	if (world[room].dir_option[door]->to_room != NOWHERE)
-	  world[room].dir_option[door]->to_room =
-	      real_room(world[room].dir_option[door]->to_room,
-			world[room].number);
+    if (world[room].dir_option[door]->to_room != NOWHERE)
+      world[room].dir_option[door]->to_room =
+          real_room(world[room].dir_option[door]->to_room,
+            world[room].number);
 }
 
 
 
 /*************************************************************************
-*  procedures for resetting, both play-time and boot-time	 	 *
+*  procedures for resetting, both play-time and boot-time          *
 *********************************************************************** */
 
 /* read and allocate space for a '~'-terminated string from a given file */
@@ -426,7 +426,7 @@ char *fread_string(FILE * fl, char *error)
   do {
     if (!fgets(tmp, 512, fl)) {
       fprintf(stderr, "SYSERR: fread_string: format error at or near %s\n",
-	      error);
+          error);
       exit(1);
     }
     /* If there is a '~', end the string; else put an "\r\n" over the '\n'. */

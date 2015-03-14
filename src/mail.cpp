@@ -42,8 +42,8 @@ static int mail_recip_ok(const char *name)
 
 static void free_mail_record(struct mail_t *record)
 {
-	if (record->body)
-		free(record->body);
+    if (record->body)
+        free(record->body);
   free(record);
 }
 
@@ -55,12 +55,12 @@ static struct mail_t *read_mail_record(FILE *mail_file)
   struct mail_t *record;
 
   if (!get_line(mail_file, line))
-  	return NULL;
+      return NULL;
 
   if (sscanf(line, "### %ld %ld %ld", &recipient, &sender, (long *)&sent_time) != 3) {
-  	log("Mail system - fatal error - malformed mail header");
-  	log("Line was: %s", line);
-  	return NULL;
+      log("Mail system - fatal error - malformed mail header");
+      log("Line was: %s", line);
+      return NULL;
   }
 
   CREATE(record, struct mail_t, 1);
@@ -75,8 +75,8 @@ static struct mail_t *read_mail_record(FILE *mail_file)
 
 static void write_mail_record(FILE *mail_file, struct mail_t *record)
 {
-	fprintf(mail_file, "### %ld %ld %ld\n"
-	                   "%s~\n",
+    fprintf(mail_file, "### %ld %ld %ld\n"
+                       "%s~\n",
                      record->recipient,
                      record->sender,
                      (long)record->sent_time,
@@ -109,8 +109,8 @@ int scan_file(void)
   }
 
   fclose(mail_file);
- 	log("   Mail file read -- %d messages.", count);
- 	return TRUE;
+     log("   Mail file read -- %d messages.", count);
+     return TRUE;
 }
 
 /* int has_mail(long #1)
@@ -131,10 +131,10 @@ int has_mail(long recipient)
   record = read_mail_record(mail_file);
 
   while (record) {
-  	if (record->recipient == recipient) {
-  		free_mail_record(record);
-  		fclose(mail_file);
-  		return TRUE;
+      if (record->recipient == recipient) {
+          free_mail_record(record);
+          fclose(mail_file);
+          return TRUE;
     }
     free_mail_record(record);
     record = read_mail_record(mail_file);
@@ -198,10 +198,10 @@ char *read_delete(long recipient)
   record = read_mail_record(mail_file);
 
   while (record) {
-  	if (!record_to_keep && record->recipient == recipient) {
-  		record_to_keep = record;
-  		record = read_mail_record(mail_file);
-  		continue; /* don't write and free this one just yet */
+      if (!record_to_keep && record->recipient == recipient) {
+          record_to_keep = record;
+          record = read_mail_record(mail_file);
+          continue; /* don't write and free this one just yet */
     }
     write_mail_record(new_file, record);
     free_mail_record(record);
@@ -209,7 +209,7 @@ char *read_delete(long recipient)
   }
 
   if (!record_to_keep)
-  	sprintf(buf, "Mail system error - please report");
+      sprintf(buf, "Mail system error - please report");
   else {
     char *tmstr, *from, *to;
 
@@ -219,7 +219,7 @@ char *read_delete(long recipient)
     from = get_name_by_id(record_to_keep->sender);
     to = get_name_by_id(record_to_keep->recipient);
 
- 		snprintf(buf, sizeof(buf),
+         snprintf(buf, sizeof(buf),
              " * * * * tbaMUD Mail System * * * *\r\n"
              "Date: %s\r\n"
              "To  : %s\r\n"
@@ -247,7 +247,7 @@ char *read_delete(long recipient)
 SPECIAL(postmaster)
 {
   if (!ch->desc || IS_NPC(ch))
-    return (0);			/* so mobs don't get caught here */
+    return (0);            /* so mobs don't get caught here */
 
   if (!(CMD_IS("mail") || CMD_IS("check") || CMD_IS("receive")))
     return (0);
@@ -271,7 +271,7 @@ SPECIAL(postmaster)
 }
 
 static void postmaster_send_mail(struct char_data *ch, struct char_data *mailman,
-			  int cmd, char *arg)
+              int cmd, char *arg)
 {
   long recipient;
   char buf[MAX_INPUT_LENGTH], **mailwrite;
@@ -283,34 +283,34 @@ static void postmaster_send_mail(struct char_data *ch, struct char_data *mailman
   }
   one_argument(arg, buf);
 
-  if (!*buf) {			/* you'll get no argument from me! */
+  if (!*buf) {            /* you'll get no argument from me! */
     act("$n tells you, 'You need to specify an addressee!'",
-	FALSE, mailman, 0, ch, TO_VICT);
+    FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
   if (GET_GOLD(ch) < STAMP_PRICE && GET_LEVEL(ch) < LVL_IMMORT) {
     snprintf(buf, sizeof(buf), "$n tells you, 'A stamp costs %d coin%s.'\r\n"
-	    "$n tells you, '...which I see you can't afford.'", STAMP_PRICE,
+        "$n tells you, '...which I see you can't afford.'", STAMP_PRICE,
             STAMP_PRICE == 1 ? "" : "s");
     act(buf, FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
   if ((recipient = get_id_by_name(buf)) < 0 || !mail_recip_ok(buf)) {
     act("$n tells you, 'No one by that name is registered here!'",
-	FALSE, mailman, 0, ch, TO_VICT);
+    FALSE, mailman, 0, ch, TO_VICT);
     return;
   }
   act("$n starts to write some mail.", TRUE, ch, 0, 0, TO_ROOM);
   snprintf(buf, sizeof(buf), "$n tells you, 'I'll take %d coins for the stamp.'\r\n"
        "$n tells you, 'Write your message. (/s saves /h for help).'",
-	  STAMP_PRICE);
+      STAMP_PRICE);
 
   act(buf, FALSE, mailman, 0, ch, TO_VICT);
 
   if (GET_LEVEL(ch) < LVL_IMMORT)
     GET_GOLD(ch) -= STAMP_PRICE;
 
-  SET_BIT_AR(PLR_FLAGS(ch), PLR_MAILING);	/* string_write() sets writing. */
+  SET_BIT_AR(PLR_FLAGS(ch), PLR_MAILING);    /* string_write() sets writing. */
 
   /* Start writing! */
   CREATE(mailwrite, char *, 1);
@@ -318,7 +318,7 @@ static void postmaster_send_mail(struct char_data *ch, struct char_data *mailman
 }
 
 static void postmaster_check_mail(struct char_data *ch, struct char_data *mailman,
-			  int cmd, char *arg)
+              int cmd, char *arg)
 {
   if (has_mail(GET_IDNUM(ch)))
     act("$n tells you, 'You have mail waiting.'", FALSE, mailman, 0, ch, TO_VICT);
@@ -327,7 +327,7 @@ static void postmaster_check_mail(struct char_data *ch, struct char_data *mailma
 }
 
 static void postmaster_receive_mail(struct char_data *ch, struct char_data *mailman,
-			  int cmd, char *arg)
+              int cmd, char *arg)
 {
   char buf[256];
   struct obj_data *obj;
@@ -356,7 +356,7 @@ static void postmaster_receive_mail(struct char_data *ch, struct char_data *mail
 
     if (obj->action_description == NULL)
       obj->action_description =
-	strdup("Mail system error - please report.  Error #11.\r\n");
+    strdup("Mail system error - please report.  Error #11.\r\n");
 
     obj_to_char(obj, ch);
 

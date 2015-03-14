@@ -114,7 +114,7 @@ char *CAP(char *txt)
  * function, in case your system does not have strlcpy. */
 size_t strlcpy(char *dest, const char *source, size_t totalsize)
 {
-  strncpy(dest, source, totalsize - 1);	/* strncpy: OK (we must assume 'totalsize' is correct) */
+  strncpy(dest, source, totalsize - 1);    /* strncpy: OK (we must assume 'totalsize' is correct) */
   dest[totalsize - 1] = '\0';
   return strlen(source);
 }
@@ -158,7 +158,7 @@ int str_cmp(const char *arg1, const char *arg2)
 
   for (i = 0; arg1[i] || arg2[i]; i++)
     if ((chk = LOWER(arg1[i]) - LOWER(arg2[i])) != 0)
-      return (chk);	/* not equal */
+      return (chk);    /* not equal */
 
   return (0);
 }
@@ -179,7 +179,7 @@ int strn_cmp(const char *arg1, const char *arg2, int n)
 
   for (i = 0; (arg1[i] || arg2[i]) && (n > 0); i++, n--)
     if ((chk = LOWER(arg1[i]) - LOWER(arg2[i])) != 0)
-      return (chk);	/* not equal */
+      return (chk);    /* not equal */
 
   return (0);
 }
@@ -265,7 +265,7 @@ void mudlog(int type, int level, int file, const char *str, ...)
   va_list args;
 
   if (str == NULL)
-    return;	/* eh, oh well. */
+    return;    /* eh, oh well. */
 
   if (file) {
     va_start(args, str);
@@ -276,11 +276,11 @@ void mudlog(int type, int level, int file, const char *str, ...)
   if (level < 0)
     return;
 
-  strcpy(buf, "[ ");	/* strcpy: OK */
+  strcpy(buf, "[ ");    /* strcpy: OK */
   va_start(args, str);
   vsnprintf(buf + 2, sizeof(buf) - 6, str, args);
   va_end(args);
-  strcat(buf, " ]\r\n");	/* strcat: OK */
+  strcat(buf, " ]\r\n");    /* strcat: OK */
 
   for (i = descriptor_list; i; i = i->next) {
     if (STATE(i) != CON_PLAYING || IS_NPC(i->character)) /* switch */
@@ -437,10 +437,10 @@ struct time_info_data *real_time_passed(time_t t2, time_t t1)
 
   secs = t2 - t1;
 
-  now.hours = (secs / SECS_PER_REAL_HOUR) % 24;	/* 0..23 hours */
+  now.hours = (secs / SECS_PER_REAL_HOUR) % 24;    /* 0..23 hours */
   secs -= SECS_PER_REAL_HOUR * now.hours;
 
-  now.day = (secs / SECS_PER_REAL_DAY);	/* 0..34 days  */
+  now.day = (secs / SECS_PER_REAL_DAY);    /* 0..34 days  */
   /* secs -= SECS_PER_REAL_DAY * now.day; - Not used. */
 
   now.month = -1;
@@ -462,16 +462,16 @@ struct time_info_data *mud_time_passed(time_t t2, time_t t1)
 
   secs = t2 - t1;
 
-  now.hours = (secs / SECS_PER_MUD_HOUR) % 24;	/* 0..23 hours */
+  now.hours = (secs / SECS_PER_MUD_HOUR) % 24;    /* 0..23 hours */
   secs -= SECS_PER_MUD_HOUR * now.hours;
 
-  now.day = (secs / SECS_PER_MUD_DAY) % 35;	/* 0..34 days  */
+  now.day = (secs / SECS_PER_MUD_DAY) % 35;    /* 0..34 days  */
   secs -= SECS_PER_MUD_DAY * now.day;
 
-  now.month = (secs / SECS_PER_MUD_MONTH) % 17;	/* 0..16 months */
+  now.month = (secs / SECS_PER_MUD_MONTH) % 17;    /* 0..16 months */
   secs -= SECS_PER_MUD_MONTH * now.month;
 
-  now.year = (secs / SECS_PER_MUD_YEAR);	/* 0..XX? years */
+  now.year = (secs / SECS_PER_MUD_YEAR);    /* 0..XX? years */
 
   return (&now);
 }
@@ -503,7 +503,7 @@ struct time_info_data *age(struct char_data *ch)
 
   player_age = *mud_time_passed(time(0), ch->player.time.birth);
 
-  player_age.year += 17;	/* All players start at 17 */
+  player_age.year += 17;    /* All players start at 17 */
 
   return (&player_age);
 }
@@ -538,61 +538,61 @@ bool circle_follow(struct char_data *ch, struct char_data *victim)
  * */
 void stop_follower(struct char_data *ch)
 {
-	struct follow_type *j, *k;
+    struct follow_type *j, *k;
 
-	/* Makes sure this function is not called when it shouldn't be called. */
-	if (ch->master == NULL) 
-	{
-		log("ERROR: NULL master passed to stop_follower [%d:%s]", __LINE__, __FILE__);
-		core_dump();
-		return;
-	}
+    /* Makes sure this function is not called when it shouldn't be called. */
+    if (ch->master == NULL) 
+    {
+        log("ERROR: NULL master passed to stop_follower [%d:%s]", __LINE__, __FILE__);
+        core_dump();
+        return;
+    }
 
-	if (AFF_FLAGGED(ch, AFF_CHARM)) 
-	{
-		act("You realize that $N is a jerk!", FALSE, ch, 0, ch->master, TO_CHAR);
-		act("$n realizes that $N is a jerk!", FALSE, ch, 0, ch->master, TO_NOTVICT);
-		act("$n hates your guts!", FALSE, ch, 0, ch->master, TO_VICT);
-		if (affected_by_spell(ch, SPELL_CHARM))
-		{
-			affect_from_char(ch, SPELL_CHARM);
-		}
-	} 
-	else 
-	{
-		act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
-		act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
-		act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
-	}
+    if (AFF_FLAGGED(ch, AFF_CHARM)) 
+    {
+        act("You realize that $N is a jerk!", FALSE, ch, 0, ch->master, TO_CHAR);
+        act("$n realizes that $N is a jerk!", FALSE, ch, 0, ch->master, TO_NOTVICT);
+        act("$n hates your guts!", FALSE, ch, 0, ch->master, TO_VICT);
+        if (affected_by_spell(ch, SPELL_CHARM))
+        {
+            affect_from_char(ch, SPELL_CHARM);
+        }
+    } 
+    else 
+    {
+        act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
+        act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
+        act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
+    }
 
-	if (ch->master->followers->follower == ch) // Head of follower-list?
-	{
-		// get the head of the list
-		k = ch->master->followers;
-		// make the next char the head of the list
-		ch->master->followers = k->next;
-		// unlink the char to be removed
-		k->next = NULL; // not needed, just neat
-		free(k);
-		k = NULL;
-	} 
-	else 
-	{			// locate follower who is not head of list
-		for (k = ch->master->followers; k->next->follower != ch; k = k->next)
-		{
-			// nothing to do
-		}
+    if (ch->master->followers->follower == ch) // Head of follower-list?
+    {
+        // get the head of the list
+        k = ch->master->followers;
+        // make the next char the head of the list
+        ch->master->followers = k->next;
+        // unlink the char to be removed
+        k->next = NULL; // not needed, just neat
+        free(k);
+        k = NULL;
+    } 
+    else 
+    {            // locate follower who is not head of list
+        for (k = ch->master->followers; k->next->follower != ch; k = k->next)
+        {
+            // nothing to do
+        }
 
-		j = k->next;
-		k->next = j->next;
-		free(j);
-		j = NULL;
-	}
+        j = k->next;
+        k->next = j->next;
+        free(j);
+        j = NULL;
+    }
 
-	// now we have no master, so we are not part of a group
-	ch->master = NULL;
-	REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_CHARM);
-	REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
+    // now we have no master, so we are not part of a group
+    ch->master = NULL;
+    REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_CHARM);
+    REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
 }
 
 /** Finds the number of follows that are following, and charmed by, the
@@ -602,17 +602,17 @@ void stop_follower(struct char_data *ch)
  */
 int num_followers_charmed(struct char_data *ch)
 {
-	struct follow_type *lackey;
-	int total = 0;
+    struct follow_type *lackey;
+    int total = 0;
 
-	for (lackey = ch->followers; lackey; lackey = lackey->next)
-	{
-		if (AFF_FLAGGED(lackey->follower, AFF_CHARM) && lackey->follower->master == ch)
-		{
-			total++;
-		}
-	}
-	return (total);
+    for (lackey = ch->followers; lackey; lackey = lackey->next)
+    {
+        if (AFF_FLAGGED(lackey->follower, AFF_CHARM) && lackey->follower->master == ch)
+        {
+            total++;
+        }
+    }
+    return (total);
 }
 
 /** Called when a character that follows/is followed dies. If the character
@@ -623,17 +623,17 @@ int num_followers_charmed(struct char_data *ch)
  * */
 void die_follower(struct char_data *ch)
 {
-	struct follow_type *j, *k;
+    struct follow_type *j, *k;
 
-	if (ch->master)
-	{
-		stop_follower(ch);
-	}
+    if (ch->master)
+    {
+        stop_follower(ch);
+    }
 
-	for (k = ch->followers; k; k = j) {
-		j = k->next;
-		stop_follower(k->follower);
-	}
+    for (k = ch->followers; k; k = j) {
+        j = k->next;
+        stop_follower(k->follower);
+    }
 }
 
 /** Adds a new follower to a group.
@@ -719,7 +719,7 @@ int get_filename(char *filename, size_t fbufsize, int mode, const char *orig_nam
 
   if (orig_name == NULL || *orig_name == '\0' || filename == NULL) {
     log("SYSERR: NULL pointer or empty string passed to get_filename(), %p or %p.",
-		orig_name, filename);
+        orig_name, filename);
     return (0);
   }
 
@@ -802,7 +802,7 @@ void core_dump_real(const char *who, int line)
 {
   log("SYSERR: Assertion failed at %s:%d!", who, line);
 
-#if 1	/* By default, let's not litter. */
+#if 1    /* By default, let's not litter. */
 #if defined(CIRCLE_UNIX)
   /* These would be duplicated otherwise...make very sure. */
   fflush(stdout);
@@ -828,10 +828,10 @@ int count_color_chars(char *string)
   int i, len;
   int num = 0;
 
-	if (!string || !*string)
-		return 0;
+    if (!string || !*string)
+        return 0;
 
-	len = strlen(string);
+    len = strlen(string);
   for (i = 0; i < len; i++) {
     while (string[i] == '@') {
       if (string[i + 1] == '@')
@@ -986,7 +986,7 @@ void column_list(struct char_data *ch, int num_cols, const char **list, int list
 
    /* auto columns case */
    if (num_cols == 0) {
-	   num_cols = (IS_NPC(ch) ? 80 : GET_SCREEN_WIDTH(ch)) / (max_len + (show_nums ? 5 : 1));
+       num_cols = (IS_NPC(ch) ? 80 : GET_SCREEN_WIDTH(ch)) / (max_len + (show_nums ? 5 : 1));
    }
 
    /* Ensure that the number of columns is in the range 1-10 */

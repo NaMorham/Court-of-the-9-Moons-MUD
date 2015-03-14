@@ -38,11 +38,11 @@ struct bfs_queue_struct {
 static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;
 
 /* Utility macros */
-#define MARK(room)	(SET_BIT_AR(ROOM_FLAGS(room), ROOM_BFS_MARK))
-#define UNMARK(room)	(REMOVE_BIT_AR(ROOM_FLAGS(room), ROOM_BFS_MARK))
-#define IS_MARKED(room)	(ROOM_FLAGGED(room, ROOM_BFS_MARK))
-#define TOROOM(x, y)	(world[(x)].dir_option[(y)]->to_room)
-#define IS_CLOSED(x, y)	(EXIT_FLAGGED(world[(x)].dir_option[(y)], EX_CLOSED))
+#define MARK(room)    (SET_BIT_AR(ROOM_FLAGS(room), ROOM_BFS_MARK))
+#define UNMARK(room)    (REMOVE_BIT_AR(ROOM_FLAGS(room), ROOM_BFS_MARK))
+#define IS_MARKED(room)    (ROOM_FLAGGED(room, ROOM_BFS_MARK))
+#define TOROOM(x, y)    (world[(x)].dir_option[(y)]->to_room)
+#define IS_CLOSED(x, y)    (EXIT_FLAGGED(world[(x)].dir_option[(y)], EX_CLOSED))
 
 static int VALID_EDGE(room_rnum x, int y)
 {
@@ -126,10 +126,10 @@ static int find_first_step(room_rnum src, room_rnum target)
       return (curr_dir);
     } else {
       for (curr_dir = 0; curr_dir < NUM_OF_DIRS; curr_dir++)
-	if (VALID_EDGE(queue_head->room, curr_dir)) {
-	  MARK(TOROOM(queue_head->room, curr_dir));
-	  bfs_enqueue(TOROOM(queue_head->room, curr_dir), queue_head->dir);
-	}
+    if (VALID_EDGE(queue_head->room, curr_dir)) {
+      MARK(TOROOM(queue_head->room, curr_dir));
+      bfs_enqueue(TOROOM(queue_head->room, curr_dir), queue_head->dir);
+    }
       bfs_dequeue();
     }
   }
@@ -189,7 +189,7 @@ ACMD(do_track)
   case BFS_NO_PATH:
     send_to_char(ch, "You can't sense a trail to %s from here.\r\n", HMHR(vict));
     break;
-  default:	/* Success! */
+  default:    /* Success! */
     send_to_char(ch, "You sense a trail %s from here!\r\n", dirs[dir]);
     break;
   }

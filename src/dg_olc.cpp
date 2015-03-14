@@ -210,13 +210,13 @@ static void trigedit_disp_menu(struct descriptor_data *d)
   "%sQ)%s Quit\r\n"
   "Enter Choice :",
 
-  grn, OLC_NUM(d), nrm, 			/* vnum on the title line */
-  grn, nrm, yel, GET_TRIG_NAME(trig),		/* name                   */
-  grn, nrm, yel, attach_type,			/* attach type            */
-  grn, nrm, yel, trgtypes,			/* greet/drop/etc         */
-  grn, nrm, yel, trig->narg,			/* numeric arg            */
+  grn, OLC_NUM(d), nrm,             /* vnum on the title line */
+  grn, nrm, yel, GET_TRIG_NAME(trig),        /* name                   */
+  grn, nrm, yel, attach_type,            /* attach type            */
+  grn, nrm, yel, trgtypes,            /* greet/drop/etc         */
+  grn, nrm, yel, trig->narg,            /* numeric arg            */
   grn, nrm, yel, trig->arglist?trig->arglist:"",/* strict arg             */
-  grn, nrm, cyn, OLC_STORAGE(d),		/* the command list       */
+  grn, nrm, cyn, OLC_STORAGE(d),        /* the command list       */
   grn, nrm, grn, nrm);                          /* quit colors            */
 
   OLC_MODE(d) = TRIGEDIT_MAIN_MENU;
@@ -752,21 +752,21 @@ int dg_script_edit_parse(struct descriptor_data *d, char *arg)
       switch(tolower(*arg)) {
         case 'q':
           /* This was buggy. First we created a copy of a thing, but maintained
-	   * pointers to scripts, then if we altered the scripts, we freed the 
-	   * pointers and added new ones to the OLC_THING. If we then choose NOT
-	   * to save the changes, the pointers in the original pointed to 
-	   * garbage. If we saved changes the pointers were updated correctly.
-	   * Solution: Here we just point the working copies to the new 
-	   * proto_scripts. We only update the original when choosing to save 
-	   * internally, then free the unused memory there. -Welcor
-	   * Thanks to Jeremy Stanley and Torgny Bjers for the bug report.
-	   * After updating to OasisOLC 2.0.3 I discovered some malfunctions
-	   * in this code, so I restructured it a bit. Now things work like 
-	   * this: OLC_SCRIPT(d) is assigned a copy of the edited things' 
-	   * proto_script. OLC_OBJ(d), etc.. are initalized with proto_script =
-	   * NULL; On save, the saved copy is updated with OLC_SCRIPT(d) as new
-	   * proto_script (freeing the old one). On quit/nosave, OLC_SCRIPT is 
-	   * free()'d, and the prototype not touched. */
+       * pointers to scripts, then if we altered the scripts, we freed the 
+       * pointers and added new ones to the OLC_THING. If we then choose NOT
+       * to save the changes, the pointers in the original pointed to 
+       * garbage. If we saved changes the pointers were updated correctly.
+       * Solution: Here we just point the working copies to the new 
+       * proto_scripts. We only update the original when choosing to save 
+       * internally, then free the unused memory there. -Welcor
+       * Thanks to Jeremy Stanley and Torgny Bjers for the bug report.
+       * After updating to OasisOLC 2.0.3 I discovered some malfunctions
+       * in this code, so I restructured it a bit. Now things work like 
+       * this: OLC_SCRIPT(d) is assigned a copy of the edited things' 
+       * proto_script. OLC_OBJ(d), etc.. are initalized with proto_script =
+       * NULL; On save, the saved copy is updated with OLC_SCRIPT(d) as new
+       * proto_script (freeing the old one). On quit/nosave, OLC_SCRIPT is 
+       * free()'d, and the prototype not touched. */
           return 0;
         case 'n':
           write_to_output(d, "\r\nPlease enter position, vnum   (ex: 1, 200):");

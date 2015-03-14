@@ -60,15 +60,15 @@ room_rnum add_room(struct room_data *room)
 
       /* People in this room must have their in_rooms moved up one. */
       for (tch = world[i].people; tch; tch = tch->next_in_room)
-	IN_ROOM(tch) += (IN_ROOM(tch) != NOWHERE);
+    IN_ROOM(tch) += (IN_ROOM(tch) != NOWHERE);
 
       /* Move objects too. */
       for (tobj = world[i].contents; tobj; tobj = tobj->next_content)
-	IN_ROOM(tobj) += (IN_ROOM(tobj) != NOWHERE);
+    IN_ROOM(tobj) += (IN_ROOM(tobj) != NOWHERE);
     }
   }
   if (!found) {
-    world[0] = *room;	/* Last place, in front. */
+    world[0] = *room;    /* Last place, in front. */
     copy_room_strings(&world[0], room);
   }
 
@@ -83,16 +83,16 @@ room_rnum add_room(struct room_data *room)
       case 'O':
       case 'T':
       case 'V':
-	ZCMD(i, j).arg3 += (ZCMD(i, j).arg3 != NOWHERE && ZCMD(i, j).arg3 >= found);
-	break;
+    ZCMD(i, j).arg3 += (ZCMD(i, j).arg3 != NOWHERE && ZCMD(i, j).arg3 >= found);
+    break;
       case 'D':
       case 'R':
-	ZCMD(i, j).arg1 += (ZCMD(i, j).arg1 != NOWHERE && ZCMD(i, j).arg1 >= found);
+    ZCMD(i, j).arg1 += (ZCMD(i, j).arg1 != NOWHERE && ZCMD(i, j).arg1 >= found);
       case 'G':
       case 'P':
       case 'E':
       case '*':
-	/* Known zone entries we don't care about. */
+    /* Known zone entries we don't care about. */
         break;
       default:
         mudlog(BRF, LVL_GOD, TRUE, "SYSERR: GenOLC: add_room: Unknown zone entry found!");
@@ -109,7 +109,7 @@ room_rnum add_room(struct room_data *room)
     i--;
     for (j = 0; j < NUM_OF_DIRS; j++)
       if (W_EXIT(i, j) && W_EXIT(i, j)->to_room != NOWHERE)
-	W_EXIT(i, j)->to_room += (W_EXIT(i, j)->to_room >= found);
+    W_EXIT(i, j)->to_room += (W_EXIT(i, j)->to_room >= found);
   } while (i > 0);
 
   add_to_save_list(zone_table[room->zone].number, SL_WLD);
@@ -126,7 +126,7 @@ int delete_room(room_rnum rnum)
   struct obj_data *obj, *next_obj;
   struct room_data *room;
 
-  if (rnum <= 0 || rnum > top_of_world)	/* Can't delete void yet. */
+  if (rnum <= 0 || rnum > top_of_world)    /* Can't delete void yet. */
     return FALSE;
 
   room = &world[rnum];
@@ -138,15 +138,15 @@ int delete_room(room_rnum rnum)
 
   if (r_mortal_start_room == rnum) {
     log("WARNING: GenOLC: delete_room: Deleting mortal start room!");
-    r_mortal_start_room = 0;	/* The Void */
+    r_mortal_start_room = 0;    /* The Void */
   }
   if (r_immort_start_room == rnum) {
     log("WARNING: GenOLC: delete_room: Deleting immortal start room!");
-    r_immort_start_room = 0;	/* The Void */
+    r_immort_start_room = 0;    /* The Void */
   }
   if (r_frozen_start_room == rnum) {
     log("WARNING: GenOLC: delete_room: Deleting frozen start room!");
-    r_frozen_start_room = 0;	/* The Void */
+    r_frozen_start_room = 0;    /* The Void */
   }
 
   /* Dump the contents of this room into the Void.  We could also just extract 
@@ -178,8 +178,8 @@ int delete_room(room_rnum rnum)
       else if (W_EXIT(i, j)->to_room > rnum)
         W_EXIT(i, j)->to_room -= (W_EXIT(i, j)->to_room != NOWHERE); /* with unsigned NOWHERE > any rnum */
       else if (W_EXIT(i, j)->to_room == rnum) {
-      	if ((!W_EXIT(i, j)->keyword || !*W_EXIT(i, j)->keyword) &&
-      	    (!W_EXIT(i, j)->general_description || !*W_EXIT(i, j)->general_description)) {
+          if ((!W_EXIT(i, j)->keyword || !*W_EXIT(i, j)->keyword) &&
+              (!W_EXIT(i, j)->general_description || !*W_EXIT(i, j)->general_description)) {
           /* no description, remove exit completely */
           if (W_EXIT(i, j)->keyword)
             free(W_EXIT(i, j)->keyword);
@@ -203,17 +203,17 @@ int delete_room(room_rnum rnum)
       case 'O':
       case 'T':
       case 'V':
-	if (ZCMD(i, j).arg3 == rnum)
-	  ZCMD(i, j).command = '*';	/* Cancel command. */
-	else if (ZCMD(i, j).arg3 > rnum)
-	  ZCMD(i, j).arg3 -= (ZCMD(i, j).arg3 != NOWHERE); /* with unsigned NOWHERE > any rnum */
-	break;
+    if (ZCMD(i, j).arg3 == rnum)
+      ZCMD(i, j).command = '*';    /* Cancel command. */
+    else if (ZCMD(i, j).arg3 > rnum)
+      ZCMD(i, j).arg3 -= (ZCMD(i, j).arg3 != NOWHERE); /* with unsigned NOWHERE > any rnum */
+    break;
       case 'D':
       case 'R':
-	if (ZCMD(i, j).arg1 == rnum)
-	  ZCMD(i, j).command = '*';	/* Cancel command. */
-	else if (ZCMD(i, j).arg1 > rnum)
-	  ZCMD(i, j).arg1 -= (ZCMD(i, j).arg1 != NOWHERE); /* with unsigned NOWHERE > any rnum */
+    if (ZCMD(i, j).arg1 == rnum)
+      ZCMD(i, j).command = '*';    /* Cancel command. */
+    else if (ZCMD(i, j).arg1 > rnum)
+      ZCMD(i, j).arg1 -= (ZCMD(i, j).arg1 != NOWHERE); /* with unsigned NOWHERE > any rnum */
       case 'G':
       case 'P':
       case 'E':
@@ -237,10 +237,10 @@ int delete_room(room_rnum rnum)
     update_wait_events(&world[i], &world[i+1]);
 
     for (ppl = world[i].people; ppl; ppl = ppl->next_in_room)
-      IN_ROOM(ppl) -= (IN_ROOM(ppl) != NOWHERE);	/* Redundant check? */
+      IN_ROOM(ppl) -= (IN_ROOM(ppl) != NOWHERE);    /* Redundant check? */
 
     for (obj = world[i].contents; obj; obj = obj->next_content)
-      IN_ROOM(obj) -= (IN_ROOM(obj) != NOWHERE);	/* Redundant check? */
+      IN_ROOM(obj) -= (IN_ROOM(obj) != NOWHERE);    /* Redundant check? */
   }
 
   top_of_world--;
@@ -268,7 +268,7 @@ int save_rooms(zone_rnum rzone)
   }
 
   log("GenOLC: save_rooms: Saving rooms in zone #%d (%d-%d).",
-	zone_table[rzone].number, genolc_zone_bottom(rzone), zone_table[rzone].top);
+    zone_table[rzone].number, genolc_zone_bottom(rzone), zone_table[rzone].top);
 
   snprintf(filename, sizeof(filename), "%s/%d.new", WLD_PREFIX, zone_table[rzone].number);
   if (!(sf = fopen(filename, "w"))) {
@@ -289,62 +289,62 @@ int save_rooms(zone_rnum rzone)
       strip_cr(buf);
 
       /* Save the numeric and string section of the file. */
-      fprintf(sf, 	"#%d\n"
-			"%s%c\n"
-			"%s%c\n"
-			"%d %d %d %d %d %d\n",
-	room->number,
-	room->name ? room->name : "Untitled", STRING_TERMINATOR,
-	buf, STRING_TERMINATOR,
-	zone_table[room->zone].number, room->room_flags[0], room->room_flags[1], room->room_flags[2], 
-	  room->room_flags[3], room->sector_type 
+      fprintf(sf,     "#%d\n"
+            "%s%c\n"
+            "%s%c\n"
+            "%d %d %d %d %d %d\n",
+    room->number,
+    room->name ? room->name : "Untitled", STRING_TERMINATOR,
+    buf, STRING_TERMINATOR,
+    zone_table[room->zone].number, room->room_flags[0], room->room_flags[1], room->room_flags[2], 
+      room->room_flags[3], room->sector_type 
       );
 
       /* Now you write out the exits for the room. */
       for (j = 0; j < NUM_OF_DIRS; j++) {
-	if (R_EXIT(room, j)) {
-	  int dflag;
-	  if (R_EXIT(room, j)->general_description) {
-	    strncpy(buf, R_EXIT(room, j)->general_description, sizeof(buf)-1);
-	    strip_cr(buf);
-	  } else
-	    *buf = '\0';
+    if (R_EXIT(room, j)) {
+      int dflag;
+      if (R_EXIT(room, j)->general_description) {
+        strncpy(buf, R_EXIT(room, j)->general_description, sizeof(buf)-1);
+        strip_cr(buf);
+      } else
+        *buf = '\0';
 
-	  /* Figure out door flag. */
-	  if (IS_SET(R_EXIT(room, j)->exit_info, EX_ISDOOR)) {
-	    if (IS_SET(R_EXIT(room, j)->exit_info, EX_PICKPROOF))
-	      dflag = 2;
-	    else
-	      dflag = 1;
-	  } else
-	    dflag = 0;
+      /* Figure out door flag. */
+      if (IS_SET(R_EXIT(room, j)->exit_info, EX_ISDOOR)) {
+        if (IS_SET(R_EXIT(room, j)->exit_info, EX_PICKPROOF))
+          dflag = 2;
+        else
+          dflag = 1;
+      } else
+        dflag = 0;
 
-	  if (R_EXIT(room, j)->keyword)
-	    strncpy(buf1, R_EXIT(room, j)->keyword, sizeof(buf1)-1 );
-	  else
-	    *buf1 = '\0';
+      if (R_EXIT(room, j)->keyword)
+        strncpy(buf1, R_EXIT(room, j)->keyword, sizeof(buf1)-1 );
+      else
+        *buf1 = '\0';
 
-	  /* Now write the exit to the file. */
-	  fprintf(sf,	"D%d\n"
-			"%s~\n"
-			"%s~\n"
-			"%d %d %d\n", j, buf, buf1, dflag,
-		R_EXIT(room, j)->key != NOTHING ? R_EXIT(room, j)->key : -1,
-		R_EXIT(room, j)->to_room != NOWHERE ? world[R_EXIT(room, j)->to_room].number : -1);
+      /* Now write the exit to the file. */
+      fprintf(sf,    "D%d\n"
+            "%s~\n"
+            "%s~\n"
+            "%d %d %d\n", j, buf, buf1, dflag,
+        R_EXIT(room, j)->key != NOTHING ? R_EXIT(room, j)->key : -1,
+        R_EXIT(room, j)->to_room != NOWHERE ? world[R_EXIT(room, j)->to_room].number : -1);
 
-	}
+    }
       }
 
       if (room->ex_description) {
         struct extra_descr_data *xdesc;
 
-	for (xdesc = room->ex_description; xdesc; xdesc = xdesc->next) {
-	  strncpy(buf, xdesc->description, sizeof(buf));
-	  strip_cr(buf);
-	  fprintf(sf,	"E\n"
-			"%s~\n"
-			"%s~\n", xdesc->keyword, buf);
-	}
+    for (xdesc = room->ex_description; xdesc; xdesc = xdesc->next) {
+      strncpy(buf, xdesc->description, sizeof(buf));
+      strip_cr(buf);
+      fprintf(sf,    "E\n"
+            "%s~\n"
+            "%s~\n", xdesc->keyword, buf);
+    }
       }
       fprintf(sf, "S\n");
       script_save_to_disk(sf, room, WLD_TRIGGER);

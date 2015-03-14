@@ -79,7 +79,7 @@ int add_mobile(struct char_data *mob, mob_vnum vnum)
   for (zone = 0; zone <= top_of_zone_table; zone++)
     for (cmd_no = 0; ZCMD(zone, cmd_no).command != 'S'; cmd_no++)
       if (ZCMD(zone, cmd_no).command == 'M')
-	ZCMD(zone, cmd_no).arg1 += (ZCMD(zone, cmd_no).arg1 >= found);
+    ZCMD(zone, cmd_no).arg1 += (ZCMD(zone, cmd_no).arg1 >= found);
 
   /* Update shop keepers. */
   if (shop_index)
@@ -222,7 +222,7 @@ int free_mobile(struct char_data *mob)
     free_mobile_strings(mob);
     /* free script proto list */
     free_proto_script(mob, MOB_TRIGGER);
-   } else {	/* Prototyped mobile. */
+   } else {    /* Prototyped mobile. */
     if (mob->player.name && mob->player.name != mob_proto[i].player.name)
       free(mob->player.name);
     if (mob->player.title && mob->player.title != mob_proto[i].player.title)
@@ -335,16 +335,16 @@ int write_mobile_record(mob_vnum mvnum, struct char_data *mob, FILE *fd)
   strip_cr(strncpy(ldesc, GET_LDESC(mob), MAX_STRING_LENGTH - 1));
   strip_cr(strncpy(ddesc, GET_DDESC(mob), MAX_STRING_LENGTH - 1));
 
-  fprintf(fd,	"#%d\n"
-		"%s%c\n"
-		"%s%c\n"
-		"%s%c\n"
-		"%s%c\n",
-	mvnum,
-	GET_ALIAS(mob), STRING_TERMINATOR,
-	GET_SDESC(mob), STRING_TERMINATOR,
-	ldesc, STRING_TERMINATOR,
-	ddesc, STRING_TERMINATOR
+  fprintf(fd,    "#%d\n"
+        "%s%c\n"
+        "%s%c\n"
+        "%s%c\n"
+        "%s%c\n",
+    mvnum,
+    GET_ALIAS(mob), STRING_TERMINATOR,
+    GET_SDESC(mob), STRING_TERMINATOR,
+    ldesc, STRING_TERMINATOR,
+    ddesc, STRING_TERMINATOR
   );
 
   fprintf(fd, "%d %d %d %d %d %d %d %d %d E\n"
@@ -358,10 +358,10 @@ int write_mobile_record(mob_vnum mvnum, struct char_data *mob, FILE *fd)
       GET_MANA(mob), GET_MOVE(mob), GET_NDD(mob), GET_SDD(mob),
       GET_DAMROLL(mob));
 
-  fprintf(fd, 	"%d %d\n"
-		"%d %d %d\n",
-		GET_GOLD(mob), GET_EXP(mob),
-		GET_POS(mob), GET_DEFAULT_POS(mob), GET_SEX(mob)
+  fprintf(fd,     "%d %d\n"
+        "%d %d %d\n",
+        GET_GOLD(mob), GET_EXP(mob),
+        GET_POS(mob), GET_DEFAULT_POS(mob), GET_SEX(mob)
   );
 
   if (write_mobile_espec(mvnum, mob, fd) < 0)

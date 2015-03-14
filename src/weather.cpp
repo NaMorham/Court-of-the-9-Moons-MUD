@@ -65,7 +65,7 @@ static void another_hour(int mode)
       break;
     }
   }
-  if (time_info.hours > 23) {	/* Changed by HHS due to bug ??? */
+  if (time_info.hours > 23) {    /* Changed by HHS due to bug ??? */
     time_info.hours -= 24;
     time_info.day++;
 
@@ -74,8 +74,8 @@ static void another_hour(int mode)
       time_info.month++;
 
       if (time_info.month > 16) {
-	time_info.month = 0;
-	time_info.year++;
+    time_info.month = 0;
+    time_info.year++;
       }
     }
   }
@@ -113,32 +113,32 @@ static void weather_change(void)
       change = 1;
     else if (weather_info.pressure < 1010)
       if (dice(1, 4) == 1)
-	change = 1;
+    change = 1;
     break;
   case SKY_CLOUDY:
     if (weather_info.pressure < 970)
       change = 2;
     else if (weather_info.pressure < 990) {
       if (dice(1, 4) == 1)
-	change = 2;
+    change = 2;
       else
-	change = 0;
+    change = 0;
     } else if (weather_info.pressure > 1030)
       if (dice(1, 4) == 1)
-	change = 3;
+    change = 3;
 
     break;
   case SKY_RAINING:
     if (weather_info.pressure < 970) {
       if (dice(1, 4) == 1)
-	change = 4;
+    change = 4;
       else
-	change = 0;
+    change = 0;
     } else if (weather_info.pressure > 1030)
       change = 5;
     else if (weather_info.pressure > 1010)
       if (dice(1, 4) == 1)
-	change = 5;
+    change = 5;
 
     break;
   case SKY_LIGHTNING:
@@ -146,7 +146,7 @@ static void weather_change(void)
       change = 6;
     else if (weather_info.pressure > 990)
       if (dice(1, 4) == 1)
-	change = 6;
+    change = 6;
 
     break;
   default:

@@ -104,21 +104,21 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
   switch (command) {
   case PARSE_HELP:
     write_to_output(d,
-	    "Editor command formats: /<letter>\r\n\r\n"
-	    "/a         -  aborts editor\r\n"
-	    "/c         -  clears buffer\r\n"
-	    "/d#        -  deletes a line #\r\n"
-	    "/e# <text> -  changes the line at # with <text>\r\n"
-	    "/f         -  formats text\r\n"
-	    "/fi        -  indented formatting of text\r\n"
-	    "/h         -  list text editor commands\r\n"
-	    "/i# <text> -  inserts <text> before line #\r\n"
-	    "/l         -  lists buffer\r\n"
-	    "/n         -  lists buffer with line numbers\r\n"
-	    "/r 'a' 'b' -  replace 1st occurance of text <a> in buffer with text <b>\r\n"
-	    "/ra 'a' 'b'-  replace all occurances of text <a> within buffer with text <b>\r\n"
-	    "              usage: /r[a] 'pattern' 'replacement'\r\n"
-	    "/s         -  saves text\r\n");
+        "Editor command formats: /<letter>\r\n\r\n"
+        "/a         -  aborts editor\r\n"
+        "/c         -  clears buffer\r\n"
+        "/d#        -  deletes a line #\r\n"
+        "/e# <text> -  changes the line at # with <text>\r\n"
+        "/f         -  formats text\r\n"
+        "/fi        -  indented formatting of text\r\n"
+        "/h         -  list text editor commands\r\n"
+        "/i# <text> -  inserts <text> before line #\r\n"
+        "/l         -  lists buffer\r\n"
+        "/n         -  lists buffer with line numbers\r\n"
+        "/r 'a' 'b' -  replace 1st occurance of text <a> in buffer with text <b>\r\n"
+        "/ra 'a' 'b'-  replace all occurances of text <a> within buffer with text <b>\r\n"
+        "              usage: /r[a] 'pattern' 'replacement'\r\n"
+        "/s         -  saves text\r\n");
     break;
   case PARSE_FORMAT:
     if (STATE(d) == CON_TRIGEDIT) {
@@ -127,8 +127,8 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     }
     while (isalpha(string[j]) && j < 2) {
       if (string[j++] == 'i' && !indent) {
-	indent = TRUE;
-	flags += FORMAT_INDENT;
+    indent = TRUE;
+    flags += FORMAT_INDENT;
       }
     }
     switch (sscanf((indent ? string + 1 : string), " %d - %d ", &line_low, &line_high))
@@ -157,7 +157,7 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
   case PARSE_REPLACE:
     while (isalpha(string[j]) && j < 2)
       if (string[j++] == 'a' && !indent)
-	rep_all = 1;
+    rep_all = 1;
 
     if ((s = strtok(string, "'")) == NULL) {
       write_to_output(d, "Invalid format.\r\n");
@@ -176,11 +176,11 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
       return;
     } else if ((total_len = ((strlen(t) - strlen(s)) + strlen(*d->str))) <= d->max_str) {
       if ((replaced = replace_str(d->str, s, t, rep_all, d->max_str)) > 0) {
-	write_to_output(d, "Replaced %d occurance%sof '%s' with '%s'.\r\n", replaced, ((replaced != 1) ? "s " : " "), s, t);
+    write_to_output(d, "Replaced %d occurance%sof '%s' with '%s'.\r\n", replaced, ((replaced != 1) ? "s " : " "), s, t);
       } else if (replaced == 0) {
-	write_to_output(d, "String '%s' not found.\r\n", s);
+    write_to_output(d, "String '%s' not found.\r\n", s);
       } else
-	write_to_output(d, "ERROR: Replacement string causes buffer overflow, aborted replace.\r\n");
+    write_to_output(d, "ERROR: Replacement string causes buffer overflow, aborted replace.\r\n");
     } else
       write_to_output(d, "Not enough space left in buffer.\r\n");
     break;
@@ -194,8 +194,8 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
       break;
     case 2:
       if (line_high < line_low) {
-	write_to_output(d, "That range is invalid.\r\n");
-	return;
+    write_to_output(d, "That range is invalid.\r\n");
+    return;
       }
       break;
     }
@@ -207,26 +207,26 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
       return;
     } else if (line_low > 0) {
       while (s && i < line_low)
-	if ((s = strchr(s, '\n')) != NULL) {
-	  i++;
-	  s++;
-	}
+    if ((s = strchr(s, '\n')) != NULL) {
+      i++;
+      s++;
+    }
       if (s == NULL || i < line_low) {
-	write_to_output(d, "Line(s) out of range; not deleting.\r\n");
-	return;
+    write_to_output(d, "Line(s) out of range; not deleting.\r\n");
+    return;
       }
       t = s;
       while (s && i < line_high)
-	if ((s = strchr(s, '\n')) != NULL) {
-	  i++;
-	  total_len++;
-	  s++;
-	}
+    if ((s = strchr(s, '\n')) != NULL) {
+      i++;
+      total_len++;
+      s++;
+    }
       if (s && (s = strchr(s, '\n')) != NULL) {
-	while (*(++s))
-	  *(t++) = *s;
+    while (*(++s))
+      *(t++) = *s;
       } else
-	total_len--;
+    total_len--;
       *t = '\0';
       RECREATE(*d->str, char, strlen(*d->str) + 3);
 
@@ -243,12 +243,12 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     if (*string)
       switch (sscanf(string, " %d - %d ", &line_low, &line_high)) {
       case 0:
-	line_low = 1;
-	line_high = 999999;
-	break;
+    line_low = 1;
+    line_high = 999999;
+    break;
       case 1:
-	line_high = line_low;
-	break;
+    line_high = line_low;
+    break;
     } else {
       line_low = 1;
       line_high = 999999;
@@ -269,8 +269,8 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     s = *d->str;
     while (s && (i < line_low))
       if ((s = strchr(s, '\n')) != NULL) {
-	i++;
-	s++;
+    i++;
+    s++;
       }
     if (i < line_low || s == NULL) {
       write_to_output(d, "Line(s) out of range; no buffer listing.\r\n");
@@ -279,9 +279,9 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     t = s;
     while (s && i <= line_high)
       if ((s = strchr(s, '\n')) != NULL) {
-	i++;
-	total_len++;
-	s++;
+    i++;
+    total_len++;
+    s++;
       }
     if (s) {
       temp = *s;
@@ -301,12 +301,12 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     if (*string)
       switch (sscanf(string, " %d - %d ", &line_low, &line_high)) {
       case 0:
-	line_low = 1;
-	line_high = 999999;
-	break;
+    line_low = 1;
+    line_high = 999999;
+    break;
       case 1:
-	line_high = line_low;
-	break;
+    line_high = line_low;
+    break;
     } else {
       line_low = 1;
       line_high = 999999;
@@ -326,8 +326,8 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     s = *d->str;
     while (s && i < line_low)
       if ((s = strchr(s, '\n')) != NULL) {
-	i++;
-	s++;
+    i++;
+    s++;
       }
     if (i < line_low || s == NULL) {
       write_to_output(d, "Line(s) out of range; no buffer listing.\r\n");
@@ -336,15 +336,15 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     t = s;
     while (s && i <= line_high)
       if ((s = strchr(s, '\n')) != NULL) {
-	i++;
-	total_len++;
-	s++;
-	temp = *s;
-	*s = '\0';
-	sprintf(buf, "%s%4d: ", buf, (i - 1));
-	strcat(buf, t);
-	*s = temp;
-	t = s;
+    i++;
+    total_len++;
+    s++;
+    temp = *s;
+    *s = '\0';
+    sprintf(buf, "%s%4d: ", buf, (i - 1));
+    strcat(buf, t);
+    *s = temp;
+    t = s;
       }
     if (s && t) {
       temp = *s;
@@ -374,27 +374,27 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     }
     if (line_low > 0) {
       while (s && (i < line_low))
-	if ((s = strchr(s, '\n')) != NULL) {
-	  i++;
-	  s++;
-	}
+    if ((s = strchr(s, '\n')) != NULL) {
+      i++;
+      s++;
+    }
       if (i < line_low || s == NULL) {
-	write_to_output(d, "Line number out of range; insert aborted.\r\n");
-	return;
+    write_to_output(d, "Line number out of range; insert aborted.\r\n");
+    return;
       }
       temp = *s;
       *s = '\0';
       if ((strlen(*d->str) + strlen(buf2) + strlen(s + 1) + 3) > d->max_str) {
-	*s = temp;
-	write_to_output(d, "Insert text pushes buffer over maximum size, insert aborted.\r\n");
-	return;
+    *s = temp;
+    write_to_output(d, "Insert text pushes buffer over maximum size, insert aborted.\r\n");
+    return;
       }
       if (*d->str && **d->str)
-	strcat(buf, *d->str);
+    strcat(buf, *d->str);
       *s = temp;
       strcat(buf, buf2);
       if (s && *s)
-	strcat(buf, s);
+    strcat(buf, s);
       RECREATE(*d->str, char, strlen(buf) + 3);
 
       strcpy(*d->str, buf);
@@ -423,24 +423,24 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
     if (line_low > 0) {
       /* Loop through the text counting \n characters until we get to the line. */
       while (s && i < line_low)
-	if ((s = strchr(s, '\n')) != NULL) {
-	  i++;
-	  s++;
-	}
+    if ((s = strchr(s, '\n')) != NULL) {
+      i++;
+      s++;
+    }
       /* Make sure that there was a THAT line in the text. */
       if (s == NULL || i < line_low) {
-	write_to_output(d, "Line number out of range; change aborted.\r\n");
-	return;
+    write_to_output(d, "Line number out of range; change aborted.\r\n");
+    return;
       }
       /* If s is the same as *d->str that means I'm at the beginning of the
        * message text and I don't need to put that into the changed buffer. */
       if (s != *d->str) {
-	/* First things first .. we get this part into the buffer. */
-	temp = *s;
-	*s = '\0';
-	/* Put the first 'good' half of the text into storage. */
-	strcat(buf, *d->str);
-	*s = temp;
+    /* First things first .. we get this part into the buffer. */
+    temp = *s;
+    *s = '\0';
+    /* Put the first 'good' half of the text into storage. */
+    strcat(buf, *d->str);
+    *s = temp;
       }
       /* Put the new 'good' line into place. */
       strcat(buf, buf2);
@@ -448,14 +448,14 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
         /* This means that we are at the END of the line, we want out of there,
          * but we want s to point to the beginning of the line. AFTER the line 
          * we want edited. */
-	s++;
-	/* Now put the last 'good' half of buffer into storage. */
-	strcat(buf, s);
+    s++;
+    /* Now put the last 'good' half of buffer into storage. */
+    strcat(buf, s);
       }
       /* Check for buffer overflow. */
       if (strlen(buf) > d->max_str) {
-	write_to_output(d, "Change causes new length to exceed buffer maximum size, aborted.\r\n");
-	return;
+    write_to_output(d, "Change causes new length to exceed buffer maximum size, aborted.\r\n");
+    return;
       }
       /* Change the size of the REAL buffer to fit the new text. */
       RECREATE(*d->str, char, strlen(buf) + 3);

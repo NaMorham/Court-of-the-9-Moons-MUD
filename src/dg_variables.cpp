@@ -84,7 +84,7 @@ int item_in_list(char *item, obj_data *list)
   int count = 0;
 
   if (!item || !*item)
-  	return 0;
+      return 0;
 
   if (*item == UID_CHAR) {
     long id = atol(item + 1);
@@ -179,7 +179,7 @@ int text_processed(char *field, char *subfield, struct trig_var_data *vd,
     if (cindex > len || cindex < 1)
       strcpy(str, "");
     else
-    	snprintf(str, slen, "%c", vd->value[cindex - 1]);
+        snprintf(str, slen, "%c", vd->value[cindex - 1]);
     return TRUE;
   } else if (!str_cmp(field, "mudcommand")) {
     /* find the mud command returned from this text */
@@ -559,7 +559,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
               int addition = atoi(subfield);
              GET_ALIGNMENT(c) = MAX(-1000, MIN(addition, 1000));
             }
-	    snprintf(str, slen, "%d", GET_ALIGNMENT(c));
+        snprintf(str, slen, "%d", GET_ALIGNMENT(c));
           }
           else if (!str_cmp(field, "armor"))
             snprintf(str, slen, "%d", compute_armor_class(c));
@@ -608,7 +608,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
           else if (!str_cmp(field, "drunk")) {
             if (subfield && *subfield) {
               int addition = atoi(subfield);
-	     GET_COND(c, DRUNK) = MAX(-1, MIN(addition, 24));
+         GET_COND(c, DRUNK) = MAX(-1, MIN(addition, 24));
             }
             snprintf(str, slen, "%d", GET_COND(c, DRUNK));
           }
@@ -990,7 +990,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
             snprintf(str, slen, "%s", IS_NPC(c) ? "" : GET_TITLE(c));
           }
           break;
-	case 'v':
+    case 'v':
           if (!str_cmp(field, "varexists")) {
             struct trig_var_data *remote_vd;
             strcpy(str, "0");
@@ -1067,7 +1067,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
             } else
               snprintf(str, slen, "0"); 
           } 
-	case 'c':
+    case 'c':
           if (!str_cmp(field, "cost")) {
             if (subfield && *subfield) {
               int addition = atoi(subfield);
@@ -1103,7 +1103,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
               snprintf(str, slen, "%d", item_in_list(subfield,
 o->contains));
             else
-            	strcpy(str, "0");
+                strcpy(str, "0");
           }
           break;
         case 'e':
@@ -1118,14 +1118,14 @@ o->contains));
             }
           }
           break;
-	case 'h':
+    case 'h':
           /* thanks to Jamie Nelson (Mordecai of 4 Dimensions MUD) */
           if (!str_cmp(field, "has_in")) {
             if (GET_OBJ_TYPE(o) == ITEM_CONTAINER)
               snprintf(str, slen, "%s", (item_in_list(subfield,
 o->contains) ? "1" : "0"));
             else
-            	strcpy(str, "0");
+                strcpy(str, "0");
           }
           else if (!str_cmp(field, "hasattached")) { 
             if (!(subfield && *subfield)) 
@@ -1149,7 +1149,7 @@ o->contains) ? "1" : "0"));
           else if (!str_cmp(field, "is_pc")) { 
             strcpy(str, "-1"); 
           } 
-	  break;
+      break;
         case 'n':
           if (!str_cmp(field, "name"))
             snprintf(str, slen, "%s",  o->name);
@@ -1201,16 +1201,16 @@ o->contains) ? "1" : "0"));
           break;
         case 'w':
           if (!str_cmp(field, "wearflag")) { 
-	    if (subfield && *subfield) {
-	      if (can_wear_on_pos(o, find_eq_pos_script(subfield))) 
-	        snprintf(str, slen, "1"); 
-	      else 
-	         snprintf(str, slen, "0"); 
-	    } else
+        if (subfield && *subfield) {
+          if (can_wear_on_pos(o, find_eq_pos_script(subfield))) 
+            snprintf(str, slen, "1"); 
+          else 
+             snprintf(str, slen, "0"); 
+        } else
               snprintf(str, slen, "0");
-	  }
+      }
 
-	  else if (!str_cmp(field, "weight")){
+      else if (!str_cmp(field, "weight")){
             if (subfield && *subfield) {
               int addition = atoi(subfield);
               GET_OBJ_WEIGHT(o) = MAX(1, addition + GET_OBJ_WEIGHT(o));

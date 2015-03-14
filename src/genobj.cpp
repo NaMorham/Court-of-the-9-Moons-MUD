@@ -203,23 +203,23 @@ int save_objects(zone_rnum zone_num)
   for (counter = genolc_zone_bottom(zone_num); counter <= zone_table[zone_num].top; counter++) {
     if ((realcounter = real_object(counter)) != NOTHING) {
       if ((obj = &obj_proto[realcounter])->action_description) {
-	strncpy(buf, obj->action_description, sizeof(buf) - 1);
-	strip_cr(buf);
+    strncpy(buf, obj->action_description, sizeof(buf) - 1);
+    strip_cr(buf);
       } else
-	*buf = '\0';
+    *buf = '\0';
 
       fprintf(fp,
-	      "#%d\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n"
-	      "%s~\n",
+          "#%d\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n"
+          "%s~\n",
 
-	      GET_OBJ_VNUM(obj),
-	      (obj->name && *obj->name) ? obj->name : "undefined",
-	      (obj->short_description && *obj->short_description) ? obj->short_description : "undefined",
-	      (obj->description && *obj->description) ?	obj->description : "undefined",
-	      buf);
+          GET_OBJ_VNUM(obj),
+          (obj->name && *obj->name) ? obj->name : "undefined",
+          (obj->short_description && *obj->short_description) ? obj->short_description : "undefined",
+          (obj->description && *obj->description) ?    obj->description : "undefined",
+          buf);
 
       sprintascii(ebuf1, GET_OBJ_EXTRA(obj)[0]);
       sprintascii(ebuf2, GET_OBJ_EXTRA(obj)[1]);
@@ -238,7 +238,7 @@ int save_objects(zone_rnum zone_num)
           "%d %d %d %d\n"
           "%d %d %d %d %d\n",
 
-	  GET_OBJ_TYPE(obj),
+      GET_OBJ_TYPE(obj),
           ebuf1, ebuf2, ebuf3, ebuf4,
           wbuf1, wbuf2, wbuf3, wbuf4,
           pbuf1, pbuf2, pbuf3, pbuf4,
@@ -252,26 +252,26 @@ int save_objects(zone_rnum zone_num)
       script_save_to_disk(fp, obj, OBJ_TRIGGER);
 
       /* Do we have extra descriptions? */
-      if (obj->ex_description) {	/* Yes, save them too. */
-	for (ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
-	  /* Sanity check to prevent nasty protection faults. */
-	  if (!ex_desc->keyword || !ex_desc->description || !*ex_desc->keyword || !*ex_desc->description) {
-	    mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: OLC: oedit_save_to_disk: Corrupt ex_desc!");
-	    continue;
-	  }
-	  strncpy(buf, ex_desc->description, sizeof(buf) - 1);
-	  strip_cr(buf);
-	  fprintf(fp, "E\n"
-		  "%s~\n"
-		  "%s~\n", ex_desc->keyword, buf);
-	}
+      if (obj->ex_description) {    /* Yes, save them too. */
+    for (ex_desc = obj->ex_description; ex_desc; ex_desc = ex_desc->next) {
+      /* Sanity check to prevent nasty protection faults. */
+      if (!ex_desc->keyword || !ex_desc->description || !*ex_desc->keyword || !*ex_desc->description) {
+        mudlog(BRF, LVL_IMMORT, TRUE, "SYSERR: OLC: oedit_save_to_disk: Corrupt ex_desc!");
+        continue;
+      }
+      strncpy(buf, ex_desc->description, sizeof(buf) - 1);
+      strip_cr(buf);
+      fprintf(fp, "E\n"
+          "%s~\n"
+          "%s~\n", ex_desc->keyword, buf);
+    }
       }
       /* Do we have affects? */
       for (counter2 = 0; counter2 < MAX_OBJ_AFFECT; counter2++)
-	if (obj->affected[counter2].modifier)
-	  fprintf(fp, "A\n"
-		  "%d %d\n", obj->affected[counter2].location,
-		  obj->affected[counter2].modifier);
+    if (obj->affected[counter2].modifier)
+      fprintf(fp, "A\n"
+          "%d %d\n", obj->affected[counter2].location,
+          obj->affected[counter2].modifier);
     }
   }
 
@@ -387,7 +387,7 @@ int delete_object(obj_rnum rnum)
   log("GenOLC: delete_object: Deleting object #%d (%s).", GET_OBJ_VNUM(obj), obj->short_description);
 
   for (tmp = object_list; tmp; tmp = next_obj) {
-	next_obj = tmp->next;
+    next_obj = tmp->next;
     if (tmp->item_number != obj->item_number)
       continue;
 
@@ -459,13 +459,13 @@ int delete_object(obj_rnum rnum)
           delete_zone_command(&zone_table[zone], cmd_no);
         } else
           ZCMD(zone, cmd_no).arg1 -= (ZCMD(zone, cmd_no).arg1 > rnum);
-	break;
+    break;
       case 'R':
         if (ZCMD(zone, cmd_no).arg2 == rnum) {
           delete_zone_command(&zone_table[zone], cmd_no);
         } else
           ZCMD(zone, cmd_no).arg2 -= (ZCMD(zone, cmd_no).arg2 > rnum);
-	break;
+    break;
       }
     }
   }

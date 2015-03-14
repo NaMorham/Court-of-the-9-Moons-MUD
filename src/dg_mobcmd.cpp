@@ -399,9 +399,9 @@ ACMD(do_mload)
       }
       cnt = (arg1 != NULL && *arg1 == UID_CHAR) ? get_obj(arg1) : get_obj_vis(ch, arg1, NULL);
       if (cnt && GET_OBJ_TYPE(cnt) == ITEM_CONTAINER) {
-      	obj_to_obj(object, cnt);
+          obj_to_obj(object, cnt);
         load_otrigger(object);
-      	return;
+          return;
       }
       /* neither char nor container found - just dump it in room */
       obj_to_room(object, IN_ROOM(ch));
@@ -1105,11 +1105,11 @@ ACMD(do_mfollow)
 
   /* stop following someone else first */
   if (ch->master) {
-    if (ch->master->followers->follower == ch) {	/* Head of follower-list? */
+    if (ch->master->followers->follower == ch) {    /* Head of follower-list? */
       k = ch->master->followers;
       ch->master->followers = k->next;
       free(k);
-    } else {			/* locate follower who is not head of list */
+    } else {            /* locate follower who is not head of list */
       for (k = ch->master->followers; k->next->follower != ch; k = k->next);
 
       j = k->next;

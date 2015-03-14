@@ -19,13 +19,13 @@
  * 1 - Create a new board object in the object files.
  * 2 - Increase the NUM_OF_BOARDS constant in boards.h.
  * 3 - Add a new line to the board_info array below.  The fields are:
- * 	Board's virtual number.
- * 	Min level one must be to look at this board or read messages on it.
- * 	Min level one must be to post a message to the board.
- * 	Min level one must be to remove other people's messages from this
- * 	  board (but you can always remove your own message).
- * 	Filename of this board, in quotes.
- * 	Last field must always be 0.
+ *     Board's virtual number.
+ *     Min level one must be to look at this board or read messages on it.
+ *     Min level one must be to post a message to the board.
+ *     Min level one must be to remove other people's messages from this
+ *       board (but you can always remove your own message).
+ *     Filename of this board, in quotes.
+ *     Last field must always be 0.
  * 4 - In spec_assign.c, find the section which assigns the special procedure
  *     gen_board to the other bulletin boards, and add your new one in a
  *     similar fashion. */
@@ -43,7 +43,7 @@
 #include "modify.h"
 
 /* Board appearance order. */
-#define	NEWEST_AT_TOP	FALSE
+#define    NEWEST_AT_TOP    FALSE
 
 /* Format: vnum, read lvl, write lvl, remove lvl, filename, 0 at end. Be sure 
  * to also change NUM_OF_BOARDS in board.h*/
@@ -91,7 +91,7 @@ static int find_board(struct char_data *ch)
   for (obj = world[IN_ROOM(ch)].contents; obj; obj = obj->next_content)
     for (i = 0; i < NUM_OF_BOARDS; i++)
       if (BOARD_RNUM(i) == GET_OBJ_RNUM(obj))
-	return (i);
+    return (i);
 
   if (GET_LEVEL(ch) >= LVL_IMMORT)
     for (obj = ch->carrying; obj; obj = obj->next_content)
@@ -114,7 +114,7 @@ static void init_boards(void)
   for (i = 0; i < NUM_OF_BOARDS; i++) {
     if ((BOARD_RNUM(i) = real_object(BOARD_VNUM(i))) == NOTHING) {
       log("SYSERR: Fatal board error: board vnum %d does not exist!",
-	      BOARD_VNUM(i));
+          BOARD_VNUM(i));
       fatal_error = 1;
     }
     num_of_msgs[i] = 0;
@@ -213,7 +213,7 @@ int board_write_message(int board_type, struct char_data *ch, char *arg, struct 
   act("$n starts to write a message.", TRUE, ch, 0, 0, TO_ROOM);
 
   string_write(ch->desc, &(msg_storage[NEW_MSG_INDEX(board_type).slot_num]),
-		MAX_MESSAGE_LENGTH, board_type + BOARD_MAGIC, NULL);
+        MAX_MESSAGE_LENGTH, board_type + BOARD_MAGIC, NULL);
 
   num_of_msgs[board_type]++;
   return (1);
@@ -245,10 +245,10 @@ int board_show_board(int board_type, struct char_data *ch, char *arg, struct obj
     int nlen;
 
     len = snprintf(buf, sizeof(buf),
-		"This is a bulletin board.  Usage: READ/REMOVE <messg #>, WRITE <header>.\r\n"
-		"You will need to look at the board to save your message.\r\n"
-		"There are %d messages on the board.\r\n",
-		num_of_msgs[board_type]);
+        "This is a bulletin board.  Usage: READ/REMOVE <messg #>, WRITE <header>.\r\n"
+        "You will need to look at the board to save your message.\r\n"
+        "There are %d messages on the board.\r\n",
+        num_of_msgs[board_type]);
 #if NEWEST_AT_TOP
     for (i = num_of_msgs[board_type] - 1; i >= 0; i--) {
       if (!MSG_HEADING(board_type, i))
@@ -288,9 +288,9 @@ int board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
   one_argument(arg, number);
   if (!*number)
     return (0);
-  if (isname(number, board->name))	/* so "read board" works */
+  if (isname(number, board->name))    /* so "read board" works */
     return (board_show_board(board_type, ch, arg, board));
-  if (!is_number(number))	/* read 2.mail, look 2.sword */
+  if (!is_number(number))    /* read 2.mail, look 2.sword */
     return (0);
   if (!(msg = atoi(number)))
     return (0);
@@ -327,8 +327,8 @@ int board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
     return (1);
   }
   snprintf(buffer, sizeof(buffer), "Message %d : %s\r\n\r\n%s\r\n", msg,
-	  MSG_HEADING(board_type, ind),
-	  msg_storage[MSG_SLOTNUM(board_type, ind)]);
+      MSG_HEADING(board_type, ind),
+      msg_storage[MSG_SLOTNUM(board_type, ind)]);
 
   page_string(ch->desc, buffer, TRUE);
 
@@ -431,8 +431,8 @@ void board_save_board(int board_type)
       msg_index[board_type][i].heading_len = 0;
 
     if (MSG_SLOTNUM(board_type, i) < 0 ||
-	MSG_SLOTNUM(board_type, i) >= INDEX_SIZE ||
-	(!(tmp2 = msg_storage[MSG_SLOTNUM(board_type, i)])))
+    MSG_SLOTNUM(board_type, i) >= INDEX_SIZE ||
+    (!(tmp2 = msg_storage[MSG_SLOTNUM(board_type, i)])))
       msg_index[board_type][i].message_len = 0;
     else
       msg_index[board_type][i].message_len = strlen(tmp2) + 1;

@@ -58,17 +58,17 @@ void parse_webster_html(char *arg) {
   for ( ; get_line(infile, buf)!=0; ) {
     
     if (strncmp(buf, "<script>write_ads(AdsNum, 0)</script>", 37) != 0)
-    	continue; // read until we hit the line with results in it.
+        continue; // read until we hit the line with results in it.
     
     p = buf+37;
 
     if (strncmp(p, "<br>", 4) == 0)
-    	{
-    		fprintf(outfile, "That word could not be found.\n");
-    		goto end;
-    	}
-		else if (strncmp(p, "<div ", 5) == 0) // definition is here, all in one line.
-			{
+        {
+            fprintf(outfile, "That word could not be found.\n");
+            goto end;
+        }
+        else if (strncmp(p, "<div ", 5) == 0) // definition is here, all in one line.
+            {
         while (strncmp(p, "ds-list", 7)) //seek to the definition
           p++;
         
@@ -81,28 +81,28 @@ void parse_webster_html(char *arg) {
 
         while (1)
         {
-     			q = outline;
-     			
-     			while (*p != '<')
-     			{
-     				assert(p < scanbuf+sizeof(scanbuf));
-     			  *q++ = *p++;
-     			 } 
-       		if (!strncmp(p, "<br", 3) || !strncmp(p, "<p", 2) || !strncmp(p, "<div class=\"ds-list\"", 23) || !strncmp(p, "<div class=\"sds-list\"", 24))
-       			*q++ = '\n';
-        	  // if it's not a <br> tag or a <div class="sds-list"> or <div class="ds-list"> tag, ignore it.
+                 q = outline;
+                 
+                 while (*p != '<')
+                 {
+                     assert(p < scanbuf+sizeof(scanbuf));
+                   *q++ = *p++;
+                  } 
+               if (!strncmp(p, "<br", 3) || !strncmp(p, "<p", 2) || !strncmp(p, "<div class=\"ds-list\"", 23) || !strncmp(p, "<div class=\"sds-list\"", 24))
+                   *q++ = '\n';
+              // if it's not a <br> tag or a <div class="sds-list"> or <div class="ds-list"> tag, ignore it.
 
-					*q++='\0';
-					fprintf(outfile, "%s", outline);
-					
-					if (!strncmp(p, "</table", 7))
-						goto end;
-						
-				  p = strtok(NULL, ">");        	  
-       	}	
-			}
-		else if (strncmp(p, "<div>", 5) == 0) // not found, but suggestions are ample:
-			{
+                    *q++='\0';
+                    fprintf(outfile, "%s", outline);
+                    
+                    if (!strncmp(p, "</table", 7))
+                        goto end;
+                        
+                  p = strtok(NULL, ">");              
+           }    
+            }
+        else if (strncmp(p, "<div>", 5) == 0) // not found, but suggestions are ample:
+            {
         strncpy(scanbuf, p, sizeof(scanbuf)); // strtok on a copy.
         
         p = strtok(scanbuf, ">"); // chop the line at the end of tags: <br><b>word</b> becomes "<br>" "<b>" "word</b>"
@@ -110,32 +110,32 @@ void parse_webster_html(char *arg) {
         
         while (1)
         {
-     			q = outline;
-     			
-     			while (*p != '<')
-     			  *q++ = *p++;
-     			  
-       		if (!strncmp(p, "<td ", 4))
-       			*q++ = '\n';
-        	  // if it's not a <td> tag, ignore it.
+                 q = outline;
+                 
+                 while (*p != '<')
+                   *q++ = *p++;
+                   
+               if (!strncmp(p, "<td ", 4))
+                   *q++ = '\n';
+              // if it's not a <td> tag, ignore it.
 
-					*q++='\0';
-					fprintf(outfile, "%s", outline);
-					
-					if (!strncmp(p, "</table", 7))
-						goto end;
-						
-				  p = strtok(NULL, ">");        	  
-       	}	
-			}
-		else
-			{
-				// weird.. one of the above should be correct.
-				fprintf(outfile, "It would appear that the free online dictionary has changed their format.\n"
-				                 "Sorry, but you might need a webrowser instead.\n\n"
-				                 "See http://www.thefreedictionary.com/%s", arg);
-				goto end;
-		  }
+                    *q++='\0';
+                    fprintf(outfile, "%s", outline);
+                    
+                    if (!strncmp(p, "</table", 7))
+                        goto end;
+                        
+                  p = strtok(NULL, ">");              
+           }    
+            }
+        else
+            {
+                // weird.. one of the above should be correct.
+                fprintf(outfile, "It would appear that the free online dictionary has changed their format.\n"
+                                 "Sorry, but you might need a webrowser instead.\n\n"
+                                 "See http://www.thefreedictionary.com/%s", arg);
+                goto end;
+          }
     }
     
 end:

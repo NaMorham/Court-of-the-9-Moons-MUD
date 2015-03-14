@@ -19,7 +19,7 @@
 # include <mcheck.h>
 #endif
 
-#ifdef CIRCLE_MACINTOSH		// Includes for the Macintosh
+#ifdef CIRCLE_MACINTOSH        // Includes for the Macintosh
 # define SIGPIPE 13
 # define SIGALRM 14
 // GUSI headers
@@ -29,7 +29,7 @@
 # include <console.h>
 #endif
 
-#ifdef CIRCLE_WINDOWS		// Includes for Win32
+#ifdef CIRCLE_WINDOWS        // Includes for Win32
 # ifdef __BORLANDC__
 #  include <dir.h>
 # else // MSVC
@@ -38,12 +38,12 @@
 # include <mmsystem.h>
 #endif // CIRCLE_WINDOWS
 
-#ifdef CIRCLE_AMIGA		// Includes for the Amiga
+#ifdef CIRCLE_AMIGA        // Includes for the Amiga
 # include <sys/ioctl.h>
 # include <clib/socket_protos.h>
 #endif // CIRCLE_AMIGA
 
-#ifdef CIRCLE_ACORN		// Includes for the Acorn (RiscOS)
+#ifdef CIRCLE_ACORN        // Includes for the Acorn (RiscOS)
 # include <socklib.h>
 # include <inetlib.h>
 # include <sys/ioctl.h>
@@ -204,7 +204,7 @@ void gettimeofday(struct timeval *t, struct timezone *dummy)
     t->tv_usec = (millisec % 1000) * 1000;
 }
 
-#endif	// CIRCLE_WINDOWS || CIRCLE_MACINTOSH
+#endif    // CIRCLE_WINDOWS || CIRCLE_MACINTOSH
 
 int main(int argc, char **argv)
 {
@@ -216,7 +216,7 @@ int main(int argc, char **argv)
 #endif
 
 #if CIRCLE_GNU_LIBC_MEMORY_TRACK
-    mtrace();	// This must come before any use of malloc().
+    mtrace();    // This must come before any use of malloc().
 #endif
 
 #ifdef CIRCLE_MACINTOSH
@@ -341,7 +341,7 @@ int main(int argc, char **argv)
                 "  -q             Quick boot (doesn't scan rent for object limits)\n"
                 "  -r             Restrict MUD -- no new players allowed.\n"
                 "  -s             Suppress special procedure assignments.\n"
-                " Note:		These arguments are 'CaSe SeNsItIvE!!!'\n",
+                " Note:        These arguments are 'CaSe SeNsItIvE!!!'\n",
                 argv[0]
             );
             exit(0);
@@ -597,7 +597,7 @@ static void init_game(ush_int local_port)
     if (circle_reboot)
     {
         log("Rebooting.");
-        exit(52);			// what's so great about HHGTTG, anyhow?
+        exit(52);            // what's so great about HHGTTG, anyhow?
     }
     log("Normal termination of game.");
 }
@@ -654,7 +654,7 @@ static socket_t init_socket(ush_int local_port)
         perror("SYSERR: Error creating socket");
         exit(1);
     }
-#endif				// CIRCLE_WINDOWS
+#endif                // CIRCLE_WINDOWS
 
 #if defined(SO_REUSEADDR) && !defined(CIRCLE_MACINTOSH)
     opt = 1;
@@ -677,7 +677,7 @@ static socket_t init_socket(ush_int local_port)
         ld.l_linger = 0;
         if (setsockopt(s, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld)) < 0)
         {
-            perror("SYSERR: setsockopt SO_LINGER");	// Not fatal I suppose.
+            perror("SYSERR: setsockopt SO_LINGER");    // Not fatal I suppose.
         }
     }
 #endif
@@ -750,7 +750,7 @@ static int get_max_players(void)
 #define OPEN_MAX FOPEN_MAX
 #endif
     method = "OPEN_MAX";
-    max_descs = OPEN_MAX;		/* Uh oh.. rlimit didn't work, but we have
+    max_descs = OPEN_MAX;        /* Uh oh.. rlimit didn't work, but we have
                                 * OPEN_MAX */
 #elif defined (_SC_OPEN_MAX)
     /* Okay, you don't have getrlimit() and you don't have OPEN_MAX.  Time to
@@ -979,7 +979,7 @@ void game_loop(socket_t local_mother_desc)
             {
                 show_string(d, comm);
             }
-            else if (d->str)		// Writing boards, mail, etc.
+            else if (d->str)        // Writing boards, mail, etc.
             {
                 string_add(d, comm);
             }
@@ -987,11 +987,11 @@ void game_loop(socket_t local_mother_desc)
             {
                 nanny(d, comm);
             }
-            else 			// else: we're playing normally.
+            else             // else: we're playing normally.
             {
-                if (aliased)		// To prevent recursive aliases.
+                if (aliased)        // To prevent recursive aliases.
                 {
-                    d->has_prompt = TRUE;	// To get newline before next cmd output.
+                    d->has_prompt = TRUE;    // To get newline before next cmd output.
                 }
                 else if (perform_alias(d, comm, sizeof(comm)))    // Run it through aliasing system
                 {
@@ -1108,7 +1108,7 @@ void heartbeat(int heart_pulse)
         zone_update();
     }
 
-    if (!(heart_pulse % PULSE_IDLEPWD))		// 15 seconds
+    if (!(heart_pulse % PULSE_IDLEPWD))        // 15 seconds
     {
         check_idle_passwords();
     }
@@ -1123,7 +1123,7 @@ void heartbeat(int heart_pulse)
         perform_violence();
     }
 
-    if (!(heart_pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC)))	// Tick !
+    if (!(heart_pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC)))    // Tick !
     {
         weather_and_time(1);
         check_time_triggers();
@@ -1132,7 +1132,7 @@ void heartbeat(int heart_pulse)
         check_timed_quests();
     }
 
-    if (CONFIG_AUTO_SAVE && !(heart_pulse % PULSE_AUTOSAVE)) 	// 1 minute
+    if (CONFIG_AUTO_SAVE && !(heart_pulse % PULSE_AUTOSAVE))     // 1 minute
     {
         if (++mins_since_crashsave >= CONFIG_AUTOSAVE_TIME)
         {
@@ -1179,7 +1179,7 @@ static void timediff(struct timeval *rslt, struct timeval *a, struct timeval *b)
             rslt->tv_usec = a->tv_usec - b->tv_usec;
         }
     }
-    else		// a->tv_sec > b->tv_sec
+    else        // a->tv_sec > b->tv_sec
     {
         rslt->tv_sec = a->tv_sec - b->tv_sec;
         if (a->tv_usec < b->tv_usec)
@@ -1223,7 +1223,7 @@ static void record_usage(void)
 
     log("nusage: %-3d sockets connected, %-3d sockets playing", sockets_connected, sockets_playing);
 
-#ifdef RUSAGE	// Not RUSAGE_SELF because it doesn't guarantee prototype.
+#ifdef RUSAGE    // Not RUSAGE_SELF because it doesn't guarantee prototype.
     {
         struct rusage ru;
 
@@ -1300,14 +1300,14 @@ static size_t proc_colors(char *txt, size_t maxlen, int parse)
         // if we get here we have a color code
         s++; // s now points to the code
 
-        if (!*s)	// string was terminated with @
+        if (!*s)    // string was terminated with @
         {
             *d++ = '@';
             // s will now point to '\0' in the for() check
             continue;
         }
 
-        if (!parse)		// not parsing, just skip the code, unless it's @@
+        if (!parse)        // not parsing, just skip the code, unless it's @@
         {
             if (*s == '@')
             {
@@ -1318,9 +1318,9 @@ static size_t proc_colors(char *txt, size_t maxlen, int parse)
         }
 
         // parse the color code
-        for (i = 0; CCODE[i] != '!'; i++)	// do we find it ?
+        for (i = 0; CCODE[i] != '!'; i++)    // do we find it ?
         {
-            if ((*s) == CCODE[i])		// if so :
+            if ((*s) == CCODE[i])        // if so :
             {
                 /* c now points to the first char in color code*/
                 for(c = ANSI[i] ; *c && ((size_t)(d-p) < maxlen); )
@@ -1359,7 +1359,7 @@ static char *make_prompt(struct descriptor_data *d)
     }
     else if (d->str)
     {
-        strcpy(prompt, "] ");	// strcpy: OK (for 'MAX_PROMPT_LENGTH >= 3')
+        strcpy(prompt, "] ");    // strcpy: OK (for 'MAX_PROMPT_LENGTH >= 3')
     }
     else if (STATE(d) == CON_PLAYING && !IS_NPC(d->character))
     {
@@ -1405,7 +1405,7 @@ static char *make_prompt(struct descriptor_data *d)
                 }
             }
         }
-        else	// not auto prompt
+        else    // not auto prompt
         {
             if (PRF_FLAGGED(d->character, PRF_DISPHP) && len < sizeof(prompt))
             {
@@ -1473,7 +1473,7 @@ static char *make_prompt(struct descriptor_data *d)
 
         if (len < sizeof(prompt))
         {
-            strncat(prompt, "> ", sizeof(prompt) - len - 1);	// strncat: OK
+            strncat(prompt, "> ", sizeof(prompt) - len - 1);    // strncat: OK
         }
     }
     else if (STATE(d) == CON_PLAYING && IS_NPC(d->character))
@@ -1522,7 +1522,7 @@ static int get_from_q(struct txt_q *queue, char *dest, int *aliased)
         return (0);
     }
 
-    strcpy(dest, queue->head->text);	// strcpy: OK (mutual MAX_INPUT_LENGTH)
+    strcpy(dest, queue->head->text);    // strcpy: OK (mutual MAX_INPUT_LENGTH)
     *aliased = queue->head->aliased;
 
     tmp = queue->head;
@@ -1587,7 +1587,7 @@ size_t vwrite_to_output(struct descriptor_data *t, const char *format, va_list a
     if (size < 0 || wantsize >= sizeof(txt))
     {
         size = sizeof(txt) - 1;
-        strcpy(txt + size - strlen(text_overflow), text_overflow);	// strcpy: OK
+        strcpy(txt + size - strlen(text_overflow), text_overflow);    // strcpy: OK
     }
 
     /* If the text is too big to fit into even a large buffer, truncate
@@ -1604,7 +1604,7 @@ size_t vwrite_to_output(struct descriptor_data *t, const char *format, va_list a
     * text just barely fits, then it's switched to a large buffer instead. */
     if (t->bufspace > size)
     {
-        strcpy(t->output + t->bufptr, txt);	// strcpy: OK (size checked above)
+        strcpy(t->output + t->bufptr, txt);    // strcpy: OK (size checked above)
         t->bufspace -= size;
         t->bufptr += size;
         return (t->bufspace);
@@ -1618,16 +1618,16 @@ size_t vwrite_to_output(struct descriptor_data *t, const char *format, va_list a
         t->large_outbuf = bufpool;
         bufpool = bufpool->next;
     }
-    else	// else create a new one
+    else    // else create a new one
     {
         CREATE(t->large_outbuf, struct txt_block, 1);
         CREATE(t->large_outbuf->text, char, LARGE_BUFSIZE);
         buf_largecount++;
     }
 
-    strcpy(t->large_outbuf->text, t->output);	// strcpy: OK (size checked previously)
-    t->output = t->large_outbuf->text;	// make big buffer primary
-    strcat(t->output, txt);	// strcat: OK (size checked)
+    strcpy(t->large_outbuf->text, t->output);    // strcpy: OK (size checked previously)
+    t->output = t->large_outbuf->text;    // make big buffer primary
+    strcat(t->output, txt);    // strcat: OK (size checked)
 
     // set the pointer for the next write
     t->bufptr = strlen(t->output);
@@ -1749,7 +1749,7 @@ static int set_sendbuf(socket_t s)
 // Initialize a descriptor
 static void init_descriptor (struct descriptor_data *newd, int desc)
 {
-    static int last_desc = 0;	// last descriptor number
+    static int last_desc = 0;    // last descriptor number
 
     newd->descriptor = desc;
     newd->idle_tics = 0;
@@ -1820,12 +1820,12 @@ static int new_descriptor(socket_t s)
         }
 
         // find the numeric site address
-        strncpy(newd->host, (char *)inet_ntoa(peer.sin_addr), HOST_LENGTH);	// strncpy: OK (n->host:HOST_LENGTH+1)
+        strncpy(newd->host, (char *)inet_ntoa(peer.sin_addr), HOST_LENGTH);    // strncpy: OK (n->host:HOST_LENGTH+1)
         *(newd->host + HOST_LENGTH) = '\0';
     }
     else
     {
-        strncpy(newd->host, from->h_name, HOST_LENGTH);	// strncpy: OK (n->host:HOST_LENGTH+1)
+        strncpy(newd->host, from->h_name, HOST_LENGTH);    // strncpy: OK (n->host:HOST_LENGTH+1)
         *(newd->host + HOST_LENGTH) = '\0';
     }
 
@@ -1857,9 +1857,9 @@ static int new_descriptor(socket_t s)
 
 /* Send all of the output that we've accumulated for a player out to the 
 * player's descriptor. 32 byte GARBAGE_SPACE in MAX_SOCK_BUF used for:
-*	 2 bytes: prepended \r\n
-*	14 bytes: overflow message
-*	 2 bytes: extra \r\n for non-comapct
+*     2 bytes: prepended \r\n
+*    14 bytes: overflow message
+*     2 bytes: extra \r\n for non-comapct
 *      14 bytes: unused */
 static int process_output(struct descriptor_data *t)
 {
@@ -1867,21 +1867,21 @@ static int process_output(struct descriptor_data *t)
     int result;
 
     // we may need this \r\n for later -- see below
-    strcpy(i, "\r\n");	// strcpy: OK (for 'MAX_SOCK_BUF >= 3')
+    strcpy(i, "\r\n");    // strcpy: OK (for 'MAX_SOCK_BUF >= 3')
 
     // now, append the 'real' output
-    strcpy(osb, t->output);	// strcpy: OK (t->output:LARGE_BUFSIZE < osb:MAX_SOCK_BUF-2)
+    strcpy(osb, t->output);    // strcpy: OK (t->output:LARGE_BUFSIZE < osb:MAX_SOCK_BUF-2)
 
     // if we're in the overflow state, notify the user
     if (t->bufspace == 0)
-        strcat(osb, "**OVERFLOW**\r\n");	// strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space)
+        strcat(osb, "**OVERFLOW**\r\n");    // strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space)
 
     // add the extra CRLF if the person isn't in compact mode
     if (STATE(t) == CON_PLAYING && t->character && !IS_NPC(t->character) && !PRF_FLAGGED(t->character, PRF_COMPACT))
-        strcat(osb, "\r\n");	// strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space)
+        strcat(osb, "\r\n");    // strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space)
 
     // add a prompt
-    strcat(i, make_prompt(t));	// strcpy: OK (i:MAX_SOCK_BUF reserves space)
+    strcat(i, make_prompt(t));    // strcpy: OK (i:MAX_SOCK_BUF reserves space)
 
     /* now, send the output.  If this is an 'interruption', use the prepended
     * CRLF, otherwise send the straight output sans CRLF. */
@@ -1899,12 +1899,12 @@ static int process_output(struct descriptor_data *t)
         result = write_to_descriptor(t->descriptor, osb);
     }
 
-    if (result < 0)			// Oops, fatal error. Bye!
+    if (result < 0)            // Oops, fatal error. Bye!
     {
         close_socket(t);
         return (-1);
     }
-    else if (result == 0)	// Socket buffer full. Try later.
+    else if (result == 0)    // Socket buffer full. Try later.
     {
         return (0);
     }
@@ -1947,7 +1947,7 @@ static int process_output(struct descriptor_data *t)
     else
     {
         // Not all data in buffer sent.  result < output buffersize.
-        strcpy(t->output, t->output + result);	// strcpy: OK (overlap)
+        strcpy(t->output, t->output + result);    // strcpy: OK (overlap)
         t->bufptr   -= result;
         t->bufspace += result;
     }
@@ -1999,7 +1999,7 @@ ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length)
 #else
 
 #if defined(CIRCLE_ACORN)
-#define write	socketwrite
+#define write    socketwrite
 #endif
 
 // perform_socket_write for all Non-Windows platforms
@@ -2025,21 +2025,21 @@ static ssize_t perform_socket_write(socket_t desc, const char *txt, size_t lengt
     /* result < 0, so an error was encountered - is it transient? Unfortunately, 
     * different systems use different constants to indicate this. */
 
-#ifdef EAGAIN		// POSIX
+#ifdef EAGAIN        // POSIX
     if (errno == EAGAIN)
     {
         return (0);
     }
 #endif
 
-#ifdef EWOULDBLOCK	// BSD
+#ifdef EWOULDBLOCK    // BSD
     if (errno == EWOULDBLOCK)
     {
         return (0);
     }
 #endif
 
-#ifdef EDEADLK		// Macintosh
+#ifdef EDEADLK        // Macintosh
     if (errno == EDEADLK)
     {
         return (0);
@@ -2115,35 +2115,35 @@ static ssize_t perform_socket_read(socket_t desc, char *read_point, size_t space
     }
 
     // Read returned a value < 0: there was an error.
-#if defined(CIRCLE_WINDOWS)	// Windows
+#if defined(CIRCLE_WINDOWS)    // Windows
     if ((WSAGetLastError() == WSAEWOULDBLOCK) || (WSAGetLastError() == WSAEINTR))
     {
         return (0);
     }
 #else
 
-#ifdef EINTR		// Interrupted system call - various platforms
+#ifdef EINTR        // Interrupted system call - various platforms
     if (errno == EINTR)
     {
         return (0);
     }
 #endif
 
-#ifdef EAGAIN		// POSIX
+#ifdef EAGAIN        // POSIX
     if (errno == EAGAIN)
     {
         return (0);
     }
 #endif
 
-#ifdef EWOULDBLOCK	// BSD
+#ifdef EWOULDBLOCK    // BSD
     if (errno == EWOULDBLOCK)
     {
         return (0);
     }
 #endif // EWOULDBLOCK
 
-#ifdef EDEADLK		// Macintosh
+#ifdef EDEADLK        // Macintosh
     if (errno == EDEADLK)
     {
         return (0);
@@ -2198,17 +2198,17 @@ static int process_input(struct descriptor_data *t)
 
         bytes_read = perform_socket_read(t->descriptor, read_point, space_left);
 
-        if (bytes_read < 0)	// Error, disconnect them.
+        if (bytes_read < 0)    // Error, disconnect them.
         {
             return (-1);
         }
-        else if (bytes_read == 0)	// Just blocking, no problems.
+        else if (bytes_read == 0)    // Just blocking, no problems.
         {
             return (0);
         }
 
         // at this point, we know we got some data from the read
-        *(read_point + bytes_read) = '\0';  	// terminate the string
+        *(read_point + bytes_read) = '\0';      // terminate the string
 
         // search for a newline in the data we just read
         for (ptr = read_point; *ptr && !nl_pos; ptr++)
@@ -2255,7 +2255,7 @@ static int process_input(struct descriptor_data *t)
         // The '> 1' reserves room for a '$ => $$' expansion.
         for (ptr = read_point; (space_left > 1) && (ptr < nl_pos); ptr++)
         {
-            if ((*ptr == '\b') || (*ptr == 127))	// handle backspacing or delete key
+            if ((*ptr == '\b') || (*ptr == 127))    // handle backspacing or delete key
             {
                 if (write_point > tmp)
                 {
@@ -2272,9 +2272,9 @@ static int process_input(struct descriptor_data *t)
             }
             else if (isascii(*ptr) && isprint(*ptr))
             {
-                if ((*(write_point++) = *ptr) == '$') 		// copy one character
+                if ((*(write_point++) = *ptr) == '$')         // copy one character
                 {
-                    *(write_point++) = '$';	    // if it's a $, double it
+                    *(write_point++) = '$';        // if it's a $, double it
                     space_left -= 2;
                 }
                 else
@@ -2302,9 +2302,9 @@ static int process_input(struct descriptor_data *t)
         }
         failed_subst = 0;
 
-        if ((*tmp == '!') && !(*(tmp + 1)))		// Redo last command.
+        if ((*tmp == '!') && !(*(tmp + 1)))        // Redo last command.
         {
-            strcpy(tmp, t->last_input);	        // strcpy: OK (by mutual MAX_INPUT_LENGTH)
+            strcpy(tmp, t->last_input);            // strcpy: OK (by mutual MAX_INPUT_LENGTH)
         }
         else if (*tmp == '!' && *(tmp + 1))
         {
@@ -2317,12 +2317,12 @@ static int process_input(struct descriptor_data *t)
             {
                 if (t->history[cnt] && is_abbrev(commandln, t->history[cnt]))
                 {
-                    strcpy(tmp, t->history[cnt]);	// strcpy: OK (by mutual MAX_INPUT_LENGTH)
-                    strcpy(t->last_input, tmp);	    // strcpy: OK (by mutual MAX_INPUT_LENGTH)
+                    strcpy(tmp, t->history[cnt]);    // strcpy: OK (by mutual MAX_INPUT_LENGTH)
+                    strcpy(t->last_input, tmp);        // strcpy: OK (by mutual MAX_INPUT_LENGTH)
                     write_to_output(t, "%s\r\n", tmp);
                     break;
                 }
-                if (cnt == 0)	// At top, loop to bottom.
+                if (cnt == 0)    // At top, loop to bottom.
                 {
                     cnt = HISTORY_SIZE;
                 }
@@ -2332,18 +2332,18 @@ static int process_input(struct descriptor_data *t)
         {
             if (!(failed_subst = perform_subst(t, t->last_input, tmp)))
             {
-                strcpy(t->last_input, tmp);	// strcpy: OK (by mutual MAX_INPUT_LENGTH)
+                strcpy(t->last_input, tmp);    // strcpy: OK (by mutual MAX_INPUT_LENGTH)
             }
         }
         else
         {
-            strcpy(t->last_input, tmp);	    // strcpy: OK (by mutual MAX_INPUT_LENGTH)
+            strcpy(t->last_input, tmp);        // strcpy: OK (by mutual MAX_INPUT_LENGTH)
             if (t->history[t->history_pos])
             {
-                free(t->history[t->history_pos]);	    // Clear the old line.
+                free(t->history[t->history_pos]);        // Clear the old line.
             }
-            t->history[t->history_pos] = strdup(tmp);	// Save the new.
-            if (++t->history_pos >= HISTORY_SIZE)	    // Wrap to top.
+            t->history[t->history_pos] = strdup(tmp);    // Save the new.
+            if (++t->history_pos >= HISTORY_SIZE)        // Wrap to top.
             {
                 t->history_pos = 0;
             }
@@ -2424,22 +2424,22 @@ static int perform_subst(struct descriptor_data *t, char *orig, char *subst)
     // now, we construct the new string for output.
 
     // first, everything in the original, up to the string to be replaced
-    strncpy(newsub, orig, strpos - orig);	// strncpy: OK (newsub:MAX_INPUT_LENGTH+5 > orig:MAX_INPUT_LENGTH)
+    strncpy(newsub, orig, strpos - orig);    // strncpy: OK (newsub:MAX_INPUT_LENGTH+5 > orig:MAX_INPUT_LENGTH)
     newsub[strpos - orig] = '\0';
 
     // now, the replacement string
-    strncat(newsub, second, MAX_INPUT_LENGTH - strlen(newsub) - 1);	// strncpy: OK
+    strncat(newsub, second, MAX_INPUT_LENGTH - strlen(newsub) - 1);    // strncpy: OK
 
     // now, if there's anything left in the original after the string to
     // replaced, copy that too.
     if (((strpos - orig) + strlen(first)) < strlen(orig))
     {
-        strncat(newsub, strpos + strlen(first), MAX_INPUT_LENGTH - strlen(newsub) - 1);	// strncpy: OK
+        strncat(newsub, strpos + strlen(first), MAX_INPUT_LENGTH - strlen(newsub) - 1);    // strncpy: OK
     }
 
     // terminate the string in case of an overflow from strncat
     newsub[MAX_INPUT_LENGTH - 1] = '\0';
-    strcpy(subst, newsub);	// strcpy: OK (by mutual MAX_INPUT_LENGTH)
+    strcpy(subst, newsub);    // strcpy: OK (by mutual MAX_INPUT_LENGTH)
 
     return (0);
 }
@@ -2709,7 +2709,7 @@ static RETSIGTYPE hupsig(int sig)
     exit(1); // perhaps something more elegant should substituted
 }
 
-#endif	// CIRCLE_UNIX
+#endif    // CIRCLE_UNIX
 
 /*
 * This is an implementation of signal() using sigaction() for portability.
@@ -2734,7 +2734,7 @@ static sigfunc *my_signal(int signo, sigfunc *func)
     sigemptyset(&sact.sa_mask);
     sact.sa_flags = 0;
 #ifdef SA_INTERRUPT
-    sact.sa_flags |= SA_INTERRUPT;	// SunOS
+    sact.sa_flags |= SA_INTERRUPT;    // SunOS
 #endif
 
     if (sigaction(signo, &sact, &oact) < 0)
@@ -2744,7 +2744,7 @@ static sigfunc *my_signal(int signo, sigfunc *func)
 
     return (oact.sa_handler);
 }
-#endif				// POSIX
+#endif                // POSIX
 
 static void signal_setup(void)
 {
@@ -2777,7 +2777,7 @@ static void signal_setup(void)
     my_signal(SIGPIPE, SIG_IGN);
     my_signal(SIGALRM, SIG_IGN);
 }
-#endif	// CIRCLE_UNIX || CIRCLE_MACINTOSH
+#endif    // CIRCLE_UNIX || CIRCLE_MACINTOSH
 
 /* 
 * Public routines for system-to-player-communication. 
@@ -3223,7 +3223,7 @@ static void setup_log(const char *filename, int fd)
 
 static int open_logfile(const char *filename, FILE *stderr_fp)
 {
-    if (stderr_fp)	// freopen() the descriptor.
+    if (stderr_fp)    // freopen() the descriptor.
     {
         logfile = freopen(filename, "w", stderr_fp);
     }
