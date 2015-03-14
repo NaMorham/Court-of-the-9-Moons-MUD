@@ -118,7 +118,7 @@ void extract_script(void *thing, int type)
     obj_data *obj;
     room_data *room;
 
-    switch (type) 
+    switch (type)
     {
     case MOB_TRIGGER:
         mob = (struct char_data *)thing;

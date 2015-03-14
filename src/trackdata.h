@@ -27,10 +27,10 @@ private:
     bool m_entered;     ///! Are the tracks emntering or leaving
     time_t m_created;   ///! Used to determine how old the tracks are
     byte m_race;        ///! Not implemented yet
-    byte barefoot;        
+    byte barefoot;
     byte burdened;
 };
 
-//class 
+//class
 
 #endif

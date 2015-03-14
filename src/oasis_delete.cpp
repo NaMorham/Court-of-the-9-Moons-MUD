@@ -19,7 +19,7 @@
 #include "improved-edit.h"
 
 /* Free's strings from any object, room, mobiles, or player. TRUE if successful,
- * otherwise, it returns FALSE. Type - The OLC type constant relating to the 
+ * otherwise, it returns FALSE. Type - The OLC type constant relating to the
  * data type of data. */
 int free_strings(void *data, int type)
 {

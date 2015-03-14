@@ -1,13 +1,13 @@
 /**
 * @file comm.h
 * Header file, prototypes of public communication functions.
-* 
+*
 * Part of the core tbaMUD source code distribution, which is a derivative
 * of, and continuation of, CircleMUD.
-*                                                                        
-* All rights reserved.  See license for complete information.                                                                
-* Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University 
-* CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               
+*
+* All rights reserved.  See license for complete information.
+* Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University
+* CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.
 *
 */
 #ifndef _COMM_H_
@@ -18,9 +18,9 @@
 
 /* comm.c */
 void close_socket(struct descriptor_data *d);
-size_t send_to_char(struct char_data *ch, const char *messg, ...) __attribute__ 
+size_t send_to_char(struct char_data *ch, const char *messg, ...) __attribute__
     ((format (printf, 2, 3)));
-void send_to_all(const char *messg, ...) __attribute__ ((format (printf, 1, 
+void send_to_all(const char *messg, ...) __attribute__ ((format (printf, 1,
     2)));
 void send_to_room(room_rnum room, const char *messg, ...) __attribute__ ((format
     (printf, 2, 3)));
@@ -29,8 +29,8 @@ void send_to_outdoor(const char *messg, ...) __attribute__ ((format (printf, 1,
 void send_to_range(room_vnum start, room_vnum finish, const char *messg, ...)
     __attribute__ ((format (printf, 3, 4)));
 
-/* Act type settings and flags */ 
-#define TO_ROOM     1   /**< act() type: to everyone in room, except ch. */ 
+/* Act type settings and flags */
+#define TO_ROOM     1   /**< act() type: to everyone in room, except ch. */
 #define TO_VICT     2   /**< act() type: to vict_obj. */
 #define TO_NOTVICT  3   /**< act() type: to everyone in room, not ch or vict_obj. */
 #define TO_CHAR     4   /**< act() type: to ch. */
@@ -40,7 +40,7 @@ void send_to_range(room_vnum start, room_vnum finish, const char *messg, ...)
 
 
 /* act functions */
-void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj, void *vict_obj, struct char_data *to); 
+void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj, void *vict_obj, struct char_data *to);
 char * act(const char *str, int hide_invisible, struct char_data *ch, struct obj_data *obj, void *vict_obj, int type);
 
 /* I/O functions */

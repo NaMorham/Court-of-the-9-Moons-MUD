@@ -514,7 +514,7 @@ void str_and_map(char *str, struct char_data *ch, room_vnum target_room ) {
       map[x][y]= (!(y%2) && !worldmap) ? DOOR_NONE : SECT_EMPTY;
 
   /* starts the mapping with the center room */
-MapArea(target_room, ch, centre, centre, min, max, ns_size/2, ew_size/2, worldmap ); 
+MapArea(target_room, ch, centre, centre, min, max, ns_size/2, ew_size/2, worldmap );
   map[centre][centre] = SECT_HERE;
 
   /* char_size = rooms + doors + padding */

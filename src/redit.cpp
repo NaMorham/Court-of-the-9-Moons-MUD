@@ -170,12 +170,12 @@ void redit_setup_existing(struct descriptor_data *d, int real_num)
   CREATE(room, struct room_data, 1);
 
   *room = world[real_num];
-  
-  /* Make new room people list be empty.                          */ 
-  /* Fixes bug where copying a room from within that room creates */ 
-  /* an infinite loop when you next act() in the new room (goto?) */ 
-  /* and you are your next_in_room          -- anderyu (10-05-22) */ 
-  room->people = NULL; 
+
+  /* Make new room people list be empty.                          */
+  /* Fixes bug where copying a room from within that room creates */
+  /* an infinite loop when you next act() in the new room (goto?) */
+  /* and you are your next_in_room          -- anderyu (10-05-22) */
+  room->people = NULL;
 
   /* Allocate space for all strings. */
   room->name = str_udup(world[real_num].name);
@@ -232,7 +232,7 @@ void redit_save_internally(struct descriptor_data *d)
   if (OLC_ROOM(d)->number == NOWHERE)
     new_room = TRUE;
 
-  OLC_ROOM(d)->number = OLC_NUM(d); 
+  OLC_ROOM(d)->number = OLC_NUM(d);
   /* FIXME: Why is this not set elsewhere? */
   OLC_ROOM(d)->zone = OLC_ZNUM(d);
 
@@ -330,13 +330,13 @@ static void redit_disp_exit_menu(struct descriptor_data *d)
 {
   char door_buf[24];
   /* if exit doesn't exist, alloc/create it */
-    if (OLC_EXIT(d) == NULL) 
+    if (OLC_EXIT(d) == NULL)
     {
     CREATE(OLC_EXIT(d), struct room_direction_data, 1);
     OLC_EXIT(d)->to_room = NOWHERE;
   }
   /* Weird door handling! */
-    if (IS_SET(OLC_EXIT(d)->exit_info, EX_ISDOOR)) 
+    if (IS_SET(OLC_EXIT(d)->exit_info, EX_ISDOOR))
     {
     if (IS_SET(OLC_EXIT(d)->exit_info, EX_PICKPROOF))
         {
@@ -357,7 +357,7 @@ static void redit_disp_exit_menu(struct descriptor_data *d)
       strncpy(door_buf, "Is a door", sizeof(door_buf)-1);
             }
         }
-    } 
+    }
     else
     {
     strncpy(door_buf, "No door", sizeof(door_buf)-1);
@@ -393,8 +393,8 @@ static void redit_disp_exit_flag_menu(struct descriptor_data *d)
       "%s2%s) Pickproof\r\n"
       "%s3%s) Breakable\r\n"
       "%s4%s) Hidden\r\n"
-      "Enter choice : ", 
-      grn, nrm, grn, nrm, grn, nrm, 
+      "Enter choice : ",
+      grn, nrm, grn, nrm, grn, nrm,
       grn, nrm, grn, nrm);
 }
 
@@ -511,8 +511,8 @@ void redit_parse(struct descriptor_data *d, char *arg)
       break;
     case 'n':
     case 'N':
-      /* If not saving, we must free the script_proto list. We do so by 
-       * assigning it to the edited room and letting free_room in 
+      /* If not saving, we must free the script_proto list. We do so by
+       * assigning it to the edited room and letting free_room in
        * cleanup_olc handle it. */
       OLC_ROOM(d)->proto_script = OLC_SCRIPT(d);
       cleanup_olc(d, CLEANUP_ALL);
@@ -744,7 +744,7 @@ void redit_parse(struct descriptor_data *d, char *arg)
       redit_disp_exit_flag_menu(d);
     } else {
       /* Doors are a bit idiotic, don't you think? :) -- I agree. -gg */
-      /* 
+      /*
       OLC_EXIT(d)->exit_info = (number == 0 ? 0 :
                 (number == 1 ? EX_ISDOOR :
                 (number == 2 ? EX_ISDOOR | EX_PICKPROOF : 0)));
@@ -788,7 +788,7 @@ void redit_parse(struct descriptor_data *d, char *arg)
   case REDIT_EXTRADESC_MENU:
     switch ((number = atoi(arg))) {
     case 0:
-      /* If something got left out, delete the extra description when backing 
+      /* If something got left out, delete the extra description when backing
          out to the menu. */
       if (OLC_DESC(d)->keyword == NULL || OLC_DESC(d)->description == NULL) {
     struct extra_descr_data *temp;
@@ -843,7 +843,7 @@ void redit_parse(struct descriptor_data *d, char *arg)
     } else
       write_to_output(d, "That room does not exist.\r\n");
     break;
-  
+
   case REDIT_DELETE:
     if (*arg == 'y' || *arg == 'Y') {
       if (delete_room(real_room(OLC_ROOM(d)->number)))

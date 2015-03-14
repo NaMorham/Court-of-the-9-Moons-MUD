@@ -146,7 +146,7 @@ struct trig_var_data {
 };
 
 /** structure for triggers */
-struct trig_data 
+struct trig_data
 {
     IDXTYPE nr;                         ///< trigger's rnum
     byte attach_type;                   ///< mob/obj/wld intentions
@@ -168,7 +168,7 @@ struct trig_data
 };
 
 /** a complete script (composed of several triggers) */
-struct script_data 
+struct script_data
 {
     long types;                        ///< bitvector of trigger types
     struct trig_data *trig_list;       ///< list of triggers
@@ -180,7 +180,7 @@ struct script_data
 };
 
 /* The event data for the wait command */
-struct wait_event_data 
+struct wait_event_data
 {
     struct trig_data *trigger;
     void *go;
@@ -188,7 +188,7 @@ struct wait_event_data
 };
 
 /* used for actor memory triggers */
-struct script_memory 
+struct script_memory
 {
     long id;        // id of who to remember
     char *cmd;        // command, or NULL for generic

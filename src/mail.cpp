@@ -339,8 +339,8 @@ static void postmaster_receive_mail(struct char_data *ch, struct char_data *mail
     return;
   }
   while (has_mail(GET_IDNUM(ch))) {
-    obj = create_obj(); 
-    obj->item_number = 1; 
+    obj = create_obj();
+    obj->item_number = 1;
     obj->name = strdup("mail paper letter");
     obj->short_description = strdup("a piece of mail");
     obj->description = strdup("Someone has left a piece of mail here.");
@@ -365,11 +365,11 @@ static void postmaster_receive_mail(struct char_data *ch, struct char_data *mail
   }
 }
 
-void notify_if_playing(struct char_data *from, int recipient_id) 
-{ 
-  struct descriptor_data *d; 
+void notify_if_playing(struct char_data *from, int recipient_id)
+{
+  struct descriptor_data *d;
 
-  for (d = descriptor_list; d; d = d->next) 
-    if ((IS_PLAYING(d)) && (GET_IDNUM(d->character) == recipient_id) && (has_mail(GET_IDNUM(d->character)))) 
-      send_to_char(d->character, "You have new mudmail from %s.\r\n", GET_NAME(from)); 
-} 
+  for (d = descriptor_list; d; d = d->next)
+    if ((IS_PLAYING(d)) && (GET_IDNUM(d->character) == recipient_id) && (has_mail(GET_IDNUM(d->character))))
+      send_to_char(d->character, "You have new mudmail from %s.\r\n", GET_NAME(from));
+}

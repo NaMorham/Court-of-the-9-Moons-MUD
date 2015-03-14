@@ -31,12 +31,12 @@ typedef signed char         byte;       ///< Technically 1 signed byte; vals sho
 #endif
 
 // preamble
-/** 
+/**
  * As of bpl20, it should be safe to use unsigned data types for the various
  * virtual and real number data types.  There really isn't a reason to use
  * signed anymore so use the unsigned types and get 65,535 objects instead of
  * 32,768. NOTE: This will likely be unconditionally unsigned later.
- * 0 = use signed indexes; 1 = use unsigned indexes 
+ * 0 = use signed indexes; 1 = use unsigned indexes
  */
 #define CIRCLE_UNSIGNED_INDEX    1
 
@@ -54,8 +54,8 @@ typedef signed char         byte;       ///< Technically 1 signed byte; vals sho
 # define IDXTYPE_MIN    SHRT_MIN        ///< Used for compatibility checks.
 # define NOWHERE        ((IDXTYPE)-1)   ///< nil reference for rooms
 # define NOTHING        ((IDXTYPE)-1)   ///< nil reference for objects
-# define NOBODY            ((IDXTYPE)-1)    ///< nil reference for mobiles 
-# define NOFLAG         ((IDXTYPE)-1)   ///< nil reference for flags  
+# define NOBODY            ((IDXTYPE)-1)    ///< nil reference for mobiles
+# define NOFLAG         ((IDXTYPE)-1)   ///< nil reference for flags
 #endif
 
 #endif  // __CIRCLE__MUDTYPES_H__

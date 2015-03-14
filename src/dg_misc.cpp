@@ -170,7 +170,7 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
 
     /* make sure all parameters are present */
     if (charname == NULL || !*charname || property == NULL || !*property ||
-        value_p == NULL || !*value_p || duration_p == NULL || !*duration_p) 
+        value_p == NULL || !*value_p || duration_p == NULL || !*duration_p)
     {
         script_log("Trigger: %s, VNum %d. dg_affect usage: <target> <property> <value> <duration>",
                    GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
@@ -179,7 +179,7 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
 
     value = atoi(value_p);
     duration = atoi(duration_p);
-    if (duration <= 0) 
+    if (duration <= 0)
     {
         script_log("Trigger: %s, VNum %d. dg_affect: need positive duration!",
                    GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
@@ -190,9 +190,9 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
 
     /* find the property -- first search apply_types */
     i = 0;
-    while (str_cmp(apply_types[i], "\n")) 
+    while (str_cmp(apply_types[i], "\n"))
     {
-        if (!str_cmp(apply_types[i], property)) 
+        if (!str_cmp(apply_types[i], property))
         {
             type=APPLY_TYPE;
             break;
@@ -203,9 +203,9 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
     if (!type)  /* search affect_types now */
     {
         i = 0;
-        while (str_cmp(affected_bits[i], "\n")) 
+        while (str_cmp(affected_bits[i], "\n"))
         {
-            if (!str_cmp(affected_bits[i], property)) 
+            if (!str_cmp(affected_bits[i], property))
             {
                 type=AFFECT_TYPE;
                 break;
@@ -223,14 +223,14 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
 
     /* locate the target */
     ch = get_char(charname);
-    if (!ch) 
+    if (!ch)
     {
         script_log("Trigger: %s, VNum %d. dg_affect: cannot locate target!",
                    GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
         return;
     }
 
-    if (!str_cmp(value_p, "off")) 
+    if (!str_cmp(value_p, "off"))
     {
         affect_from_char(ch, SPELL_DG_AFFECT);
         return;
@@ -241,12 +241,12 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
     af.duration = duration -1;
     af.modifier = value;
 
-    if (type == APPLY_TYPE) 
+    if (type == APPLY_TYPE)
     {
         af.location = i;
         af.bitvector = 0;
-    } 
-    else 
+    }
+    else
     {
         af.location = 0;
         af.bitvector = i;
@@ -257,7 +257,7 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
 
 void send_char_pos(struct char_data *ch, int dam)
 {
-    switch (GET_POS(ch)) 
+    switch (GET_POS(ch))
     {
     case POS_MORTALLYW:
         act("$n is mortally wounded, and will die soon, if not aided.", TRUE, ch, 0, 0, TO_ROOM);
@@ -322,7 +322,7 @@ int valid_dg_target(struct char_data *ch, int bitvector)
 
 void script_damage(struct char_data *vict, int dam)
 {
-    if (GET_LEVEL(vict)>=LVL_IMMORT && (dam > 0)) 
+    if (GET_LEVEL(vict)>=LVL_IMMORT && (dam > 0))
     {
         send_to_char(vict, "Being the cool immortal you are, you sidestep a trap, "
                      "obviously placed to kill you.\r\n");
@@ -335,7 +335,7 @@ void script_damage(struct char_data *vict, int dam)
     update_pos(vict);
     send_char_pos(vict, dam);
 
-    if (GET_POS(vict) == POS_DEAD) 
+    if (GET_POS(vict) == POS_DEAD)
     {
         if (!IS_NPC(vict))
         {

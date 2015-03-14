@@ -344,7 +344,7 @@ ACMD(do_vnum)
 
   half_chop(argument, buf, buf2);
 
-    if (!*buf || !*buf2) 
+    if (!*buf || !*buf2)
     {
     send_to_char(ch, "Usage: vnum { obj | mob | room | trig } <name>\r\n");
     return;
@@ -529,7 +529,7 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
 
   send_to_char(ch, "Description:\r\n%s", rm->description ? rm->description : "  None.\r\n");
 
-    if (rm->ex_description) 
+    if (rm->ex_description)
     {
     send_to_char(ch, "Extra descs:%s", CCCYN(ch, C_NRM));
     for (desc = rm->ex_description; desc; desc = desc->next)
@@ -549,7 +549,7 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
 
     column += send_to_char(ch, "%s %s(%s)", found++ ? "," : "", GET_NAME(k),
         !IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB"));
-        if (column >= 62) 
+        if (column >= 62)
         {
       send_to_char(ch, "%s\r\n", k->next_in_room ? "," : "");
       found = FALSE;
@@ -558,12 +558,12 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
   }
   send_to_char(ch, "%s", CCNRM(ch, C_NRM));
 
-    if (rm->contents) 
+    if (rm->contents)
     {
     send_to_char(ch, "Contents:%s", CCGRN(ch, C_NRM));
     column = 9;    // ^^^ strlen ^^^
 
-        for (found = 0, j = rm->contents; j; j = j->next_content) 
+        for (found = 0, j = rm->contents; j; j = j->next_content)
         {
       if (!CAN_SEE_OBJ(ch, j))
             {
@@ -571,7 +571,7 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
             }
 
       column += send_to_char(ch, "%s %s", found++ ? "," : "", j->short_description);
-            if (column >= 62) 
+            if (column >= 62)
             {
     send_to_char(ch, "%s\r\n", j->next_content ? "," : "");
     found = FALSE;
@@ -581,7 +581,7 @@ static void do_stat_room(struct char_data *ch, struct room_data *rm)
     send_to_char(ch, "%s", CCNRM(ch, C_NRM));
   }
 
-    for (i = 0; i < NUM_OF_DIRS; i++) 
+    for (i = 0; i < NUM_OF_DIRS; i++)
     {
     char buf1[128];
 
@@ -2728,12 +2728,12 @@ ACMD(do_show)
     const char pcnpc;
     const char type;
   } set_fields[] = {
-   { "ac",        LVL_BUILDER,     BOTH,     NUMBER },  // 0 
-   { "afk",             LVL_BUILDER,    PC,    BINARY },  // 1 
+   { "ac",        LVL_BUILDER,     BOTH,     NUMBER },  // 0
+   { "afk",             LVL_BUILDER,    PC,    BINARY },  // 1
    { "age",        LVL_GOD,    BOTH,    NUMBER },
    { "align",        LVL_BUILDER,     BOTH,     NUMBER },
    { "bank",        LVL_BUILDER,     PC,     NUMBER },
-   { "brief",        LVL_GOD,     PC,     BINARY },  // 5 
+   { "brief",        LVL_GOD,     PC,     BINARY },  // 5
    { "cha",        LVL_BUILDER,     BOTH,     NUMBER },
    { "class",        LVL_BUILDER,     BOTH,     MISC },
    { "color",        LVL_GOD,     PC,     BINARY },
@@ -3403,9 +3403,9 @@ ACMD(do_links)
 /* Armor class limits*/
 #define TOTAL_WEAR_CHECKS  (NUM_ITEM_WEARS-2)  /*minus Wield and Take*/
 struct zcheck_armor {
-  bitvector_t bitvector;          // from Structs.h                      
-  int ac_allowed;                 // Max. AC allowed for this body part 
-  char *message;                  // phrase for error message           
+  bitvector_t bitvector;          // from Structs.h
+  int ac_allowed;                 // Max. AC allowed for this body part
+  char *message;                  // phrase for error message
 } zarmor[] = {
   {ITEM_WEAR_FINGER, 10, "Ring"},
   {ITEM_WEAR_NECK,   10, "Necklace"},
@@ -3424,9 +3424,9 @@ struct zcheck_armor {
 
 /*These are strictly boolean*/
 #define CAN_WEAR_WEAPONS         0     // toggle - can a weapon also be a piece of armor?
-#define MAX_APPLIES_LIMIT        1     // toggle - is there a limit at all?              
-#define CHECK_ITEM_RENT          0     // do we check for rent cost == 0 ?               
-#define CHECK_ITEM_COST          0     // do we check for item cost == 0 ?               
+#define MAX_APPLIES_LIMIT        1     // toggle - is there a limit at all?
+#define CHECK_ITEM_RENT          0     // do we check for rent cost == 0 ?
+#define CHECK_ITEM_COST          0     // do we check for item cost == 0 ?
 /* Applies limits !! Very Important:  Keep these in the same order as in Structs.h.
  * To ignore an apply, set max_aff to -99. These will be ignored if MAX_APPLIES_LIMIT = 0 */
 struct zcheck_affs {
@@ -4041,25 +4041,25 @@ ACMD(do_checkloadstatus)
 
     two_arguments(argument, buf1, buf2);
 
-    if ((!*buf1) || (!*buf2) || (!isdigit(*buf2))) 
+    if ((!*buf1) || (!*buf2) || (!isdigit(*buf2)))
     {
         send_to_char(ch, "Checkload <M | O | T> <vnum>\r\n");
         return;
     }
 
-    if (LOWER(*buf1) == 'm') 
+    if (LOWER(*buf1) == 'm')
     {
         mob_checkload(ch, atoi(buf2));
         return;
     }
 
-    if (LOWER(*buf1) == 'o') 
+    if (LOWER(*buf1) == 'o')
     {
         obj_checkload(ch, atoi(buf2));
         return;
     }
 
-    if (LOWER(*buf1) == 't') 
+    if (LOWER(*buf1) == 't')
     {
         trg_checkload(ch, atoi(buf2));
         return;
@@ -4068,7 +4068,7 @@ ACMD(do_checkloadstatus)
 // Zone Checker code above.
 
 /*
- * (c) 1996-97 Erwin S. Andreasen. 
+ * (c) 1996-97 Erwin S. Andreasen.
  */
 ACMD(do_copyover)
 {
@@ -4081,7 +4081,7 @@ ACMD(do_copyover)
     int i;
 
     fp = fopen (COPYOVER_FILE, "w");
-    if (!fp) 
+    if (!fp)
     {
         send_to_char (ch, "Copyover file not writeable, aborted.\n\r");
         return;
@@ -4099,12 +4099,12 @@ ACMD(do_copyover)
         d_next = d->next;
 
         // drop those logging on
-        if (!d->character || d->connected > CON_PLAYING) 
+        if (!d->character || d->connected > CON_PLAYING)
         {
             write_to_descriptor (d->descriptor, "\n\rSorry, we are rebooting. Come back in a few minutes.\n\r");
             close_socket (d); // throw'em out
-        } 
-        else 
+        }
+        else
         {
             fprintf (fp, "%d %ld %s %s\n", d->descriptor, GET_PREF(och), GET_NAME(och), d->host);
             // save och
@@ -4143,7 +4143,7 @@ ACMD(do_peace)
     act ("As $n makes a strange arcane gesture, a golden light descends\r\n"
         "from the heavens stopping all the fighting.\r\n",FALSE, ch, 0, 0, TO_ROOM);
     send_to_room(IN_ROOM(ch), "Everything is quite peaceful now.\r\n");
-    for(vict=world[IN_ROOM(ch)].people; vict; vict=next_v) 
+    for(vict=world[IN_ROOM(ch)].people; vict; vict=next_v)
     {
         next_v = vict->next_in_room;
         if (FIGHTING(vict))
@@ -4163,36 +4163,36 @@ ACMD(do_zpurge)
     char arg[MAX_INPUT_LENGTH];
     int purge_all = FALSE;
     one_argument(argument, arg);
-    if (*arg == '.' || !*arg) 
+    if (*arg == '.' || !*arg)
     {
         zone = world[IN_ROOM(ch)].zone;
         vzone = zone_table[zone].number;
     }
-    else if (is_number(arg)) 
+    else if (is_number(arg))
     {
         vzone = atoi(arg);
         zone = real_zone(vzone);
-        if (zone == NOWHERE || zone > top_of_zone_table) 
+        if (zone == NOWHERE || zone > top_of_zone_table)
         {
             send_to_char(ch, "That zone doesn't exist!\r\n");
             return;
         }
     }
-    else if (*arg == '*') 
+    else if (*arg == '*')
     {
         purge_all = TRUE;
     }
-    else 
+    else
     {
         send_to_char(ch, "That isn't a valid zone number!\r\n");
         return;
     }
-    if (GET_LEVEL(ch) < LVL_GOD && !can_edit_zone(ch, zone)) 
+    if (GET_LEVEL(ch) < LVL_GOD && !can_edit_zone(ch, zone))
     {
         send_to_char(ch, "You can only purge your own zone!\r\n");
         return;
     }
-    if (!purge_all) 
+    if (!purge_all)
     {
         for (vroom = zone_table[zone].bot; vroom <= zone_table[zone].top; vroom++) {
             purge_room(real_room(vroom));
@@ -4200,9 +4200,9 @@ ACMD(do_zpurge)
         send_to_char(ch, "Purged zone #%d: %s.\r\n", zone_table[zone].number, zone_table[zone].name);
         mudlog(NRM, MAX(LVL_GRGOD, GET_INVIS_LEV(ch)), TRUE, "(GC) %s purged zone %d (%s)", GET_NAME(ch), zone_table[zone].number, zone_table[zone].name);
     }
-    else 
+    else
     {
-        for (room = 0; room <= top_of_world; room++) 
+        for (room = 0; room <= top_of_world; room++)
         {
             purge_room(room);
         }
@@ -4211,7 +4211,7 @@ ACMD(do_zpurge)
     }
 }
 
-/** 
+/**
  * Used to read and gather a bit of information about external log files while
  * in game.
  * Makes use of the '@' color codes in the file status information.
@@ -4238,14 +4238,14 @@ ACMD(do_file)
     char buf[MAX_STRING_LENGTH];  // Display buffer for req_file.
 
     // Defines which files are available to read.
-    struct file_struct 
+    struct file_struct
     {
         char *cmd;          // The 'name' of the file to view
         char level;         // Minimum level needed to view.
         char *file;         // The file location, relative to the working dir.
         int read_backwards; // Should the file be read backwards by default?
-    } 
-    fields[] = 
+    }
+    fields[] =
     {
         { "xnames",         LVL_GOD,    XNAME_FILE,          TRUE},
         { "levels",         LVL_GOD,    LEVELS_LOGFILE,      TRUE},
@@ -4395,41 +4395,41 @@ ACMD(do_changelog)
 
     skip_spaces(&argument);
 
-    if (!*argument) 
+    if (!*argument)
     {
         send_to_char(ch, "Usage: changelog <change>\r\n");
         return;
     }
 
     sprintf(buf, "%s.bak", CHANGE_LOG_FILE);
-    if (rename(CHANGE_LOG_FILE, buf)) 
+    if (rename(CHANGE_LOG_FILE, buf))
     {
         mudlog(BRF, LVL_IMPL, TRUE,
             "SYSERR: Error making backup changelog file (%s)", buf);
         return;
     }
 
-    if (!(fl = fopen(buf, "r"))) 
+    if (!(fl = fopen(buf, "r")))
     {
         mudlog(BRF, LVL_IMPL, TRUE,
             "SYSERR: Error opening backup changelog file (%s)", buf);
         return;
     }
 
-    if (!(newFl = fopen(CHANGE_LOG_FILE, "w"))) 
+    if (!(newFl = fopen(CHANGE_LOG_FILE, "w")))
     {
         mudlog(BRF, LVL_IMPL, TRUE,
             "SYSERR: Error opening new changelog file (%s)", CHANGE_LOG_FILE);
         return;
     }
 
-    while (get_line(fl, line)) 
+    while (get_line(fl, line))
     {
         if (*line != '[')
         {
             fprintf(newFl, "%s\n", line);
         }
-        else 
+        else
         {
             strcpy(last_buf, line);
             break;
@@ -4473,23 +4473,23 @@ ACMD(do_plist)
     strcpy(buf, argument);        // strcpy: OK (sizeof: argument == buf)
     name_search[0] = '\0';
 
-    while (*buf) 
+    while (*buf)
     {
         char arg[MAX_INPUT_LENGTH], buf1[MAX_INPUT_LENGTH];
 
         half_chop(buf, arg, buf1);
-        if (isdigit(*arg)) 
+        if (isdigit(*arg))
         {
             if (sscanf(arg, "%d-%d", &low, &high) == 1)
             {
                 high = low;
             }
             strcpy(buf, buf1);        // strcpy: OK (sizeof: buf1 == buf)
-        } 
-        else if (*arg == '-') 
+        }
+        else if (*arg == '-')
         {
             mode = *(arg + 1);        // just in case; we destroy arg in the switch
-            switch (mode) 
+            switch (mode)
             {
             case 'l':
                 half_chop(buf1, arg, buf);
@@ -4520,8 +4520,8 @@ ACMD(do_plist)
                 send_to_char(ch, "%s\r\n", PLIST_FORMAT);
                 return;
             }
-        } 
-        else 
+        }
+        else
         {
             send_to_char(ch, "%s\r\n", PLIST_FORMAT);
             return;
@@ -4533,7 +4533,7 @@ ACMD(do_plist)
                     "%s-------------------------------------%s\r\n", CCCYN(ch, C_NRM),
                     CCNRM(ch, C_NRM));
 
-    for (i = 0; i <= top_of_p_table; i++) 
+    for (i = 0; i <= top_of_p_table; i++)
     {
         if (player_table[i].level < low || player_table[i].level > high)
         {
@@ -4575,8 +4575,8 @@ ACMD(do_wizupdate)
     send_to_char(ch, "Wizlists updated.\n\r");
 }
 
-/* 
- * NOTE: This is called from perform_set 
+/*
+ * NOTE: This is called from perform_set
  */
 bool change_player_name(struct char_data *ch, struct char_data *vict, char *new_name)
 {
@@ -4599,25 +4599,25 @@ bool change_player_name(struct char_data *ch, struct char_data *vict, char *new_
 
     if (!new_name || !(*new_name) || strlen(new_name) < 2 ||
         strlen(new_name) > MAX_NAME_LENGTH || !valid_name(new_name) ||
-        fill_word(new_name) || reserved_word(new_name) ) 
+        fill_word(new_name) || reserved_word(new_name) )
     {
             send_to_char(ch, "Invalid new name.\r\n");
             return FALSE;
     }
 
     // Check that someone with new_name isn't already logged in
-    if ((temp_ch = get_player_vis(ch, new_name, NULL, FIND_CHAR_WORLD)) != NULL) 
+    if ((temp_ch = get_player_vis(ch, new_name, NULL, FIND_CHAR_WORLD)) != NULL)
     {
         send_to_char(ch, "Sorry, the new name already exists.\r\n");
         return FALSE;
-    } 
-    else  
+    }
+    else
     {
         // try to load the player off disk
         CREATE(temp_ch, struct char_data, 1);
         clear_char(temp_ch);
         CREATE(temp_ch->player_specials, struct player_special_data, 1);
-        if ((plr_i = load_char(new_name, temp_ch)) > -1) 
+        if ((plr_i = load_char(new_name, temp_ch)) > -1)
         {
             free_char(temp_ch);
             send_to_char(ch, "Sorry, the new name already exists.\r\n");
@@ -4690,7 +4690,7 @@ ACMD(do_zlock)
 
     two_arguments(argument, arg, arg2);
 
-    if (!*arg) 
+    if (!*arg)
     {
         send_to_char(ch, "Usage: %szlock <zone number>%s\r\n", QYEL, QNRM);
         send_to_char(ch, "%s       zlock list%s\r\n\r\n", QYEL, QNRM);
@@ -4700,57 +4700,57 @@ ACMD(do_zlock)
         send_to_char(ch, "'zlock all all' will lock every zone in the MUD.\r\n");
         return;
     }
-    if (is_abbrev(arg, "all")) 
+    if (is_abbrev(arg, "all"))
     {
-        if (GET_LEVEL(ch) < LVL_GRGOD) 
+        if (GET_LEVEL(ch) < LVL_GRGOD)
         {
             send_to_char(ch, "You do not have sufficient access to lock all zones.\r\n");
             return;
         }
-        if (!*arg2) 
+        if (!*arg2)
         {
-            for (zn = 0; zn <= top_of_zone_table; zn++) 
+            for (zn = 0; zn <= top_of_zone_table; zn++)
             {
-                if (!ZONE_FLAGGED(zn, ZONE_NOBUILD) && ZONE_FLAGGED(zn, ZONE_GRID)) 
+                if (!ZONE_FLAGGED(zn, ZONE_NOBUILD) && ZONE_FLAGGED(zn, ZONE_GRID))
                 {
                     counter++;
                     SET_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
-                    if (save_zone(zn)) 
+                    if (save_zone(zn))
                     {
                         log("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
-                    } 
-                    else 
-                    {
-                        fail = TRUE;
                     }
-                }
-            }
-        } 
-        else if (is_abbrev(arg2, "all")) 
-        {
-            for (zn = 0; zn <= top_of_zone_table; zn++) 
-            {
-                if (!ZONE_FLAGGED(zn, ZONE_NOBUILD)) 
-                {
-                    counter++;
-                    SET_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
-                    if (save_zone(zn)) 
-                    {
-                        log("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
-                    } 
-                    else 
+                    else
                     {
                         fail = TRUE;
                     }
                 }
             }
         }
-        if (counter == 0) 
+        else if (is_abbrev(arg2, "all"))
+        {
+            for (zn = 0; zn <= top_of_zone_table; zn++)
+            {
+                if (!ZONE_FLAGGED(zn, ZONE_NOBUILD))
+                {
+                    counter++;
+                    SET_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
+                    if (save_zone(zn))
+                    {
+                        log("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
+                    }
+                    else
+                    {
+                        fail = TRUE;
+                    }
+                }
+            }
+        }
+        if (counter == 0)
         {
             send_to_char(ch, "There are no unlocked zones to lock!\r\n");
             return;
         }
-        if (fail) 
+        if (fail)
         {
             send_to_char(ch, "Unable to save zone changes.  Check syslog!\r\n");
             return;
@@ -4759,57 +4759,57 @@ ACMD(do_zlock)
         mudlog(BRF, LVL_GOD, TRUE, "(GC) %s has locked ALL zones!", GET_NAME(ch));
         return;
     }
-    if (is_abbrev(arg, "list")) 
+    if (is_abbrev(arg, "list"))
     {
         // Show all locked zones
-        for (zn = 0; zn <= top_of_zone_table; zn++) 
+        for (zn = 0; zn <= top_of_zone_table; zn++)
         {
-            if (ZONE_FLAGGED(zn, ZONE_NOBUILD)) 
+            if (ZONE_FLAGGED(zn, ZONE_NOBUILD))
             {
-                if (!counter) 
+                if (!counter)
                 {
                     send_to_char(ch, "Locked Zones\r\n");
                 }
                 send_to_char(ch, "[%s%3d%s] %s%-*s %s%-1s%s\r\n",
-                             QGRN, zone_table[zn].number, QNRM, 
-                             QCYN, count_color_chars(zone_table[zn].name)+30, zone_table[zn].name, 
+                             QGRN, zone_table[zn].number, QNRM,
+                             QCYN, count_color_chars(zone_table[zn].name)+30, zone_table[zn].name,
                              QYEL, zone_table[zn].builders ? zone_table[zn].builders : "None.", QNRM);
                 counter++;
             }
         }
-        if (counter == 0) 
+        if (counter == 0)
         {
             send_to_char(ch, "There are currently no locked zones!\r\n");
         }
         return;
     }
-    else if ((znvnum = atoi(arg)) == 0) 
+    else if ((znvnum = atoi(arg)) == 0)
     {
         send_to_char(ch, "Usage: %szlock <zone number>%s\r\n", QYEL, QNRM);
         return;
     }
 
-    if ((zn = real_zone(znvnum)) == NOWHERE) 
+    if ((zn = real_zone(znvnum)) == NOWHERE)
     {
         send_to_char(ch, "That zone does not exist!\r\n");
         return;
     }
 
     // Check the builder list
-    if (GET_LEVEL(ch) < LVL_GRGOD && !is_name(GET_NAME(ch), zone_table[zn].builders) && GET_OLC_ZONE(ch) != znvnum) 
+    if (GET_LEVEL(ch) < LVL_GRGOD && !is_name(GET_NAME(ch), zone_table[zn].builders) && GET_OLC_ZONE(ch) != znvnum)
     {
         send_to_char(ch, "You do not have sufficient access to lock that zone!\r\n");
         return;
     }
 
     // If we get here, player has typed 'zlock <num>'
-    if (ZONE_FLAGGED(zn, ZONE_NOBUILD)) 
+    if (ZONE_FLAGGED(zn, ZONE_NOBUILD))
     {
         send_to_char(ch, "Zone %d is already locked!\r\n", znvnum);
         return;
     }
     SET_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
-    if (save_zone(zn)) 
+    if (save_zone(zn))
     {
         mudlog(NRM, LVL_GRGOD, TRUE, "(GC) %s has locked zone %d", GET_NAME(ch), znvnum);
     }
@@ -4829,7 +4829,7 @@ ACMD(do_zunlock)
 
     one_argument(argument, arg);
 
-    if (!*arg) 
+    if (!*arg)
     {
         send_to_char(ch, "Usage: %szunlock <zone number>%s\r\n", QYEL, QNRM);
         send_to_char(ch, "%s       zunlock list%s\r\n\r\n", QYEL, QNRM);
@@ -4838,35 +4838,35 @@ ACMD(do_zunlock)
         send_to_char(ch, "'zunlock all' will unlock every zone in the MUD.\r\n");
         return;
     }
-    if (is_abbrev(arg, "all")) 
+    if (is_abbrev(arg, "all"))
     {
-        if (GET_LEVEL(ch) < LVL_GRGOD) 
+        if (GET_LEVEL(ch) < LVL_GRGOD)
         {
             send_to_char(ch, "You do not have sufficient access to lock zones.\r\n");
             return;
         }
-        for (zn = 0; zn <= top_of_zone_table; zn++) 
+        for (zn = 0; zn <= top_of_zone_table; zn++)
         {
-            if (ZONE_FLAGGED(zn, ZONE_NOBUILD)) 
+            if (ZONE_FLAGGED(zn, ZONE_NOBUILD))
             {
                 counter++;
                 REMOVE_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
-                if (save_zone(zn)) 
+                if (save_zone(zn))
                 {
                     log("(GC) %s has unlocked zone %d", GET_NAME(ch), zone_table[zn].number);
-                } 
-                else 
+                }
+                else
                 {
                     fail = TRUE;
                 }
             }
         }
-        if (counter == 0) 
+        if (counter == 0)
         {
             send_to_char(ch, "There are no locked zones to unlock!\r\n");
             return;
         }
-        if (fail) 
+        if (fail)
         {
             send_to_char(ch, "Unable to save zone changes.  Check syslog!\r\n");
             return;
@@ -4875,57 +4875,57 @@ ACMD(do_zunlock)
         mudlog(BRF, LVL_GOD, TRUE, "(GC) %s has unlocked ALL zones!", GET_NAME(ch));
         return;
     }
-    if (is_abbrev(arg, "list")) 
+    if (is_abbrev(arg, "list"))
     {
         // Show all unlocked zones
-        for (zn = 0; zn <= top_of_zone_table; zn++) 
+        for (zn = 0; zn <= top_of_zone_table; zn++)
         {
-            if (!ZONE_FLAGGED(zn, ZONE_NOBUILD)) 
+            if (!ZONE_FLAGGED(zn, ZONE_NOBUILD))
             {
-                if (!counter) 
+                if (!counter)
                 {
                     send_to_char(ch, "Unlocked Zones\r\n");
                 }
                 send_to_char(ch, "[%s%3d%s] %s%-*s %s%-1s%s\r\n",
-                            QGRN, zone_table[zn].number, QNRM, 
+                            QGRN, zone_table[zn].number, QNRM,
                             QCYN, count_color_chars(zone_table[zn].name)+30, zone_table[zn].name,
                             QYEL, zone_table[zn].builders ? zone_table[zn].builders : "None.", QNRM);
                 counter++;
             }
         }
-        if (counter == 0) 
+        if (counter == 0)
         {
             send_to_char(ch, "There are currently no unlocked zones!\r\n");
         }
         return;
     }
-    else if ((znvnum = atoi(arg)) == 0) 
+    else if ((znvnum = atoi(arg)) == 0)
     {
         send_to_char(ch, "Usage: %szunlock <zone number>%s\r\n", QYEL, QNRM);
         return;
     }
 
-    if ((zn = real_zone(znvnum)) == NOWHERE) 
+    if ((zn = real_zone(znvnum)) == NOWHERE)
     {
         send_to_char(ch, "That zone does not exist!\r\n");
         return;
     }
 
     // Check the builder list
-    if (GET_LEVEL(ch) < LVL_GRGOD && !is_name(GET_NAME(ch), zone_table[zn].builders) && GET_OLC_ZONE(ch) != znvnum) 
+    if (GET_LEVEL(ch) < LVL_GRGOD && !is_name(GET_NAME(ch), zone_table[zn].builders) && GET_OLC_ZONE(ch) != znvnum)
     {
         send_to_char(ch, "You do not have sufficient access to unlock that zone!\r\n");
         return;
     }
 
     // If we get here, player has typed 'zunlock <num>'
-    if (!ZONE_FLAGGED(zn, ZONE_NOBUILD)) 
+    if (!ZONE_FLAGGED(zn, ZONE_NOBUILD))
     {
         send_to_char(ch, "Zone %d is already unlocked!\r\n", znvnum);
         return;
     }
     REMOVE_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
-    if (save_zone(zn)) 
+    if (save_zone(zn))
     {
         mudlog(NRM, LVL_GRGOD, TRUE, "(GC) %s has unlocked zone %d", GET_NAME(ch), znvnum);
     }

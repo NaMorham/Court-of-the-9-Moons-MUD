@@ -45,7 +45,7 @@
 /* Board appearance order. */
 #define    NEWEST_AT_TOP    FALSE
 
-/* Format: vnum, read lvl, write lvl, remove lvl, filename, 0 at end. Be sure 
+/* Format: vnum, read lvl, write lvl, remove lvl, filename, 0 at end. Be sure
  * to also change NUM_OF_BOARDS in board.h*/
 struct board_info_type board_info[NUM_OF_BOARDS] = {
   {3099, 0, 0, LVL_GOD, LIB_ETC "board.mortal", 0},
@@ -137,7 +137,7 @@ SPECIAL(gen_board)
 
   /* These were originally globals for some unknown reason. */
   int ACMD_READ, ACMD_LOOK, ACMD_EXAMINE, ACMD_WRITE, ACMD_REMOVE;
-  
+
   if (!loaded) {
     init_boards();
     loaded = 1;

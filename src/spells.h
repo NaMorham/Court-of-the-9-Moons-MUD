@@ -1,13 +1,13 @@
 /**
 * @file spells.h
 * Constants and function prototypes for the spell system.
-* 
+*
 * Part of the core tbaMUD source code distribution, which is a derivative
 * of, and continuation of, CircleMUD.
-*                                                                        
-* All rights reserved.  See license for complete information.                                                                
-* Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University 
-* CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               
+*
+* All rights reserved.  See license for complete information.
+* Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University
+* CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.
 */
 #ifndef _SPELLS_H_
 #define _SPELLS_H_
@@ -109,13 +109,13 @@
 #define SKILL_TRACK            140 /* Reserved Skill[] DO NOT CHANGE */
 /* New skills may be added here up to MAX_SKILLS (200) */
 
-/* NON-PLAYER AND OBJECT SPELLS AND SKILLS: The practice levels for the spells 
- * and skills below are _not_ recorded in the players file; therefore, the 
- * intended use is for spells and skills associated with objects (such as 
+/* NON-PLAYER AND OBJECT SPELLS AND SKILLS: The practice levels for the spells
+ * and skills below are _not_ recorded in the players file; therefore, the
+ * intended use is for spells and skills associated with objects (such as
  * SPELL_IDENTIFY used with scrolls of identify) or non-players (such as NPC
  * only spells). */
 
-/* To make an affect induced by dg_affect look correct on 'stat' we need to 
+/* To make an affect induced by dg_affect look correct on 'stat' we need to
  * define it with a 'spellname'. */
 #define SPELL_DG_AFFECT              298
 

@@ -1,9 +1,9 @@
 /**
 * @file telnet.h
 * Function prototypes, defines and macros to handle socket connections.
-* 
+*
 * Part of the core tbaMUD source code distribution, which is a derivative
-* of, and continuation of, CircleMUD.               
+* of, and continuation of, CircleMUD.
 */
 
 /*

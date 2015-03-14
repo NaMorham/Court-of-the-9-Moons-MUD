@@ -1047,19 +1047,19 @@ void discrete_load(FILE *fl, int mode, char *filename)
     const char *modes[] = {"world", "mob", "obj", "ZON", "SHP", "HLP", "trg", "qst"};
     /* modes positions correspond to DB_BOOT_xxx in db.h */
 
-    for (;;) 
+    for (;;)
     {
         /* We have to do special processing with the obj files because they have no
         * end-of-record marker. */
         if (mode != DB_BOOT_OBJ || nr < 0)
         {
-            if (!get_line(fl, line)) 
+            if (!get_line(fl, line))
             {
-                if (nr == -1) 
+                if (nr == -1)
                 {
                     log("SYSERR: %s file %s is empty!", modes[mode], filename);
-                } 
-                else 
+                }
+                else
                 {
                     log("SYSERR: Format error in %s after %s #%d\n"
                         "...expecting a new %s, but file ended!\n"
@@ -1073,10 +1073,10 @@ void discrete_load(FILE *fl, int mode, char *filename)
         {
             return;
         }
-        if (*line == '#') 
+        if (*line == '#')
         {
             last = nr;
-            if (sscanf(line, "#%d", &nr) != 1) 
+            if (sscanf(line, "#%d", &nr) != 1)
             {
                 log("SYSERR: Format error after %s #%d", modes[mode], last);
                 exit(1);
@@ -1087,7 +1087,7 @@ void discrete_load(FILE *fl, int mode, char *filename)
             }
             else
             {
-                switch (mode) 
+                switch (mode)
                 {
                 case DB_BOOT_WLD:
                     parse_room(fl, nr);
@@ -1106,8 +1106,8 @@ void discrete_load(FILE *fl, int mode, char *filename)
                     break;
                 }
             }
-        } 
-        else 
+        }
+        else
         {
             log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
                 filename, modes[mode], nr);
@@ -2801,8 +2801,8 @@ char *fread_string(FILE *fl, const char *error)
   return (strlen(buf) ? strdup(buf) : NULL);
 }
 
-/** 
- * Read a numerical value from a given file 
+/**
+ * Read a numerical value from a given file
  */
 int fread_number(FILE *fp)
 {
@@ -2828,21 +2828,21 @@ int fread_number(FILE *fp)
     {
         c = getc( fp );
     }
-    else if( c == '-' ) 
+    else if( c == '-' )
     {
         sign = TRUE;
         c = getc( fp );
     }
 
-    if(!isdigit(c)) 
+    if(!isdigit(c))
     {
         log( "fread_number: bad format. (%c)", c );
         return 0;
     }
 
-    while(isdigit(c)) 
+    while(isdigit(c))
     {
-        if(feof(fp)) 
+        if(feof(fp))
         {
             log( "%s", "fread_number: EOF encountered on read." );
             return number;
@@ -2868,8 +2868,8 @@ int fread_number(FILE *fp)
     return number;
 }
 
-/** 
- * Read to end of line from a given file into a static buffer 
+/**
+ * Read to end of line from a given file into a static buffer
  */
 char *fread_line(FILE *fp)
 {
@@ -2884,9 +2884,9 @@ char *fread_line(FILE *fp)
 
     // Skip blanks.
     // Read first char.
-    do 
+    do
     {
-        if(feof(fp)) 
+        if(feof(fp))
         {
             log("fread_line: EOF encountered on read.");
             *pline = '\0';
@@ -2899,9 +2899,9 @@ char *fread_line(FILE *fp)
     // Un-Read first char
     ungetc( c, fp );
 
-    do 
+    do
     {
-        if(feof(fp)) 
+        if(feof(fp))
         {
             log("fread_line: EOF encountered on read.");
             *pline = '\0';
@@ -2910,7 +2910,7 @@ char *fread_line(FILE *fp)
         c = getc( fp );
         *pline++ = c;
         ln++;
-        if( ln >= ( MAX_STRING_LENGTH - 1 ) ) 
+        if( ln >= ( MAX_STRING_LENGTH - 1 ) )
         {
             log("fread_line: line too long");
             break;
@@ -2928,7 +2928,7 @@ char *fread_line(FILE *fp)
     pline--;
     *pline = '\0';
 
-    // Since tildes generally aren't found at the end of lines, this 
+    // Since tildes generally aren't found at the end of lines, this
     // seems workable. Will enable reading old configs. */
     if ( line[strlen(line) - 1] == '~' )
     {
@@ -2952,9 +2952,9 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
 
     // Skip blanks.
     // Read first char.
-    do 
+    do
     {
-        if (feof(fp)) 
+        if (feof(fp))
         {
             log("fread_flags: EOF encountered on read.");
             *pline = '\0';
@@ -2968,7 +2968,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
     ungetc( c, fp );
 
     do {
-        if (feof(fp)) 
+        if (feof(fp))
         {
             log("fread_flags: EOF encountered on read.");
             *pline = '\0';
@@ -2977,7 +2977,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
         c = getc( fp );
         *pline++ = c;
         ln++;
-        if ( ln >= ( MAX_STRING_LENGTH - 1 ) ) 
+        if ( ln >= ( MAX_STRING_LENGTH - 1 ) )
         {
             log("fread_flags: line too long");
             break;
@@ -2995,7 +2995,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
     pline--;
     *pline = '\0';
 
-    // Since tildes generally aren't found at the end of lines, 
+    // Since tildes generally aren't found at the end of lines,
     // this seems workable. Will enable reading old configs.
     if( line[strlen(line) - 1] == '~' )
     {
@@ -3003,7 +3003,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
     }
 
     // We now have a line of text with all the flags on it - let's convert it
-    for (i=0,tmp_txt=line;tmp_txt && *tmp_txt && i<fg_size;i++) 
+    for (i=0,tmp_txt=line;tmp_txt && *tmp_txt && i<fg_size;i++)
     {
         tmp_txt = one_argument(tmp_txt,val_txt);  // Grab a number
         fg[i]   = atoi(val_txt);                  // Convert to int
@@ -3013,7 +3013,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
 }
 
 /**
- * Read one word from a given file (into static buffer). 
+ * Read one word from a given file (into static buffer).
  */
 char *fread_word(FILE *fp)
 {
@@ -3065,16 +3065,16 @@ char *fread_word(FILE *fp)
    return NULL;
 }
 
-/** 
- * Read to end of line in a given file (for comments) 
+/**
+ * Read to end of line in a given file (for comments)
  */
 void fread_to_eol(FILE *fp)
 {
     char c;
 
-    do 
+    do
     {
-        if(feof(fp)) 
+        if(feof(fp))
         {
             log( "%s", "fread_to_eol: EOF encountered on read." );
             return;
@@ -3083,7 +3083,7 @@ void fread_to_eol(FILE *fp)
     }
     while( c != '\n' && c != '\r' );
 
-    do 
+    do
     {
         c = getc( fp );
     }
@@ -3111,9 +3111,9 @@ void free_char(struct char_data *ch)
     int i;
     struct alias_data *a;
 
-    if (ch->player_specials != NULL && ch->player_specials != &dummy_mob) 
+    if (ch->player_specials != NULL && ch->player_specials != &dummy_mob)
     {
-        while ((a = GET_ALIASES(ch)) != NULL) 
+        while ((a = GET_ALIASES(ch)) != NULL)
         {
             GET_ALIASES(ch) = (GET_ALIASES(ch))->next;
             free_alias(a);
@@ -3143,7 +3143,7 @@ void free_char(struct char_data *ch)
             log("SYSERR: Mob %s (#%d) had player_specials allocated!", GET_NAME(ch), GET_MOB_VNUM(ch));
         }
     }
-    if (!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == NOBODY)) 
+    if (!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == NOBODY))
     {
         // if this is a player, or a non-prototyped non-player, free all
         if (GET_NAME(ch))
@@ -3188,8 +3188,8 @@ void free_char(struct char_data *ch)
 
         // free script proto list
         free_proto_script(ch, MOB_TRIGGER);
-    } 
-    else if ((i = GET_MOB_RNUM(ch)) != NOBODY) 
+    }
+    else if ((i = GET_MOB_RNUM(ch)) != NOBODY)
     {
         // otherwise, free strings only if the string is not pointing at proto
         if (ch->player.name && ch->player.name != mob_proto[i].player.name)
@@ -3254,18 +3254,18 @@ void free_char(struct char_data *ch)
     ch = NULL;
 }
 
-/** 
- * release memory allocated for an obj struct 
+/**
+ * release memory allocated for an obj struct
  */
 void free_obj(struct obj_data *obj)
 {
-    if (GET_OBJ_RNUM(obj) == NOWHERE) 
+    if (GET_OBJ_RNUM(obj) == NOWHERE)
     {
         free_object_strings(obj);
         // free script proto list
         free_proto_script(obj, OBJ_TRIGGER);
-    } 
-    else 
+    }
+    else
     {
         free_object_strings_proto(obj);
         if (obj->proto_script != obj_proto[GET_OBJ_RNUM(obj)].proto_script)
@@ -3287,7 +3287,7 @@ void free_obj(struct obj_data *obj)
     obj = NULL;
 }
 
-/** 
+/**
  * Steps: 1: Read contents of a text file. 2: Make sure no one is using the
  * pointer in paging. 3: Allocate space. 4: Point 'buf' to it.
  * We don't want to free() the string that someone may be viewing in the pager.
@@ -3296,7 +3296,7 @@ void free_obj(struct obj_data *obj)
  * ->showstr_vector but we'll only match if the pointer is to the string we're
  * interested in and not a copy. If someone is reading a global copy we're
  * trying to replace, give everybody using it a different copy so as to avoid
- * special cases. 
+ * special cases.
  */
 static int file_to_string_alloc(const char *name, char **buf)
 {
@@ -3318,7 +3318,7 @@ static int file_to_string_alloc(const char *name, char **buf)
         return (-1);
     }
 
-    for (in_use = descriptor_list; in_use; in_use = in_use->next) 
+    for (in_use = descriptor_list; in_use; in_use = in_use->next)
     {
         if (!in_use->showstr_count || *in_use->showstr_vector != *buf)
         {

@@ -236,7 +236,7 @@ void zfree(unsigned char *what, char *file, int line)
       pad_check(m);
 
       /* note that we freed the memory */
-      m->frees++;  
+      m->frees++;
 
       /* check to see if it was freed > once */
       if (m->frees > 1) {
@@ -263,7 +263,7 @@ void zfree(unsigned char *what, char *file, int line)
 char *zstrdup(const char *src, char *file, int line)
 {
   char *result;
-#ifndef NO_MEMORY_STRDUP    
+#ifndef NO_MEMORY_STRDUP
   result = (char*)zmalloc(strlen(src) + 1, file, line);
   if (!result)
     return NULL;

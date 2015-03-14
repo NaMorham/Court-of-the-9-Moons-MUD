@@ -30,7 +30,7 @@ ACMD(do_say)
     {
         send_to_char(ch, "Yes, but WHAT do you want to say?\r\n");
     }
-    else 
+    else
     {
         char buf[MAX_INPUT_LENGTH + 14], *msg;
         struct char_data *vict;
@@ -50,7 +50,7 @@ ACMD(do_say)
         {
             send_to_char(ch, "%s", CONFIG_OK);
         }
-        else 
+        else
         {
             sprintf(buf, "You say, '%s@n'", argument);
             msg = act(buf, FALSE, ch, 0, 0, TO_CHAR | DG_NO_TRIG);
@@ -70,7 +70,7 @@ ACMD(do_gsay)
 
     skip_spaces(&argument);
 
-    if (!AFF_FLAGGED(ch, AFF_GROUP)) 
+    if (!AFF_FLAGGED(ch, AFF_GROUP))
     {
         send_to_char(ch, "But you are not the member of a group!\r\n");
         return;
@@ -79,7 +79,7 @@ ACMD(do_gsay)
     {
         send_to_char(ch, "Yes, but WHAT do you want to group-say?\r\n");
     }
-    else 
+    else
     {
         char buf[MAX_STRING_LENGTH];
 
@@ -129,10 +129,10 @@ static void perform_tell(struct char_data *ch, struct char_data *vict, char *arg
     {
         send_to_char(ch, "%s", CONFIG_OK);
     }
-    else 
+    else
     {
         snprintf(buf, sizeof(buf), "%sYou tell $N, '%s'%s", CCRED(ch, C_NRM), arg, CCNRM(ch, C_NRM));
-        msg = act(buf, FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);     
+        msg = act(buf, FALSE, ch, 0, vict, TO_CHAR | TO_SLEEP);
         add_history(ch, msg, HIST_TELL);
     }
 
@@ -189,7 +189,7 @@ ACMD(do_tell)
     {
         send_to_char(ch, "Who do you wish to tell what??\r\n");
     }
-    else if (!strcmp(buf, "m-w")) 
+    else if (!strcmp(buf, "m-w"))
     {
 #ifdef CIRCLE_WINDOWS
         // getpid() is not portable
@@ -198,14 +198,14 @@ ACMD(do_tell)
         int i;
         char word[MAX_INPUT_LENGTH], *p, *q;
 
-        if (last_webster_teller != -1L) 
+        if (last_webster_teller != -1L)
         {
-            if (GET_IDNUM(ch) == last_webster_teller) 
+            if (GET_IDNUM(ch) == last_webster_teller)
             {
                 send_to_char(ch, "You are still waiting for a response.\r\n");
                 return;
-            } 
-            else 
+            }
+            else
             {
                 send_to_char(ch, "Hold on, m-w is busy. Try again in a couple of seconds.\r\n");
                 return;
@@ -223,7 +223,7 @@ ACMD(do_tell)
 
         *q = '\0';
 
-        if (!*word) 
+        if (!*word)
         {
             send_to_char(ch, "Sorry, only letters and +/- are allowed characters.\r\n");
             return;
@@ -233,7 +233,7 @@ ACMD(do_tell)
         last_webster_teller = GET_IDNUM(ch);
         send_to_char(ch, "You look up '%s' in Merriam-Webster.\r\n", word);
 #endif // platform specific part
-    } 
+    }
     else if (GET_LEVEL(ch) < LVL_IMMORT && !(vict = get_player_vis(ch, buf, NULL, FIND_CHAR_WORLD)))
     {
         send_to_char(ch, "%s", CONFIG_NOPERSON);
@@ -267,13 +267,13 @@ ACMD(do_reply)
     {
         send_to_char(ch, "What is your reply?\r\n");
     }
-    else 
+    else
     {
         // Make sure the person you're replying to is still playing by searching
         // for them.  Note, now last tell is stored as player IDnum instead of
         // a pointer, which is much better because it's safer, plus will still
-        // work if someone logs out and back in again. A descriptor list based 
-        // search would be faster although we could not find link dead people.  
+        // work if someone logs out and back in again. A descriptor list based
+        // search would be faster although we could not find link dead people.
         // Not that they can hear tells anyway. :) -gg 2/24/98
         while (tch && (IS_NPC(tch) || GET_IDNUM(tch) != GET_LAST_TELL(ch)))
         {
@@ -297,7 +297,7 @@ ACMD(do_spec_comm)
     struct char_data *vict;
     const char *action_sing, *action_plur, *action_others;
 
-    switch (subcmd) 
+    switch (subcmd)
     {
     case SCMD_WHISPER:
         action_sing = "whisper to";
@@ -332,14 +332,14 @@ ACMD(do_spec_comm)
     {
         send_to_char(ch, "You can't get your mouth close enough to your ear...\r\n");
     }
-    else 
+    else
     {
         char buf1[MAX_STRING_LENGTH];
 
         snprintf(buf1, sizeof(buf1), "$n %s you, '%s'", action_plur, buf2);
         act(buf1, FALSE, ch, 0, vict, TO_VICT);
 
-        if ((!IS_NPC(ch)) && (PRF_FLAGGED(ch, PRF_NOREPEAT))) 
+        if ((!IS_NPC(ch)) && (PRF_FLAGGED(ch, PRF_NOREPEAT)))
         {
             send_to_char(ch, "%s", CONFIG_OK);
         }
@@ -367,29 +367,29 @@ ACMD(do_write)
         return;
     }
 
-    if (!*papername) 
+    if (!*papername)
     {
         // Nothing was delivered.
         send_to_char(ch, "Write?  With what?  ON what?  What are you trying to do?!?\r\n");
         return;
     }
-    if (*penname) 
+    if (*penname)
     {
         // Nothing was delivered.
-        if (!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying))) 
+        if (!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying)))
         {
             send_to_char(ch, "You have no %s.\r\n", papername);
             return;
         }
-        if (!(pen = get_obj_in_list_vis(ch, penname, NULL, ch->carrying))) 
+        if (!(pen = get_obj_in_list_vis(ch, penname, NULL, ch->carrying)))
         {
             send_to_char(ch, "You have no %s.\r\n", penname);
             return;
         }
-    } 
+    }
     else    // There was one arg.. let's see what we can find.
     {
-        if (!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying))) 
+        if (!(paper = get_obj_in_list_vis(ch, papername, NULL, ch->carrying)))
         {
             send_to_char(ch, "There is no %s in your inventory.\r\n", papername);
             return;
@@ -398,20 +398,20 @@ ACMD(do_write)
         {
             pen = paper;
             paper = NULL;
-        } 
-        else if (GET_OBJ_TYPE(paper) != ITEM_NOTE) 
+        }
+        else if (GET_OBJ_TYPE(paper) != ITEM_NOTE)
         {
             send_to_char(ch, "That thing has nothing to do with writing.\r\n");
             return;
         }
 
         // One object was found.. now for the other one.
-        if (!GET_EQ(ch, WEAR_HOLD)) 
+        if (!GET_EQ(ch, WEAR_HOLD))
         {
             send_to_char(ch, "You can't write with %s %s alone.\r\n", AN(papername), papername);
             return;
         }
-        if (!CAN_SEE_OBJ(ch, GET_EQ(ch, WEAR_HOLD))) 
+        if (!CAN_SEE_OBJ(ch, GET_EQ(ch, WEAR_HOLD)))
         {
             send_to_char(ch, "The stuff in your hand is invisible!  Yeech!!\r\n");
             return;
@@ -435,12 +435,12 @@ ACMD(do_write)
     {
         act("You can't write on $p.", FALSE, ch, paper, 0, TO_CHAR);
     }
-    else 
+    else
     {
         char *backstr = NULL;
 
         // Something on it, display it as that's in input buffer.
-        if (paper->action_description) 
+        if (paper->action_description)
         {
             backstr = strdup(paper->action_description);
             send_to_char(ch, "There's something written on it already:\r\n");
@@ -470,14 +470,14 @@ ACMD(do_page)
     {
         send_to_char(ch, "Whom do you wish to page?\r\n");
     }
-    else 
+    else
     {
         char buf[MAX_STRING_LENGTH];
 
         snprintf(buf, sizeof(buf), "\007\007*$n* %s", buf2);
-        if (!str_cmp(arg, "all")) 
+        if (!str_cmp(arg, "all"))
         {
-            if (GET_LEVEL(ch) > LVL_GOD) 
+            if (GET_LEVEL(ch) > LVL_GOD)
             {
                 for (d = descriptor_list; d; d = d->next)
                 {
@@ -493,7 +493,7 @@ ACMD(do_page)
             }
             return;
         }
-        if ((vict = get_char_vis(ch, arg, NULL, FIND_CHAR_WORLD))) 
+        if ((vict = get_char_vis(ch, arg, NULL, FIND_CHAR_WORLD)))
         {
             act(buf, FALSE, ch, 0, vict, TO_VICT);
             if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOREPEAT))
@@ -504,7 +504,7 @@ ACMD(do_page)
             {
                 act(buf, FALSE, ch, 0, vict, TO_CHAR);
             }
-        } 
+        }
         else
         {
             send_to_char(ch, "There is no such person in the game!\r\n");
@@ -521,7 +521,7 @@ ACMD(do_gen_comm)
     bool emoting = FALSE;
 
     // Array of flags which must _not_ be set in order for comm to be heard.
-    int channels[] = 
+    int channels[] =
     {
         0,
         PRF_NOSHOUT,
@@ -532,7 +532,7 @@ ACMD(do_gen_comm)
         0
     };
 
-    int hist_type[] = 
+    int hist_type[] =
     {
         HIST_HOLLER,
         HIST_SHOUT,
@@ -545,7 +545,7 @@ ACMD(do_gen_comm)
     //           [1] name of the action
     //           [2] message if you're not on the channel
     //           [3] a color string.
-    const char *com_msgs[][4] = 
+    const char *com_msgs[][4] =
     {
         {"You cannot holler!!\r\n",
         "holler",
@@ -578,18 +578,18 @@ ACMD(do_gen_comm)
         KYEL}
     };
 
-    if (PLR_FLAGGED(ch, PLR_NOSHOUT)) 
+    if (PLR_FLAGGED(ch, PLR_NOSHOUT))
     {
         send_to_char(ch, "%s", com_msgs[subcmd][0]);
         return;
     }
-    if (ROOM_FLAGGED(IN_ROOM(ch), ROOM_SOUNDPROOF) && (GET_LEVEL(ch) < LVL_GOD)) 
+    if (ROOM_FLAGGED(IN_ROOM(ch), ROOM_SOUNDPROOF) && (GET_LEVEL(ch) < LVL_GOD))
     {
         send_to_char(ch, "The walls seem to absorb your words.\r\n");
         return;
     }
 
-    if (subcmd == SCMD_GEMOTE) 
+    if (subcmd == SCMD_GEMOTE)
     {
         if (!*argument)
         {
@@ -603,13 +603,13 @@ ACMD(do_gen_comm)
     }
 
     // Level_can_shout defined in config.c.
-    if (GET_LEVEL(ch) < CONFIG_LEVEL_CAN_SHOUT) 
+    if (GET_LEVEL(ch) < CONFIG_LEVEL_CAN_SHOUT)
     {
         send_to_char(ch, "You must be at least level %d before you can %s.\r\n", CONFIG_LEVEL_CAN_SHOUT, com_msgs[subcmd][1]);
         return;
     }
     // Make sure the char is on the channel.
-    if (!IS_NPC(ch) && PRF_FLAGGED(ch, channels[subcmd])) 
+    if (!IS_NPC(ch) && PRF_FLAGGED(ch, channels[subcmd]))
     {
         send_to_char(ch, "%s", com_msgs[subcmd][2]);
         return;
@@ -619,14 +619,14 @@ ACMD(do_gen_comm)
     skip_spaces(&argument);
 
     // Make sure that there is something there to say!
-    if (!*argument) 
+    if (!*argument)
     {
         send_to_char(ch, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
         return;
     }
-    if (subcmd == SCMD_HOLLER) 
+    if (subcmd == SCMD_HOLLER)
     {
-        if (GET_MOVE(ch) < CONFIG_HOLLER_MOVE_COST) 
+        if (GET_MOVE(ch) < CONFIG_HOLLER_MOVE_COST)
         {
             send_to_char(ch, "You're too exhausted to holler.\r\n");
             return;
@@ -644,7 +644,7 @@ ACMD(do_gen_comm)
     {
         send_to_char(ch, "%s", CONFIG_OK);
     }
-    else 
+    else
     {
         snprintf(buf1, sizeof(buf1), "%sYou %s, '%s%s'%s", COLOR_LEV(ch) >= C_CMP ? color_on : "",
             com_msgs[subcmd][1], argument, COLOR_LEV(ch) >= C_CMP ? color_on : "", CCNRM(ch, C_CMP));
@@ -658,7 +658,7 @@ ACMD(do_gen_comm)
     }
 
     // Now send all the strings out.
-    for (i = descriptor_list; i; i = i->next) 
+    for (i = descriptor_list; i; i = i->next)
     {
         if (STATE(i) != CON_PLAYING || i == ch->desc || !i->character )
         {
@@ -680,7 +680,7 @@ ACMD(do_gen_comm)
             continue;
         }
 
-        snprintf(buf2, sizeof(buf2), "%s%s%s", (COLOR_LEV(i->character) >= C_NRM) ? color_on : "", buf1, KNRM); 
+        snprintf(buf2, sizeof(buf2), "%s%s%s", (COLOR_LEV(i->character) >= C_NRM) ? color_on : "", buf1, KNRM);
         msg = act(buf2, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP);
         add_history(i->character, msg, hist_type[subcmd]);
     }
@@ -688,7 +688,7 @@ ACMD(do_gen_comm)
 
 ACMD(do_qcomm)
 {
-    if (!PRF_FLAGGED(ch, PRF_QUEST)) 
+    if (!PRF_FLAGGED(ch, PRF_QUEST))
     {
         send_to_char(ch, "You aren't even part of the quest!\r\n");
         return;
@@ -699,7 +699,7 @@ ACMD(do_qcomm)
     {
         send_to_char(ch, "%c%s?  Yes, fine, %s we must, but WHAT??\r\n", UPPER(*CMD_NAME), CMD_NAME + 1, CMD_NAME);
     }
-    else 
+    else
     {
         char buf[MAX_STRING_LENGTH];
         struct descriptor_data *i;
@@ -708,7 +708,7 @@ ACMD(do_qcomm)
         {
             send_to_char(ch, "%s", CONFIG_OK);
         }
-        else if (subcmd == SCMD_QSAY) 
+        else if (subcmd == SCMD_QSAY)
         {
             snprintf(buf, sizeof(buf), "You quest-say, '%s'", argument);
             act(buf, FALSE, ch, 0, argument, TO_CHAR);
@@ -722,7 +722,7 @@ ACMD(do_qcomm)
         {
             snprintf(buf, sizeof(buf), "$n quest-says, '%s'", argument);
         }
-        else 
+        else
         {
             strlcpy(buf, argument, sizeof(buf));
             mudlog(CMP, MAX(LVL_BUILDER, GET_INVIS_LEV(ch)), TRUE, "(GC) %s qechoed: %s", GET_NAME(ch), argument);

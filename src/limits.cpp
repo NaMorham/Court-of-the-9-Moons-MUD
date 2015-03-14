@@ -50,9 +50,9 @@ static int graf(int grafage, int p0, int p1, int p2, int p3, int p4, int p5, int
 }
 
 /* The hit_limit, mana_limit, and move_limit functions are gone.  They added an
- * unnecessary level of complexity to the internal structure, weren't 
+ * unnecessary level of complexity to the internal structure, weren't
  * particularly useful, and led to some annoying bugs.  From the players' point
- * of view, the only difference the removal of these functions will make is 
+ * of view, the only difference the removal of these functions will make is
  * that a character's age will now only affect the HMV gain per tick, and _not_
  * the HMV maximums. */
 /* manapoint gain pr. game hour */
@@ -180,7 +180,7 @@ void set_title(struct char_data *ch, char *title)
 
   if (title == NULL) {
     GET_TITLE(ch) = strdup(GET_SEX(ch) == SEX_FEMALE ?
-      title_female(GET_CLASS(ch), GET_LEVEL(ch)) : 
+      title_female(GET_CLASS(ch), GET_LEVEL(ch)) :
       title_male(GET_CLASS(ch), GET_LEVEL(ch)));
   } else {
     if (strlen(title) > MAX_TITLE_LENGTH)
@@ -375,7 +375,7 @@ void point_update(void)
     room_vnum rmVNum;
 
     /* characters */
-    for (i = character_list; i; i = next_char) 
+    for (i = character_list; i; i = next_char)
     {
         next_char = i->next;
 
@@ -383,7 +383,7 @@ void point_update(void)
         gain_condition(i, DRUNK, -1);
         gain_condition(i, THIRST, -1);
 
-        if (GET_POS(i) >= POS_STUNNED) 
+        if (GET_POS(i) >= POS_STUNNED)
         {
             GET_HIT(i) = MIN(GET_HIT(i) + hit_gain(i), GET_MAX_HIT(i));
             GET_MANA(i) = MIN(GET_MANA(i) + mana_gain(i), GET_MAX_MANA(i));
@@ -400,21 +400,21 @@ void point_update(void)
                 update_pos(i);
             }
         }
-        else if (GET_POS(i) == POS_INCAP) 
+        else if (GET_POS(i) == POS_INCAP)
         {
             if (damage(i, i, 1, TYPE_SUFFERING) == -1)
             {
                 continue;
             }
         }
-        else if (GET_POS(i) == POS_MORTALLYW) 
+        else if (GET_POS(i) == POS_MORTALLYW)
         {
             if (damage(i, i, 2, TYPE_SUFFERING) == -1)
             {
                 continue;
             }
         }
-        if (!IS_NPC(i)) 
+        if (!IS_NPC(i))
         {
             update_char_objects(i);
             (i->char_specials.timer)++;
@@ -426,12 +426,12 @@ void point_update(void)
     }
 
     /* objects */
-    for (j = object_list; j; j = next_thing) 
+    for (j = object_list; j; j = next_thing)
     {
         next_thing = j->next;    /* Next in object list */
 
         /* If this is a corpse */
-        if (IS_CORPSE(j)) 
+        if (IS_CORPSE(j))
         {
             /* timer count down */
             if (GET_OBJ_TIMER(j) > 0)
@@ -439,7 +439,7 @@ void point_update(void)
                 GET_OBJ_TIMER(j)--;
             }
 
-            if (!GET_OBJ_TIMER(j)) 
+            if (!GET_OBJ_TIMER(j))
             {
                 char_data *pCarriedBy = NULL;
                 if (j->carried_by)
@@ -447,14 +447,14 @@ void point_update(void)
                     pCarriedBy = j->carried_by;
                     act("$p decays in your hands.", FALSE, j->carried_by, j, 0, TO_CHAR);
                 }
-                else if ((IN_ROOM(j) != NOWHERE) && (world[IN_ROOM(j)].people)) 
+                else if ((IN_ROOM(j) != NOWHERE) && (world[IN_ROOM(j)].people))
                 {
                     act("A quivering horde of maggots consumes $p.",
                         TRUE, world[IN_ROOM(j)].people, j, 0, TO_ROOM);
                     act("A quivering horde of maggots consumes $p.",
                         TRUE, world[IN_ROOM(j)].people, j, 0, TO_CHAR);
                 }
-                for (jj = j->contains; jj; jj = next_thing2) 
+                for (jj = j->contains; jj; jj = next_thing2)
                 {
                     next_thing2 = jj->next_content;    /* Next in inventory */
                     obj_from_obj(jj);
@@ -476,7 +476,7 @@ void point_update(void)
                         core_dump();
                     }
                 }
-                
+
                 if (pCarriedBy)
                 {
                     rmRNum_dbg = IN_ROOM(pCarriedBy);
@@ -493,7 +493,7 @@ void point_update(void)
                 else
                 {
                     rmVNum = world[rmRNum_dbg].number;
-                    log("Extract obj [%d:%s] from Room %d:%s", 
+                    log("Extract obj [%d:%s] from Room %d:%s",
                         GET_OBJ_VNUM(j), GET_OBJ_SHORT(j),
                         rmVNum, world[rmRNum_dbg].description);
                 }
@@ -508,7 +508,7 @@ void point_update(void)
 
         /* If the timer is set, count it down and at 0, try the trigger
         * note to .rej hand-patchers: make this last in your point-update() */
-        else if (GET_OBJ_TIMER(j) > 0) 
+        else if (GET_OBJ_TIMER(j) > 0)
         {
 #ifdef _DEBUG
             log("Handling object in %s:%d - NOT A CORPSE BUT HAS TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));

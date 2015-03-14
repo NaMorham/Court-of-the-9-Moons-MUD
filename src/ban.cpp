@@ -234,12 +234,12 @@ int valid_name(char *newname)
   struct descriptor_data *dt;
   char tempname[MAX_INPUT_LENGTH];
 
-  /* Make sure someone isn't trying to create this same name.  We want to do a 
+  /* Make sure someone isn't trying to create this same name.  We want to do a
    * 'str_cmp' so people can't do 'Bob' and 'BoB'.  The creating login will not
-   * have a character name yet and other people sitting at the prompt won't 
-   * have characters yet. New, unindexed characters (i.e., characters who are 
-   * in the process of creating) will have an idnum of -1, set by clear_char() 
-   * in db.c.  If someone is creating a character by the same name as the one 
+   * have a character name yet and other people sitting at the prompt won't
+   * have characters yet. New, unindexed characters (i.e., characters who are
+   * in the process of creating) will have an idnum of -1, set by clear_char()
+   * in db.c.  If someone is creating a character by the same name as the one
    * we are checking, then the name is invalid, to prevent character duping.
    * THIS SHOULD FIX THE 'invalid name' if disconnected from OLC-bug - Welcor */
   for (dt = descriptor_list; dt; dt = dt->next)

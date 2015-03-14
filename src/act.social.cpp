@@ -166,7 +166,7 @@ void free_social_messages(void)
     struct social_messg *mess;
     int i;
 
-    for (i = 0;i <= top_of_socialt;i++)  
+    for (i = 0;i <= top_of_socialt;i++)
     {
         mess = &soc_mess_list[i];
         free_action(mess);
@@ -175,7 +175,7 @@ void free_social_messages(void)
     soc_mess_list = NULL;
 }
 
-void free_action(struct social_messg *mess)  
+void free_action(struct social_messg *mess)
 {
     if (mess->command) free(mess->command);
     if (mess->sort_as) free(mess->sort_as);

@@ -541,14 +541,14 @@ void stop_follower(struct char_data *ch)
     struct follow_type *j, *k;
 
     /* Makes sure this function is not called when it shouldn't be called. */
-    if (ch->master == NULL) 
+    if (ch->master == NULL)
     {
         log("ERROR: NULL master passed to stop_follower [%d:%s]", __LINE__, __FILE__);
         core_dump();
         return;
     }
 
-    if (AFF_FLAGGED(ch, AFF_CHARM)) 
+    if (AFF_FLAGGED(ch, AFF_CHARM))
     {
         act("You realize that $N is a jerk!", FALSE, ch, 0, ch->master, TO_CHAR);
         act("$n realizes that $N is a jerk!", FALSE, ch, 0, ch->master, TO_NOTVICT);
@@ -557,8 +557,8 @@ void stop_follower(struct char_data *ch)
         {
             affect_from_char(ch, SPELL_CHARM);
         }
-    } 
-    else 
+    }
+    else
     {
         act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
         act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
@@ -575,8 +575,8 @@ void stop_follower(struct char_data *ch)
         k->next = NULL; // not needed, just neat
         free(k);
         k = NULL;
-    } 
-    else 
+    }
+    else
     {            // locate follower who is not head of list
         for (k = ch->master->followers; k->next->follower != ch; k = k->next)
         {

@@ -352,11 +352,11 @@ cpp_extern const struct command_info cmd_info[] = {
   { "\n", "zzzzzzz", 0, 0, 0, 0 } };    /* this must be last */
 
 
-  /* 
+  /*
    * Thanks to Melzaren for this change to allow DG Scripts to be attachable
-   * to player's while still disallowing them to manually use the DG-Commands. 
+   * to player's while still disallowing them to manually use the DG-Commands.
    */
-  const struct mob_script_command_t mob_script_commands[] = 
+  const struct mob_script_command_t mob_script_commands[] =
   {
       /* DG trigger commands. minimum_level should be set to -1. */
       { "masound"  , do_masound  , 0 },
@@ -380,10 +380,10 @@ cpp_extern const struct command_info cmd_info[] = {
       { "mtransform", do_mtransform , 0 },
       { "mzoneecho", do_mzoneecho, 0 },
       { "mfollow"  , do_mfollow  , 0 },
-      { "\n" , do_not_here , 0 } 
+      { "\n" , do_not_here , 0 }
   };
 
-int script_command_interpreter(struct char_data *ch, char *arg) 
+int script_command_interpreter(struct char_data *ch, char *arg)
 {
     /* DG trigger commands */
     int i;
@@ -478,7 +478,7 @@ void command_interpreter(struct char_data *ch, char *argument)
     /* special case to handle one-character, non-alphanumeric commands; requested
     * by many people so "'hi" or ";godnet test" is possible. Patch sent by Eric
     * Green and Stefan Wasilewski. */
-    if (!isalpha(*argument)) 
+    if (!isalpha(*argument))
     {
         arg[0] = argument[0];
         arg[1] = '\0';
@@ -497,7 +497,7 @@ void command_interpreter(struct char_data *ch, char *argument)
     }
 
     /* Allow IMPLs to switch into mobs to test the commands. */
-    if (IS_NPC(ch) && ch->desc && GET_LEVEL(ch->desc->original) >= LVL_IMPL) 
+    if (IS_NPC(ch) && ch->desc && GET_LEVEL(ch->desc->original) >= LVL_IMPL)
     {
         if (script_command_interpreter(ch, argument))
         {
@@ -521,7 +521,7 @@ void command_interpreter(struct char_data *ch, char *argument)
     {
         for (length = strlen(arg), cmd = 0; *complete_cmd_info[cmd].command != '\n'; cmd++)
         {
-            if (complete_cmd_info[cmd].command_pointer == do_action && 
+            if (complete_cmd_info[cmd].command_pointer == do_action &&
                 !strncmp(complete_cmd_info[cmd].command, arg, length))
             {
                 if (GET_LEVEL(ch) >= complete_cmd_info[cmd].minimum_level)
@@ -532,7 +532,7 @@ void command_interpreter(struct char_data *ch, char *argument)
         }
     }
 
-    if (*complete_cmd_info[cmd].command == '\n') 
+    if (*complete_cmd_info[cmd].command == '\n')
     {
         int found = 0;
         send_to_char(ch, "Huh!?!\r\n");
@@ -569,7 +569,7 @@ void command_interpreter(struct char_data *ch, char *argument)
     }
     else if (GET_POS(ch) < complete_cmd_info[cmd].minimum_position)
     {
-        switch (GET_POS(ch)) 
+        switch (GET_POS(ch))
         {
         case POS_DEAD:
             send_to_char(ch, "Lie still; you are DEAD!!! :-(\r\n");
@@ -605,7 +605,7 @@ void command_interpreter(struct char_data *ch, char *argument)
 /* Routines to handle aliasing. */
 static struct alias_data *find_alias(struct alias_data *alias_list, char *str)
 {
-    while (alias_list != NULL) 
+    while (alias_list != NULL)
     {
         if (*str == *alias_list->alias)    // hey, every little bit counts :-)
         {

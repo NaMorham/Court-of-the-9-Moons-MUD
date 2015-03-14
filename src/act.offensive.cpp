@@ -81,7 +81,7 @@ ACMD(do_hit)
   } else if (AFF_FLAGGED(ch, AFF_CHARM) && (ch->master == vict))
     act("$N is just such a good friend, you simply can't hit $M.", FALSE, ch, 0, vict, TO_CHAR);
   else {
-    if (!CONFIG_PK_ALLOWED && !IS_NPC(vict) && !IS_NPC(ch)) 
+    if (!CONFIG_PK_ALLOWED && !IS_NPC(vict) && !IS_NPC(ch))
     check_killer(ch, vict);
 
     if ((GET_POS(ch) == POS_STANDING) && (vict != FIGHTING(ch))) {
@@ -249,10 +249,10 @@ ACMD(do_flee)
       loss *= GET_LEVEL(was_fighting);
       gain_exp(ch, -loss);
         }
-      if (FIGHTING(ch)) 
-        stop_fighting(ch); 
+      if (FIGHTING(ch))
+        stop_fighting(ch);
       if (was_fighting && ch == FIGHTING(was_fighting))
-        stop_fighting(was_fighting); 
+        stop_fighting(was_fighting);
       } else {
     act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
       }
