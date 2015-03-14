@@ -585,6 +585,7 @@ void stop_follower(struct char_data *ch)
 
         j = k->next;
         k->next = j->next;
+        // CHECK IF J HAS FOLLOWERS AND FREE PROPERLY
         free(j);
         j = NULL;
     }
@@ -1484,3 +1485,4 @@ char *strpaste(char *str1, char *str2, char *joiner)
   *rp = '\0';
   return ret;
 }
+
