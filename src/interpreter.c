@@ -385,27 +385,27 @@ cpp_extern const struct command_info cmd_info[] = {
 
 int script_command_interpreter(struct char_data *ch, char *arg) 
 {
-	/* DG trigger commands */
-	int i;
-	char first_arg[MAX_INPUT_LENGTH];
-	char *line;
+    /* DG trigger commands */
+    int i;
+    char first_arg[MAX_INPUT_LENGTH];
+    char *line;
 
-	skip_spaces(&arg);
-	if (!*arg)
-		return 0;
+    skip_spaces(&arg);
+    if (!*arg)
+        return 0;
 
-	line = any_one_arg(arg, first_arg);
+    line = any_one_arg(arg, first_arg);
 
-	for (i = 0; *mob_script_commands[i].command_name != '\n'; i++)
-		if (!str_cmp(first_arg, mob_script_commands[i].command_name))
-			break; // NB - only allow full matches.
+    for (i = 0; *mob_script_commands[i].command_name != '\n'; i++)
+        if (!str_cmp(first_arg, mob_script_commands[i].command_name))
+            break; // NB - only allow full matches.
 
-	if (*mob_script_commands[i].command_name == '\n')
-		return 0; // no matching commands.
+    if (*mob_script_commands[i].command_name == '\n')
+        return 0; // no matching commands.
 
-	/* Poiner to the command? */
-	((*mob_script_commands[i].command_pointer) (ch, line, 0, mob_script_commands[i].subcmd));
-	return 1; // We took care of execution. Let caller know.
+    /* Poiner to the command? */
+    ((*mob_script_commands[i].command_pointer) (ch, line, 0, mob_script_commands[i].subcmd));
+    return 1; // We took care of execution. Let caller know.
 }
 
 const char *fill[] =

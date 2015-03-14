@@ -1,41 +1,46 @@
 /**
-* @file utils.h
-* Utility macros and prototypes of utility functions.
-*
-* Part of the core tbaMUD source code distribution, which is a derivative
-* of, and continuation of, CircleMUD.
-*
-* All rights reserved.  See license for complete information.
-* Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University
-* CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.
-*
-* @todo Merge structs, random and other very generic functions and macros into
-* the utils module.
-* @todo Take more mud specific functions and function prototypes (follower
-* functions, move functions, char_from_furniture) out of utils and declare /
-* define elsewhere.
-*/
-#ifndef _UTILS_H_ /* Begin header file protection */
-#define _UTILS_H_
+ * @file utils.h
+ * Utility macros and prototypes of utility functions.
+ *
+ * Part of the core tbaMUD source code distribution, which is a derivative
+ * of, and continuation of, CircleMUD.
+ *
+ * All rights reserved.  See license for complete information.
+ * Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University
+ * CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.
+ *
+ * @todo Merge structs, random and other very generic functions and macros into
+ * the utils module.
+ * @todo Take more mud specific functions and function prototypes (follower
+ * functions, move functions, char_from_furniture) out of utils and declare /
+ * define elsewhere.
+ */
+#ifndef __TBAMUD__UTILS_H__     // Begin header file protection
+#define __TBAMUD__UTILS_H__
 
-/** Definition of the action command, for the do_ series of in game functions.
+/**
+ * Definition of the action command, for the do_ series of in game functions.
  * This macro is placed here (for now) because it's too general of a macro
  * to be first defined in interpreter.h. The reason for using a macro is
  * to allow for easier addition of parameters to the otherwise generic and
- * static function structure. */
+ * static function structure. 
+ */
 #define ACMD(name)  \
    void name(struct char_data *ch, char *argument, int cmd, int subcmd)
 
-/* external declarations and prototypes */
-
+/*
+ * external declarations and prototypes 
+ */
 /** direct all log() references to basic_mud_log() function. */
 #define log			basic_mud_log
 
 /** Standard line size, used for many string limits. */
 #define READ_SIZE	256
 
-/* Public functions made available from utils.c. Documentation for all functions
- * are made available with the function definition. */
+/*
+ * Public functions made available from utils.c. Documentation for all functions
+ * are made available with the function definition. 
+ */
 void basic_mud_log(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
 void basic_mud_vlog(const char *format, va_list args);
 int touch(const char *path);
@@ -67,16 +72,22 @@ IDXTYPE atoidx( const char *str_to_conv );
 char *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad);
 char *strpaste(char *str1, char *str2, char *joiner);
 
-/* Public functions made available form weather.c */
+/*
+ * Public functions made available form weather.c 
+ */
 void weather_and_time(int mode);
 
-/** Creates a core dump for diagnostic purposes, but will keep (if it can)
+/** 
+ * Creates a core dump for diagnostic purposes, but will keep (if it can)
  * the mud running after the core has been dumped. Call this in the place
- * of calling core_dump_real. */
+ * of calling core_dump_real. 
+ */
 #define core_dump() core_dump_real(__FILE__, __LINE__)
 
-/* Only provide our versions if one isn't in the C library. These macro names
- * will be defined by sysdep.h if a strcasecmp or stricmp exists. */
+/*
+ * Only provide our versions if one isn't in the C library. These macro names
+ * will be defined by sysdep.h if a strcasecmp or stricmp exists. 
+ */
 #ifndef str_cmp
 int	str_cmp(const char *arg1, const char *arg2);
 #endif
@@ -84,11 +95,15 @@ int	str_cmp(const char *arg1, const char *arg2);
 int	strn_cmp(const char *arg1, const char *arg2, int n);
 #endif
 
-/* random functions in random.c */
+/*
+ * random functions in random.c 
+ */
 void circle_srandom(unsigned long initial_seed);
 unsigned long circle_random(void);
 
-/* undefine MAX and MIN so that our functions are used instead */
+/*
+ * undefine MAX and MIN so that our functions are used instead 
+ */
 #ifdef MAX
 #undef MAX
 #endif
@@ -101,22 +116,30 @@ int MAX(int a, int b);
 int MIN(int a, int b);
 char *CAP(char *txt);
 
-/* Followers */
+/*
+ * Followers 
+ */
 int	num_followers_charmed(struct char_data *ch);
 void	die_follower(struct char_data *ch);
 void	add_follower(struct char_data *ch, struct char_data *leader);
 void	stop_follower(struct char_data *ch);
 bool	circle_follow(struct char_data *ch, struct char_data *victim);
 
-/* in act.informative.c */
+/*
+ * in act.informative.c 
+ */
 void	look_at_room(struct char_data *ch, int mode);
 void  add_history(struct char_data *ch, char *msg, int type);
 
-/* in act.movmement.c */
+/*
+ * in act.movmement.c 
+ */
 int	do_simple_move(struct char_data *ch, int dir, int following);
 int	perform_move(struct char_data *ch, int dir, int following);
 
-/* in limits.c */
+/*
+ * in limits.c 
+ */
 int	mana_gain(struct char_data *ch);
 int	hit_gain(struct char_data *ch);
 int	move_gain(struct char_data *ch);
@@ -137,15 +160,21 @@ void char_from_furniture(struct char_data *ch);
 /** Who is sitting on this obj */
 #define OBJ_SAT_IN_BY(obj)      ((obj)->sitting_here)
 
-/* various constants */
+/*
+ * various constants 
+ */
 
-/* defines for mudlog() */
+/*
+ * defines for mudlog() 
+ */
 #define OFF	0  /**< Receive no mudlog messages. */
 #define BRF	1  /**< Receive only the most important mudlog messages. */
 #define NRM	2  /**< Receive the standard mudlog messages. */
 #define CMP	3  /**< Receive every mudlog message. */
 
-/* get_filename() types of files to open */
+/* 
+ * get_filename() types of files to open 
+ */
 #define CRASH_FILE       0 /**< Open up a player crash save file */
 #define ETEXT_FILE       1 /**< ???? */
 #define SCRIPT_VARS_FILE 2 /**< Reference to a global variable file. */
@@ -153,14 +182,18 @@ void char_from_furniture(struct char_data *ch);
 
 #define MAX_FILES        4 /**< Max number of files types vailable */
 
-/* breadth-first searching for graph function (tracking, etc) */
-#define BFS_ERROR		(-1)       /**< Error in the search. */
-#define BFS_ALREADY_THERE	(-2) /**< Area traversed already. */
-#define BFS_NO_PATH		(-3)     /**< No path through here. */
+/*
+ * breadth-first searching for graph function (tracking, etc) 
+ */
+#define BFS_ERROR		(-1)        /**< Error in the search. */
+#define BFS_ALREADY_THERE	(-2)    /**< Area traversed already. */
+#define BFS_NO_PATH		(-3)        /**< No path through here. */
 
-/** Number of real life seconds per mud hour.
+/** 
+ * Number of real life seconds per mud hour.
  * @todo The definitions based on SECS_PER_MUD_HOUR should be configurable.
- * See act.informative.c and utils.c for other places to change. */
+ * See act.informative.c and utils.c for other places to change. 
+ */
 #define SECS_PER_MUD_HOUR	75
 /** Real life seconds in one mud day.
  * Current calculation = 30 real life minutes. */
@@ -181,10 +214,14 @@ void char_from_furniture(struct char_data *ch);
 /** The number of seconds in a real year. */
 #define SECS_PER_REAL_YEAR	(365*SECS_PER_REAL_DAY)
 
-/* integer utils */
+/*
+ * integer utils 
+ */
 #define URANGE(a, b, c)          ((b) < (a) ? (a) : ((b) > (c) ? (c) : (b)))
 
-/* Various string utils. */
+/* 
+ * Various string utils. 
+ */
 /** If a is not null, FALSE or '0', return "YES"; if it is, return "NO" */
 #define YESNO(a) ((a) ? "YES" : "NO")
 /** If a is not null, FALSE or '0', return "ON"; if it is, return "OFF" */
@@ -195,35 +232,44 @@ void char_from_furniture(struct char_data *ch);
 /** If c is a lower case letter, return the upper case. */
 #define UPPER(c)   (((c)>='a'  && (c) <= 'z') ? ((c)+('A'-'a')) : (c) )
 
-/** If ch is equal to either a newline or a carriage return, return 1,
+/** 
+ * If ch is equal to either a newline or a carriage return, return 1,
  * else 0.
- * @todo Recommend using the ? operator for clarity. */
+ * @todo Recommend using the ? operator for clarity. 
+ */
 #define ISNEWL(ch) ((ch) == '\n' || (ch) == '\r')
 
-/** If string begins a vowel (upper or lower case), return "an"; else return
- * "a". */
+/** 
+ * If string begins a vowel (upper or lower case), return "an"; else return
+ * "a". 
+ */
 #define AN(string) (strchr("aeiouAEIOU", *string) ? "an" : "a")
 
-/** A calloc based memory allocation macro.
+/** 
+ * A calloc based memory allocation macro.
  * @param result Pointer to created memory.
  * @param type The type of memory (int, struct char_data, etc.).
- * @param number How many of type to make. */
+ * @param number How many of type to make. 
+ */
 #define CREATE(result, type, number)  do {\
 	if ((number) * sizeof(type) <= 0)	\
 		log("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__);	\
 	if (!((result) = (type *) calloc ((number), sizeof(type))))	\
 		{ perror("SYSERR: malloc failure"); abort(); } } while(0)
 
-/** A realloc based memory reallocation macro. Reminder: realloc can reduce
+/**
+ * A realloc based memory reallocation macro. Reminder: realloc can reduce
  * the size of an array as well as increase it.
  * @param result Pointer to created memory.
  * @param type The type of memory (int, struct char_data, etc.).
- * @param number How many of type to make. */
+ * @param number How many of type to make. 
+ */
 #define RECREATE(result, type, number) do {\
   if (!((result) = (type *) realloc ((result), sizeof(type) * (number))))\
 		{ perror("SYSERR: realloc failure"); abort(); } } while(0)
 
-/** Remove an item from a linked list and reset the links.
+/** 
+ * Remove an item from a linked list and reset the links.
  * If item is at the list head, change the head, else traverse the
  * list looking for the item before the one to be removed.
  * @pre Requires that a variable 'temp' be declared as the same type as the
@@ -233,7 +279,7 @@ void char_from_furniture(struct char_data *ch);
  * @param item Pointer to item to remove from the list.
  * @param head Pointer to the head of the linked list.
  * @param next The variable name pointing to the next in the list.
- * */
+ */
 #define REMOVE_FROM_LIST(item, head, next)	\
    if ((item) == (head))		\
       head = (item)->next;		\
@@ -245,7 +291,8 @@ void char_from_furniture(struct char_data *ch);
          temp->next = (item)->next;	\
    }					\
 
-/* Connect 'link' to the end of a double-linked list
+/**
+ * Connect 'link' to the end of a double-linked list
  * The new item becomes the last in the linked list, and the last
  * pointer is updated.
  * @param link  Pointer to item to remove from the list.
@@ -253,7 +300,7 @@ void char_from_furniture(struct char_data *ch);
  * @param last  Pointer to the last item of the linked list.
  * @param next  The variable name pointing to the next in the list.
  * @param prev  The variable name pointing to the previous in the list.
- * */
+ */
 #define LINK(link, first, last, next, prev)                     \
 do                                                              \
 {                                                               \
@@ -266,7 +313,8 @@ do                                                              \
     (last)                      = (link);                       \
 } while(0)
 
-/* Remove 'link' from a double-linked list
+/**
+ * Remove 'link' from a double-linked list
  * @post  item is removed from the list, but remains in memory, and must
    be free'd after unlinking.
  * @param link  Pointer to item to remove from the list.
@@ -274,7 +322,7 @@ do                                                              \
  * @param last  Pointer to the last item of the linked list.
  * @param next  The variable name pointing to the next in the list.
  * @param prev  The variable name pointing to the previous in the list.
- * */
+ */
 #define UNLINK(link, first, last, next, prev)                   \
 do                                                              \
 {                                                               \
@@ -288,9 +336,10 @@ do                                                              \
       (link)->next->prev        = (link)->prev;                 \
 } while(0)
 
-/* Free a pointer, and log if it was NULL
+/** 
+ * Free a pointer, and log if it was NULL
  * @param point The pointer to be free'd.
- * */
+ */
 #define DISPOSE(point)													 \
 do																		 \
 {																		 \
@@ -303,17 +352,23 @@ do																		 \
 	point = NULL;														 \
 } while(0)
 
-/* String Utils */
-/* Allocate memory for a string, and return a pointer
+/*
+ * String Utils 
+ */
+/** 
+ * Allocate memory for a string, and return a pointer
  * @param point The string to be copied.
- * */
+ */
 #define STRALLOC(point)         (strdup(point))
-/* Free allocated memory for a string
+/** 
+ * Free allocated memory for a string
  * @param point The string to be free'd.
- * */
+ */
 #define STRFREE(point)          DISPOSE(point)
 
-/* basic bitvector utils */
+/*
+ * basic bitvector utils 
+ */
 /** Return the bitarray field number x is in. */
 #define Q_FIELD(x)  ((int) (x) / 32)
 /** Return the bit to set in a bitarray field. */
@@ -327,7 +382,9 @@ do																		 \
 /** If bit is on in bitarray var, turn it off; if it is off, turn it on. */
 #define TOGGLE_BIT_AR(var, bit)   ((var)[Q_FIELD(bit)] = (var)[Q_FIELD(bit)] ^ Q_BIT(bit))
 
-/* Older, stock tbaMUD bit settings. */
+/*
+ * Older, stock tbaMUD bit settings. 
+ */
 /** 1 if bit is set in flag, 0 if it is not set. */
 #define IS_SET(flag,bit)  ((flag) & (bit))
 /** Set a specific bit in var to 1. */
@@ -337,11 +394,13 @@ do																		 \
 /** If bit in var is off, turn it on; if it is on, turn it off. */
 #define TOGGLE_BIT(var,bit) ((var) ^= (bit))
 
-/* Accessing player specific data structures on a mobile is a very bad thing
+/*
+ * Accessing player specific data structures on a mobile is a very bad thing
  * to do.  Consider that changing these variables for a single mob will change
  * it for every other single mob in the game.  If we didn't specifically check
  * for it, 'wimpy' would be an extremely bad thing for a mob to do, as an
- * example.  If you really couldn't care less, change this to a '#if 0'. */
+ * example.  If you really couldn't care less, change this to a '#if 0'. 
+ */
 #if 1
 /** Warn if accessing player_specials on a mob.
  * @todo Subtle bug in the var reporting, but works well for now. */
@@ -375,7 +434,9 @@ do																		 \
 /** References the routine element for a spell. Currently unused. */
 #define SPELL_ROUTINES(spl)	(spell_info[spl].routines)
 
-/* IS_MOB() acts as a VALID_MOB_RNUM()-like function.*/
+/* 
+ * IS_MOB() acts as a VALID_MOB_RNUM()-like function.
+ */
 /** 1 if the character has the NPC bit set, 0 if the character does not.
  * Used to prevents NPCs and mobs from doing things they shouldn't, even
  * when mobs are possessed or charmed by a player. */
@@ -422,8 +483,9 @@ do																		 \
 /** Checks to see if a PC or NPC is dead. */
 #define DEAD(ch) (PLR_FLAGGED((ch), PLR_NOTDEADYET) || MOB_FLAGGED((ch), MOB_NOTDEADYET))
 
-/* room utils */
-
+/*
+ * room utils 
+ */
 /** Return the sector type for the room. If there is no sector type, return
  * SECT_INSIDE. */
 #define SECT(room)	(VALID_ROOM_RNUM(room) ? \
@@ -446,7 +508,9 @@ do																		 \
 #define GET_ROOM_SPEC(room) \
 	(VALID_ROOM_RNUM(room) ? world[(room)].func : NULL)
 
-/* char utils */
+/*
+ * char utils 
+ */
 /** What room is PC/NPC in? */
 #define IN_ROOM(ch)	((ch)->in_room)
 /** What room was PC/NPC previously in? */
@@ -588,7 +652,10 @@ do																		 \
 #define GET_PAGE_LENGTH(ch)     CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.page_length))
 /** Return the page width for ch */
 #define GET_SCREEN_WIDTH(ch)    CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.screen_width))
-/* Autoquests data */
+
+/*
+ * Autoquests data 
+ */
 /** Return the number of questpoints ch has. */
 #define GET_QUESTPOINTS(ch)     CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.questpoints))
 /** Return the current quest that a player has assigned */
@@ -661,7 +728,9 @@ do																		 \
 /** Use this macro to check the wait state of ch. */
 #define GET_WAIT_STATE(ch)    ((ch)->wait)
 
-/* Descriptor-based utils. */
+/*
+ * Descriptor-based utils. 
+ */
 /** Connected state of d. */
 #define STATE(d)	((d)->connected)
 
@@ -676,7 +745,9 @@ do																		 \
 			(to_sleeping || AWAKE(ch)) && \
 			!PLR_FLAGGED((ch), PLR_WRITING))
 
-/* object utils */
+/*
+ * object utils 
+ */
 /** Check for NOWHERE or the top array index? If using unsigned types, the top
  * array index will catch everything. If using signed types, NOTHING will
  * catch the majority of bad accesses. */
@@ -725,7 +796,9 @@ do																		 \
 /** Return short description of obj. */
 #define GET_OBJ_SHORT(obj)      ((obj)->short_description)
 
-/* Compound utilities and other macros. */
+/*
+ * Compound utilities and other macros. 
+ */
 /** Used to compute version. To see if the code running is newer than 3.0pl13,
  * you would use: if _CIRCLEMUD > CIRCLEMUD_VERSION(3,0,13) */
 #define CIRCLEMUD_VERSION(major, minor, patchlevel) \
@@ -848,7 +921,9 @@ do																		 \
 /** Defines if ch is outdoors or not. */
 #define OUTSIDE(ch) (!ROOM_FLAGGED(IN_ROOM(ch), ROOM_INDOORS))
 
-/* OS compatibility */
+/*
+ * OS compatibility 
+ */
 #ifndef NULL
 /** Just in case NULL is not defined. */
 #define NULL (void *)0
@@ -874,7 +949,9 @@ do																		 \
 #define NO 0
 #endif
 
-/* defines for fseek */
+/*
+ * defines for fseek 
+ */
 #ifndef SEEK_SET
 /** define for fseek */
 #define SEEK_SET	0
@@ -884,9 +961,11 @@ do																		 \
 #define SEEK_END	2
 #endif
 
-/* NOCRYPT can be defined by an implementor manually in sysdep.h. CIRCLE_CRYPT
+/* 
+ * NOCRYPT can be defined by an implementor manually in sysdep.h. CIRCLE_CRYPT
  * is a variable that the 'configure' script automatically sets when it
- * determines whether or not the system is capable of encrypting. */
+ * determines whether or not the system is capable of encrypting. 
+ */
 #if defined(NOCRYPT) || !defined(CIRCLE_CRYPT)
 /** When crypt is not defined. (NOTE: Player passwords will be plain text.) */
 #define CRYPT(a,b) (a)
@@ -895,8 +974,9 @@ do																		 \
 #define CRYPT(a,b) ((char *) crypt((a),(b)))
 #endif
 
-/* Config macros */
-
+/*
+ *Config macros
+ */
 /** Pointer to the config file. */
 #define CONFIG_CONFFILE         config_info.CONFFILE
 
@@ -942,15 +1022,21 @@ do																		 \
 /** Get the display closed doors setting. */
 #define CONFIG_DISP_CLOSED_DOORS config_info.play.disp_closed_doors
 
-/* Map/Automap options */
+/*
+ * Map/Automap options 
+ */
 #define CONFIG_MAP             config_info.play.map_option
 #define CONFIG_MAP_SIZE        config_info.play.map_size
 #define CONFIG_MINIMAP_SIZE    config_info.play.minimap_size
 
-/* DG Script Options */
+/*
+ * DG Script Options 
+ */
 #define CONFIG_SCRIPT_PLAYERS  config_info.play.script_players
 
-/* Crash Saves */
+/*
+ * Crash Saves 
+ */
 /** Get free rent setting. */
 #define CONFIG_FREE_RENT        config_info.csd.free_rent
 /** Get max number of objects to save. */
@@ -966,7 +1052,9 @@ do																		 \
 /** Get legnth of time to hold rent files. */
 #define CONFIG_RENT_TIMEOUT     config_info.csd.rent_file_timeout
 
-/* Room Numbers */
+/* 
+ * Room Numbers 
+ */
 /** Get the mortal start room. */
 #define CONFIG_MORTAL_START     config_info.room_nums.mortal_start_room
 /** Get the immortal start room. */
@@ -980,7 +1068,9 @@ do																		 \
 /** Ge the third dontation room. */
 #define CONFIG_DON_ROOM_3       config_info.room_nums.donation_room_3
 
-/* Game Operation */
+/* 
+ * Game Operation 
+ */
 /** Get the default mud connection port. */
 #define CONFIG_DFLT_PORT        config_info.operation.DFLT_PORT
 /** Get the default mud ip address. */
@@ -1012,10 +1102,12 @@ do																		 \
 /** Should medit show the advnaced stats menu? */
 #define CONFIG_MEDIT_ADVANCED   config_info.operation.medit_advanced
 
-/* Autowiz */
+/* 
+ * Autowiz 
+ */
 /** Use autowiz or not? */
 #define CONFIG_USE_AUTOWIZ      config_info.autowiz.use_autowiz
 /** What is the minimum level character to put on the wizlist? */
 #define CONFIG_MIN_WIZLIST_LEV  config_info.autowiz.min_wizlist_lev
 
-#endif /* _UTILS_H_ */
+#endif      // __TBAMUD__UTILS_H__
