@@ -182,307 +182,307 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\src\act.comm.c"
+				RelativePath="..\..\src\act.comm.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.informative.c"
+				RelativePath="..\..\src\act.informative.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.item.c"
+				RelativePath="..\..\src\act.item.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.movement.c"
+				RelativePath="..\..\src\act.movement.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.offensive.c"
+				RelativePath="..\..\src\act.offensive.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.other.c"
+				RelativePath="..\..\src\act.other.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.social.c"
+				RelativePath="..\..\src\act.social.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\act.wizard.c"
+				RelativePath="..\..\src\act.wizard.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\aedit.c"
+				RelativePath="..\..\src\aedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\asciimap.c"
+				RelativePath="..\..\src\asciimap.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\ban.c"
+				RelativePath="..\..\src\ban.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\boards.c"
+				RelativePath="..\..\src\boards.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\bsd-snprintf.c"
+				RelativePath="..\..\src\bsd-snprintf.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\castle.c"
+				RelativePath="..\..\src\castle.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\cedit.c"
+				RelativePath="..\..\src\cedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\class.c"
+				RelativePath="..\..\src\class.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\comm.c"
+				RelativePath="..\..\src\comm.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\config.c"
+				RelativePath="..\..\src\config.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\constants.c"
+				RelativePath="..\..\src\constants.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\db.c"
+				RelativePath="..\..\src\db.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_comm.c"
+				RelativePath="..\..\src\dg_comm.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_db_scripts.c"
+				RelativePath="..\..\src\dg_db_scripts.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_event.c"
+				RelativePath="..\..\src\dg_event.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_handler.c"
+				RelativePath="..\..\src\dg_handler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_misc.c"
+				RelativePath="..\..\src\dg_misc.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_mobcmd.c"
+				RelativePath="..\..\src\dg_mobcmd.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_objcmd.c"
+				RelativePath="..\..\src\dg_objcmd.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_olc.c"
+				RelativePath="..\..\src\dg_olc.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_scripts.c"
+				RelativePath="..\..\src\dg_scripts.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_triggers.c"
+				RelativePath="..\..\src\dg_triggers.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_variables.c"
+				RelativePath="..\..\src\dg_variables.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\dg_wldcmd.c"
+				RelativePath="..\..\src\dg_wldcmd.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\fight.c"
+				RelativePath="..\..\src\fight.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genmob.c"
+				RelativePath="..\..\src\genmob.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genobj.c"
+				RelativePath="..\..\src\genobj.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genolc.c"
+				RelativePath="..\..\src\genolc.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genqst.c"
+				RelativePath="..\..\src\genqst.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genshp.c"
+				RelativePath="..\..\src\genshp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genwld.c"
+				RelativePath="..\..\src\genwld.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\genzon.c"
+				RelativePath="..\..\src\genzon.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\graph.c"
+				RelativePath="..\..\src\graph.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\handler.c"
+				RelativePath="..\..\src\handler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\hedit.c"
+				RelativePath="..\..\src\hedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\house.c"
+				RelativePath="..\..\src\house.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\ibt.c"
+				RelativePath="..\..\src\ibt.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\improved-edit.c"
+				RelativePath="..\..\src\improved-edit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\interpreter.c"
+				RelativePath="..\..\src\interpreter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\limits.c"
+				RelativePath="..\..\src\limits.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\magic.c"
+				RelativePath="..\..\src\magic.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mail.c"
+				RelativePath="..\..\src\mail.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\medit.c"
+				RelativePath="..\..\src\medit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\mobact.c"
+				RelativePath="..\..\src\mobact.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\modify.c"
+				RelativePath="..\..\src\modify.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\oasis.c"
+				RelativePath="..\..\src\oasis.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\oasis_copy.c"
+				RelativePath="..\..\src\oasis_copy.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\oasis_delete.c"
+				RelativePath="..\..\src\oasis_delete.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\oasis_list.c"
+				RelativePath="..\..\src\oasis_list.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\objsave.c"
+				RelativePath="..\..\src\objsave.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\oedit.c"
+				RelativePath="..\..\src\oedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\players.c"
+				RelativePath="..\..\src\players.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\prefedit.c"
+				RelativePath="..\..\src\prefedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\qedit.c"
+				RelativePath="..\..\src\qedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\quest.c"
+				RelativePath="..\..\src\quest.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\random.c"
+				RelativePath="..\..\src\random.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\redit.c"
+				RelativePath="..\..\src\redit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\sedit.c"
+				RelativePath="..\..\src\sedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\shop.c"
+				RelativePath="..\..\src\shop.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\spec_assign.c"
+				RelativePath="..\..\src\spec_assign.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\spec_procs.c"
+				RelativePath="..\..\src\spec_procs.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\spell_parser.c"
+				RelativePath="..\..\src\spell_parser.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\spells.c"
+				RelativePath="..\..\src\spells.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\tedit.c"
+				RelativePath="..\..\src\tedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\utils.c"
+				RelativePath="..\..\src\utils.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\weather.c"
+				RelativePath="..\..\src\weather.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\zedit.c"
+				RelativePath="..\..\src\zedit.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\zmalloc.c"
+				RelativePath="..\..\src\zmalloc.cpp"
 				>
 			</File>
 		</Filter>
