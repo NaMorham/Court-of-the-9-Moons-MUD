@@ -291,15 +291,16 @@ do                                                              \
 /* Free a pointer, and log if it was NULL
  * @param point The pointer to be free'd.
  * */
-#define DISPOSE(point)                                          \
-do                                                              \
-{                                                               \
-  if (!(point))                                                 \
-  {                                                             \
-        log( "SYSERR: Freeing null pointer %s:%d", __FILE__, __LINE__ ); \
-  }                                                             \
-  else free(point);                                             \
-  point = NULL;                                                 \
+#define DISPOSE(point)													 \
+do																		 \
+{																		 \
+	if (!(point))														 \
+	{																	 \
+		log( "SYSERR: Freeing null pointer %s:%d", __FILE__, __LINE__ ); \
+	} else {                                                             \
+		free(point);													 \
+	}																	 \
+	point = NULL;														 \
 } while(0)
 
 /* String Utils */

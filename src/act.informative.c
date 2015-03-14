@@ -2248,9 +2248,13 @@ void free_history(struct char_data *ch, int type)
 
   while ((ftmp = tmp)) {
     tmp = tmp->next;
-    if (ftmp->text)
+	if (ftmp->text)
+	{
       free(ftmp->text);
+	  ftmp->text = NULL;
+	}
     free(ftmp);
+	ftmp = NULL;
   }
   GET_HISTORY(ch, type) = NULL;
 }
@@ -2322,8 +2326,12 @@ void add_history(struct char_data *ch, char *str, int type)
       tmp = GET_HISTORY(ch, type);
       GET_HISTORY(ch, type) = tmp->next;
       if (tmp->text)
+	  {
         free(tmp->text);
+		tmp->text = NULL;
+	  }
       free(tmp);
+	  tmp = NULL;
     }
   }
   /* add this history message to ALL */

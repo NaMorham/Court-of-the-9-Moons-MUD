@@ -756,61 +756,75 @@ void weight_change_object(struct obj_data *obj, int weight)
 
 void name_from_drinkcon(struct obj_data *obj)
 {
-  char *new_name, *cur_name, *next;
-  const char *liqname;
-  int liqlen, cpylen;
+	char *new_name, *cur_name, *next;
+	const char *liqname;
+	int liqlen, cpylen;
 
-  if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
-    return;
+	if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
+	{
+		return;
+	}
 
-  liqname = drinknames[GET_OBJ_VAL(obj, 2)];
-  if (!isname(liqname, obj->name)) {
-    log("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
-    /* SYSERR_DESC: From name_from_drinkcon(), this error comes about if the 
-     * object noted (by keywords and item vnum) does not contain the liquid 
-     * string being searched for. */
-    return;
-  }
+	liqname = drinknames[GET_OBJ_VAL(obj, 2)];
+	if (!isname(liqname, obj->name)) {
+		log("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
+		/* SYSERR_DESC: From name_from_drinkcon(), this error comes about if the 
+		* object noted (by keywords and item vnum) does not contain the liquid 
+		* string being searched for. */
+		return;
+	}
 
-  liqlen = strlen(liqname);
-  CREATE(new_name, char, strlen(obj->name) - strlen(liqname)); /* +1 for NUL, -1 for space */
+	liqlen = strlen(liqname);
+	CREATE(new_name, char, strlen(obj->name) - strlen(liqname)); /* +1 for NUL, -1 for space */
 
-  for (cur_name = obj->name; cur_name; cur_name = next) {
-    if (*cur_name == ' ')
-      cur_name++;
+	for (cur_name = obj->name; cur_name; cur_name = next) 
+	{
+		if (*cur_name == ' ')
+		{
+			cur_name++;
+		}
+		if ((next = strchr(cur_name, ' ')))
+		{
+			cpylen = next - cur_name;
+		}
+		else
+		{
+			cpylen = strlen(cur_name);
+		}
+		if (!strn_cmp(cur_name, liqname, liqlen))
+		{
+			continue;
+		}
 
-    if ((next = strchr(cur_name, ' ')))
-      cpylen = next - cur_name;
-    else
-      cpylen = strlen(cur_name);
+		if (*new_name)
+		{
+			strcat(new_name, " "); /* strcat: OK (size precalculated) */
+		}
+		strncat(new_name, cur_name, cpylen); /* strncat: OK (size precalculated) */
+	}
 
-    if (!strn_cmp(cur_name, liqname, liqlen))
-      continue;
-
-    if (*new_name)
-      strcat(new_name, " "); /* strcat: OK (size precalculated) */
-    strncat(new_name, cur_name, cpylen); /* strncat: OK (size precalculated) */
-  }
-
-  if (GET_OBJ_RNUM(obj) == NOTHING || obj->name != obj_proto[GET_OBJ_RNUM(obj)].name)
-    free(obj->name);
-  obj->name = new_name;
+	if (GET_OBJ_RNUM(obj) == NOTHING || obj->name != obj_proto[GET_OBJ_RNUM(obj)].name)
+	{
+		free(obj->name);
+	}
+	obj->name = new_name;
 }
 
 void name_to_drinkcon(struct obj_data *obj, int type)
 {
-  char *new_name;
+	char *new_name;
 
-  if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
-    return;
+	if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))
+		return;
 
-  CREATE(new_name, char, strlen(obj->name) + strlen(drinknames[type]) + 2);
-  sprintf(new_name, "%s %s", obj->name, drinknames[type]); /* sprintf: OK */
+	CREATE(new_name, char, strlen(obj->name) + strlen(drinknames[type]) + 2);
+	sprintf(new_name, "%s %s", obj->name, drinknames[type]); /* sprintf: OK */
 
-  if (GET_OBJ_RNUM(obj) == NOTHING || obj->name != obj_proto[GET_OBJ_RNUM(obj)].name)
-    free(obj->name);
-
-  obj->name = new_name;
+	if (GET_OBJ_RNUM(obj) == NOTHING || obj->name != obj_proto[GET_OBJ_RNUM(obj)].name)
+	{
+		free(obj->name);
+	}
+	obj->name = new_name;
 }
 
 ACMD(do_drink)

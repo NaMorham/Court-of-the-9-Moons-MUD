@@ -883,221 +883,238 @@ int count_hash_records(FILE *fl)
 
 void index_boot(int mode)
 {
-  const char *index_filename, *prefix = NULL;	/* NULL or egcs 1.1 complains */
-  FILE *db_index, *db_file;
-  int rec_count = 0, size[2], i;
-  char buf2[PATH_MAX], buf1[MAX_STRING_LENGTH];
+	const char *index_filename, *prefix = NULL;	/* NULL or egcs 1.1 complains */
+	FILE *db_index, *db_file;
+	int rec_count = 0, size[2], i;
+	char buf2[PATH_MAX], buf1[MAX_STRING_LENGTH];
 
-  switch (mode) {
+	switch (mode) {
   case DB_BOOT_WLD:
-    prefix = WLD_PREFIX;
-    break;
+	  prefix = WLD_PREFIX;
+	  break;
   case DB_BOOT_MOB:
-    prefix = MOB_PREFIX;
-    break;
+	  prefix = MOB_PREFIX;
+	  break;
   case DB_BOOT_OBJ:
-    prefix = OBJ_PREFIX;
-    break;
+	  prefix = OBJ_PREFIX;
+	  break;
   case DB_BOOT_ZON:
-    prefix = ZON_PREFIX;
-    break;
+	  prefix = ZON_PREFIX;
+	  break;
   case DB_BOOT_SHP:
-    prefix = SHP_PREFIX;
-    break;
+	  prefix = SHP_PREFIX;
+	  break;
   case DB_BOOT_HLP:
-    prefix = HLP_PREFIX;
-    break;
+	  prefix = HLP_PREFIX;
+	  break;
   case DB_BOOT_TRG:
-    prefix = TRG_PREFIX;
-    break;
+	  prefix = TRG_PREFIX;
+	  break;
   case DB_BOOT_QST:
-    prefix = QST_PREFIX;
-    break;
+	  prefix = QST_PREFIX;
+	  break;
   default:
-    log("SYSERR: Unknown subcommand %d to index_boot!", mode);
-    exit(1);
-  }
+	  log("SYSERR: Unknown subcommand %d to index_boot!", mode);
+	  exit(1);
+	}
 
-  if (mini_mud)
-    index_filename = MINDEX_FILE;
-  else
-    index_filename = INDEX_FILE;
+	if (mini_mud)
+		index_filename = MINDEX_FILE;
+	else
+		index_filename = INDEX_FILE;
 
-  snprintf(buf2, sizeof(buf2), "%s%s", prefix, index_filename);
-  if (!(db_index = fopen(buf2, "r"))) {
-    log("SYSERR: opening index file '%s': %s", buf2, strerror(errno));
-    exit(1);
-  }
+	snprintf(buf2, sizeof(buf2), "%s%s", prefix, index_filename);
+	if (!(db_index = fopen(buf2, "r"))) {
+		log("SYSERR: opening index file '%s': %s", buf2, strerror(errno));
+		exit(1);
+	}
 
-  /* first, count the number of records in the file so we can malloc */
-  i = fscanf(db_index, "%s\n", buf1);
-  while (*buf1 != '$') {
-    snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
-    if (!(db_file = fopen(buf2, "r"))) {
-      log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
-	  index_filename, strerror(errno));
-      i = fscanf(db_index, "%s\n", buf1);
-      continue;
-    } else {
-      if (mode == DB_BOOT_ZON)
-	rec_count++;
-      else if (mode == DB_BOOT_HLP)
-	rec_count += count_alias_records(db_file);
-      else
-	rec_count += count_hash_records(db_file);
-    }
+	/* first, count the number of records in the file so we can malloc */
+	i = fscanf(db_index, "%s\n", buf1);
+	while (*buf1 != '$') {
+		snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
+		if (!(db_file = fopen(buf2, "r"))) {
+			log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
+				index_filename, strerror(errno));
+			i = fscanf(db_index, "%s\n", buf1);
+			continue;
+		} else {
+			if (mode == DB_BOOT_ZON)
+				rec_count++;
+			else if (mode == DB_BOOT_HLP)
+				rec_count += count_alias_records(db_file);
+			else
+				rec_count += count_hash_records(db_file);
+		}
 
-    fclose(db_file);
-    i = fscanf(db_index, "%s\n", buf1);
-  }
+		fclose(db_file);
+		i = fscanf(db_index, "%s\n", buf1);
+	}
 
-  /* Exit if 0 records, unless this is shops */
-  if (!rec_count) {
-    if (mode == DB_BOOT_SHP || mode == DB_BOOT_QST)
-      return;
-    log("SYSERR: boot error - 0 records counted in %s/%s.", prefix,
-	index_filename);
-    exit(1);
-  }
+	/* Exit if 0 records, unless this is shops */
+	if (!rec_count) {
+		if (mode == DB_BOOT_SHP || mode == DB_BOOT_QST)
+			return;
+		log("SYSERR: boot error - 0 records counted in %s/%s.", prefix,
+			index_filename);
+		exit(1);
+	}
 
-  /* "bytes" does _not_ include strings or other later malloc'd things. */
-  switch (mode) {
+	/* "bytes" does _not_ include strings or other later malloc'd things. */
+	switch (mode) {
   case DB_BOOT_TRG:
-    CREATE(trig_index, struct index_data *, rec_count);
-    break;
+	  CREATE(trig_index, struct index_data *, rec_count);
+	  break;
   case DB_BOOT_WLD:
-    CREATE(world, struct room_data, rec_count);
-    size[0] = sizeof(struct room_data) * rec_count;
-    log("   %d rooms, %d bytes.", rec_count, size[0]);
-    break;
+	  CREATE(world, struct room_data, rec_count);
+	  size[0] = sizeof(struct room_data) * rec_count;
+	  log("   %d rooms, %d bytes.", rec_count, size[0]);
+	  break;
   case DB_BOOT_MOB:
-    CREATE(mob_proto, struct char_data, rec_count);
-    CREATE(mob_index, struct index_data, rec_count);
-    size[0] = sizeof(struct index_data) * rec_count;
-    size[1] = sizeof(struct char_data) * rec_count;
-    log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
-    break;
+	  CREATE(mob_proto, struct char_data, rec_count);
+	  CREATE(mob_index, struct index_data, rec_count);
+	  size[0] = sizeof(struct index_data) * rec_count;
+	  size[1] = sizeof(struct char_data) * rec_count;
+	  log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
+	  break;
   case DB_BOOT_OBJ:
-    CREATE(obj_proto, struct obj_data, rec_count);
-    CREATE(obj_index, struct index_data, rec_count);
-    size[0] = sizeof(struct index_data) * rec_count;
-    size[1] = sizeof(struct obj_data) * rec_count;
-    log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
-    break;
+	  CREATE(obj_proto, struct obj_data, rec_count);
+	  CREATE(obj_index, struct index_data, rec_count);
+	  size[0] = sizeof(struct index_data) * rec_count;
+	  size[1] = sizeof(struct obj_data) * rec_count;
+	  log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
+	  break;
   case DB_BOOT_ZON:
-    CREATE(zone_table, struct zone_data, rec_count);
-    size[0] = sizeof(struct zone_data) * rec_count;
-    log("   %d zones, %d bytes.", rec_count, size[0]);
-    break;
+	  CREATE(zone_table, struct zone_data, rec_count);
+	  size[0] = sizeof(struct zone_data) * rec_count;
+	  log("   %d zones, %d bytes.", rec_count, size[0]);
+	  break;
   case DB_BOOT_HLP:
-    CREATE(help_table, struct help_index_element, rec_count);
-    size[0] = sizeof(struct help_index_element) * rec_count;
-    log("   %d entries, %d bytes.", rec_count, size[0]);
-    break;
+	  CREATE(help_table, struct help_index_element, rec_count);
+	  size[0] = sizeof(struct help_index_element) * rec_count;
+	  log("   %d entries, %d bytes.", rec_count, size[0]);
+	  break;
   case DB_BOOT_QST:
-    CREATE(aquest_table, struct aq_data, rec_count);
-    size[0] = sizeof(struct aq_data) * rec_count;
-    log("   %d entries, %d bytes.", rec_count, size[0]);
-    break;
-  }
+	  CREATE(aquest_table, struct aq_data, rec_count);
+	  size[0] = sizeof(struct aq_data) * rec_count;
+	  log("   %d entries, %d bytes.", rec_count, size[0]);
+	  break;
+	}
 
-  rewind(db_index);
-  i = fscanf(db_index, "%s\n", buf1);
-  while (*buf1 != '$') {
-    snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
-    if (!(db_file = fopen(buf2, "r"))) {
-      log("SYSERR: %s: %s", buf2, strerror(errno));
-      exit(1);
-    }
-    switch (mode) {
-    case DB_BOOT_WLD:
-    case DB_BOOT_OBJ:
-    case DB_BOOT_MOB:
-    case DB_BOOT_TRG:
-    case DB_BOOT_QST:
-      discrete_load(db_file, mode, buf2);
-      break;
-    case DB_BOOT_ZON:
-      load_zones(db_file, buf2);
-      break;
-    case DB_BOOT_HLP:
-      load_help(db_file, buf2);
-      break;
-    case DB_BOOT_SHP:
-      boot_the_shops(db_file, buf2, rec_count);
-      break;
-    }
+	rewind(db_index);
+	i = fscanf(db_index, "%s\n", buf1);
+	while (*buf1 != '$') {
+		snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
+		if (!(db_file = fopen(buf2, "r"))) {
+			log("SYSERR: %s: %s", buf2, strerror(errno));
+			exit(1);
+		}
+		switch (mode) {
+	case DB_BOOT_WLD:
+	case DB_BOOT_OBJ:
+	case DB_BOOT_MOB:
+	case DB_BOOT_TRG:
+	case DB_BOOT_QST:
+		discrete_load(db_file, mode, buf2);
+		break;
+	case DB_BOOT_ZON:
+		load_zones(db_file, buf2);
+		break;
+	case DB_BOOT_HLP:
+		load_help(db_file, buf2);
+		break;
+	case DB_BOOT_SHP:
+		boot_the_shops(db_file, buf2, rec_count);
+		break;
+		}
 
-    fclose(db_file);
-    i = fscanf(db_index, "%s\n", buf1);
-  }
-  fclose(db_index);
+		fclose(db_file);
+		i = fscanf(db_index, "%s\n", buf1);
+	}
+	fclose(db_index);
 
-  /* Sort the help index. */
-  if (mode == DB_BOOT_HLP) {
-    qsort(help_table, top_of_helpt, sizeof(struct help_index_element), hsort);
-  }
+	/* Sort the help index. */
+	if (mode == DB_BOOT_HLP) {
+		qsort(help_table, top_of_helpt, sizeof(struct help_index_element), hsort);
+	}
 }
 
 void discrete_load(FILE *fl, int mode, char *filename)
 {
-  int nr = -1, last;
-  char line[READ_SIZE];
+	int nr = -1, last;
+	char line[READ_SIZE];
 
-  const char *modes[] = {"world", "mob", "obj", "ZON", "SHP", "HLP", "trg", "qst"};
-  /* modes positions correspond to DB_BOOT_xxx in db.h */
+	const char *modes[] = {"world", "mob", "obj", "ZON", "SHP", "HLP", "trg", "qst"};
+	/* modes positions correspond to DB_BOOT_xxx in db.h */
 
-  for (;;) {
-    /* We have to do special processing with the obj files because they have no
-     * end-of-record marker. */
-    if (mode != DB_BOOT_OBJ || nr < 0)
-      if (!get_line(fl, line)) {
-	if (nr == -1) {
-	  log("SYSERR: %s file %s is empty!", modes[mode], filename);
-	} else {
-	  log("SYSERR: Format error in %s after %s #%d\n"
-	      "...expecting a new %s, but file ended!\n"
-	      "(maybe the file is not terminated with '$'?)", filename,
-	      modes[mode], nr, modes[mode]);
+	for (;;) 
+	{
+		/* We have to do special processing with the obj files because they have no
+		* end-of-record marker. */
+		if (mode != DB_BOOT_OBJ || nr < 0)
+		{
+			if (!get_line(fl, line)) 
+			{
+				if (nr == -1) 
+				{
+					log("SYSERR: %s file %s is empty!", modes[mode], filename);
+				} 
+				else 
+				{
+					log("SYSERR: Format error in %s after %s #%d\n"
+						"...expecting a new %s, but file ended!\n"
+						"(maybe the file is not terminated with '$'?)", filename,
+						modes[mode], nr, modes[mode]);
+				}
+				exit(1);
+			}
+		}
+		if (*line == '$')
+		{
+			return;
+		}
+		if (*line == '#') 
+		{
+			last = nr;
+			if (sscanf(line, "#%d", &nr) != 1) 
+			{
+				log("SYSERR: Format error after %s #%d", modes[mode], last);
+				exit(1);
+			}
+			if (nr >= 99999)
+			{
+				return;
+			}
+			else
+			{
+				switch (mode) 
+				{
+				case DB_BOOT_WLD:
+					parse_room(fl, nr);
+					break;
+				case DB_BOOT_MOB:
+					parse_mobile(fl, nr);
+					break;
+				case DB_BOOT_TRG:
+					parse_trigger(fl, nr);
+					break;
+				case DB_BOOT_OBJ:
+					strlcpy(line, parse_object(fl, nr), sizeof(line));
+					break;
+				case DB_BOOT_QST:
+					parse_quest(fl, nr);
+					break;
+				}
+			}
+		} 
+		else 
+		{
+			log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
+				filename, modes[mode], nr);
+			log("SYSERR: ... offending line: '%s'", line);
+			exit(1);
+		}
 	}
-	exit(1);
-      }
-    if (*line == '$')
-      return;
-
-    if (*line == '#') {
-      last = nr;
-      if (sscanf(line, "#%d", &nr) != 1) {
-	log("SYSERR: Format error after %s #%d", modes[mode], last);
-	exit(1);
-      }
-      if (nr >= 99999)
-	return;
-      else
-	switch (mode) {
-	case DB_BOOT_WLD:
-	  parse_room(fl, nr);
-	  break;
-	case DB_BOOT_MOB:
-	  parse_mobile(fl, nr);
-	  break;
-        case DB_BOOT_TRG:
-          parse_trigger(fl, nr);
-          break;
-	case DB_BOOT_OBJ:
-	  strlcpy(line, parse_object(fl, nr), sizeof(line));
-	  break;
-  case DB_BOOT_QST:
-    parse_quest(fl, nr);
-    break;
-	}
-    } else {
-      log("SYSERR: Format error in %s file %s near %s #%d", modes[mode],
-	  filename, modes[mode], nr);
-      log("SYSERR: ... offending line: '%s'", line);
-      exit(1);
-    }
-  }
 }
 
 static char fread_letter(FILE *fp)

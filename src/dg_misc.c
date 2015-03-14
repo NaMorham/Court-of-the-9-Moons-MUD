@@ -152,122 +152,140 @@ void do_dg_cast(void *go, struct script_data *sc, trig_data *trig, int type, cha
 #define APPLY_TYPE	1
 #define AFFECT_TYPE	2
 void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
-		  int script_type, char *cmd)
+				  int script_type, char *cmd)
 {
-  struct char_data *ch = NULL;
-  int value=0, duration=0;
-  char junk[MAX_INPUT_LENGTH]; /* will be set to "dg_affect" */
-  char charname[MAX_INPUT_LENGTH], property[MAX_INPUT_LENGTH];
-  char value_p[MAX_INPUT_LENGTH], duration_p[MAX_INPUT_LENGTH];
-  int i=0, type=0;
-  struct affected_type af;
+	struct char_data *ch = NULL;
+	int value=0, duration=0;
+	char junk[MAX_INPUT_LENGTH]; /* will be set to "dg_affect" */
+	char charname[MAX_INPUT_LENGTH], property[MAX_INPUT_LENGTH];
+	char value_p[MAX_INPUT_LENGTH], duration_p[MAX_INPUT_LENGTH];
+	int i=0, type=0;
+	struct affected_type af;
 
 
-  half_chop(cmd, junk, cmd);
-  half_chop(cmd, charname, cmd);
-  half_chop(cmd, property, cmd);
-  half_chop(cmd, value_p, duration_p);
+	half_chop(cmd, junk, cmd);
+	half_chop(cmd, charname, cmd);
+	half_chop(cmd, property, cmd);
+	half_chop(cmd, value_p, duration_p);
 
-  /* make sure all parameters are present */
-  if (charname == NULL || !*charname || property == NULL || !*property ||
-      value_p == NULL || !*value_p || duration_p == NULL || !*duration_p) {
-    script_log("Trigger: %s, VNum %d. dg_affect usage: <target> <property> <value> <duration>",
-      GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
-    return;
-  }
+	/* make sure all parameters are present */
+	if (charname == NULL || !*charname || property == NULL || !*property ||
+		value_p == NULL || !*value_p || duration_p == NULL || !*duration_p) 
+	{
+		script_log("Trigger: %s, VNum %d. dg_affect usage: <target> <property> <value> <duration>",
+				   GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
+		return;
+	}
 
-  value = atoi(value_p);
-  duration = atoi(duration_p);
-  if (duration <= 0) {
-    script_log("Trigger: %s, VNum %d. dg_affect: need positive duration!",
-      GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
-    script_log("Line was: dg_affect %s %s %s %s (%d)",
-      charname, property, value_p, duration_p, duration);
-    return;
-  }
+	value = atoi(value_p);
+	duration = atoi(duration_p);
+	if (duration <= 0) 
+	{
+		script_log("Trigger: %s, VNum %d. dg_affect: need positive duration!",
+				   GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
+		script_log("Line was: dg_affect %s %s %s %s (%d)",
+				   charname, property, value_p, duration_p, duration);
+		return;
+	}
 
-  /* find the property -- first search apply_types */
-  i = 0;
-  while (str_cmp(apply_types[i], "\n")) {
-    if (!str_cmp(apply_types[i], property)) {
-      type=APPLY_TYPE;
-      break;
-    }
-    i++;
-  }
+	/* find the property -- first search apply_types */
+	i = 0;
+	while (str_cmp(apply_types[i], "\n")) 
+	{
+		if (!str_cmp(apply_types[i], property)) 
+		{
+			type=APPLY_TYPE;
+			break;
+		}
+		i++;
+	}
 
-  if (!type) { /* search affect_types now */
-    i = 0;
-    while (str_cmp(affected_bits[i], "\n")) {
-      if (!str_cmp(affected_bits[i], property)) {
-        type=AFFECT_TYPE;
-        break;
-      }
-      i++;
-    }
-  }
+	if (!type)  /* search affect_types now */
+	{
+		i = 0;
+		while (str_cmp(affected_bits[i], "\n")) 
+		{
+			if (!str_cmp(affected_bits[i], property)) 
+			{
+				type=AFFECT_TYPE;
+				break;
+			}
+			i++;
+		}
+	}
 
-  if (!type) { /* property not found */
-    script_log("Trigger: %s, VNum %d. dg_affect: unknown property '%s'!",
-      GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig), property);
-    return;
-  }
+	if (!type)  /* property not found */
+	{
+		script_log("Trigger: %s, VNum %d. dg_affect: unknown property '%s'!",
+				   GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig), property);
+		return;
+	}
 
-  /* locate the target */
-  ch = get_char(charname);
-  if (!ch) {
-    script_log("Trigger: %s, VNum %d. dg_affect: cannot locate target!",
-      GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
-    return;
-  }
+	/* locate the target */
+	ch = get_char(charname);
+	if (!ch) 
+	{
+		script_log("Trigger: %s, VNum %d. dg_affect: cannot locate target!",
+				   GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
+		return;
+	}
 
-  if (!str_cmp(value_p, "off")) {
-    affect_from_char(ch, SPELL_DG_AFFECT);
-    return;
-  }
+	if (!str_cmp(value_p, "off")) 
+	{
+		affect_from_char(ch, SPELL_DG_AFFECT);
+		return;
+	}
 
-  /* add the affect */
-  af.type = SPELL_DG_AFFECT;
-  af.duration = duration -1;
-  af.modifier = value;
+	/* add the affect */
+	af.type = SPELL_DG_AFFECT;
+	af.duration = duration -1;
+	af.modifier = value;
 
-  if (type == APPLY_TYPE) {
-    af.location = i;
-    af.bitvector = 0;
-  } else {
-    af.location = 0;
-    af.bitvector = i;
-  }
+	if (type == APPLY_TYPE) 
+	{
+		af.location = i;
+		af.bitvector = 0;
+	} 
+	else 
+	{
+		af.location = 0;
+		af.bitvector = i;
+	}
 
-  affect_to_char(ch, &af);
+	affect_to_char(ch, &af);
 }
 
 void send_char_pos(struct char_data *ch, int dam)
 {
-  switch (GET_POS(ch)) {
-    case POS_MORTALLYW:
-      act("$n is mortally wounded, and will die soon, if not aided.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You are mortally wounded, and will die soon, if not aided.\r\n");
-      break;
-    case POS_INCAP:
-      act("$n is incapacitated and will slowly die, if not aided.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You are incapacitated and will slowly die, if not aided.\r\n");
-      break;
-    case POS_STUNNED:
-      act("$n is stunned, but will probably regain consciousness again.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You're stunned, but will probably regain consciousness again.\r\n");
-      break;
-    case POS_DEAD:
-      act("$n is dead!  R.I.P.", FALSE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You are dead!  Sorry...\r\n");
-      break;
-    default:                        /* >= POSITION SLEEPING */
-      if (dam > (GET_MAX_HIT(ch) >> 2))
-        act("That really did HURT!", FALSE, ch, 0, 0, TO_CHAR);
-      if (GET_HIT(ch) < (GET_MAX_HIT(ch) >> 2))
-        send_to_char(ch, "%sYou wish that your wounds would stop BLEEDING so much!%s\r\n",
-                         CCRED(ch, C_SPR), CCNRM(ch, C_SPR));
-  }
+	switch (GET_POS(ch)) 
+	{
+	case POS_MORTALLYW:
+		act("$n is mortally wounded, and will die soon, if not aided.", TRUE, ch, 0, 0, TO_ROOM);
+		send_to_char(ch, "You are mortally wounded, and will die soon, if not aided.\r\n");
+		break;
+	case POS_INCAP:
+		act("$n is incapacitated and will slowly die, if not aided.", TRUE, ch, 0, 0, TO_ROOM);
+		send_to_char(ch, "You are incapacitated and will slowly die, if not aided.\r\n");
+		break;
+	case POS_STUNNED:
+		act("$n is stunned, but will probably regain consciousness again.", TRUE, ch, 0, 0, TO_ROOM);
+		send_to_char(ch, "You're stunned, but will probably regain consciousness again.\r\n");
+		break;
+	case POS_DEAD:
+		act("$n is dead!  R.I.P.", FALSE, ch, 0, 0, TO_ROOM);
+		send_to_char(ch, "You are dead!  Sorry...\r\n");
+		break;
+	default:                        /* >= POSITION SLEEPING */
+		if (dam > (GET_MAX_HIT(ch) >> 2))
+		{
+			act("That really did HURT!", FALSE, ch, 0, 0, TO_CHAR);
+		}
+		if (GET_HIT(ch) < (GET_MAX_HIT(ch) >> 2))
+		{
+			send_to_char(ch, "%sYou wish that your wounds would stop BLEEDING so much!%s\r\n",
+			CCRED(ch, C_SPR), CCNRM(ch, C_SPR));
+		}
+	}
 }
 
 /* Used throughout the xxxcmds.c files for checking if a char can be targetted
@@ -275,40 +293,56 @@ void send_char_pos(struct char_data *ch, int dam)
  * %teleport%. - Welcor */
 int valid_dg_target(struct char_data *ch, int bitvector)
 {
-  if (IS_NPC(ch))
-    return TRUE;  /* all npcs are allowed as targets */
-  else if (ch->desc && (STATE(ch->desc) != CON_PLAYING))
-    return FALSE; /* Only PC's who are playing can be targetted */
-  else if (GET_LEVEL(ch) < LVL_IMMORT)
-    return TRUE;  /* as well as all mortals */
-  else if (!IS_SET(bitvector, DG_ALLOW_GODS) &&
-     GET_LEVEL(ch) >= LVL_GRGOD) /* LVL_GOD has the advance command. Can't allow them to be forced. */
-    return FALSE; /* but not always the highest gods */
-  else if (!PRF_FLAGGED(ch, PRF_NOHASSLE))
-    return TRUE;  /* the ones in between as allowed as long as they have no-hassle off.   */
-  else
-    return FALSE;  /* The rest are gods with nohassle on... */
+	if (IS_NPC(ch))
+	{
+		return TRUE;  /* all npcs are allowed as targets */
+	}
+	else if (ch->desc && (STATE(ch->desc) != CON_PLAYING))
+	{
+		return FALSE; /* Only PC's who are playing can be targetted */
+	}
+	else if (GET_LEVEL(ch) < LVL_IMMORT)
+	{
+		return TRUE;  /* as well as all mortals */
+	}
+	else if (!IS_SET(bitvector, DG_ALLOW_GODS) &&
+	{
+		GET_LEVEL(ch) >= LVL_GRGOD) /* LVL_GOD has the advance command. Can't allow them to be forced. */
+		return FALSE; /* but not always the highest gods */
+	}
+	else if (!PRF_FLAGGED(ch, PRF_NOHASSLE))
+	{
+		return TRUE;  /* the ones in between as allowed as long as they have no-hassle off.   */
+	}
+	else
+	{
+		return FALSE;  /* The rest are gods with nohassle on... */
+	}
 }
 
 void script_damage(struct char_data *vict, int dam)
 {
-  if (GET_LEVEL(vict)>=LVL_IMMORT && (dam > 0)) {
-    send_to_char(vict, "Being the cool immortal you are, you sidestep a trap, "
-        "obviously placed to kill you.\r\n");
-    return;
-  }
+	if (GET_LEVEL(vict)>=LVL_IMMORT && (dam > 0)) 
+	{
+		send_to_char(vict, "Being the cool immortal you are, you sidestep a trap, "
+					 "obviously placed to kill you.\r\n");
+		return;
+	}
 
-  GET_HIT(vict) -= dam;
-  GET_HIT(vict) = MIN(GET_HIT(vict), GET_MAX_HIT(vict));
+	GET_HIT(vict) -= dam;
+	GET_HIT(vict) = MIN(GET_HIT(vict), GET_MAX_HIT(vict));
 
-  update_pos(vict);
-  send_char_pos(vict, dam);
+	update_pos(vict);
+	send_char_pos(vict, dam);
 
-  if (GET_POS(vict) == POS_DEAD) {
-    if (!IS_NPC(vict))
-      mudlog( BRF, 0, TRUE, "%s killed by script at %s",
-          GET_NAME(vict), world[vict->in_room].name);
-    die(vict, NULL);
-  }
+	if (GET_POS(vict) == POS_DEAD) 
+	{
+		if (!IS_NPC(vict))
+		{
+			mudlog( BRF, 0, TRUE, "%s killed by script at %s",
+			GET_NAME(vict), world[vict->in_room].name);
+		}
+		die(vict, NULL);
+	}
 }
 

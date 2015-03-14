@@ -369,83 +369,174 @@ static void check_idling(struct char_data *ch)
 /* Update PCs, NPCs, and objects */
 void point_update(void)
 {
-  struct char_data *i, *next_char;
-  struct obj_data *j, *next_thing, *jj, *next_thing2;
+	struct char_data *i, *next_char;
+	struct obj_data *j, *next_thing, *jj, *next_thing2;
+	room_rnum rmRNum_dbg;
+	room_vnum rmVNum;
 
-  /* characters */
-  for (i = character_list; i; i = next_char) {
-    next_char = i->next;
+	/* characters */
+	for (i = character_list; i; i = next_char) 
+	{
+		next_char = i->next;
 
-    gain_condition(i, HUNGER, -1);
-    gain_condition(i, DRUNK, -1);
-    gain_condition(i, THIRST, -1);
+		gain_condition(i, HUNGER, -1);
+		gain_condition(i, DRUNK, -1);
+		gain_condition(i, THIRST, -1);
 
-    if (GET_POS(i) >= POS_STUNNED) {
-      GET_HIT(i) = MIN(GET_HIT(i) + hit_gain(i), GET_MAX_HIT(i));
-      GET_MANA(i) = MIN(GET_MANA(i) + mana_gain(i), GET_MAX_MANA(i));
-      GET_MOVE(i) = MIN(GET_MOVE(i) + move_gain(i), GET_MAX_MOVE(i));
-      if (AFF_FLAGGED(i, AFF_POISON))
-	if (damage(i, i, 2, SPELL_POISON) == -1)
-	  continue;	/* Oops, they died. -gg 6/24/98 */
-      if (GET_POS(i) <= POS_STUNNED)
-	update_pos(i);
-    } else if (GET_POS(i) == POS_INCAP) {
-      if (damage(i, i, 1, TYPE_SUFFERING) == -1)
-	continue;
-    } else if (GET_POS(i) == POS_MORTALLYW) {
-      if (damage(i, i, 2, TYPE_SUFFERING) == -1)
-	continue;
-    }
-    if (!IS_NPC(i)) {
-      update_char_objects(i);
-      (i->char_specials.timer)++;
-      if (GET_LEVEL(i) < CONFIG_IDLE_MAX_LEVEL)
-	check_idling(i);
-    }
-  }
-
-  /* objects */
-  for (j = object_list; j; j = next_thing) {
-    next_thing = j->next;	/* Next in object list */
-
-    /* If this is a corpse */
-    if (IS_CORPSE(j)) {
-      /* timer count down */
-      if (GET_OBJ_TIMER(j) > 0)
-	GET_OBJ_TIMER(j)--;
-
-      if (!GET_OBJ_TIMER(j)) {
-
-	if (j->carried_by)
-	  act("$p decays in your hands.", FALSE, j->carried_by, j, 0, TO_CHAR);
-	else if ((IN_ROOM(j) != NOWHERE) && (world[IN_ROOM(j)].people)) {
-	  act("A quivering horde of maggots consumes $p.",
-	      TRUE, world[IN_ROOM(j)].people, j, 0, TO_ROOM);
-	  act("A quivering horde of maggots consumes $p.",
-	      TRUE, world[IN_ROOM(j)].people, j, 0, TO_CHAR);
+		if (GET_POS(i) >= POS_STUNNED) 
+		{
+			GET_HIT(i) = MIN(GET_HIT(i) + hit_gain(i), GET_MAX_HIT(i));
+			GET_MANA(i) = MIN(GET_MANA(i) + mana_gain(i), GET_MAX_MANA(i));
+			GET_MOVE(i) = MIN(GET_MOVE(i) + move_gain(i), GET_MAX_MOVE(i));
+			if (AFF_FLAGGED(i, AFF_POISON))
+			{
+				if (damage(i, i, 2, SPELL_POISON) == -1)
+				{
+					continue;	/* Oops, they died. -gg 6/24/98 */
+				}
+			}
+			if (GET_POS(i) <= POS_STUNNED)
+			{
+				update_pos(i);
+			}
+		}
+		else if (GET_POS(i) == POS_INCAP) 
+		{
+			if (damage(i, i, 1, TYPE_SUFFERING) == -1)
+			{
+				continue;
+			}
+		}
+		else if (GET_POS(i) == POS_MORTALLYW) 
+		{
+			if (damage(i, i, 2, TYPE_SUFFERING) == -1)
+			{
+				continue;
+			}
+		}
+		if (!IS_NPC(i)) 
+		{
+			update_char_objects(i);
+			(i->char_specials.timer)++;
+			if (GET_LEVEL(i) < CONFIG_IDLE_MAX_LEVEL)
+			{
+				check_idling(i);
+			}
+		}
 	}
-	for (jj = j->contains; jj; jj = next_thing2) {
-	  next_thing2 = jj->next_content;	/* Next in inventory */
-	  obj_from_obj(jj);
 
-	  if (j->in_obj)
-	    obj_to_obj(jj, j->in_obj);
-	  else if (j->carried_by)
-	    obj_to_room(jj, IN_ROOM(j->carried_by));
-	  else if (IN_ROOM(j) != NOWHERE)
-	    obj_to_room(jj, IN_ROOM(j));
-	  else
-	    core_dump();
+	/* objects */
+	for (j = object_list; j; j = next_thing) 
+	{
+		next_thing = j->next;	/* Next in object list */
+
+#ifdef _DEBUG
+		if (j && (GET_OBJ_VNUM(j) == 90)) // crashy icecream
+		{
+			int breakHere = 1;
+		}
+		{
+			obj_vnum dbgOVNum = NOTHING;
+			const char *dbgOShort = NULL;
+
+			log("Update timers for object in \"void point_update(void)\":%s:%d, ", __FILE__, __LINE__);
+			dbgOVNum = GET_OBJ_VNUM(j);
+			dbgOShort = GET_OBJ_SHORT(j);
+			log("\t\tObj[%d, %s]", dbgOVNum, dbgOShort);
+		}
+#endif
+
+		/* If this is a corpse */
+		if (IS_CORPSE(j)) 
+		{
+			/* timer count down */
+			if (GET_OBJ_TIMER(j) > 0)
+			{
+				GET_OBJ_TIMER(j)--;
+			}
+
+			if (!GET_OBJ_TIMER(j)) 
+			{
+				char_data *pCarriedBy = NULL;
+				if (j->carried_by)
+				{
+					pCarriedBy = j->carried_by;
+					act("$p decays in your hands.", FALSE, j->carried_by, j, 0, TO_CHAR);
+				}
+				else if ((IN_ROOM(j) != NOWHERE) && (world[IN_ROOM(j)].people)) 
+				{
+					act("A quivering horde of maggots consumes $p.",
+						TRUE, world[IN_ROOM(j)].people, j, 0, TO_ROOM);
+					act("A quivering horde of maggots consumes $p.",
+						TRUE, world[IN_ROOM(j)].people, j, 0, TO_CHAR);
+				}
+				for (jj = j->contains; jj; jj = next_thing2) 
+				{
+					next_thing2 = jj->next_content;	/* Next in inventory */
+					obj_from_obj(jj);
+
+					if (j->in_obj)
+					{
+						obj_to_obj(jj, j->in_obj);
+					}
+					else if (j->carried_by)
+					{
+						obj_to_room(jj, IN_ROOM(j->carried_by));
+					}
+					else if (IN_ROOM(j) != NOWHERE)
+					{
+						obj_to_room(jj, IN_ROOM(j));
+					}
+					else
+					{
+						core_dump();
+					}
+				}
+				
+				if (pCarriedBy)
+				{
+					rmRNum_dbg = IN_ROOM(pCarriedBy);
+				}
+				else
+				{
+					rmRNum_dbg = IN_ROOM(j);
+				}
+
+				if (rmRNum_dbg == NOWHERE)
+				{
+					log("For object %d:%s is NOWHERE", GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+				}
+				else
+				{
+					rmVNum = world[rmRNum_dbg].number;
+					log("Extract obj [%d:%s] from Room %d:%s", 
+						GET_OBJ_VNUM(j), GET_OBJ_SHORT(j),
+						rmVNum, world[rmRNum_dbg].description);
+				}
+
+#ifdef _DEBUG
+				log("Extracting object in %s:%d, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+#endif
+
+				extract_obj(j);
+			}
+		} // if this is a corpse
+
+		/* If the timer is set, count it down and at 0, try the trigger
+		* note to .rej hand-patchers: make this last in your point-update() */
+		else if (GET_OBJ_TIMER(j) > 0) 
+		{
+#ifdef _DEBUG
+			log("Handling object in %s:%d - NOT A CORPSE BUT HAS TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+#endif
+			GET_OBJ_TIMER(j)--;
+			if (!GET_OBJ_TIMER(j))
+			{
+#ifdef _DEBUG
+				log("Handling object in %s:%d - NOT A CORPSE BUT COULD NOT GET TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+#endif
+				timer_otrigger(j);
+			}
+		}
 	}
-	extract_obj(j);
-      }
-    }
-    /* If the timer is set, count it down and at 0, try the trigger
-     * note to .rej hand-patchers: make this last in your point-update() */
-    else if (GET_OBJ_TIMER(j)>0) {
-      GET_OBJ_TIMER(j)--;
-      if (!GET_OBJ_TIMER(j))
-        timer_otrigger(j);
-    }
-  }
 }

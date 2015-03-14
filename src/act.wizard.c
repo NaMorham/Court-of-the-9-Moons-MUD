@@ -1890,6 +1890,7 @@ void add_llog_entry(struct char_data *ch, int type) {
     if(!(fp=fopen(LAST_FILE,"a"))) {
       log("error opening last_file for appending");
       free(llast);
+	  llast = NULL;
       return;
     }
     i = fwrite(llast,sizeof(struct last_entry),1,fp);
@@ -1899,6 +1900,7 @@ void add_llog_entry(struct char_data *ch, int type) {
     mod_llog_entry(llast,type);
   }
   free(llast);
+  llast = NULL;
 }
 
 void clean_llog_entries(void) {
@@ -3041,7 +3043,9 @@ static int perform_set(struct char_data *ch, struct char_data *vict, int mode, c
         skip_spaces(&val_arg);
 
         if (POOFIN(vict))
+		{
           free(POOFIN(vict));
+		}
 
       if (!*val_arg)
           POOFIN(vict) = NULL;

@@ -163,33 +163,36 @@ void free_command_list(void)
 
 void free_social_messages(void)
 {
-  struct social_messg *mess;
-  int i;
+	struct social_messg *mess;
+	int i;
 
-  for (i = 0;i <= top_of_socialt;i++)  {
-    mess = &soc_mess_list[i];
-    free_action(mess);
-  }
-  free(soc_mess_list);
+	for (i = 0;i <= top_of_socialt;i++)  
+	{
+		mess = &soc_mess_list[i];
+		free_action(mess);
+	}
+	free(soc_mess_list);
+	soc_mess_list = NULL;
 }
 
-void free_action(struct social_messg *mess)  {
-  if (mess->command) free(mess->command);
-  if (mess->sort_as) free(mess->sort_as);
-  if (mess->char_no_arg) free(mess->char_no_arg);
-  if (mess->others_no_arg) free(mess->others_no_arg);
-  if (mess->char_found) free(mess->char_found);
-  if (mess->others_found) free(mess->others_found);
-  if (mess->vict_found) free(mess->vict_found);
-  if (mess->char_body_found) free(mess->char_body_found);
-  if (mess->others_body_found) free(mess->others_body_found);
-  if (mess->vict_body_found) free(mess->vict_body_found);
-  if (mess->not_found) free(mess->not_found);
-  if (mess->char_auto) free(mess->char_auto);
-  if (mess->others_auto) free(mess->others_auto);
-  if (mess->char_obj_found) free(mess->char_obj_found);
-  if (mess->others_obj_found) free(mess->others_obj_found);
-  memset(mess, 0, sizeof(struct social_messg));
+void free_action(struct social_messg *mess)  
+{
+	if (mess->command) free(mess->command);
+	if (mess->sort_as) free(mess->sort_as);
+	if (mess->char_no_arg) free(mess->char_no_arg);
+	if (mess->others_no_arg) free(mess->others_no_arg);
+	if (mess->char_found) free(mess->char_found);
+	if (mess->others_found) free(mess->others_found);
+	if (mess->vict_found) free(mess->vict_found);
+	if (mess->char_body_found) free(mess->char_body_found);
+	if (mess->others_body_found) free(mess->others_body_found);
+	if (mess->vict_body_found) free(mess->vict_body_found);
+	if (mess->not_found) free(mess->not_found);
+	if (mess->char_auto) free(mess->char_auto);
+	if (mess->others_auto) free(mess->others_auto);
+	if (mess->char_obj_found) free(mess->char_obj_found);
+	if (mess->others_obj_found) free(mess->others_obj_found);
+	memset(mess, 0, sizeof(struct social_messg));
 }
 
 static int find_action(int cmd)
