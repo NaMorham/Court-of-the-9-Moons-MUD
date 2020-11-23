@@ -16,49 +16,49 @@ DISTDIR=c:\circle
 CFLAGS=-c -I$(LCCDIR)\include -DLCC_WIN32
 CC=lcc
 OBJS=\
-	genqst.obj \
-	qedit.obj \
-	quest.obj \
-	weather.obj \
-	utils.obj \
-	spells.obj \
-	spell_parser.obj \
-	spec_procs.obj \
-	spec_assign.obj \
-	shop.obj \
-	random.obj \
-	players.obj \
-	objsave.obj \
-	modify.obj \
-	mobact.obj \
-	mail.obj \
-	magic.obj \
-	limits.obj \
-	interpreter.obj \
-	house.obj \
-	handler.obj \
-	graph.obj \
-	fight.obj \
-	db.obj \
-	constants.obj \
-	config.obj \
-	comm.obj \
-	class.obj \
-	castle.obj \
-	boards.obj \
-	ban.obj \
-	act.wizard.obj \
-	act.social.obj \
-	act.other.obj \
-	act.offensive.obj \
-	act.movement.obj \
-	act.item.obj \
-	act.informative.obj \
-	act.comm.obj \
+    genqst.obj \
+    qedit.obj \
+    quest.obj \
+    weather.obj \
+    utils.obj \
+    spells.obj \
+    spell_parser.obj \
+    spec_procs.obj \
+    spec_assign.obj \
+    shop.obj \
+    random.obj \
+    players.obj \
+    objsave.obj \
+    modify.obj \
+    mobact.obj \
+    mail.obj \
+    magic.obj \
+    limits.obj \
+    interpreter.obj \
+    house.obj \
+    handler.obj \
+    graph.obj \
+    fight.obj \
+    db.obj \
+    constants.obj \
+    config.obj \
+    comm.obj \
+    class.obj \
+    castle.obj \
+    boards.obj \
+    ban.obj \
+    act.wizard.obj \
+    act.social.obj \
+    act.other.obj \
+    act.offensive.obj \
+    act.movement.obj \
+    act.item.obj \
+    act.informative.obj \
+    act.comm.obj \
 
 LIBS=$(LCCDIR)\lib\wsock32.lib
 
-circle.exe:	$(OBJS)
+circle.exe:    $(OBJS)
         lcclnk  -subsystem console -o $(DISTDIR)\bin\circle.exe $(OBJS) $(LIBS)
 
 # Build GENQST.C
