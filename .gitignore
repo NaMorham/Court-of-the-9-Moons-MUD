@@ -53,3 +53,9 @@ lib/etc/time
 lib/plrfiles/*/*.plr
 lib/plrobjs/*/*.objs
 lib/plrfiles/index
+
+# MSVC temp files
+ninemoons.sdf
+ninemoons.vcxproj.*
+src/ninemoons/VS*/Backup/**
+UpgradeLog.htm*
