@@ -58,4 +58,4 @@ extern size_t affected_bits_count;
 extern size_t extra_bits_count;
 extern size_t wear_bits_count;
 
-#endif /* _CONSTANTS_H_ */
+#endif      // _CONSTANTS_H_

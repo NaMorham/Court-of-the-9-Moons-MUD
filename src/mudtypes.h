@@ -12,22 +12,25 @@
 #ifndef __CIRCLE__MUDTYPES_H__
 #define __CIRCLE__MUDTYPES_H__
 
+#include <limits.h>
+
 #include "conf.h"
 #include "sysdep.h"
 
-
-// Type Definitions
-typedef signed char         sbyte;      ///< 1 byte; vals = -127 to 127
-typedef unsigned char       ubyte;      ///< 1 byte; vals = 0 to 255
-typedef signed short int    sh_int;     ///< 2 bytes; vals = -32,768 to 32,767
-typedef unsigned short int  ush_int;    ///< 2 bytes; vals = 0 to 65,535
+/*
+ * Type Definitions
+ */
+typedef signed char sbyte;          //!< 1 byte; vals = -127 to 127
+typedef unsigned char ubyte;        //!< 1 byte; vals = 0 to 255
+typedef signed short int sh_int;    //!< 2 bytes; vals = -32,768 to 32,767
+typedef unsigned short int ush_int; //!< 2 bytes; vals = 0 to 65,535
 
 #if !defined(__cplusplus)    // Anyone know a portable method?
 typedef char                bool;       ///< Technically 1 signed byte; vals should only = TRUE or FALSE.
 #endif
 
 #if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)    // Hm, sysdep.h?
-typedef signed char         byte;       ///< Technically 1 signed byte; vals should only = TRUE or FALSE.
+typedef signed char byte;            //!< Technically 1 signed byte; vals should only = TRUE or FALSE.
 #endif
 
 // preamble
@@ -41,21 +44,21 @@ typedef signed char         byte;       ///< Technically 1 signed byte; vals sho
 #define CIRCLE_UNSIGNED_INDEX    1
 
 #if CIRCLE_UNSIGNED_INDEX
-# define IDXTYPE        ush_int         ///< Index types are unsigned short ints
-# define IDXTYPE_MAX    USHRT_MAX       ///< Used for compatibility checks.
-# define IDXTYPE_MIN    0               ///< Used for compatibility checks.
-# define NOWHERE        ((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
-# define NOTHING        ((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
-# define NOBODY            ((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
-# define NOFLAG         ((IDXTYPE)~0)   ///< Sets to ush_int_MAX, or 65,535
+typedef ush_int IDXTYPE;                //!< Index types are unsigned short ints
+const IDXTYPE IDXTYPE_MAX = USHRT_MAX;    //!< Used for compatibility checks.
+const IDXTYPE IDXTYPE_MIN = 0;            //!< Used for compatibility checks.
+const IDXTYPE NOWHERE = ((IDXTYPE)~0);    //!< Sets to ush_int_MAX, or 65,535
+const IDXTYPE NOTHING = ((IDXTYPE)~0);    //!< Sets to ush_int_MAX, or 65,535
+const IDXTYPE NOBODY = ((IDXTYPE)~0);    //!< Sets to ush_int_MAX, or 65,535
+const IDXTYPE NOFLAG = ((IDXTYPE)~0);    //!< Sets to ush_int_MAX, or 65,535
 #else
-# define IDXTYPE        sh_int          ///< Index types are unsigned short ints
-# define IDXTYPE_MAX    SHRT_MAX        ///< Used for compatibility checks.
-# define IDXTYPE_MIN    SHRT_MIN        ///< Used for compatibility checks.
-# define NOWHERE        ((IDXTYPE)-1)   ///< nil reference for rooms
-# define NOTHING        ((IDXTYPE)-1)   ///< nil reference for objects
-# define NOBODY            ((IDXTYPE)-1)    ///< nil reference for mobiles
-# define NOFLAG         ((IDXTYPE)-1)   ///< nil reference for flags
+typedef    sh_int IDXTYPE;                    //!< Index types are unsigned short ints
+const IDXTYPE IDXTYPE_MAX = SHRT_MAX;    //!< Used for compatibility checks.
+const IDXTYPE IDXTYPE_MIN = SHRT_MIN;    //!< Used for compatibility checks.
+const IDXTYPE NOWHERE = ((IDXTYPE)-1);    //!< nil reference for rooms
+const IDXTYPE NOTHING = ((IDXTYPE)-1);    //!< nil reference for objects
+const IDXTYPE NOBODY = ((IDXTYPE)-1);    //!< nil reference for mobiles
+const IDXTYPE NOFLAG = ((IDXTYPE)-1);    //!< nil reference for flags
 #endif
 
 #endif  // __CIRCLE__MUDTYPES_H__

@@ -29,10 +29,11 @@ void assign_rooms(void);
 /*****************************************************************************
  * Begin Functions and defines for spec_procs.c
  ****************************************************************************/
-/* Utility functions */
+// Utility functions
 void sort_spells(void);
 void list_skills(struct char_data *ch);
-/* Special functions */
+
+// Special functions
 SPECIAL(guild);
 SPECIAL(dump);
 SPECIAL(mayor);

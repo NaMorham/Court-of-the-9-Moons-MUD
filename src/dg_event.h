@@ -17,22 +17,29 @@
 #ifndef _DG_EVENT_H_
 #define _DG_EVENT_H_
 
-/** How often will heartbeat() call the 'wait' event function?
- * @deprecated Currently not used. */
+
+/**
+ * How often will heartbeat() call the 'wait' event function?
+ * @deprecated Currently not used.
+ */
 #define PULSE_DG_EVENT 1
 
 /**************************************************************************
  * Begin event structures and defines.
  **************************************************************************/
-/** All Functions handled by the event system must be of this format. */
+/**
+ * All Functions handled by the event system must be of this format.
+ */
 #define EVENTFUNC(name) long (name)(void *event_obj)
 
-/** The event structure. Events get attached to the queue and are executed
- * when their turn comes up in the queue. */
-struct event {
-  EVENTFUNC(*func); /**< The function called when this event comes up. */
-  void *event_obj;  /**< event_obj is passed to func when func is called */
-  struct q_element *q_el;  /**< Where this event is located in the queue */
+/**
+ * The event structure. Events get attached to the queue and are executed
+ * when their turn comes up in the queue.
+ */
+struct mud_event_t {
+    EVENTFUNC(*func);       //!< The function called when this event comes up.
+    void *event_obj;        //!< event_obj is passed to func when func is called
+    struct q_element *q_el; //!< Where this event is located in the queue
 };
 /**************************************************************************
  * End event structures and defines.
@@ -41,41 +48,47 @@ struct event {
 /**************************************************************************
  * Begin priority queue structures and defines.
  **************************************************************************/
-/** Number of buckets available in each queue. Reduces enqueue cost. */
+/**
+ * Number of buckets available in each queue. Reduces enqueue cost.
+ */
 #define NUM_EVENT_QUEUES    10
 
-/** The priority queue. */
+/**
+ * The priority queue.
+ */
 struct dg_queue {
-  struct q_element *head[NUM_EVENT_QUEUES]; /**< Front of each queue bucket. */
-  struct q_element *tail[NUM_EVENT_QUEUES]; /**< Rear of each queue bucket. */
+    struct q_element *head[NUM_EVENT_QUEUES];   //!< Front of each queue bucket.
+    struct q_element *tail[NUM_EVENT_QUEUES];   //!< Rear of each queue bucket.
 };
 
-/** Queued elements. */
+/**
+ * Queued elements.
+ */
 struct q_element {
-  void *data;  /**< The event to be handled. */
-  long key;    /**< When the event should be handled. */
-  struct q_element *prev, *next; /**< Points to other q_elements in line. */
+    void *data;                     //!< The event to be handled.
+    long key;                       //!< When the event should be handled.
+    struct q_element *prev, *next;  //!< Points to other q_elements in line.
 };
 /**************************************************************************
  * End priority queue structures and defines.
  **************************************************************************/
 
-/* - events - function protos needed by other modules */
-void event_init(void);
-struct event *event_create(EVENTFUNC(*func), void *event_obj, long when);
-void event_cancel(struct event *event);
-void event_process(void);
-long event_time(struct event *event);
-void event_free_all(void);
+// - events - function protos needed by other modules
+void                event_init(void);
+struct mud_event_t  *event_create(EVENTFUNC(*func), void *event_obj, long when);
+void                event_cancel(struct mud_event_t *the_event);
+void                event_process(void);
+long                event_time(struct mud_event_t *the_event);
+void                event_free_all(void);
 
-/* - queues - function protos need by other modules */
-struct dg_queue *queue_init(void);
-struct q_element *queue_enq(struct dg_queue *q, void *data, long key);
-void queue_deq(struct dg_queue *q, struct q_element *qe);
-void *queue_head(struct dg_queue *q);
-long queue_key(struct dg_queue *q);
-long queue_elmt_key(struct q_element *qe);
-void queue_free(struct dg_queue *q);
-int  event_is_queued(struct event *event);
+// - queues - function protos need by other modules
+struct dg_queue     *queue_init(void);
+struct q_element    *queue_enq(struct dg_queue *q, void *data, long key);
+void                queue_deq(struct dg_queue *q, struct q_element *qe);
+void                *queue_head(struct dg_queue *q);
+long                queue_key(struct dg_queue *q);
+long                queue_elmt_key(struct q_element *qe);
+void                queue_free(struct dg_queue *q);
+int                 event_is_queued(struct mud_event_t *the_event);
 
 #endif /* _DG_EVENT_H_ */

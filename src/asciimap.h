@@ -10,12 +10,16 @@
 #ifndef ASCIIMAP_H_
 #define ASCIIMAP_H_
 
-/* Map options (settable in cedit) */
+/*
+ * Map options (settable in cedit)
+ */
 #define MAP_OFF      0
 #define MAP_ON       1
 #define MAP_IMM_ONLY 2
 
-/* Exported function prototypes */
+/*
+ * Exported function prototypes
+ */
 bool can_see_map(struct char_data *ch);
 void str_and_map(char *str, struct char_data *ch, room_vnum target_room );
 ACMD(do_map);

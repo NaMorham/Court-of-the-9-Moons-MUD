@@ -81,65 +81,65 @@ const char *CTrackData::getName() const
 
 const byte CTrackData::getDirection() const
 {
-	return m_dir;
+    return m_dir;
 }
 const byte CTrackData::setDirection(const byte dir)
 {
-	return m_dir = dir;
+    return m_dir = dir;
 }
 
 const byte CTrackData::getPctCovered() const
 {
-	return m_pctCovered;
+    return m_pctCovered;
 }
 const byte CTrackData::setPctCovered(const byte pct)
 {
-	return m_pctCovered = pct;
+    return m_pctCovered = pct;
 }
 
 const bool CTrackData::getIsEntering() const
 {
-	return m_entered;
+    return m_entered;
 }
 const bool CTrackData::setIsEntering(const bool enter)
 {
-	return m_entered = enter;
+    return m_entered = enter;
 }
 
 const time_t CTrackData::getCreateTime() const
 {
-	return m_created;
+    return m_created;
 }
 const time_t CTrackData::setCreateTime(const time_t created)
 {
-	return m_created = created;
+    return m_created = created;
 }
 
 const byte CTrackData::getRace() const
 {
-	return m_race;
+    return m_race;
 }
 const byte CTrackData::setRace(const byte race)
 {
-	return m_race = race;
+    return m_race = race;
 }
 
 const byte CTrackData::getBarefoot() const
 {
-	return m_barefoot;
+    return m_barefoot;
 }
 const byte CTrackData::setBarefoot(const byte barefoot)
 {
-	return m_barefoot = barefoot;
+    return m_barefoot = barefoot;
 }
 
 const byte CTrackData::getBurdened() const
 {
-	return m_burdened;
+    return m_burdened;
 }
 const byte CTrackData::setBurdened(const byte burdened)
 {
-	return m_burdened = burdened;
+    return m_burdened = burdened;
 }
 
 const bool CTrackData::operator!=(const CTrackData &rhs) const

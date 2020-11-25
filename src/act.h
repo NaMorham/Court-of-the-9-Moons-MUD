@@ -20,6 +20,7 @@
 
 #include "utils.h" /* for the ACMD macro */
 
+
 /*****************************************************************************
  * Begin Functions and defines for act.comm.c
  ****************************************************************************/
@@ -59,7 +60,7 @@ char *find_exdesc(char *word, struct extra_descr_data *list);
 /** @todo Move to a mud centric string utility library */
 void space_to_minus(char *str);
 /** @todo Move to a help module? */
-int search_help(const char *argument, int level);
+size_t search_help(const char *argument, int level);
 /* functions with subcommands */
 /* do_commands */
 ACMD(do_commands);
@@ -194,16 +195,16 @@ ACMD(do_rescue);
 /* Functions with subcommands */
 /* do_gen_tog */
 ACMD(do_gen_tog);
-#define SCMD_NOSUMMON    0
-#define SCMD_NOHASSLE    1
-#define SCMD_BRIEF       2
-#define SCMD_COMPACT     3
-#define SCMD_NOTELL      4
-#define SCMD_NOAUCTION   5
-#define SCMD_NOSHOUT     6
-#define SCMD_NOGOSSIP    7
-#define SCMD_NOGRATZ     8
-#define SCMD_NOWIZ       9
+#define SCMD_NOSUMMON     0
+#define SCMD_NOHASSLE     1
+#define SCMD_BRIEF        2
+#define SCMD_COMPACT      3
+#define SCMD_NOTELL       4
+#define SCMD_NOAUCTION    5
+#define SCMD_NOSHOUT      6
+#define SCMD_NOGOSSIP     7
+#define SCMD_NOGRATZ      8
+#define SCMD_NOWIZ        9
 #define SCMD_QUEST       10
 #define SCMD_SHOWVNUMS   11
 #define SCMD_NOREPEAT    12
@@ -275,13 +276,13 @@ ACMD(do_gmote);
  ****************************************************************************/
 /* Utility Functions */
 /** @todo should probably be moved to a more general file handler module */
-void clean_llog_entries(void);
+void        clean_llog_entries(void);
 /** @todo This should be moved to a more general utility file */
-int script_command_interpreter(struct char_data *ch, char *arg);
-room_rnum find_target_room(struct char_data *ch, char *rawroomstr);
-void perform_immort_vis(struct char_data *ch);
-void snoop_check(struct char_data *ch);
-bool change_player_name(struct char_data *ch, struct char_data *vict, char *new_name);
+int         script_command_interpreter(struct char_data *ch, char *arg);
+room_rnum   find_target_room(struct char_data *ch, char *rawroomstr);
+void        perform_immort_vis(struct char_data *ch);
+void        snoop_check(struct char_data *ch);
+bool        change_player_name(struct char_data *ch, struct char_data *vict, char *new_name);
 /* Functions with subcommands */
 /* do_date */
 ACMD(do_date);

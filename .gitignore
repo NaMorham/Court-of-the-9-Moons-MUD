@@ -59,3 +59,5 @@ ninemoons.sdf
 ninemoons.vcxproj.*
 src/ninemoons/VS*/Backup/**
 UpgradeLog.htm*
+Backup
+baks.zip
