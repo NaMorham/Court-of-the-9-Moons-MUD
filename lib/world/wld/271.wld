@@ -45,6 +45,7 @@ Zone 271 is linked to the following zones:
 272 Sundhaven II                   at 27144 (east ) ---> 27260
 272 Sundhaven II                   at 27145 (west ) ---> 27221
 272 Sundhaven II                   at 27148 (down ) ---> 27257
+
 272 Sundhaven II                   at 27149 (east ) ---> 27249
 272 Sundhaven II                   at 27152 (east ) ---> 27257
 272 Sundhaven II                   at 27152 (west ) ---> 27250
@@ -486,6 +487,7 @@ rules conduct~
  2) Don't point.
  3) No stealing the tips.
  4) No honor among thieves.
+
 The list is, of course, left anonymous.
 ~
 S
@@ -1093,14 +1095,7 @@ D0
 S
 #27156
 PETSHOP STOREROOM~
-   Make two rooms and some pets.  The rooms MUST be sequential.  If the first
-room is 315 then the second must be 316.  The second room is known as the
-storeroom.  All that is required in the storeroom is to load one of each mob you
-wish to be a pet.  This room can not have any exits and will never be used by
-mortals.  Although a pet shopkeeper is not required it is recommended.  After
-all of this is done ask your coder to implement the petshop.  It will not work
-until the code is changed and the MUD is rebooted.  The cost of pets is 300
-times their level.
+   Mortals should never come here!    
 ~
 271 1536 0 0 0 0
 S

@@ -6,7 +6,7 @@ end of the path.  It is a very stormy night, with rain pouring down and
 lightning striking in the distance.  Thunder claps and booms as you head up the
 path hoping for a place to stay until the storm passes over.    
 ~
-283 196 0 0 0 5
+283 196 0 0 0 0
 D1
 You don't feel like looking, you just want to get out of this rain!!
 ~
@@ -43,7 +43,7 @@ puddles, and places where the path is practically gone.  By now all of your
 clothes are soaked, and most of your legs are all muddy.  Ewwwwwwwwwwww!!  If
 you don't get somewhere soon, you're going to catch a cold!    
 ~
-283 192 0 0 0 5
+283 192 0 0 0 0
 D3
 You're soaked with muddy water, and are caught in a HUGE thunderstorm. 
 Do you really feel like looking back?
@@ -66,7 +66,7 @@ Suddenly, lightning strikes only a few feet away from where you were.
 Unprepared, you almost fall to the mud.  Now you are running as fast as one can
 go.    
 ~
-283 192 0 0 0 5
+283 192 0 0 0 0
 D0
 A house is north, waiting for you to get inside...
 ~
@@ -389,8 +389,11 @@ To the west looks to be a large chair with a dark figure sitting in it...
 E
 sign~
    *****************North = The Slow-Death Room************
+
 ********************South = Quick-Death*******************
+
 ********************West = The Dungeon Ruler's Lair********** 
+
 *******BE WARNED: UNPREPARED INTRUDERS WILL DIE*******
 ~
 S
@@ -1177,6 +1180,7 @@ Oops!~
    You are climbing down the ladder to the ground when all of a sudden a large
 gust of wind comes along and hits you hard.  Unprepared, you lose your grip on
 the very wet ropes, and fly head first into the ground below you.  OUCH!!!!!  
+
 ~
 283 741 0 0 0 0
 D4

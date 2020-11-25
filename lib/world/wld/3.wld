@@ -106,8 +106,7 @@ S
 An Elegant Hall~
    Drawings of ancient battles in which the Magi slaughter their foes line both
 sides of the hallway.  Depicted on these drawings are a myriad of creatures
-ranging from ogres, orcs, goblins, and demons to humans, elves, and dwarves.  
-One of the paintings looks oddly familiar.
+ranging from ogres, orcs, goblins, and demons to humans, elves, and dwarves.
 ~
 3 8 0 0 0 0
 D0
@@ -123,7 +122,6 @@ D2
 ~
 0 0 319
 S
-T 304
 #305
 The Baths~
    The air is musky and hard to breathe due to the hot steam wafting from the
@@ -162,11 +160,10 @@ D2
 ~
 0 0 321
 S
-T 306
 #307
 A Long Hallway~
    The barren walls and floor would seem odd anywhere but here as the Clerics of
-Sanctus consider decorations, desires, or any form of unnecessary wants to be
+Sanctus consider decorations, desires, or any form od unnecessary wants to be
 blasphemous.  They dedicate their lives to helping others, never themselves, and
 would all sacrifice their lives for that principle.
 ~
@@ -337,7 +334,7 @@ D3
 S
 #316
 Magi Alley~
-   The inner city wall is used to separate the city into two separate
+   The inner city wall is used to seperate the city into two seperate
 battlefields.  In case of an attack by superior numbers the citizens will fall
 back into the inner city as a last measure of defense.  Luckily, the army has
 been very successful in protecting the city and it has never come to that.    
@@ -1370,16 +1367,16 @@ and well kept.  A single door leads down to the shop below.
 D5
 ~
 door~
-1 0 225
+2 0 225
+E
+sky winds~
+   Cold winds plunge ceaselessly at you from the dark, cloudless sky.
+~
 E
 floor~
    The stone floor is the same shade of grey as the sky and is completely plain
 and unscratched. It is probably too hard for anything to leave as much as a
 scratch on it.
-~
-E
-sky winds~
-   Cold winds plunge ceaselessly at you from the dark, cloudless sky.
 ~
 S
 $~

@@ -20,6 +20,7 @@ This zone was made as a connector to other zones, a basic filler zone full
 of low level mobs and eq.  DragonSpyre, the Corn Maize, the Sinister Forest,
 Jher, and Ofingia all connect off this zone on Dibrova.  It is not a
 particularly stand-out zone, but is a decent enough connector zone.
+
 Links: 00n, 15e, 32e, 49n, 95s
 Zone 263 is linked to the following zones:
 257 Jareth Main City               at 26300 (east ) ---> 25756
@@ -331,7 +332,7 @@ D3
 S
 #26319
 Lake's Edge~
-   The road splits off here, going it's separate ways around the lake, one split
+   The road splits off here, going it's seperate ways around the lake, one split
 heading north, one heading south.  The trail also heads east through the fertile
 farmlands of Jareth.  
 ~
@@ -480,6 +481,7 @@ S
 Lake's Edge~
    The road runs east and west from here, around the lake.  A farm lies just
 southeast of you, to the northeast you see a dock which leads out into the lake.
+
 ~
 263 0 0 0 0 0
 D1
@@ -787,7 +789,7 @@ farmlands giving way to evergreens and more versatile shrubbery.  The path
 continues it's way west and east from you and a small offshoot heads south as
 well.  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D1
 ~
 ~
@@ -848,7 +850,7 @@ it looks as if the path may come to a dead end.  The mountain wall rises
 alongside you to the east high into the clouds.  There is a crack in the
 mountain face just east of here.  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D0
 ~
 ~
@@ -868,7 +870,7 @@ A Dead End Path~
 tall rocky cliff.  The only apparent way out of here is north, the way you came
 from .
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D0
 ~
 ~
@@ -887,7 +889,7 @@ the farmlands.  You see that the road crosses a natural bridge to the west, both
 sides of the road sloping steeply down in forestlands.  There have been no rails
 erected so you probably should watch your step.  And watch for loose gravel!  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D1
 ~
 ~
@@ -904,7 +906,7 @@ side of a deep, dark forest.  A forest who's floor lies close to five hundred
 feet below where you now stand.  The way to the west looks precarious, at best,
 the east looks much more safe.  Do you REALLY think you need to go west?  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D1
 ~
 ~
@@ -925,7 +927,7 @@ situation.  Amazingly, you see that there is some sort of trail leading down the
 north and south sides of the cliff, way down deep into the dark forests below.
 You would have to be insane to try and climb down that 'trail'!  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D0
 ~
 ~
@@ -969,7 +971,7 @@ start, but no trace of greenery can you see anywhere.  Looking down, you see
 that the walkway spans over very large and very dark forests, one on either
 side.  Caution might be advised when crossing this bridge.  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D1
 ~
 ~
@@ -986,7 +988,7 @@ length of a huge dark forest, miles beneath it's top.  It looks safe enough for
 crossing, but caution might be a good idea when attempting to traverse this
 precarious bridge.  
 ~
-263 0 0 0 0 5
+263 0 0 0 0 0
 D1
 ~
 ~

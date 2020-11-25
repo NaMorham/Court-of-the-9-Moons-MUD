@@ -1,33 +1,31 @@
 #3100
 The Northwest End Of The Concourse~
-   You are at the concourse, the city wall is just west.  A small promenade
-goes east, and the bridge is just north of here.  The concourse continues
-south along the city wall.
+   You are at the concourse, the city wall is just west.  A small promenade goes
+east, and the bridge is just north of here.  The concourse continues south along
+the city wall.
 ~
-31 0 0 0 0 0
-D0
-You see the Bridge.
-~
-~
-0 -1 3051
+31 0 0 0 0 1
 D1
-You see the promenade.
 ~
 ~
-0 -1 3101
+0 0 3145
 D2
 The promenade continues far south.
 ~
 ~
 0 -1 3127
+D4
+~
+~
+0 0 3072
 S
 #3101
 The Promenade~
-   The river gently flows westwards just north of here.  The promenade
-continues further east and to the west you see the city wall.  Park Road
-leads south from here.
+   The river gently flows westwards just north of here.  The promenade continues
+further east and to the west you see the city wall.  Park Road leads south from
+here.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D1
 The promenade continues.
 ~
@@ -39,18 +37,17 @@ Park Road leads south.
 ~
 0 -1 3131
 D3
-You see the Concourse.
 ~
 ~
-0 -1 3100
+0 0 3145
 S
 #3102
 The Promenade~
-   The river gently flows westwards just north of here.  The promenade
-continues both east and west.  South of here you see the entrance to
-the park, and a small building seems to be just west of the entrance.
+   The river gently flows westwards just north of here.  The promenade continues
+both east and west.  South of here you see the entrance to the park, and a small
+building seems to be just west of the entrance.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D1
 You see the promenade.
 ~
@@ -69,11 +66,11 @@ You see the promenade.
 S
 #3103
 The Promenade~
-   The river gently flows westwards just north of here.  The promenade
-continues both east and west.  A small path leads south.  Looking across
-the river you see the levee.
+   The river gently flows westwards just north of here.  The promenade continues
+both east and west.  A small path leads south.  Looking across the river you see
+the levee.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D1
 You see the Concourse.
 ~
@@ -92,12 +89,11 @@ You see the promenade.
 S
 #3104
 The Northeast End Of The Concourse~
-   You are at the Concourse.  The city wall is just east and a small
-promenade goes west.  Looking across the river you see a building that
-resembles a warehouse.  The Concourse continues south along the city
-wall.
+   You are at the Concourse.  The city wall is just east and a small promenade
+goes west.  Looking across the river you see a building that resembles a
+warehouse.  The Concourse continues south along the city wall.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D2
 The Concourse continues south.
 ~
@@ -221,7 +217,7 @@ notice a sign on the door.  The park entrance is to the east.
 D0
 ~
 ~
-0 -1 3131
+0 0 3144
 D1
 You see the park entrance.
 ~
@@ -286,7 +282,7 @@ The Pond~
    You are swimming around in the pond, feeling rather stupid.  You can get
 back on the path from the eastern and western end of the pond.
 ~
-31 0 0 0 0 6
+31 0 0 0 0 0
 D1
 ~
 ~
@@ -417,12 +413,16 @@ The chain disappears in the clouds.
 E
 sign~
    The sign points in all directions:
+
    North - Emerald Avenue.
    East  - Park Road.
    South - Emerald Avenue.
    West  - Park Road.
+
 Someone has added the following with red paint:
+
    Up    - Redferne's Flying Citadel.
+
 ~
 E
 chain~
@@ -520,11 +520,11 @@ D2
 0 -1 3129
 S
 #3127
-On The Concourse~
-   You are at the southwest corner of the city wall.  The Concourse leads
-both north and east.
+The Concourse Near the South Gate~
+You are at the southwest corner of the city wall.  The Concourse leads both
+north and east.  The southern gate of the city rises to the west.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D0
 ~
 ~
@@ -532,19 +532,18 @@ D0
 D1
 ~
 ~
-0 -1 3128
+0 0 3142
 D3
 Through the South Gate you can see a small path leading southwards.
 ~
-~
-0 -1 3504
+gate~
+1 -1 3504
 S
 #3128
-On The Concourse~
-   The Concourse continues both east and west.  Emerald Avenue is north of
-here.
+An Intersection On The Concourse~
+The Concourse continues both east and west.  Emerald Avenue is north of here.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D0
 ~
 ~
@@ -552,18 +551,18 @@ D0
 D1
 ~
 ~
-0 -1 3129
+0 0 3143
 D3
 ~
 ~
-0 -1 3127
+0 0 3142
 S
 #3129
-On The Concourse~
-   The Concourse continues both east and west.  Park Road is north of here
-and an iron grate leads south to the graveyard.
+The Concourse Near the Graveyard~
+The Concourse continues both east and west.  Park Road is north of here and an
+iron grate leads south to the graveyard.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D0
 ~
 ~
@@ -580,14 +579,14 @@ grate~
 D3
 ~
 ~
-0 -1 3128
+0 0 3143
 S
 #3130
 On The Concourse~
-   You are at the southeast corner of the city wall.  The Concourse leads
-both north and west.
+   You are at the southeast corner of the city wall.  The Concourse leads both
+north and west.
 ~
-31 0 0 0 0 0
+31 0 0 0 0 1
 D0
 ~
 ~
@@ -609,11 +608,11 @@ D0
 D2
 ~
 ~
-0 -1 3111
+0 0 3144
 S
 #3132
 Emerald Avenue~
-   You are at Emerald Avenue which continues north and south.  Penny Lane leads
+You are at Emerald Avenue which continues north and south.  Penny Lane leads
 east from here.
 ~
 31 0 0 0 0 0
@@ -750,8 +749,8 @@ that there wouldn't be room for the students too, though.
 S
 #3139
 Penny Lane~
-   You are on Penny Lane.  Emerald Avenue is to the west and Penny Lane
-continues in eastward direction.
+You are on Penny Lane.  Emerald Avenue is to the west and Penny Lane continues
+in eastward direction.
 ~
 31 0 0 0 0 0
 D1
@@ -765,7 +764,7 @@ D3
 S
 #3140
 Penny Lane~
-   You are on Penny Lane.  The narrow road continues north and west.
+You are on Penny Lane.  The narrow road continues north and west.
 ~
 31 0 0 0 0 0
 D0
@@ -779,13 +778,74 @@ D3
 S
 #3141
 The End Of Penny Lane~
-   You are at the end of Penny Lane.  The only exit appears to be south.
+You are at the end of Penny Lane.  The only exit appears to be south.
 ~
 31 0 0 0 0 0
 D2
 ~
 ~
 0 -1 3140
+S
+#3142
+On the Concourse Near the Gate~
+The concourse runs along the southern wall of the city.  The south gate is to
+the west and a neat parkland is fenced off to the north.
+~
+31 0 0 0 0 1
+D1
+~
+~
+0 0 3128
+D3
+~
+~
+0 0 3127
+S
+#3143
+Along the Concourse~
+You are in an unfinished room.
+~
+31 0 0 0 0 1
+D1
+~
+~
+0 0 3129
+D3
+~
+~
+0 0 3128
+S
+#3144
+Park Road Near the Headquarters~
+The road continues to south past the City Guard Headquarters where it branches
+into the park.  The promenade is visible along the road to the north, and the
+sound of running water drifts in for the river beyond.
+~
+31 0 0 0 0 1
+D0
+~
+~
+0 0 3131
+D2
+~
+~
+0 0 3111
+S
+#3145
+The Promenade Near the Concourse~
+   The promenade continues along the rivers edge.  The city wall is visible to
+the west where it borders the concourse.  TO the east the promenade meanders
+long the river towards the park entrance.
+~
+31 0 0 0 0 1
+D1
+~
+~
+0 0 3101
+D3
+~
+~
+0 0 3100
 S
 #3150
 A Gravel Road In The Graveyard~
@@ -895,6 +955,7 @@ altar~
    The altar looks very old...  You examine the floor around the altar and
 notice that it seems less dusty than the rest of the room...  Someone must clean
 here regularly...  Maybe that old guy in Park Cafe, he looked like that sort...
+
 ~
 E
 benches rows~

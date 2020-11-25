@@ -6,7 +6,7 @@ hazardous, and probably not worth the effort; the energy
 barrier continues up the mountain side out of sight.  The
 only exit is back to the east.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -27,7 +27,7 @@ to the end of the forest, and back east.  Each way the
 strange energy barrier stands just to the north,
 inscrutable, magical, and impenetrable.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -53,7 +53,7 @@ along, you scare a small squirrel, which leaps through
 the barrier without a second thought!  Your hand is still
 repulsed by the magical field, however.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -77,7 +77,7 @@ some sort of glowing energy barrier running through the
 woods.  A game trail, seemingly well traveled, runs east-
 west along the magical barrier's length.  Very strange.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -108,7 +108,7 @@ background.  For a short moment, you wonder if the field
 is keeping something in, or you out.  It makes you
 wonder...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -134,7 +134,7 @@ skirt the edge of the magical barrier in either direction.
 Curious... who or what is keeping this field in place,
 and for what purpose?
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -159,7 +159,7 @@ north-south here.  The tree looks healthy and unaffected
 by the energy field passing right through its center.
 Odd...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -185,7 +185,7 @@ rushing noise above the humming of the field.  The trail
 you are on continues to the north and south, only a few
 feet away from the barrier it follows.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -213,7 +213,7 @@ forest.  The trail you are on leads north-south through
 the woods, following the energy barrier all along its
 length.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -243,7 +243,7 @@ penetrating the magical field, however.
    The river seems too wide and too swift to cross here.
 It appears the only way to go is back to the south.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D2
 ~
 ~
@@ -265,7 +265,7 @@ and electric shocks sting your body from every metallic
 piece of equipment you are carrying.  You think with a
 final shove, you can break through to the other side...
 ~
-62 4 0 0 0 5
+62 4 0 0 0 3
 D1
 ~
 ~
@@ -285,7 +285,7 @@ travellers on the forest paths away from here.  The air
 smells of death and decay, and the air is very still.  You
 feel uncomfortable.
 ~
-62 4 0 0 0 0
+62 4 0 0 0 3
 D1
 ~
 ~
@@ -308,12 +308,12 @@ clearing.  The dirt seems matted down, and you see many
 footprints in the soil.   Nearby you hear a bird's chirp
 abruptly cut off in a loud squawk, and then silence.  The
 paths seem well-traveled, the undergrowth matted down and
-the foliage hacked away to leave plenty of room or a
+the foilage hacked away to leave plenty of room or a
 traveller to pass in every cardinal direction, excepting
 the west path seems fairly overgrown...
    You feel watched.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 2
 D0
 ~
 ~
@@ -344,7 +344,7 @@ be well-used and you spot many tracks in the earth.  Again
 the hairs on the back of your neck stand up, and you wonder
 if you're being spied upon.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -364,7 +364,7 @@ overhead and wonder as to the force field's nature.  This
 path leads south into the forest, and westwards along the
 river's edge.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D2
 ~
 ~
@@ -384,7 +384,7 @@ inbetween the water and the forest's edge.  Once again you
 shiver and feel that unmistakeable sense that you are
 being watched.  Disturbing.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -404,7 +404,7 @@ nice area, however, as evidenced by the amount of traffic
 this path gets.  From the marks in the grass, you guess 
 that this is a favored resting spot.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 5
 D1
 ~
 ~
@@ -420,7 +420,7 @@ however?
    There is a clearing to the north, and the path
 continues to the south.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D0
 ~
 ~
@@ -434,7 +434,7 @@ S
 A Forest Trail~
    This trail leads north-south... obviously a gaming
 trail.  The woods, mostly deciduous trees with the
-accompanying ground foliage, crowd in to either side.
+accompanying ground foilage, crowd in to either side.
 A shrub to your left shows a fresh cutting wound...
 looks like a sharp object like a knife or machete did
 the damage.
@@ -442,7 +442,7 @@ the damage.
 nothing.  Something is watching you, you feel it.
 Where?
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -462,7 +462,7 @@ the wood scratched at, and the arrowhead left behind.
 Otherwise, there doesn't seem to be much of interest in 
 this particular section of the woods.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D0
 ~
 ~
@@ -482,7 +482,7 @@ there seems to be a small clearing to the west.
 have sworn you heard a voice nearby.  Whatever it was, it 
 wasn't speaking common.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D1
 ~
 ~
@@ -500,7 +500,7 @@ lead away to the east, west, and south from here.  The
 trees above block out the sky fairly effectively, also
 blotting out the glowing energy barrier above your head.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 2
 D1
 ~
 ~
@@ -526,7 +526,7 @@ windingly around the trees to the east and west, the woods
 blocking out whatever may be ahead.  Again you get that 
 strange feeling of being watched.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -547,7 +547,7 @@ an area where a smaller path breaks off from the main track.  Eastwards seems to
 be another small clearing that seems to be well used; there are many tracks
 leading in that direction.  
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -566,7 +566,7 @@ tracks in the earth -- the salt licks must attract
 wildlife for miles around.  You think this would be a good
 place to hide and wait for dinner if you were a hunter...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 2
 D3
 ~
 ~
@@ -574,13 +574,13 @@ D3
 S
 #6225
 A Forest Trail~
-   This trail leads east-west through the forest foliage,
+   This trail leads east-west through the forest foilage,
 around the trees and up and down the slight rises.  The
 area is quiet and serene, except for the energy barrier
 keeping you in to the south.  For just a moment, you wonder
 if you're still being watched...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -599,7 +599,7 @@ ferns around you rustle gently in the light breeze.
 Somehow, the threatening aura that pervades over the rest
 of the area seems absent here.  You feel almost relaxed...
 ~
-62 4 0 0 0 0
+62 4 0 0 0 3
 D0
 ~
 ~
@@ -615,7 +615,7 @@ broken knife handle, made of bone and dried leather,
 useless now.  You wonder if the owner is watching you 
 now -- something certainly is.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -635,7 +635,7 @@ evidently.  You still feel as if you're being watched in
 the back of your mind, and adrenaline pumps into your
 brain like a lightning fuzz.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D1
 ~
 ~
@@ -650,11 +650,11 @@ A Forest Trail~
    A north-south trail leads through the woods here, with 
 a small side trail leading off to the east.  The trees 
 provide adequate cover from the sky, but through a few 
-holes in the foliage you spot the magical barrier above 
+holes in the foilage you spot the magical barrier above 
 you, keeping you from escaping by flight.  You feel 
 slightly captured.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D1
 ~
 ~
@@ -674,7 +674,7 @@ here... it seems as if many have been cut down by some
 sort of crude tools.  This land clearing appears to be 
 especially true to the east.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D0
 ~
 ~
@@ -697,7 +697,7 @@ smelling brown fluid, tannin evidently, fills many of
 these, soaking into various bits and pieces of animal 
 hides.  Crude, but workable.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 2
 D3
 ~
 ~
@@ -712,7 +712,7 @@ here, and it definitely looks as if the forest is ending.
 Eastwards the trail leads on into the thick of the forest.
 A small split off trail leads away to the south here.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -729,14 +729,14 @@ S
 #6233
 A Forest Trail~
    The ground is growing more rocky here.  The trees and 
-other foliage in the forest grow sparse here, finding it 
+other foilage in the forest grow sparse here, finding it 
 hard to find purchase in the soil.   The forest ends just 
 to the west, with the trail you are on leading right on up
 to the side of the mountains.  A side trail leads south 
 here, and the trail also leads back into the thick of the 
 forest to the east.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -761,7 +761,7 @@ to the west, and a side trail runs along the forest's edge
 to the north.  To the east, the trail runs deep into the 
 forest out of sight.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D0
 ~
 ~
@@ -783,7 +783,7 @@ green canopy of leaves overhead make this area fairly dark
 and ominous, and that creepy 'watched' feeling returns to
 hit you with full force.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D2
 ~
 ~
@@ -801,7 +801,7 @@ south.  Two wooden poles with skulls on top warn you away
 from the south, and succeed in making you feel quite
 uncomfortable.  Strange...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D1
 ~
 ~
@@ -827,7 +827,7 @@ occupants in the ground.  How uncivilized... you hope you
 aren't taken care of in this matter when your time
 comes...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 2
 D0
 ~
 ~
@@ -842,7 +842,7 @@ the corner of your eye catches your eyes, and you turn
 your head.  Nothing, there's nothing there at all.
    You wonder if you're being stalked.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D0
 ~
 ~
@@ -867,7 +867,7 @@ the energy field meets the northern 'wall'.  The water
 passes right on through the magical barrier, however...
 the barrier is obviously porous to some materials.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D2
 ~
 ~
@@ -887,7 +887,7 @@ by that means.  The trail you are on runs by the side of
 the river to the east, and a path leads by the forest side
 to the south.
 ~
-62 0 0 0 0 0
+62 0 0 0 0 3
 D1
 ~
 ~
@@ -906,7 +906,7 @@ where a trail leads up to a cave in the mountain side.
 There doesn't seem to be a whole lot to capture your 
 attention here...
 ~
-62 0 0 0 0 0
+62 0 0 0 0 10
 D0
 ~
 ~
@@ -930,7 +930,7 @@ odor.  Your stomach turns involuntarily, and you wonder
 about going back down the hill to the east, instead of 
 going even further down the western tunnel.
 ~
-62 8 0 0 0 5
+62 8 0 0 0 0
 D1
 ~
 ~
@@ -995,7 +995,7 @@ lights from inside, and you hear some heavy breathing and
 low grunts from that direction.  The cave entrance to the 
 east seems far too far away for your comfort...
 ~
-62 9 0 0 0 5
+62 9 0 0 0 0
 D1
 ~
 ~

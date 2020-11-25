@@ -15,6 +15,10 @@ D2
 ~
 0 -1 29202
 E
+throne~
+   Its nice, for a chair, but drab, for a throne.    
+~
+E
 credits info~
    Kerofk by Amanda Eterniale & Builder_5
 Copyright 1993 by Curious Areas Workshop
@@ -61,10 +65,6 @@ everything I could ever want. This area was overhauled with the aid
 of George Essl's Dikued program. Even more thanks to the brothers of 
 FORCE and all the players at VieMud, for some of the most painful 
 playtesting ever seen.
-~
-E
-throne~
-   Its nice, for a chair, but drab, for a throne.    
 ~
 S
 #29201
@@ -534,6 +534,7 @@ Intersection~
    Business Road joins Star Gate Road here.  Small shops line the
 street to your south while Star Gate Road continues on its way east
 and west.
+
    There is an odd feeling of power to your north.
 ~
 292 8 0 0 0 0
@@ -968,13 +969,13 @@ D1
 ~
 0 -1 29241
 E
-weapons~
-   A closer examinations reveal the weapons are all junk.  
-~
-E
 pictures~
    With a closer look, you realize the pictures are all of someone else's
 family.  
+~
+E
+weapons~
+   A closer examinations reveal the weapons are all junk.  
 ~
 S
 #29243
@@ -1193,6 +1194,7 @@ Town Hall--Entrance~
    Organized Madness.  There are people going every which way here, up
 across, over, under, through!  Deliveries, messages, visits,
 appointments, WHEW!  You're suddenly glad you don't work here!
+
 	   There's a directory sign:
 		Up-Mayor Kell
 		Down-Jails
@@ -1285,6 +1287,7 @@ Inner Chamber~
    Now you've done it!  You've interrupted a Council Session!  You'll
 never work in this town again!  What?!?  You don't work here?  Guards,
 ATTACK!!!
+
    There is a big round table here with 6 seats.  Otherwise, this room
 seems plain, to minimize the distractions upon the Council Members.
 ~
@@ -1314,12 +1317,12 @@ D4
 ~
 0 -1 29255
 E
-chair~
-   There's a tag on it: 'Laz-E-Goblin'
-~
-E
 newspaper~
    Seems all it is is war news.  How boring!  
+~
+E
+chair~
+   There's a tag on it: 'Laz-E-Goblin'
 ~
 S
 #29262
@@ -1387,7 +1390,9 @@ Uh-Oh!~
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA(breathe)AAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHH!!!!
 			THUD! CRACK!  KerPLOOMP!
+
    	   (that wasn't a good idea, but now you know that, eh?)
+
 ~
 292 4 0 0 0 0
 S
@@ -1396,6 +1401,7 @@ T 29204
 Whoops...~
    Accelerating at 9.81 m/s2 is usually not a good idea unless you
 have a...  SSSSSSPPPPPPPLLLLLLAAAAAAAAATTTTTTTTT!!!!!
+
 ~
 292 4 0 0 0 0
 S
@@ -1475,7 +1481,7 @@ a grizzled sergeant behind it.  He turns the paperwork in front of him
 around for you... 'Name, Race, Sex, Age, Address...'.  Behind him you
 see the office of the Captain of the Guard.
 ~
-292 12 0 0 0 0
+292 8 0 0 0 0
 D1
 ~
 ~

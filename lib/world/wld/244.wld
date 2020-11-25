@@ -16,6 +16,7 @@ door iron~
 E
 sign notice door~
    The notice looks like this:
+
    x-------------------------------------------------------------------x
    |                    C O O L A N D   P R I S O N                    |
    |                                                                   |
@@ -90,6 +91,7 @@ door iron~
 E
 sign notice door~
    The notice looks like this:
+
    x-------------------------------------------------------------------x
    |                    C O O L A N D   P R I S O N                    |
    |                                                                   |
@@ -123,6 +125,7 @@ door iron~
 E
 sign notice door~
    The notice looks like this:
+
    x-------------------------------------------------------------------x
    |                    C O O L A N D   P R I S O N                    |
    |                                                                   |
@@ -218,12 +221,14 @@ The cell hallway is West.
 E
 words sign notice door~
    The scratchings look like this:
+
  _____    ______     _____   _____          _______    _____    _____ 
 |      | /      \    \     \ /     \ |\   |    |      /     \  /     \  
 |     /         | .  |     | \     \ | \  \    |      |        \     \ 
 |-----\    ____/     |     |  |    | | \  |    |      | ___     |    | 
 |      |  /       .  |     |  |    | |  \ |    |      |    \    |    | 
 |_____/   \______    |____/   \____/ |   \|    |       \___/    \____/
+
 ~
 S
 #24406
@@ -289,6 +294,7 @@ door iron~
 E
 sign notice door~
    The notice looks like this:
+
    x-------------------------------------------------------------------x
    |                    C O O L A N D   P R I S O N                    |
    |                                                                   |
@@ -336,6 +342,7 @@ door iron~
 E
 sign notice door~
    The notice looks like this:
+
    x-------------------------------------------------------------------x
    |                    C O O L A N D   P R I S O N                    |
    |                                                                   |
@@ -1158,6 +1165,7 @@ The staircase leads Down into darkness.
 E
 sign notice red lettering~
    This sign looks like this:
+
     x-------------------------------------------------------x
     |              THIS IS YOUR FINAL WARNING!!!            |
     |                                                       |
@@ -1206,6 +1214,7 @@ door metal thick huge~
 E
 sign notice~
    The sign looks like this:
+
    x------------------------------------------------------------x
    |               C O O L A N D   P R I S O N                  |
    |                                                            |

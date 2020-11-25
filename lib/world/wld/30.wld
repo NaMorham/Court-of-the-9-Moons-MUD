@@ -40,10 +40,9 @@ reads "Midgaard Donation Room."
 ~
 0 -1 3063
 D2
-You look down the huge stone steps at the temple square below.
 ~
-~
-0 -1 3005
+doors~
+1 0 3055
 D3
 You see the Reading Room.
 ~
@@ -53,17 +52,16 @@ E
 paintings ancient wall peasants gods giants~
    The paintings are numerous in style and quality.  But, they all have the same
 surreal quality that tugs at the mind to become lost in their depth and detail.
+
 ~
 S
-T 3017
 #3002
 The Clerics' Inner Sanctum~
-   This is the inner sanctum.  A picture of the mighty Thor, is hanging on
-the wall, just above the altar which is set against the western wall.  A well
-in the middle of the floor leads down into darkness.  Vile smells waft from
-the depths.
+   This is the inner sanctum.  A picture of the mighty Thor, is hanging on the
+wall, just above the altar which is set against the western wall.  A well in the
+middle of the floor leads down into darkness.  Vile smells waft from the depths.
 ~
-30 12 0 0 0 0
+30 12 0 0 0 1
 D1
 You see your favorite place, the bar of divination.
 ~
@@ -81,7 +79,7 @@ The Bar Of Divination~
    The bar is one of the finest in the land, lucky it is members only.  Fine
 furniture is set all around the room.  A small sign is hanging on the wall.
 ~
-30 140 0 0 0 0
+30 140 0 0 0 1
 D2
 You see the entrance.
 ~
@@ -103,11 +101,11 @@ Free instructions provided by the waiter:
 S
 #3004
 The Entrance To The Clerics' Guild~
-   The entrance hall is a small modest room, reflecting the true nature of
-the Clerics.  The exit leads east to the temple square.  A small entrance to
-the bar is in the northern wall.
+   The entrance hall is a small modest room, reflecting the true nature of the
+Clerics.  The exit leads east to the temple square.  A small entrance to the bar
+is in the northern wall.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D0
 You see the bar, richly decorated with really stylish furniture.
 ~
@@ -117,7 +115,7 @@ D1
 You see the Temple Square.
 ~
 ~
-0 -1 3005
+1 -1 3005
 S
 #3005
 The Temple Square~
@@ -126,22 +124,20 @@ temple gate.  The entrance to the Clerics' Guild is to the west, and the old
 Grunting Boar Inn, is to the east.  Just south of here you see the market
 square, the center of Midgaard.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
-You see the temple.
 ~
 ~
-0 -1 3001
+0 0 3055
 D1
 You see the good old Grunting Boar Inn.
 ~
 ~
 0 -1 3006
 D2
-You see the Market Square.
 ~
 ~
-0 -1 3014
+0 0 3056
 D3
 You see the entrance to the Clerics' Guild.
 ~
@@ -150,12 +146,12 @@ You see the entrance to the Clerics' Guild.
 S
 #3006
 The Entrance Hall Of The Grunting Boar Inn~
-   You are standing in the entrance hall of the Grunting Boar Inn.  The hall
-has been wisely decorated with simple, functional furniture.  The heavy smell
-of dust and aging paper drifts in from the Post Office to the north.  A small
+   You are standing in the entrance hall of the Grunting Boar Inn.  The hall has
+been wisely decorated with simple, functional furniture.  The heavy smell of
+dust and aging paper drifts in from the Post Office to the north.  A small
 staircase leads up to the reception and the bar is to the east.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D0
 You see the Midgaard Post Office.
 ~
@@ -182,10 +178,10 @@ The Grunting Boar~
    You are standing in the bar.  The bar is set against the northern wall, old
 archaic writing, carvings and symbols cover its top.  A fireplace is built into
 the western wall, and through the southeastern windows you can see the temple
-square.  This place makes you feel like home.
-A small sign with big letters is fastened to the bar.
+square.  This place makes you feel like home.  A small sign with big letters is
+fastened to the bar.
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D3
 You see the exit to the entrance hall.
 ~
@@ -195,6 +191,7 @@ E
 sign~
    The sign reads:
 Free instructions provided by the Grunting Boar Inn.
+
    Buy  - Buy something (drinkable) from the bartender.
    List - The bartender will show you all the different drinks and
           specialties, and tell the price of each.
@@ -207,11 +204,11 @@ poems about beer, and small beer-mugs.
 S
 #3008
 The Reception~
-   You are standing in the reception.  The staircase leads down to the
-entrance hall.  An exit to the north leads to the Cryogenic Center.
-There is a small sign on the counter.
+   You are standing in the reception.  The staircase leads down to the entrance
+hall.  An exit to the north leads to the Cryogenic Center.  There is a small
+sign on the counter.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D0
 You see the Cryogenic Center.
 ~
@@ -238,12 +235,11 @@ sign~
 S
 #3009
 The Bakery~
-   You are standing inside the small bakery.  A sweet scent of danish and
-fine bread fills the room.  The bread and Danish are arranged in fine order
-on the shelves, and seem to be of the finest quality.
-A small sign is on the counter.
+   You are standing inside the small bakery.  A sweet scent of danish and fine
+bread fills the room.  The bread and Danish are arranged in fine order on the
+shelves, and seem to be of the finest quality.  A small sign is on the counter.
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D2
 You see the main street.
 ~
@@ -260,6 +256,7 @@ makes your mouth water and your soul sing.
 E
 sign~
    Free instructions provided by the store:
+
    Buy  - Will buy you some bread or pastry.
    List - The baker will kindly tell you the price and sort of the bread in
           his bakery.
@@ -268,10 +265,9 @@ S
 #3010
 The General Store~
    You are inside the general store.  All sorts of items are stacked on shelves
-behind the counter, safely out of your reach.
-A small note hangs on the wall.
+behind the counter, safely out of your reach.  A small note hangs on the wall.
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D2
 You see the main street.
 ~
@@ -280,6 +276,7 @@ You see the main street.
 E
 note~
    The note reads:
+
   List  - Show which various items are in the store.
   Buy   - Buy an item.
   Value - The shopkeeper will (free of charge) tell how much he will
@@ -293,7 +290,7 @@ The Weapon Shop~
 available space in the room including the ceiling is loaded with various
 equipment and weaponry.  There is a small note on the counter.  
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D2
 You see the main street.
 ~
@@ -302,6 +299,7 @@ You see the main street.
 E
 note~
    The note reads:
+
   List  - Show which various items are in the store.
   Buy   - Buy an item.
   Value - The shopkeeper will (free of charge) tell how much he will
@@ -313,10 +311,9 @@ S
 Main Street~
    You are at the end of the main street of Midgaard.  South of here is the
 entrance to the Guild of Magic Users.  The street continues east towards the
-market square.  The magic shop is to the north and to the west is the city
-gate.
+market square.  The magic shop is to the north and to the west is the city gate.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the magic shop.
 ~
@@ -331,7 +328,7 @@ D2
 You see the entrance to the Guild of Magic Users.
 ~
 ~
-0 -1 3017
+1 -1 3017
 D3
 You see the city gate.
 ~
@@ -344,7 +341,7 @@ Main Street~
 here is the entrance to the Armory, and the bakery is to the north.  East of
 here is the market square.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the bakery.
 ~
@@ -368,27 +365,25 @@ You see the main street.
 S
 #3014
 Market Square~
-   You are standing on the market square, the famous Square of Midgaard.
-A large, peculiar looking statue is standing in the middle of the square.
-Roads lead in every direction, north to the temple square, south to the
-common square, east and westbound is the main street.
+   You are standing on the market square, the famous Square of Midgaard.  A
+large, peculiar looking statue is standing in the middle of the square.  Roads
+lead in every direction, north to the temple square, south to the common square,
+east and westbound is the main street.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
-You see the temple square.
 ~
 ~
-0 -1 3005
+0 0 3056
 D1
 You see the main street.
 ~
 ~
 0 -1 3015
 D2
-You see the common square.
 ~
 ~
-0 -1 3025
+0 0 3069
 D3
 You see the main street.
 ~
@@ -397,15 +392,16 @@ You see the main street.
 E
 statue~
    What you see is the Midgaard Worm, stretching around the Palace of Midgaard.
+
 ~
 S
 #3015
 Main Street~
    You are on the main street crossing through town.  To the north is the
-general store, and the main street continues east.  To the west you see and
-hear the market place, to the south a small door leads into the Pet Shop.
+general store, and the main street continues east.  To the west you see and hear
+the market place, to the south a small door leads into the Pet Shop.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the general store.
 ~
@@ -430,10 +426,10 @@ S
 #3016
 Main Street~
    The main street, to the north is the weapon shop and to the south is the
-Guild of Swordsmen.  To the east you leave town and to the west the street
-leads to the market square.
+Guild of Swordsmen.  To the east you leave town and to the west the street leads
+to the market square.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the weapon shop.
 ~
@@ -448,7 +444,7 @@ D2
 You see the swordsmen's guild.
 ~
 ~
-0 -1 3021
+1 -1 3021
 D3
 You see the main street leading to the market square.
 ~
@@ -457,14 +453,15 @@ You see the main street leading to the market square.
 S
 #3017
 The Entrance To The Mages' Guild~
-   The entrance hall to this guild is a small, poor lighted room.
+   The entrance hall to this guild is a small, poor lighted room.  Strange fumes
+and barely audible sounds drift in from the south.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D0
 You see the main street.
 ~
 ~
-0 -1 3012
+1 -1 3012
 D2
 You see your favorite place, the Mages' Bar.
 ~
@@ -473,10 +470,10 @@ You see your favorite place, the Mages' Bar.
 S
 #3018
 The Mages' Bar~
-   The bar is one of the weirdest in the land.  Mystical images float around
-the air.  Illusions of fine furniture appear all around the room.
+   The bar is one of the weirdest in the land.  Mystical images float around the
+air.  Illusions of fine furniture appear all around the room.
 ~
-30 140 0 0 0 0
+30 140 0 0 0 1
 D0
 You see the lobby.
 ~
@@ -494,22 +491,29 @@ The Mages' Laboratory~
 over numerous huge oaken tables, most of these cluttered with strange- looking
 pipes and flasks.  The floor is covered with half-erased pentagrams and even
 weirder symbols, and a blackboard in a dark corner has only been partially
-cleaned, some painful-looking letters faintly visible.
+cleaned, some painful-looking letters faintly visible.  A well in the middle of
+the floor leads down into darkness.  Vile smells waft from the depths.
 ~
-30 12 0 0 0 0
+30 12 0 0 0 1
 D3
 You see the bar.
 ~
 ~
 0 -1 3018
+D5
+You can't see what is down there, it is too dark.  Looks like it would be
+impossible to climb back up.
+~
+~
+0 -1 7017
 S
 #3020
 The Armory~
    The armory has a wide assortment of armor displayed on the walls and in the
-windows. Helmets, shields, and suits of armor are for sale. To the north is
-the main street. On the wall is a small note.
+windows.  Helmets, shields, and suits of armor are for sale.  To the north is
+the main street.  On the wall is a small note.
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D0
 You see the main street.
 ~
@@ -518,10 +522,12 @@ You see the main street.
 E
 note~
    You can use these commands for trading:
+
   value <item>     To get the price of an item in your possession.
   sell <item>      To sell something.
   buy <item>       To buy something (provided that the shop has it in store).
   list             Gives you a listing of the shop's inventory.
+
         WE DON'T GIVE CREDIT; WE DON'T EXPECT TO RECEIVE CREDIT!
                              NO HAGGLING
 ~
@@ -532,43 +538,47 @@ The Entrance Hall To The Guild Of Swordsmen~
 careful not to say something wrong (or right).  To the east is the bar and to
 the north is the main street.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D0
 You see the main street.
 ~
 ~
-0 -1 3016
-D2
+1 -1 3016
+D1
+You see the swordsmen's bar, many noises comes from there.
 ~
 ~
-0 0 3022
+0 -1 3022
 S
 #3022
 The Bar Of Swordsmen~
    The bar of swordsmen, once upon a time beautifully furnished.  But now the
-furniture is all around you in small pieces.  To the south is the yard, and
-to the west is the entrance hall.
+furniture is all around you in small pieces.  To the south is the yard, and to
+the west is the entrance hall.
 ~
-30 140 0 0 0 0
-D0
-~
-~
-0 0 3021
-D1
+30 140 0 0 0 1
+D2
+You see the practice yard.
 ~
 ~
-0 0 3023
+0 -1 3023
+D3
+You see the entrance hall to the warriors' guild.
+~
+~
+0 -1 3021
 S
 #3023
 The Tournament And Practice Yard~
-   This is the practice yard of the fighters.  To the north is the bar.
-A well leads down into darkness.
+   This is the practice yard of the fighters.  To the north is the bar.  A well
+leads down into darkness.
 ~
-30 12 0 0 0 0
-D3
+30 12 0 0 0 1
+D0
+You see the bar.
 ~
 ~
-0 0 3022
+0 -1 3022
 D5
 You can't see what is down there, it is too dark.  Looks like it would be
 impossible to climb back up.
@@ -601,15 +611,14 @@ S
 #3025
 The Common Square~
    The common square, people pass you, talking to each other.  To the west is
-the poor alley and to the east is the dark alley.  To the north, this square
-is connected to the market square.  From the south you notice a nasty smell.
+the poor alley and to the east is the dark alley.  To the north, this square is
+connected to the market square.  From the south you notice a nasty smell.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
-You see the market square.
 ~
 ~
-0 -1 3014
+0 0 3068
 D1
 You see the dark alley.
 ~
@@ -631,17 +640,16 @@ The Dark Alley~
    The dark alley, to the west is the common square and to the south is the
 Guild of Thieves.  The alley continues east.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
-The alley continues east.
 ~
 ~
-0 -1 3045
+0 0 3067
 D2
 You see the entrance to the thieves' guild.
 ~
 ~
-0 -1 3027
+1 -1 3027
 D3
 You see the common square.
 ~
@@ -650,20 +658,21 @@ You see the common square.
 E
 guild~
    It is the thieves' guild, don't enter if you care about your health or money.
+
 ~
 S
 #3027
 The Entrance Hall To The Guild Of Thieves~
    The entrance hall to the thieves' and assassins' guild.  A place where you
-can lose both your life and your money, if you are not careful.  To the north
-is the dark alley and to the east is the thieves' bar.
+can lose both your life and your money, if you are not careful.  To the north is
+the dark alley and to the east is the thieves' bar.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D0
 You see the alley.
 ~
 ~
-0 -1 3026
+1 -1 3026
 D1
 You see the thieves bar, where everything disappears.
 ~
@@ -673,11 +682,10 @@ S
 #3028
 The Thieves' Bar~
    The bar of the thieves.  Once upon a time this place was beautifully
-furnished, but now it seems almost empty.  To the south is the yard, and to
-the west is the entrance hall.
-   (Maybe the furniture has been stolen?!)
+furnished, but now it seems almost empty.  To the south is the yard, and to the
+west is the entrance hall.  (Maybe the furniture has been stolen?!  )
 ~
-30 140 0 0 0 0
+30 140 0 0 0 1
 D2
 You see the secret yard.
 ~
@@ -695,10 +703,10 @@ furniture~
 S
 #3029
 The Secret Yard~
-   The secret practice yard of thieves and assassins.  To the north is the
-bar.  A well leads down into darkness.
+   The secret practice yard of thieves and assassins.  To the north is the bar.
+A well leads down into darkness.
 ~
-30 12 0 0 0 0
+30 12 0 0 0 1
 D0
 You see the bar.
 ~
@@ -717,7 +725,7 @@ The Dump~
 garbage you can see a large junction of pipes, looks like the entrance to the
 sewer system.  North of here you see the common square.
 ~
-30 4 0 0 0 0
+30 4 0 0 0 1
 D0
 You see the common square.
 ~
@@ -732,10 +740,10 @@ S
 T 3004
 #3031
 The Pet Shop~
-   The Pet Shop is a small crowded store, full of cages and animals of
-various sizes.  There is a sign on the wall.
+   The Pet Shop is a small crowded store, full of cages and animals of various
+sizes.  There is a sign on the wall.
 ~
-30 140 0 0 0 0
+30 140 0 0 0 1
 D0
 You see the main street.
 ~
@@ -744,41 +752,58 @@ You see the main street.
 E
 sign~
    The sign reads:
+
   Use 'List' to see the available pets.
   Use 'Buy <pet>' to buy yourself a pet.
+
   Instructions for having pets:
+
   You can use 'order <pet> <instructions>' to order your pets around.
   If you abuse your pet, it will no longer regard you as its master.
   If you have several pets you may use 'order followers <instructions>'
+
   You can name the pet you buy with: 'buy <pet> <name>'
+
  Regards,
+
  The Shopkeeper
+
 ~
 S
 #3032
 PETSHOP STOREROOM~
-   Make two rooms and some pets.  The rooms MUST be sequential.  If the first
-room is 315 then the second must be 316.  The second room is known as the
-storeroom.  All that is required in the storeroom is to load one of each mob you
-wish to be a pet.  This room can not have any exits and will never be used by
-mortals.  Although a pet shopkeeper is not required it is recommended.  After
-all of this is done ask your coder to implement the petshop.  It will not work
-until the code is changed and the MUD is rebooted.  The cost of pets is 300
-times their level.
+   Mortals should never come here!  Mobs loaded in this room will appear for
+sale in the pet shop.
 ~
-30 1536 0 0 0 0
+30 1552 0 0 0 0
 S
 #3033
 The Magic Shop~
-   Behind the counter you see various items, neatly placed in racks,
-presumably most of them are magic.
+   Behind the counter you see various items, neatly placed in racks, presumably
+most of them are magic.
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D2
 You see the main street.
 ~
 ~
 0 -1 3012
+S
+#3034
+Along the Wall Road~
+   The massive stones of the western wall loom over the road as it follows along
+the inner edge.  Strange sounds and vapours drift in from the building to the
+east.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3042
+D2
+~
+~
+0 0 3043
 S
 #3040
 Inside The West Gate Of Midgaard~
@@ -786,7 +811,7 @@ Inside The West Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  Main Street leads
 east and Wall Road leads south from here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see Main Street.
 ~
@@ -831,7 +856,7 @@ Inside The East Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  Main Street leads
 west from here.  To the south you see the Water Shop.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see the city gate.
 ~
@@ -874,17 +899,16 @@ Wall Road~
    You are walking next to the western city wall.  The road continues further
 south and the city gate is just north of here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the city gate.
 ~
 ~
 0 -1 3040
 D2
-The road continues further south.
 ~
 ~
-0 -1 3043
+0 0 3034
 E
 wall~
    It is built from large grey rocks that have been fastened to each other with
@@ -894,15 +918,14 @@ S
 #3043
 Wall Road~
    You are walking next to the western city wall.  Wall Road continues further
-north and south.  A small, poor alley leads east.
-Some letters have been written on the wall here.
+north and south.  A small, poor alley leads east.  Some letters have been
+written on the wall here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
-The road continues further north.
 ~
 ~
-0 -1 3042
+0 0 3034
 D1
 Poor Alley leads east.
 ~
@@ -942,25 +965,23 @@ The alley leads west.
 S
 #3045
 The Dark Alley At The Levee~
-   You are standing in the alley which continues east and west.  South of
-here you see the levee.
+   You are standing in the alley which continues east and west.  South of here
+you see the levee.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 The alley leads east.
 ~
 ~
 0 -1 3046
 D2
-You see the levee.
 ~
 ~
-0 -1 3049
+0 0 3057
 D3
-The alley leads west.
 ~
 ~
-0 -1 3026
+0 0 3067
 S
 #3046
 The Eastern End Of The Alley~
@@ -982,10 +1003,10 @@ You see the alley.
 S
 #3047
 Wall Road~
-   You are standing on the road next to the western city wall, which
-continues north.  South of here is a bridge across the river.
+   You are standing on the road next to the western city wall, which continues
+north.  South of here is a bridge across the river.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the road.
 ~
@@ -995,7 +1016,7 @@ D2
 You see the bridge.
 ~
 ~
-0 -1 3051
+0 -1 3070
 E
 wall~
    It is built from large grey rocks that have been fastened to each other with
@@ -1019,12 +1040,11 @@ The Levee~
    You are at the levee.  South of here you see the river gently flowing west.
 The river bank is very low making it possible to enter the river.
 ~
-30 128 0 0 0 0
+30 128 0 0 0 1
 D0
-You see the alley.
 ~
 ~
-0 -1 3045
+0 0 3057
 D2
 You see the river flowing west.
 ~
@@ -1045,21 +1065,19 @@ You see the alley.
 S
 #3051
 On The Bridge~
-   You are standing on the stone bridge crosses the river.  The bridge is
-built out from the western city wall and the river flows west through an
-opening in the wall ten feet below the bridge.
+   You are standing on the stone bridge that crosses the river.  The bridge is
+built out from the western city wall and the river flows west through an opening
+in the wall ten feet below the bridge.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
-You see the road.
 ~
 ~
-0 -1 3047
+0 0 3071
 D2
-You see the Concourse.
 ~
 ~
-0 -1 3100
+0 0 3072
 E
 bridge~
    It is built from large grey rocks that have been fastened to each other with
@@ -1120,7 +1138,7 @@ Outside The East Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  To the east the
 plains stretch out in the distance.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see the plains.
 ~
@@ -1185,13 +1203,61 @@ just above his shoulders, his two ravens Hugin and Munin are sitting and at his
 feet are his wolves Gere and Freke.  
 ~
 S
+#3055
+On the Temple Steps~
+   The marble steps of the Midgaard temple climb from the square to the temple
+doors.  The sounds of the quare to the south drift in, echoing off the
+surrounding buildings and columns that line the stairs.  
+~
+30 0 0 0 0 1
+D0
+~
+doors~
+1 0 3001
+D2
+~
+~
+0 0 3005
+S
+#3056
+The Road Between the Squares~
+   The paved road stretches between the temple square to the north and market
+square to the south.  Tall stone columns line the road, supporting awnings that
+provide cover along the sides.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3005
+D2
+~
+~
+0 0 3014
+S
+#3057
+Approaching the Levee~
+   This narrow path stretches from the alley to the levee at the river side.  
+Rivulets of something trickle along the narrow drain that runs the length.  
+Harsh laughter occasionally drifts in from the building to the west.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3045
+D2
+~
+~
+0 0 3049
+S
 #3058
 Ye Olde Water Shoppe~
-   You are standing in the center of a small wooden shop whose walls are
-covered with racks upon racks of water jugs.  Several large barrels with
-spigots are stacked in the corner.
+   You are standing in the center of a small wooden shop whose walls are covered
+with racks upon racks of water jugs.  Several large barrels with spigots are
+stacked in the corner.
 ~
-30 136 0 0 0 0
+30 136 0 0 0 1
 D0
 You see the East Gate.
 ~
@@ -1229,7 +1295,7 @@ stay here forever, surrounded by powerful beauty in all directions.
    The path you are on continues north through the field and south back
 to Midgaard.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 2
 D0
 You see more of the path through the Great Field.
 ~
@@ -1254,7 +1320,7 @@ stay here forever, surrounded by powerful beauty in all directions.
    There is a strange structure on the eastern side of the path.  A small
 dirt path splits off of the main path and leads off to the west.
 ~
-30 4 0 0 0 0
+30 4 0 0 0 2
 D0
 The path continues northwards bringing you ever closer to the Dragonhelm
 Mountains.
@@ -1279,13 +1345,12 @@ There is a strange path leading towards a rusty gate to the west.
 S
 #3062
 The Post Office~
-   You are in the central post office for Midgaard.  Piles of assorted mail
-lay untouched in the corners, collecting cobwebs.  Several large crates have
-been pried open by curious customs agents, and are now stacked along the west
-wall, hiding plenty of 'WANTED' posters.
-There is a sign posted on the wall here.
+   You are in the central post office for Midgaard.  Piles of assorted mail lay
+untouched in the corners, collecting cobwebs.  Several large crates have been
+pried open by curious customs agents, and are now stacked along the west wall,
+hiding plenty of 'WANTED' posters.  There is a sign posted on the wall here.
 ~
-30 152 0 0 0 0
+30 152 0 0 0 1
 D2
 You see the entrance to the Grunting Boar Inn and Tavern.
 ~
@@ -1353,7 +1418,7 @@ The Cryogenic Center~
 body-length canisters lined up against the walls.  The Reception is to the
 south.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D2
 The Reception is to the south.
 ~
@@ -1373,7 +1438,7 @@ stay here forever, surrounded by powerful beauty in all directions.
    The way north appears to be blocked by a large plot device and you cannot
 see any way around it.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 2
 D0
 Unfortunately the way north is blocked by a large plot device and there
 does not seem to be any way around it.
@@ -1417,5 +1482,130 @@ There is a large rusty gate just to the west.
 ~
 ~
 0 -1 3600
+S
+#3067
+Along the Dark Alley~
+   The dark alley continues along here.  Shabby walls mark the back of the
+surrounding buildings and the peeling paint contributes to the general air of
+neglect in this area.
+~
+30 0 0 0 0 1
+D1
+~
+~
+0 0 3045
+D3
+~
+~
+0 0 3026
+S
+#3068
+Southern End of Temple Road~
+   The rough cobbles of Temple Road show gaps as the head south towards the
+common dirty and worn.  A faint whiff of rotting garbage wafts in from the
+south.  Square.  Small patches of grass grow in the cracks and the remaining
+stones are
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3069
+D2
+~
+~
+0 0 3025
+S
+#3069
+South Along Temple Road~
+   The temple road continues it's journey between the common and main squares.
+To the north is the main square which functions as a public forum, meeting place
+and shopping district for the busy city.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3014
+D2
+~
+~
+0 0 3068
+S
+#3070
+Wall Road Near the Bridge~
+   The stone bridge rises over the river to allow passage to the south.  To the
+west, massive stones make up the wall that towers around the city.  
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3047
+D4
+~
+~
+0 0 3071
+S
+#3071
+North End of the Bridge~
+   The stones of the bridge are firmly anchored to the wall rising to the west.
+The bridge to the south crosses the river on it's way to the park and concourse
+to the south.
+~
+30 0 0 0 0 1
+D2
+~
+~
+0 0 3051
+D5
+~
+~
+0 0 3070
+S
+#3072
+South End of the Bridge~
+   The stone bridge rises over the river to the north.  The sounds of the park
+and concourse drift in from the south and a giant chain rattles in the sky above
+the park.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3051
+D5
+~
+~
+0 0 3100
+S
+#3098
+A second test room~
+   This is a second test room to allow mapper configuration in CMUD.  This is a
+second test room to allow mapper configuration in CMUD.  This is a second test
+room to allow mapper configuration in CMUD.  This is a second test room to allow
+mapper configuration in CMUD.  This is a second test room to allow mapper
+configuration in CMUD.  This is a second test room to allow mapper configuration
+in CMUD.  This is a second test room to allow mapper configuration in CMUD.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3099
+S
+#3099
+A test room~
+   This is a test room to allow configuration of the mapper in CMUD.  This is a
+test room to allow configuration of the mapper in CMUD.  This is a test room to
+allow configuration of the mapper in CMUD.  This is a test room to allow
+configuration of the mapper in CMUD.  This is a test room to allow configuration
+of the mapper in CMUD.
+~
+30 0 0 0 0 1
+D2
+~
+~
+0 0 3098
 S
 $~

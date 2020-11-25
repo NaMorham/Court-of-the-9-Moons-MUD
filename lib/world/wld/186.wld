@@ -92,7 +92,7 @@ S
 #18604
 A Narrow Passage~
    The thin passage is plain and undecorated, but still clean.  It
-ends abruptly to the south at a small oak door, behind which you hear
+ends abruptly to the south at a small oak door, behind which you here
 movement...
 ~
 186 9 0 0 0 0
@@ -180,7 +180,7 @@ D0
 There appears to be a field road to the north.
 ~
 ~
-0 -1 3061
+0 -1 18600
 D1
 The end of that darn hallway lies back to the east.
 ~
@@ -454,7 +454,7 @@ D1
 D5
 ~
 ~
-0 -1 3061
+0 -1 18600
 E
 portal floor~
    It looks as if you could go down into it...  But you can't be sure of where
@@ -686,7 +686,9 @@ it.  The face looks remarkably familiar also.
 E
 plaque nameplate name~
    It says:
+
 Maynard, Death Jester of the Harlequins
+
 ~
 S
 #18641

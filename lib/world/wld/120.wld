@@ -1,20 +1,3 @@
-#12000
-Rome Zone Description Room~
-   Builder   : Onivel of JediMUD
-Zone         : 120 Rome
-Began        : ?
-Player Level : 4-34
-Rooms        : 68
-Mobs         : 39
-Objects      : 37
-Shops        : 6
-Triggers     : 4
-Theme        : Ancient Rome
-Zone 120 is linked to the following zones:
- 50 Great Eastern Desert           at 12068 (east ) --->  5028
-~
-120 0 0 0 0 0
-S
 #12001
 The Judging Booth~
    You stand in the midst of a small room with windows on the east and south
@@ -419,8 +402,10 @@ look around you, and all you see is tawny fur and gaping jaws... it is too
 late to run, too late to hide.
    Twelve lions rip you and your belongings into a gory mass of bloodied
 leather, bronze, and bone.
+
    What's that old saying? 
    Cats killed the curious?  Something like that, I'm sure...
+
 ~
 120 12 0 0 0 0
 S
@@ -1082,7 +1067,7 @@ is low, allowing passage without a boat.  The walls and floor are covered
 with algae and slime producing treacherous footing conditions.  There are
 exits to the north, south and east.
 ~
-120 12 0 0 0 6
+120 12 0 0 0 0
 D0
 You can see a wide street to the north.
 ~
@@ -1229,6 +1214,7 @@ Clay Avenue~
 through the heart of the city.  There are marble steps leading up.  To the
 south, off in the distance, you can see a large stone structure and a mountain
 that is partially obscured by the haze.  There is a general store to the north.
+
 ~
 120 0 0 0 0 0
 D0
@@ -1269,7 +1255,7 @@ the clouds.  The sun is shining brilliantly here and the clouds below
 look like balls of cotton.  The path that you have been walking on is
 damp and the scent of lilac is in the air.
 ~
-120 0 0 0 0 5
+120 0 0 0 0 0
 D5
 You see a damp path leading back down the mountain.
 ~
@@ -1284,7 +1270,7 @@ is low, allowing passage without a boat.  The walls and floor are covered
 with algae and slime, producing treacherous footing conditions.  There are
 exits in all four cardinal directions.
 ~
-120 8 0 0 0 6
+120 8 0 0 0 0
 D0
 The aqueduct continues.
 ~
@@ -1415,6 +1401,7 @@ E
 spires towers~
    There are two tall spires on either side of the gate and are constantly
 manned by the city guards.  They are made of stone and stand about 40 feet tall.
+
 ~
 S
 #12052
@@ -1423,7 +1410,7 @@ A Mountain Path~
 raining and there are small puddles everywhere.  You are just below the
 clouds and the view of the surrounding countryside is breathtaking.  
 ~
-120 0 0 0 0 5
+120 0 0 0 0 0
 D4
 The trail leads up and enters the clouds.
 ~
@@ -1447,7 +1434,7 @@ is low, allowing passage without a boat.  The walls and floor are covered
 with algae and slime, producing treacherous footing conditions.  There are
 exits in all four cardinal directions.
 ~
-120 8 0 0 0 6
+120 8 0 0 0 0
 D0
 The aqueduct continues.
 ~
@@ -1505,7 +1492,7 @@ Every thing is lush and green here and it appears to have been raining
 recently.  'This would be an ideal place for a picnic.' , you think to
 yourself.
 ~
-120 0 0 0 0 5
+120 0 0 0 0 0
 D4
 You see a small trail leading further up the mountain.
 ~
@@ -1535,7 +1522,7 @@ with algae and slime, producing treacherous footing conditions.  A valley
 lies to the south and the other cardinal directions lead further into the
 aqueduct.
 ~
-120 8 0 0 0 6
+120 8 0 0 0 0
 D0
 The aqueduct continues.
 ~
@@ -1604,7 +1591,7 @@ A Mountain Path~
 Everything is green and it seems like eternal spring - this is Mother Nature
 at her finest.  It is possible to descend into a tranquil valley from here.
 ~
-120 0 0 0 0 5
+120 0 0 0 0 0
 D4
 The path leads further up the mountain.
 ~

@@ -1178,6 +1178,7 @@ trapdoor~
 E
 pillar~
    These pillars appear to be made of pure crystal and are about 10 feet tall.
+
 ~
 E
 pottery~
@@ -1262,6 +1263,7 @@ hallway that has lead you thus far.  There are no decorations in this room and
 no kind of evidance of inhabitants.  There are many tiles that line the floor
 throughout the floor seeming to form a circle.  There are small markings placed
 in the circle but you cannot tell what they are for or where thet come from.  
+
 ~
 238 0 0 0 0 0
 D1
@@ -1272,6 +1274,7 @@ Looking east appears to take you to the western hallway.
 E
 scratch~
    There are many scratches forming a small circle in the middle of the tiles.
+
 ~
 E
 statue~
@@ -1405,6 +1408,7 @@ Looking south seems to lead you toward the beginning of the hidden hallway.
 E
 look sky~
    This really looks like the real sky except it is sturdy and can hold you up.
+
 ~
 E
 look mountain~
@@ -1714,7 +1718,7 @@ S
 South road~
    You are walking through a a small trail which seems to lead to nothing.  
 The road has changed here and seems to be less bright and more spooky.  The
-area is still good and the land is fertile but the air around seems very weird.
+area is still good and the land is fertile but the air around seems very wierd.
 ~
 238 0 0 0 0 0
 D1

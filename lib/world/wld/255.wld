@@ -18,6 +18,7 @@ This is a subterranean ship stuck in cave-in with a bunch of aggro pirate
 ghosts who are also invisible.  Some decent eq for the mid-level player as
 well as some good experience.  Connects to Beach and Lighthouse area, also
 available for download.
+
 Zone 255 is linked to the following zones:
 265 Beach & Lighthouse             at 25507 (up   ) ---> 26506
 265 Beach & Lighthouse             at 25531 (west ) ---> 26502
@@ -68,6 +69,7 @@ directly below you, and from the looks of it, entombed here forever, is a huge
 saling vessel.  The rope you are on drops you onto the crow's nest of the main
 mast of this ship.  You see no movement on deck, not that you expected to, as it
 looks as if this ship has been here for many decades, possibly even centuries.
+
 ~
 255 264 0 0 0 0
 D4
@@ -86,7 +88,7 @@ A set of small iron rungs lead down the mast to the deck at midships.  Rigging
 surrounds you on all sides, but none of it looks too stable.  The rope ladder
 ascends up through the mists.  
 ~
-255 0 0 0 0 5
+255 0 0 0 0 0
 D4
 ~
 ~
@@ -104,7 +106,7 @@ the crew that ran this proud ship must have long since deserted it or died
 trying to get it out of this cavern.  The gangway runs north to south the length
 of the ship.  The gunwales lies east and west of you.  
 ~
-255 0 0 0 0 5
+255 0 0 0 0 0
 D0
 ~
 ~
@@ -132,7 +134,7 @@ Gangway~
    Your footsteps echo hollowly on the old planking, giving you a sense of
 danger impending.  A hatch in the floor here gives you access to the lower deck.
 ~
-255 0 0 0 0 5
+255 0 0 0 0 0
 D0
 ~
 ~
@@ -440,7 +442,7 @@ Cave Entrance~
 flickering light inside which could be a campfire, could be a lantern.  It also
 could be a cook fire - a cook fire to cook you!  
 ~
-255 256 0 0 0 5
+255 256 0 0 0 0
 D1
 ~
 ~
