@@ -66,3 +66,6 @@ bin/**
 ninemoons.opensdf
 lib/**/00
 lib/**/*.bak
+src/**/Debug/*
+src/**Release/*
+*.tlog

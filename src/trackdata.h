@@ -64,7 +64,7 @@ public:
 
 private:
     char *m_name;       ///! The name of the char making the track
-    byte m_dir;         ///! The direction of the tracks
+    IDXTYPE m_dir;         ///! The direction of the tracks
     byte m_pctCovered;  ///! How well covered are they
     bool m_entered;     ///! Are the tracks emntering or leaving
     time_t m_created;   ///! Used to determine how old the tracks are
