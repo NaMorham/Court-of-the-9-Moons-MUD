@@ -95,13 +95,13 @@ $N is dissolved by your goodness.
 $n dissolves you, you regret having been so evil, and die...
 $n completely dissolves $N!
 $N is unaffected by your goodness!
-$n thinks that $e is really good, and tries to dispell you.
-$N laughs at $n as $e tries to dispell $M!
+$n thinks that $e is really good, and tries to dispel you.
+$N laughs at $n as $e tries to dispel $M!
 $N shivers and suffers from $S evilness!
 $n makes your soul hurt and suffer!
 $n makes $N's evil spirit shiver and suffer!
 Did you really expect $M to suffer?
-$n unfruitfully tries to dispell you.
+$n unfruitfully tries to dispel you.
 $n is stupid...
 
 * Earthquake
@@ -173,7 +173,7 @@ M
  30
 Your lightning bolt shatters $N to pieces!
 You feel enlightened by the lightning bolt $n sends, and then all is darkness -- R.I.P.!
-$N recieves the full blast of a lightning bolt from $n... and is no more.
+$N receives the full blast of a lightning bolt from $n... and is no more.
 Your aim goes from bad to worse, and your lightning bolt misses $N!
 $n has bad aim and $s lightning bolt misses you!
 $n tries to hit $N with a lightning bolt but only hits the sky!
@@ -223,13 +223,13 @@ $N is dissolved by your evil.
 $n dissolves you -- the price paid for leading a good life -- you die...
 $n completely dissolves $N!
 $N is unaffected by your evil!
-$n thinks that $e is really evil, and tries to dispell you.
-$N laughs at $n as $e tries to dispell $M!
+$n thinks that $e is really evil, and tries to dispel you.
+$N laughs at $n as $e tries to dispel $M!
 $N shivers and suffers from $S goodness!
 $n makes your soul hurt and suffer!
 $n makes $N's good spirit shiver and suffer!
 Did you really expect $M to suffer?
-$n unfruitfully tries to dispell you.
+$n unfruitfully tries to dispel you.
 $n is stupid...
 
 ***************************************************************************
@@ -320,7 +320,7 @@ $n's body rebels against $m when $e tries to punch $N.
 M
  300
 You punch $N in $S kidneys resulting in $S immediate death!
-You recieve a punch in your kidneys which ends your worldly misery -- R.I.P.!
+You receive a punch in your kidneys which ends your worldly misery -- R.I.P.!
 $n punches $N in the kidneys causing immediate death!
 You wildly punch at the air, missing $N.
 $n misses a wild punch at you.
@@ -407,7 +407,7 @@ Pathetic little $n is trying to whip you... how cute.
 $n tries to whip $N - isn't he cute?
 M
  302
-Your dextrous whip messily tears $N's torso right off!
+Your dexterous whip messily tears $N's torso right off!
 $n's whip messily tears you right in half!
 With an evil grin, $n messily whips $N in half!
 You try to whip $N but whip the ground instead!
@@ -586,7 +586,7 @@ $n starts giving pounds to $N who begins to count the money.
 M
  307
 You pound on $N with reckless abandon when you realize that $E is dead.
-With $s reckless pounding attacks, you succomb to death.
+With $s reckless pounding attacks, you succumb to death.
 $N falls under $n's pounding blows, yet $n continues $s attack!
 You hear the air whistle as you split the air with your pound!
 $n pounds in your direction, causing a whistling sound!
@@ -663,7 +663,7 @@ Looking rather silly, $n tries to thrash at $N.
 * Pierce
 M
  311
-You succesfully pierce $N and $S dead body falls to the ground in a lifeless heap.
+You successfully pierce $N and $S dead body falls to the ground in a lifeless heap.
 $n pierces you.  You are no longer a living member of this world -- R.I.P.!
 $n pierces $N whose suddenly lifeless body falls to the ground!
 You try to pierce $N but pierce the air instead!
@@ -729,7 +729,7 @@ You stab $N through the heart!  Instant death!
 $n drives a stab at you, it pierces your heart!  RIP!
 $n stabs brutally at $N, killing him as $N is impaled by $n!
 You stab at $N, missing!
-$n misses a particularily nasty stab in your direction!
+$n misses a particularly nasty stab in your direction!
 $n stabs at $N!  $e misses!
 #
 #
@@ -796,7 +796,7 @@ You feel burning poison in your blood, and suffer.
 $N looks really sick and shivers uncomfortably.
 #
 You have become poisoned somehow.
-$N has somehow become poisioned.
+$N has somehow become poisoned.
 
 
 ***************************************************************************

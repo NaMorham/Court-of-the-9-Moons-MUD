@@ -58,7 +58,7 @@ void event_init(void)
  * @param when Number of pulses between firing(s) of this event.
  * @retval event * Returns a pointer to the newly created event.
  */
-struct event *event_create(EVENTFUNC(*func), void *event_obj, long when)
+struct mud_event_t *event_create(EVENTFUNC(*func), void *event_obj, long when)
 {
     struct mud_event_t *new_event;
 

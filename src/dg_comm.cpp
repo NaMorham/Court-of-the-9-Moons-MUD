@@ -184,7 +184,8 @@ void sub_write(char *arg, char_data *ch, byte find_invis, int targets)
             }
             else if (!(obj = get_obj_in_equip_vis(ch, name, &tmp, ch->equipment))) {
             }
-            else obj = get_obj_in_list_vis(ch, name, NULL, ch->carrying) {
+            else {
+                obj = get_obj_in_list_vis(ch, name, NULL, ch->carrying);
             }
 
             otokens[i] = (void *)obj;

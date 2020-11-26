@@ -38,16 +38,16 @@ To your east you can see a huge mound of dirt.
 ~
 0 0 26702
 E
+women woman~
+   Each woman is spectacularly beautiful--except for their glazed eyes and
+expressions of utter stupor.  What on earth could be wrong with them?  
+~
+E
 sand beach~
    Close examination of the beach shows that the sand is not only white--each
 and every grain is a single crystal; it reflects the light of the sun into a
 blinding display of bright white.  While each one exhibits a different color,
 they all blend into this pristine color.  
-~
-E
-women woman~
-   Each woman is spectacularly beautiful--except for their glazed eyes and
-expressions of utter stupor.  What on earth could be wrong with them?  
 ~
 S
 #26702
@@ -192,13 +192,13 @@ The creepy road continues west.
 ~
 0 0 26739
 E
-skeletons~
-   They're quite real, and quite frightening.  We weren't lying to you.  
-~
-E
 building~
    The building is a dark grey shade, but it seems to have been soiled by grimy
 tar.  
+~
+E
+skeletons~
+   They're quite real, and quite frightening.  We weren't lying to you.  
 ~
 S
 #26709
@@ -915,7 +915,7 @@ looks like a dropoff into absolute nothingness.  Rocks skitter as you slide
 around the road.  It really looks quite dangerous--the hill would be a much
 safer way to look at the view.    
 ~
-267 0 0 0 0 0
+267 0 0 0 0 5
 D0
 You can see the bottom of Vice Hill to your north. It looks comparatively safe.
 ~
@@ -939,7 +939,7 @@ looks like a dropoff into absolute nothingness.  Rocks skitter as you slide
 around the road.  It really looks quite dangerous--you'd be much better going
 back--now.    
 ~
-267 0 0 0 0 0
+267 0 0 0 0 5
 D0
 You can still go back--it's a better idea to anyways.
 ~
@@ -962,7 +962,7 @@ like a dropoff into absolute nothingness.  Rocks skitter as you slide around
 the road.  It really looks quite dangerous--you'd be much better going
 back--now.    
 ~
-267 0 0 0 0 0
+267 0 0 0 0 5
 D0
 You can still go back--it's a better idea to anyways.
 ~
@@ -985,7 +985,7 @@ it much better.  Each step brings you closer to the edge--it looks very danger-
 ous, and the cliff's edge is quite close now.  The ground is beginning to shake
 under your weight.    
 ~
-267 0 0 0 0 0
+267 0 0 0 0 5
 D0
 You can still go back--it's a better idea to anyways.
 ~
@@ -1008,7 +1008,7 @@ Cliff's Edge~
 only got a few seconds to see it, as you're squashed down below.  Too bad
 shrieks don't make you fly.    
 ~
-267 516 0 0 0 0
+267 516 0 0 0 5
 S
 T 26710
 #26745
@@ -1075,10 +1075,10 @@ S
 Trophy Room~
    There are literally hundereds of pedestals here, each with the skulls of a
 different animal.  Some are large, some quite small--some look like nothing you
-have ever seen before.  You can see a large ritual alter on one side of the
+have ever seen before.  You can see a large ritual altar on one side of the
 room, and a strange room encased in seamless glass on the other half.  Behind
-the alter, a little uneavenness in the wall can be seen, as if someone cut
-perferations through the wall.    
+the altar, a little uneavenness in the wall can be seen, as if someone cut
+perforations through the wall.
 ~
 267 520 0 0 0 0
 D0
@@ -1181,10 +1181,10 @@ You can see the strangely shaped hallway.
 bars cell door~
 1 26713 26753
 E
-cot bed~
-   The cot is made of black.  A mattress made of straw lies on top of it--very
-thin, and certainly not comfortable.  Rats scuttle underneath the bed as you
-walk near it.  
+manacles legirons irons hands skeletal~
+   Two small hands are all that remain of what must have once been a small
+child, or a very small human.  You can see teeth marks where it looks like
+someone was trying to bite their way out.  
 ~
 E
 hole drainage~
@@ -1193,10 +1193,10 @@ a whole lot of imagination to figure out what is supposed to go down in that
 one.  
 ~
 E
-manacles legirons irons hands skeletal~
-   Two small hands are all that remain of what must have once been a small
-child, or a very small human.  You can see teeth marks where it looks like
-someone was trying to bite their way out.  
+cot bed~
+   The cot is made of black.  A mattress made of straw lies on top of it--very
+thin, and certainly not comfortable.  Rats scuttle underneath the bed as you
+walk near it.  
 ~
 S
 #26753
@@ -1338,9 +1338,8 @@ You can see the creepy hallway.
 door~
 1 26732 26757
 E
-manacles manacle chain~
-   The manacles are small, and have spikes on the insides of them.  They look
-very painful.  
+cauldron boiling oil~
+   The thing bubbles.  It curdles the brain and sends chills down your spine.  
 ~
 E
 iron maidens maiden~
@@ -1348,8 +1347,9 @@ iron maidens maiden~
 it would be an unpleasant experience.  
 ~
 E
-cauldron boiling oil~
-   The thing bubbles.  It curdles the brain and sends chills down your spine.  
+manacles manacle chain~
+   The manacles are small, and have spikes on the insides of them.  They look
+very painful.  
 ~
 S
 #26759
@@ -1981,7 +1981,6 @@ Entrance to the Office of the High Priest of Terror~
 to this fact.  Perhaps it's the skulls lined up on spikes around the room.  
 Or, perhaps the fact that it looks to be several rooms.  You really don't want
 to be here.  You can go south or north...  Neither way looks too comforting.  
-
 ~
 267 8 0 0 0 0
 D0
@@ -2059,13 +2058,10 @@ You, amazingly enough, end right back up at the entrance.
 ~
 0 0 26792
 E
-chair~
-   The chair is made of redwood, and looks very comfortable.  It also looks VERY
-heavy.  
-~
-E
-sofa~
-   This sofa looks so comfortable, you want to just sink right into it.  
+insignia window~
+   The cat o' nine tails, a whip with multiple straps, apparently is the
+ultimate symbol for the Reign of Terror.  It's the most painful--sometimes even
+fatal--whip known.  
 ~
 E
 plaques~
@@ -2079,10 +2075,13 @@ horrible feelings in life--Despair, Hopelessness, Fear, and the crowning
 emotion, in which all these culminate--Terror.  Not a pretty picture.  
 ~
 E
-insignia window~
-   The cat o' nine tails, a whip with multiple straps, apparently is the
-ultimate symbol for the Reign of Terror.  It's the most painful--sometimes even
-fatal--whip known.  
+sofa~
+   This sofa looks so comfortable, you want to just sink right into it.  
+~
+E
+chair~
+   The chair is made of redwood, and looks very comfortable.  It also looks VERY
+heavy.  
 ~
 S
 #26797

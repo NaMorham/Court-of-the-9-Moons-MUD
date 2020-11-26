@@ -344,15 +344,15 @@ leading west.
 ~
 0 -1 7014
 E
+mud~
+   It is as dark as tar and looks like something out of a toilet, on top of
+that, the smell is absolutely overwhelming.  
+~
+E
 sediment~
    It is NOT the kind of matter that would concern you too much, normally, but
 as you are in the middle of it, it just might become your main concern.  REAL
 YUCKY!  
-~
-E
-mud~
-   It is as dark as tar and looks like something out of a toilet, on top of
-that, the smell is absolutely overwhelming.  
 ~
 S
 #7014
@@ -427,8 +427,7 @@ South.  You see nothing at all in that direction it is too dark anyway.
 S
 #7017
 The Sewer Junction~
-You are in a junction that leads north, west and south.  A muck covered, rickety
-and rusty ladder clings precariously to the wall leading upwards.
+   You are in a junction that leads north, west and south.
 ~
 70 9 0 0 0 0
 D0
@@ -447,10 +446,6 @@ West.  There is a junction with four pipelines in that direction.
 ~
 ~
 0 -1 7009
-D4
-~
-~
-0 0 3019
 S
 #7018
 The Ordinary Junction~
@@ -566,10 +561,10 @@ Another intersection lies to the south.  It leads west and south.
 S
 #7026
 A Junction~
-This one seems interesting, a big difference from all the other junctions.  It
-seems cleaner than the rest of them.  Weird.  Something that looks like a mucky
-shaft leads upwards, with a damaged and rusty ladder clinging to the wall.  The
-pipes lead to the south, west and north.
+   This one seems interesting, a big difference from all the other junctions.
+It seems cleaner than the rest of them.  Weird.  Something that looks like 
+an air shaft leads upwards, but it looks far too slippery to climb.
+The pipes lead to the south, west and north.
 ~
 70 13 0 0 0 0
 D0
@@ -588,12 +583,6 @@ be an intersection there but you're not quite sure.
 ~
 ~
 0 -1 7013
-D4
-A rusty and muck covered ladder leads up through the air shaft.  The faint sound
-of hymns drifts from above.
-~
-~
-0 0 3002
 E
 mud~
    It is as dark as tar and looks like something out of a toilet, on top of
@@ -849,10 +838,6 @@ To the south you can see a triple junction leading west and east.
 ~
 ~
 0 -1 7044
-D4
-~
-~
-0 0 3029
 S
 #7044
 The Junction Going Three Ways~
@@ -933,18 +918,15 @@ door~
 S
 #7048
 The Sewers~
-You stand in a dead end of the sewer.  The only way out is south.  There is a
-rickety ladder barely fastened to the wall of the shaft leading upwards.
+   You stand in a dead end of the sewer.  The only way out is south.
+You can see a shaft leading up but it looks too difficult to go up
+that way.
 ~
 70 9 0 0 0 0
 D2
 ~
 ~
 0 -1 7049
-D4
-~
-~
-0 0 3023
 S
 #7049
 The Junction~

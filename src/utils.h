@@ -358,7 +358,7 @@ do {                                            \
 #define DISPOSE(point)                                                    \
 do {                                                                      \
     if (!(point))                                                         \
-        log( "SYSERR: Freeing null pointer %s:%d", __FILE__, __LINE__ );  \
+        WriteLogf( "SYSERR: Freeing null pointer %s:%d", __FILE__, __LINE__ );  \
     else                                                                  \
         free(point);                                                      \
     point = NULL;                                                         \

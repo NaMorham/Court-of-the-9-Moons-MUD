@@ -229,7 +229,7 @@ void assign_the_quests(void)
             continue;
         }
         if ((mrnum = real_mobile(QST_MASTER(rnum))) == NOBODY) {
-            log("SYSERR: Quest #%d has an invalid questmaster.", QST_NUM(rnum));
+            WriteLogf("SYSERR: Quest #%d has an invalid questmaster.", QST_NUM(rnum));
             continue;
         }
         if (mob_index[QST_MASTER(rnum)].func &&

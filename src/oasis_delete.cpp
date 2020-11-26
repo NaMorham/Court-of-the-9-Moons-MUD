@@ -80,7 +80,7 @@ int free_strings(void *data, int type)
 
         if (config->play.OK) {
             free(config->play.OK);
-            config->play.OK = NULL
+            config->play.OK = NULL;
         }
         if (config->play.NOPERSON) {
             free(config->play.NOPERSON);

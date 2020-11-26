@@ -4,7 +4,7 @@ Steps Leading Down to the Sea~
 top of the steps looms, while below you, the steps continue for what seems an
 eternity.  
 ~
-265 0 0 0 0 0
+265 0 0 0 0 5
 D4
 ~
 ~
@@ -19,7 +19,6 @@ credits~
 This zone is exactly what the title implies, nothing more to it than that.
 There is a large lack of objs for this zone, it is suggested that some be
 created for it, otherwise the zone would be quite bland.
-
 Zone 265 is linked to the following zones:
 258 Light Forest                   at 26500 (up   ) ---> 25874
 255 Shipwreck                      at 26502 (east ) ---> 25531
@@ -33,7 +32,7 @@ Down the Cliff-Face~
 depending on the way you're heading.  It looks as if there may be some sort of
 cave down from here.  
 ~
-265 0 0 0 0 0
+265 0 0 0 0 5
 D4
 ~
 ~
@@ -50,7 +49,7 @@ now.  There appears to be an opening in the rock to your east.  Inside you can
 only see darkness, so it is possible that it is simply a natural fissure, but
 then again, who knows?  
 ~
-265 0 0 0 0 0
+265 0 0 0 0 5
 D1
 ~
 ~
@@ -70,7 +69,7 @@ On the Steps~
 as a breeze ruffles your clothing.  You begin to feel a bit better about your
 day - the sea can do that to a person.  
 ~
-265 0 0 0 0 0
+265 0 0 0 0 5
 D4
 ~
 ~
@@ -85,7 +84,7 @@ The Base of the Steps~
    You stand at the bottom of a set of steps cut into the face of the cliff
 here.  The beach runs along east to west here as far as you can see.  
 ~
-265 0 0 0 0 0
+265 0 0 0 0 5
 D1
 ~
 ~
@@ -329,7 +328,6 @@ Takker's Jetty~
    All along the jetty, men relax in the sun, sitting in comfortable niches in
 the rocks where they can wile away their time telling tall tales about 'the ones
 that got away', discussing politics, or every now and then, doing some fishing.
-
 ~
 265 0 0 0 0 0
 D0
@@ -602,7 +600,7 @@ In the Kracken's Den~
 not just in a small spot, ALL of the water is moving from some kind of monstrous
 movement under the water.  
 ~
-265 0 0 0 0 0
+265 0 0 0 0 6
 D2
 ~
 ~

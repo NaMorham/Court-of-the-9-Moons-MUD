@@ -653,7 +653,7 @@ ACMD(do_use)
             send_to_char(ch, "You don't seem to be holding %s %s.\r\n", AN(arg), arg);
             return;
         default:
-            log("SYSERR: Unknown subcmd %d passed to do_use.", subcmd);
+            WriteLogf("SYSERR: Unknown subcmd %d passed to do_use.", subcmd);
             // SYSERR_DESC: This is the same as the unhandled case in do_gen_ps(),
             // but in the function which handles 'quaff', 'recite', and 'use'.
             return;
@@ -911,7 +911,7 @@ ACMD(do_gen_tog)
         result = PRF_TOG_CHK(ch, PRF_AUTODOOR);
         break;
     default:
-        log("SYSERR: Unknown subcmd %d in do_gen_toggle.", subcmd);
+        WriteLogf("SYSERR: Unknown subcmd %d in do_gen_toggle.", subcmd);
         return;
     }
 

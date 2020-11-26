@@ -663,7 +663,7 @@ void stop_follower(struct char_data *ch)
 
     // Makes sure this function is not called when it shouldn't be called.
     if (ch->master == NULL) {
-        log("ERROR: NULL master passed to stop_follower [%d:%s]", __LINE__, __FILE__);
+        WriteLogf("ERROR: NULL master passed to stop_follower [%d:%s]", __LINE__, __FILE__);
         core_dump();
         return;
     }
@@ -1166,7 +1166,7 @@ void column_list(struct char_data *ch, int num_cols, const char **list, int list
     }
 
     if (col_width < max_len) {
-        log("Warning: columns too narrow for correct output to %s in simple_column_list (utils.c)", GET_NAME(ch));
+        WriteLogf("Warning: columns too narrow for correct output to %s in simple_column_list (utils.c)", GET_NAME(ch));
     }
 
     // Calculate how many list items there should be per column

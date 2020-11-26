@@ -868,7 +868,7 @@ int movement_loss[] =
     4,  // Swimming
     1,  // Unswimable
     1,  // Flying
-    5   // Underwater
+    5,  // Underwater
     2   // Track
 };
 

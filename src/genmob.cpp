@@ -285,7 +285,7 @@ int free_mobile(struct char_data *mob)
             mob->player.description = NULL;
         }
         // free script proto list if it's not the prototype
-        if (mob->proto_script && mob->proto_script != mob_proto[i].proto_script)
+        if (mob->proto_script && mob->proto_script != mob_proto[i].proto_script) {
             free_proto_script(mob, MOB_TRIGGER);
         }
     }

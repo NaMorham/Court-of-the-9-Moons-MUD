@@ -872,7 +872,7 @@ void obj_command_interpreter(obj_data *obj, char *argument)
     for (length = strlen(arg), cmd = 0; *obj_cmd_info[cmd].command != '\n'; cmd++) {
 #ifdef _DEBUG
         if (GET_OBJ_VNUM(obj) == 90) {
-            log("DEBUG: obj_command_interpreter: obj 90, argument=\"%s\", arg=\"%s\", line = \"%s\", length=%d, cmd=%d, ocmd=\"%s\"",
+            WriteLogf("DEBUG: obj_command_interpreter: obj 90, argument=\"%s\", arg=\"%s\", line = \"%s\", length=%d, cmd=%d, ocmd=\"%s\"",
                 argument, arg, line, length, cmd, obj_cmd_info[cmd].command);
         }
 #endif

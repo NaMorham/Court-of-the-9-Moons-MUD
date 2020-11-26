@@ -597,7 +597,7 @@ void destroy_db(void)
                 world[cnt].dir_option[itr]->keyword = NULL;
             }
             free(world[cnt].dir_option[itr]);
-            world[cnt].dir_option[itr] = NULL:
+            world[cnt].dir_option[itr] = NULL;
         }
     }
     free(world);
@@ -635,7 +635,7 @@ void destroy_db(void)
     for (cnt = 0; cnt <= top_of_mobt; cnt++) {
         if (mob_proto[cnt].player.name) {
             free(mob_proto[cnt].player.name);
-            mob_proto[cnt].player.name = NULL:
+            mob_proto[cnt].player.name = NULL;
         }
         if (mob_proto[cnt].player.title) {
             free(mob_proto[cnt].player.title);
@@ -662,7 +662,7 @@ void destroy_db(void)
         }
     }
     free(mob_proto);
-    mob_proto = NULL:
+    mob_proto = NULL;
     free(mob_index);
     mob_index = NULL;
 
@@ -805,7 +805,7 @@ void boot_db(void)
         assign_the_shopkeepers();
         WriteLogf("   Objects.");
         assign_objects();
-        log("   Rooms.");
+        WriteLogf("   Rooms.");
         assign_rooms();
         WriteLogf("   Questmasters.");
         assign_the_quests();
@@ -1739,37 +1739,37 @@ static void interpret_espec(const char *keyword, const char *value, int i, int n
 
     CASE("Str") {
         RANGE(3, 25);
-        mob_proto[i].real_abils.str = num_arg;
+        mob_proto[i].real_abils.setStr(num_arg);
     }
 
     CASE("StrAdd") {
         RANGE(0, 100);
-        mob_proto[i].real_abils.str_add = num_arg;
+        mob_proto[i].real_abils.setStrAdd(num_arg);
     }
 
     CASE("Int") {
         RANGE(3, 25);
-        mob_proto[i].real_abils.intel = num_arg;
+        mob_proto[i].real_abils.setIntel(num_arg);
     }
 
     CASE("Wis") {
         RANGE(3, 25);
-        mob_proto[i].real_abils.wis = num_arg;
+        mob_proto[i].real_abils.setWis(num_arg);
     }
 
     CASE("Dex") {
         RANGE(3, 25);
-        mob_proto[i].real_abils.dex = num_arg;
+        mob_proto[i].real_abils.setDex(num_arg);
     }
 
     CASE("Con") {
         RANGE(3, 25);
-        mob_proto[i].real_abils.con = num_arg;
+        mob_proto[i].real_abils.setCon(num_arg);
     }
 
     CASE("Cha") {
         RANGE(3, 25);
-        mob_proto[i].real_abils.cha = num_arg;
+        mob_proto[i].real_abils.setCha(num_arg);
     }
 
     CASE("SavingPara") {
@@ -2252,12 +2252,12 @@ static void load_zones(FILE *fl, char *zonename)
     }
     else {
         // QQQ: RESET CLASS HERE?
-        CREATE(ZTBLE.cmd, struct reset_com, num_of_cmds);
+        CREATE(ZTBLE.cmd, ResetCommand_t, num_of_cmds);
     }
 
     line_num += get_line(fl, buf);
 
-    if (sscanf(buf, "#%hd", &Z.number) != 1) {
+    if (sscanf(buf, "#%hd", &ZTBLE.number) != 1) {
         WriteLogf("SYSERR: Format error in %s, line %d", zname, line_num);
         exit(1);
     }
@@ -2277,20 +2277,20 @@ static void load_zones(FILE *fl, char *zonename)
 
     // Clear all the zone flags
     for (i = 0; i < ZN_ARRAY_MAX; i++) {
-        Z.zone_flags[i] = 0;
+        ZTBLE.zone_flags[i] = 0;
     }
 
     line_num += get_line(fl, buf);
     // Look for 10 items first (new tbaMUD), if not found, try 4 (old tbaMUD)
-    if (sscanf(buf, " %hd %hd %d %d %s %s %s %s %d %d", &Z.bot, &Z.top, &Z.lifespan,
-        &Z.reset_mode, zbuf1, zbuf2, zbuf3, zbuf4, &Z.min_level, &Z.max_level) != 10)
+    if (sscanf(buf, " %hd %hd %d %d %s %s %s %s %d %d", &ZTBLE.bot, &ZTBLE.top, &ZTBLE.lifespan,
+        &ZTBLE.reset_mode, zbuf1, zbuf2, zbuf3, zbuf4, &ZTBLE.min_level, &ZTBLE.max_level) != 10)
     {
-        if (sscanf(buf, " %hd %hd %d %d ", &Z.bot, &Z.top, &Z.lifespan, &Z.reset_mode) != 4) {
+        if (sscanf(buf, " %hd %hd %d %d ", &ZTBLE.bot, &ZTBLE.top, &ZTBLE.lifespan, &ZTBLE.reset_mode) != 4) {
             // This may be due to the fact that the zone has no builder.  So, we just
             // attempt to fix this by copying the previous 2 last reads into this
             // variable and the last one.
             WriteLogf("SYSERR: Format error in numeric constant line of %s, attempting to fix.", zname);
-            if (sscanf(Z.name, " %hd %hd %d %d ", &Z.bot, &Z.top, &Z.lifespan, &Z.reset_mode) != 4) {
+            if (sscanf(ZTBLE.name, " %hd %hd %d %d ", &ZTBLE.bot, &ZTBLE.top, &ZTBLE.lifespan, &ZTBLE.reset_mode) != 4) {
                 WriteLogf("SYSERR: Could not fix previous error, aborting game.");
                 exit(1);
             }
@@ -2315,7 +2315,7 @@ static void load_zones(FILE *fl, char *zonename)
         ZTBLE.zone_flags[3] = asciiflag_conv(zbuf4);
     }
     if (ZTBLE.bot > ZTBLE.top) {
-        WriteLogf("SYSERR: Zone %d bottom (%d) > top (%d).", Z.number, Z.bot, Z.top);
+        WriteLogf("SYSERR: Zone %d bottom (%d) > top (%d).", ZTBLE.number, ZTBLE.bot, ZTBLE.top);
         exit(1);
     }
 
@@ -2368,7 +2368,7 @@ static void load_zones(FILE *fl, char *zonename)
             }
         }
 
-        ZCMD.if_flag = tmp;
+        ZCMD.if_flag = (tmp != 0);
 
         if (error) {
             WriteLogf("SYSERR: Format error in %s, line %d: '%s'", zname, line_num, buf);
@@ -3107,7 +3107,7 @@ int fread_number(FILE *fp)
 
     do {
         if (feof(fp)) {
-            log("%s", "fread_number: EOF encountered on read.");
+            WriteLogf("%s", "fread_number: EOF encountered on read.");
             return 0;
         }
         c = getc(fp);
@@ -3125,13 +3125,13 @@ int fread_number(FILE *fp)
     }
 
     if (!isdigit(c)) {
-        log("fread_number: bad format. (%c)", c);
+        WriteLogf("fread_number: bad format. (%c)", c);
         return 0;
     }
 
     while (isdigit(c)) {
         if (feof(fp)) {
-            log("%s", "fread_number: EOF encountered on read.");
+            WriteLogf("%s", "fread_number: EOF encountered on read.");
             return number;
         }
         number = number * 10 + c - '0';
@@ -3170,7 +3170,7 @@ char *fread_line(FILE *fp)
     // Read first char.
     do {
         if (feof(fp)) {
-            log("fread_line: EOF encountered on read.");
+            WriteLogf("fread_line: EOF encountered on read.");
             *pline = '\0';
             return (line);
         }
@@ -3182,7 +3182,7 @@ char *fread_line(FILE *fp)
 
     do {
         if (feof(fp)) {
-            log("fread_line: EOF encountered on read.");
+            WriteLogf("fread_line: EOF encountered on read.");
             *pline = '\0';
             return (line);
         }
@@ -3190,7 +3190,7 @@ char *fread_line(FILE *fp)
         *pline++ = c;
         ln++;
         if (ln >= (MAX_STRING_LENGTH - 1)) {
-            log("fread_line: line too long");
+            WriteLogf("fread_line: line too long");
             break;
         }
     } while ((c != '\n') && (c != '\r'));
@@ -3230,7 +3230,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
     // Read first char.
     do {
         if (feof(fp)) {
-            log("fread_flags: EOF encountered on read.");
+            WriteLogf("fread_flags: EOF encountered on read.");
             *pline = '\0';
             return (0);
         }
@@ -3242,7 +3242,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
 
     do {
         if (feof(fp)) {
-            log("fread_flags: EOF encountered on read.");
+            WriteLogf("fread_flags: EOF encountered on read.");
             *pline = '\0';
             return (0);
         }
@@ -3250,7 +3250,7 @@ int fread_flags(FILE *fp, int *fg, int fg_size)
         *pline++ = c;
         ln++;
         if (ln >= (MAX_STRING_LENGTH - 1)) {
-            log("fread_flags: line too long");
+            WriteLogf("fread_flags: line too long");
             break;
         }
     } while ((c != '\n') && (c != '\r'));
@@ -3289,7 +3289,7 @@ char *fread_word(FILE *fp)
 
     do {
         if (feof(fp)) {
-            log("fread_word: EOF encountered on read.");
+            WriteLogf("fread_word: EOF encountered on read.");
             word[0] = '\0';
             return word;
         }
@@ -3307,7 +3307,7 @@ char *fread_word(FILE *fp)
 
     for (; pword < word + MAX_STRING_LENGTH; pword++) {
         if (feof(fp)) {
-            log("fread_word: EOF encountered on read.");
+            WriteLogf("fread_word: EOF encountered on read.");
             *pword = '\0';
             return word;
         }
@@ -3320,7 +3320,7 @@ char *fread_word(FILE *fp)
             return word;
         }
     }
-    log("fread_word: word too long");
+    WriteLogf("fread_word: word too long");
     return NULL;
 }
 
@@ -3335,7 +3335,7 @@ void fread_to_eol(FILE *fp)
     {
         if (feof(fp))
         {
-            log("%s", "fread_to_eol: EOF encountered on read.");
+            WriteLogf("%s", "fread_to_eol: EOF encountered on read.");
             return;
         }
         c = getc(fp);

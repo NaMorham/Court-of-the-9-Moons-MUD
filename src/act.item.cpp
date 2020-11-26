@@ -1166,7 +1166,7 @@ ACMD(do_pour)
             act("You can't fill $p!", FALSE, ch, to_obj, 0, TO_CHAR);
             return;
         }
-        if (!*arg2) { / no 2nd argument
+        if (!*arg2) {   // no 2nd argument
             act("What do you want to fill $p from?", FALSE, ch, to_obj, 0, TO_CHAR);
             return;
         }

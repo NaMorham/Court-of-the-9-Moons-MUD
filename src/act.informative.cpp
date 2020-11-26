@@ -1404,7 +1404,7 @@ ACMD(do_who)
                 continue;
             }
             if (*name_search && str_cmp(GET_NAME(tch), name_search) &&
-                !strstr(GET_TITLE(tch), name_search))
+                !strstr(GET_TITLE(tch), name_search)) {
                 continue;
             }
             if (!CAN_SEE(ch, tch) || GET_LEVEL(tch) < low || GET_LEVEL(tch) > high) {
@@ -1527,13 +1527,13 @@ ACMD(do_who)
                 }
                 send_to_char(ch, "\r\n");
             }
-        }
+        }  // for (d ...
         send_to_char(ch, "\r\n");
         if (short_list) {
             break;
         }
-    }
-    if (short_list && num_can_see % 4) {
+    }  // for (i ...
+    if (short_list && (num_can_see % 4)) {
         send_to_char(ch, "\r\n");
     }
     if (!num_can_see) {
@@ -1759,7 +1759,7 @@ ACMD(do_gen_ps)
         send_to_char(ch, "%s\r\n", GET_NAME(ch));
         break;
     default:
-        log("SYSERR: Unhandled case in do_gen_ps. (%d)", subcmd);
+        WriteLogf("SYSERR: Unhandled case in do_gen_ps. (%d)", subcmd);
         // SYSERR_DESC: General page string function for such things as 'credits',
         // 'news', 'wizlist', 'clear', 'version'.  This occurs when a call is made
         // to this routine that is not one of the predefined calls.  To correct it,

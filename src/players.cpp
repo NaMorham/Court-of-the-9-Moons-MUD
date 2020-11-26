@@ -417,13 +417,13 @@ int load_char(const char *name, struct char_data *ch)
 
             case 'C':
                 if (!strcmp(tag, "Cha ")) {
-                    ch->real_abils.cha = atoi(line);
+                    ch->real_abils.setCha(atoi(line));
                 }
                 else if (!strcmp(tag, "Clas")) {
                     GET_CLASS(ch) = atoi(line);
                 }
                 else if (!strcmp(tag, "Con ")) {
-                    ch->real_abils.con = atoi(line);
+                    ch->real_abils.setCon(atoi(line));
                 }
                 else {
                     mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown 'C' tag [%s] in pfile [%s]", tag, name);
@@ -435,7 +435,7 @@ int load_char(const char *name, struct char_data *ch)
                     ch->player.description = fread_string(fl, buf2);
                 }
                 else if (!strcmp(tag, "Dex ")) {
-                    ch->real_abils.dex = atoi(line);
+                    ch->real_abils.setDex(atoi(line));
                 }
                 else if (!strcmp(tag, "Drnk")) {
                     GET_COND(ch, DRUNK) = atoi(line);
@@ -504,7 +504,7 @@ int load_char(const char *name, struct char_data *ch)
                     GET_IDNUM(ch) = atol(line);
                 }
                 else if (!strcmp(tag, "Int ")) {
-                    ch->real_abils.intel = atoi(line);
+                    ch->real_abils.setIntel(atoi(line));
                 }
                 else if (!strcmp(tag, "Invs")) {
                     GET_INVIS_LEV(ch) = atoi(line);
@@ -556,8 +556,8 @@ int load_char(const char *name, struct char_data *ch)
                 break;
 
             case 'N':
-                if (!strcmp(tag, "Name"))    GET_PC_NAME(ch) {
-                    = strdup(line);
+                if (!strcmp(tag, "Name")) {
+                    GET_PC_NAME(ch) = strdup(line);
                 }
                 else {
                     mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown 'N' tag [%s] in pfile [%s]", tag, name);
@@ -565,8 +565,8 @@ int load_char(const char *name, struct char_data *ch)
                 break;
 
             case 'O':
-                if (!strcmp(tag, "Olc "))  GET_OLC_ZONE(ch) {
-                    = atoi(line);
+                if (!strcmp(tag, "Olc ")) {
+                    GET_OLC_ZONE(ch) = atoi(line);
                 }
                 else {
                     mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown 'O' tag [%s] in pfile [%s]", tag, name);
@@ -574,8 +574,8 @@ int load_char(const char *name, struct char_data *ch)
                 break;
 
             case 'P':
-                if (!strcmp(tag, "Page"))  GET_PAGE_LENGTH(ch) {
-                    = atoi(line);
+                if (!strcmp(tag, "Page")) {
+                    GET_PAGE_LENGTH(ch) = atoi(line);
                 }
                 else if (!strcmp(tag, "Pass")) {
                     strcpy(GET_PASSWD(ch), line);
@@ -583,11 +583,11 @@ int load_char(const char *name, struct char_data *ch)
                 else if (!strcmp(tag, "Plyd")) {
                     ch->player.time.played = atoi(line);
                 }
-                else if (!strcmp(tag, "PfIn"))    POOFIN(ch) {
-                    = strdup(line);
+                else if (!strcmp(tag, "PfIn")) {
+                    POOFIN(ch) = strdup(line);
                 }
-                else if (!strcmp(tag, "PfOt"))    POOFOUT(ch) {
-                    = strdup(line);
+                else if (!strcmp(tag, "PfOt")) {
+                    POOFOUT(ch) = strdup(line);
                 }
                 else if (!strcmp(tag, "Pref")) {
                     if (sscanf(line, "%s %s %s %s", f1, f2, f3, f4) == 4) {
@@ -596,8 +596,9 @@ int load_char(const char *name, struct char_data *ch)
                         PRF_FLAGS(ch)[2] = asciiflag_conv(f3);
                         PRF_FLAGS(ch)[3] = asciiflag_conv(f4);
                     }
-                    else
+                    else {
                         PRF_FLAGS(ch)[0] = asciiflag_conv(f1);
+                    }
                 }
                 else {
                     mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown 'P' tag [%s] in pfile [%s]", tag, name);
@@ -605,17 +606,17 @@ int load_char(const char *name, struct char_data *ch)
                 break;
 
             case 'Q':
-                if (!strcmp(tag, "Qstp"))  GET_QUESTPOINTS(ch) {
-                    = atoi(line);
+                if (!strcmp(tag, "Qstp")) {
+                    GET_QUESTPOINTS(ch) = atoi(line);
                 }
-                else if (!strcmp(tag, "Qpnt")) GET_QUESTPOINTS(ch) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Qpnt")) {
+                    GET_QUESTPOINTS(ch) = atoi(line);
                 } /* Backward compatibility */
-                else if (!strcmp(tag, "Qcur")) GET_QUEST(ch) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Qcur")) {
+                    GET_QUEST(ch) = atoi(line);
                 }
-                else if (!strcmp(tag, "Qcnt")) GET_QUEST_COUNTER(ch) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Qcnt")) {
+                    GET_QUEST_COUNTER(ch) = atoi(line);
                 }
                 else if (!strcmp(tag, "Qest")) {
                     load_quests(fl, ch);
@@ -630,8 +631,8 @@ int load_char(const char *name, struct char_data *ch)
                 {
                     GET_RACE(ch) = atoi(line);
                 }
-                else if (!strcmp(tag, "Room"))    GET_LOADROOM(ch) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Room")) {
+                    GET_LOADROOM(ch) = atoi(line);
                 }
                 else {
                     mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown 'R' tag [%s] in pfile [%s]", tag, name);
@@ -639,11 +640,11 @@ int load_char(const char *name, struct char_data *ch)
                 break;
 
             case 'S':
-                if (!strcmp(tag, "Sex "))    GET_SEX(ch) {
-                    = atoi(line);
+                if (!strcmp(tag, "Sex ")) {
+                    GET_SEX(ch) = atoi(line);
                 }
-                else if (!strcmp(tag, "ScrW"))  GET_SCREEN_WIDTH(ch) {
-                    = atoi(line);
+                else if (!strcmp(tag, "ScrW")) {
+                    GET_SCREEN_WIDTH(ch) = atoi(line);
                 }
                 else if (!strcmp(tag, "Skil")) {
                     load_skills(fl, ch);
@@ -657,26 +658,26 @@ int load_char(const char *name, struct char_data *ch)
                 break;
 
             case 'T':
-                if (!strcmp(tag, "Thir"))    GET_COND(ch, THIRST) {
-                    = atoi(line);
+                if (!strcmp(tag, "Thir")) {
+                    GET_COND(ch, THIRST) = atoi(line);
                 }
-                else if (!strcmp(tag, "Thr1"))    GET_SAVE(ch, 0) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Thr1")) {
+                    GET_SAVE(ch, 0) = atoi(line);
                 }
-                else if (!strcmp(tag, "Thr2"))    GET_SAVE(ch, 1) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Thr2")) {
+                    GET_SAVE(ch, 1) = atoi(line);
                 }
-                else if (!strcmp(tag, "Thr3"))    GET_SAVE(ch, 2) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Thr3")) {
+                    GET_SAVE(ch, 2) = atoi(line);
                 }
-                else if (!strcmp(tag, "Thr4"))    GET_SAVE(ch, 3) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Thr4")) {
+                    GET_SAVE(ch, 3) = atoi(line);
                 }
-                else if (!strcmp(tag, "Thr5"))    GET_SAVE(ch, 4) {
-                    = atoi(line);
+                else if (!strcmp(tag, "Thr5")) {
+                    GET_SAVE(ch, 4) = atoi(line);
                 }
-                else if (!strcmp(tag, "Titl"))    GET_TITLE(ch) {
-                    = strdup(line);
+                else if (!strcmp(tag, "Titl")) {
+                    GET_TITLE(ch) = strdup(line);
                 }
                 else if (!strcmp(tag, "Trig") && CONFIG_SCRIPT_PLAYERS) {
                     if ((t_rnum = real_trigger(atoi(line))) != NOTHING) {
@@ -712,7 +713,7 @@ int load_char(const char *name, struct char_data *ch)
                     GET_WIMP_LEV(ch) = atoi(line);
                 }
                 else if (!strcmp(tag, "Wis ")) {
-                    ch->real_abils.wis = atoi(line);
+                    ch->real_abils.setWis(atoi(line));
                 }
                 else {
                     mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown 'W' tag [%s] in pfile [%s]", tag, name);
@@ -1298,8 +1299,8 @@ static void load_HMVS(struct char_data *ch, const char *line, int mode)
         break;
 
     case LOAD_STRENGTH:
-        ch->real_abils.str = num;
-        ch->real_abils.str_add = num2;
+        ch->real_abils.setStr(num);
+        ch->real_abils.setStrAdd(num2);
         break;
     }
 }

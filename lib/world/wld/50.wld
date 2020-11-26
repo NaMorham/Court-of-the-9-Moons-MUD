@@ -1,3 +1,9 @@
+#5000
+Great Eastern Desert Zone Description Room~
+You are in an unfinished room.
+~
+50 0 0 0 0 0
+S
 #5001
 A Long Tunnel~
    You encounter some rapids as you enter this tunnel cut out of
@@ -1361,7 +1367,7 @@ find that this canyon is about a half a kilometer deep.  To the west is
 a dark cave leading under the desert sands and above you a rope bridge
 spans the gap.
 ~
-50 0 0 0 0 0
+50 0 0 0 0 5
 D3
 ~
 ~

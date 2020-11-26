@@ -233,7 +233,7 @@ int greet_mtrigger(char_data *actor, int dir)
 
         // sanity check
         if (!SCRIPT(ch)) {
-            log("WARNING: Non null SCRIPT in greet_mtrigger on MOB %d", GET_MOB_VNUM(ch));
+            WriteLogf("WARNING: Non null SCRIPT in greet_mtrigger on MOB %d", GET_MOB_VNUM(ch));
             continue;
         }
 
@@ -273,7 +273,7 @@ void entry_memory_mtrigger(char_data *ch)
     char buf[MAX_INPUT_LENGTH];
 
     if (ch == NULL) {
-        WriteLogF("NULL char_data passed to entry_memory_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to entry_memory_mtrigger:%d", __LINE__);
         return;
     }
 
@@ -327,7 +327,7 @@ int entry_mtrigger(char_data *ch)
     trig_data *t;
 
     if (ch == NULL) {
-        WriteLogF("NULL char_data passed to entry_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to entry_mtrigger:%d", __LINE__);
         return 1;
     }
 
@@ -352,7 +352,7 @@ int command_mtrigger(char_data *actor, char *cmd, char *argument)
     char buf[MAX_INPUT_LENGTH];
 
     if (actor == NULL) {
-        log("NULL char_data passed to command_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to command_mtrigger:%d", __LINE__);
         return 0;
     }
 
@@ -403,7 +403,7 @@ void speech_mtrigger(char_data *actor, char *str)
     char buf[MAX_INPUT_LENGTH];
 
     if (actor == NULL) {
-        log("NULL char_data passed to speech_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to speech_mtrigger:%d", __LINE__);
         return;
     }
 
@@ -490,7 +490,7 @@ void fight_mtrigger(char_data *ch)
     char buf[MAX_INPUT_LENGTH];
 
     if (ch == NULL) {
-        log("NULL char_data passed to fight_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to fight_mtrigger:%d", __LINE__);
         return;
     }
 
@@ -520,7 +520,7 @@ void hitprcnt_mtrigger(char_data *ch)
     char buf[MAX_INPUT_LENGTH];
 
     if (ch == NULL) {
-        log("NULL char_data passed to hitprcnt_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to hitprcnt_mtrigger:%d", __LINE__);
         return;
     }
 
@@ -546,7 +546,7 @@ int receive_mtrigger(char_data *ch, char_data *actor, obj_data *obj)
     int ret_val;
 
     if (ch == NULL) {
-        log("NULL char_data passed to receive_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to receive_mtrigger:%d", __LINE__);
         return 1;
     }
 
@@ -598,7 +598,7 @@ void load_mtrigger(char_data *ch)
     int result = 0;
 
     if (ch == NULL) {
-        log("NULL char_data passed to load_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to load_mtrigger:%d", __LINE__);
         return;
     }
 
@@ -628,7 +628,7 @@ int cast_mtrigger(char_data *actor, char_data *ch, int spellnum)
     char buf[MAX_INPUT_LENGTH];
 
     if (actor == NULL) {
-        log("NULL char_data passed to cast_mtrigger:%d", __LINE__);
+        WriteLogf("NULL char_data passed to cast_mtrigger:%d", __LINE__);
         return 1;
     }
     if (ch == NULL) {
@@ -767,7 +767,7 @@ void timer_otrigger(struct obj_data *obj)
     memset(objName, 0, LARGE_BUFSIZE);
 
     if (obj == NULL) {
-        log("NULL obj_data passed to timer_otrigger:%d", __LINE__);
+        WriteLogf("NULL obj_data passed to timer_otrigger:%d", __LINE__);
         return;
     }
     if (!SCRIPT_CHECK(obj, OTRIG_TIMER)) {
@@ -783,7 +783,7 @@ void timer_otrigger(struct obj_data *obj)
             script_driver(&obj, t, OBJ_TRIGGER, TRIG_NEW);
             // if we've been purged, exit now
             if (dg_owner_purged) {
-                log("Object purged [%d:%s]", objVNum, objName);
+                WriteLogf("Object purged [%d:%s]", objVNum, objName);
                 return; // TODO: not sure if this is totally safe yet.
             }
         }
@@ -799,7 +799,7 @@ int get_otrigger(obj_data *obj, char_data *actor)
     int ret_val;
 
     if (obj == NULL) {
-        log("NULL obj_data passed to get_otrigger:%d", __LINE__);
+        WriteLogf("NULL obj_data passed to get_otrigger:%d", __LINE__);
         return 0;
     }
 

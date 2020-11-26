@@ -9,7 +9,6 @@ Zone 275 is linked to the following zones:
 276 New Sparta II                  at 27580 (north) ---> 27612
 276 New Sparta II                  at 27599 (north) ---> 27600
 276 New Sparta II                  at 27599 (south) ---> 27601
-
 guildmaster: 72, 73, 74, 75
 ~
 275 0 0 0 0 0
@@ -967,7 +966,7 @@ You see the shower room.
 S
 #27542
 The Shower Room~
-   You stand in a dim room that appears to be surprisingly decrepid
+   You stand in a dim room that appears to be surprisingly decrepit
 for part of such a new building.  It seems doubtful that anyone actually
 showers here, as you'd probably only get more dirty attempting to.
 As you peer through what little light there is, you notice a loose grate
@@ -2003,7 +2002,6 @@ You see the bar stools.
 E
 table~
    This is your standard tournament pool table (would you expect anything less).
-
 ~
 S
 #27590

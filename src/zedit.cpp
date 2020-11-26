@@ -1217,7 +1217,7 @@ void zedit_parse(struct descriptor_data *d, char *arg)
                 free(OLC_ZONE(d)->name);
             }
             else {
-                log("SYSERR: OLC: ZEDIT_ZONE_NAME: no name to free!");
+                WriteLogf("SYSERR: OLC: ZEDIT_ZONE_NAME: no name to free!");
             }
             OLC_ZONE(d)->name = strdup(arg);
             OLC_ZONE(d)->number = 1;
@@ -1233,7 +1233,7 @@ void zedit_parse(struct descriptor_data *d, char *arg)
                 free(OLC_ZONE(d)->builders);
             }
             else {
-                log("SYSERR: OLC: ZEDIT_ZONE_BUILDERS: no builders list to free!");
+                WriteLogf("SYSERR: OLC: ZEDIT_ZONE_BUILDERS: no builders list to free!");
             }
             OLC_ZONE(d)->builders = strdup(arg);
             OLC_ZONE(d)->number = 1;

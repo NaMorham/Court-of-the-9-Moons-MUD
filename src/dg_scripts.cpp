@@ -1918,7 +1918,7 @@ static struct cmdlist_element *find_else_end(trig_data *trig,
  * processes any 'wait' commands in a trigger
  */
 static void process_wait(void *go, trig_data *trig, int type, char *cmd,
-struct cmdlist_element *cl)
+    struct cmdlist_element *cl)
 {
     char buf[MAX_INPUT_LENGTH], *arg;
     struct wait_event_data *wait_event_obj;
@@ -3216,7 +3216,7 @@ void read_saved_vars(struct char_data *ch)
 
     // if we failed to open the file, return
     if (!file) {
-        log("%s had no variable file", GET_NAME(ch));
+        WriteLogf("%s had no variable file", GET_NAME(ch));
         return;
     }
     // walk through each line in the file parsing variables

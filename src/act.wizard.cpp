@@ -1993,10 +1993,10 @@ struct last_entry *find_llog_entry(int punique, long idnum) {
     // we'll search last to first, since it's faster than any thing else we can
     // do (like searching for the last shutdown/etc..)
     for (tmp = recs - 1; tmp > 0; tmp--) {
-        fseek(fp, -1 * (sizeof(struct last_entry)), SEEK_CUR);
+        fseek(fp, -1 * long(sizeof(struct last_entry)), SEEK_CUR);
         i = fread(&mlast, sizeof(struct last_entry), 1, fp);
         // another one to keep that stepback
-        fseek(fp, -1 * (sizeof(struct last_entry)), SEEK_CUR);
+        fseek(fp, -1 * long(sizeof(struct last_entry)), SEEK_CUR);
 
         if (mlast.idnum == idnum && mlast.punique == punique) {
             // then we've found a match
@@ -2033,10 +2033,10 @@ static void mod_llog_entry(struct last_entry *llast, int type) {
     // We'll search last to first, since it's faster than any thing else we can
     // do (like searching for the last shutdown/etc..)
     for (tmp = recs; tmp > 0; tmp--) {
-        fseek(fp, -1 * (sizeof(struct last_entry)), SEEK_CUR);
+        fseek(fp, -1 * long(sizeof(struct last_entry)), SEEK_CUR);
         i = fread(&mlast, sizeof(struct last_entry), 1, fp);
         // Another one to keep that stepback.
-        fseek(fp, -1 * (sizeof(struct last_entry)), SEEK_CUR);
+        fseek(fp, -1 * long(sizeof(struct last_entry)), SEEK_CUR);
 
         if (mlast.idnum == llast->idnum && mlast.punique == llast->punique) {
             // Then we've found a match, lets assume quit is inviolate, mainly because disconnect is called after each of these
@@ -2244,9 +2244,9 @@ ACMD(do_last)
 
     send_to_char(ch, "Last log\r\n");
     while (num > 0 && recs > 0) {
-        fseek(fp, -1 * (sizeof(struct last_entry)), SEEK_CUR);
+        fseek(fp, -1 * long(sizeof(struct last_entry)), SEEK_CUR);
         i = fread(&mlast, sizeof(struct last_entry), 1, fp);
-        fseek(fp, -1 * (sizeof(struct last_entry)), SEEK_CUR);
+        fseek(fp, -1 * long(sizeof(struct last_entry)), SEEK_CUR);
         if (!*name || (*name && !str_cmp(name, mlast.username))) {
             send_to_char(ch, "%10.10s %20.20s %16.16s - ",
                 mlast.username, mlast.hostname, ctime(&mlast.time));
@@ -4933,12 +4933,12 @@ bool change_player_name(struct char_data *ch, struct char_data *vict, char *new_
     char old_name[MAX_NAME_LENGTH], old_pfile[50], new_pfile[50], buf[MAX_STRING_LENGTH];
 
     if (!ch) {
-        log("SYSERR: No char passed to change_player_name.");
+        WriteLogf("SYSERR: No char passed to change_player_name.");
         return FALSE;
     }
 
     if (!vict) {
-        log("SYSERR: No victim passed to change_player_name.");
+        WriteLogf("SYSERR: No victim passed to change_player_name.");
         send_to_char(ch, "Invalid victim.\r\n");
         return FALSE;
     }
@@ -4976,7 +4976,7 @@ bool change_player_name(struct char_data *ch, struct char_data *vict, char *new_
 
     if (player_table[i].id != GET_IDNUM(vict)) {
         send_to_char(ch, "Your target was not found in the player index.\r\n");
-        log("SYSERR: Player %s, with ID %ld, could not be found in the player index.", GET_NAME(vict), GET_IDNUM(vict));
+        WriteLogf("SYSERR: Player %s, with ID %ld, could not be found in the player index.", GET_NAME(vict), GET_IDNUM(vict));
         return FALSE;
     }
 
@@ -5046,7 +5046,7 @@ ACMD(do_zlock)
                     counter++;
                     SET_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
                     if (save_zone(zn)) {
-                        log("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
+                        WriteLogf("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
                     }
                     else {
                         fail = TRUE;
@@ -5060,7 +5060,7 @@ ACMD(do_zlock)
                     counter++;
                     SET_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
                     if (save_zone(zn)) {
-                        log("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
+                        WriteLogf("(GC) %s has locked zone %d", GET_NAME(ch), zone_table[zn].number);
                     }
                     else {
                         fail = TRUE;
@@ -5157,7 +5157,7 @@ ACMD(do_zunlock)
                 counter++;
                 REMOVE_BIT_AR(ZONE_FLAGS(zn), ZONE_NOBUILD);
                 if (save_zone(zn)) {
-                    log("(GC) %s has unlocked zone %d", GET_NAME(ch), zone_table[zn].number);
+                    WriteLogf("(GC) %s has unlocked zone %d", GET_NAME(ch), zone_table[zn].number);
                 }
                 else {
                     fail = TRUE;

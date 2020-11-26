@@ -988,11 +988,11 @@ void hit(struct char_data *ch, struct char_data *victim, int type)
 
     // Check that the attacker and victim exist
     if (!ch ) {
-        WriteLogF("Can't hit someone if the character does not exist.");
+        WriteLogf("Can't hit someone if the character does not exist.");
         return;
     }
     else if (!victim) {
-        WriteLogF("Can't hit a victim if they do not exist.");
+        WriteLogf("Can't hit a victim if they do not exist.");
         return;
     }
 

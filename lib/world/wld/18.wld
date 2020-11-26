@@ -360,7 +360,6 @@ D3
 E
 slogan wall east~
    We created them, we can destroy them.  We created them, we can destroy them.
-
 ~
 S
 #1817
@@ -1536,6 +1535,11 @@ D2
 ~
 ~
 0 0 1886
+E
+sign~
+   The word "Skynet" can still be read even though the marble has been heavily
+tarnished with age and abuse.
+~
 S
 #1888
 Skynet~

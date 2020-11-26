@@ -1142,7 +1142,7 @@ obj_save_data *objsave_parse_objects(FILE *fl)
             // check for false alarm.
             if (sscanf(line, "#%d", &nr) == 1) {
                 if (real_object(nr) == NOTHING) {   //object does not exist
-                    log("SYSERR: Protection: deleting object %d.", nr);
+                    WriteLogf("SYSERR: Protection: deleting object %d.", nr);
                     continue;
                 }
                 if (temp) {

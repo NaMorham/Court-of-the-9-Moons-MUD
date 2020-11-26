@@ -160,7 +160,7 @@ struct trig_data
     char *arglist;                      //!< argument list
     int depth;                          //!< depth into nest ifs/whiles/etc
     int loops;                          //!< loop iteration counter
-    struct event *wait_event;           //!< event to pause the trigger
+    struct mud_event_t *wait_event;     //!< event to pause the trigger
     ubyte purged;                       //!< trigger is set to be purged
     struct trig_var_data *var_list;     //!< list of local vars for trigger
 
@@ -335,17 +335,17 @@ int item_in_list(char *item, obj_data *list);
 char *skill_percent(struct char_data *ch, char *skill);
 int char_has_item(char *item, struct char_data *ch);
 void var_subst(void *go, struct script_data *sc, trig_data *trig,
-            int type, char *line, char *buf);
+        int type, char *line, char *buf);
 int text_processed(char *field, char *subfield, struct trig_var_data *vd,
-            char *str, size_t slen);
+        char *str, size_t slen);
 void find_replacement(void *go, struct script_data *sc, trig_data *trig,
-            int type, char *var, char *field, char *subfield, char *str, size_t slen);
+        int type, char *var, char *field, char *subfield, char *str, size_t slen);
 void find_replacement_char(char_data *c, void *go, struct script_data *sc, trig_data *trig,
-    char *var, char *field, char *subfield, char *str, size_t slen);
+        int type, char *var, char *field, char *subfield, char *str, size_t slen);
 void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_data *trig,
-    char *var, char *field, char *subfield, char *str, size_t slen);
+        int type, char *var, char *field, char *subfield, char *str, size_t slen);
 void find_replacement_room(struct room_data *r, void *go, struct script_data *sc, trig_data *trig,
-    char *var, char *field, char *subfield, char *str, size_t slen);
+        int type, char *var, char *field, char *subfield, char *str, size_t slen);
 
 /* From dg_handler.c */
 void free_var_el(struct trig_var_data *var);

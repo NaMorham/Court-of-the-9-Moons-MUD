@@ -215,7 +215,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
     obj_data *obj, *o = NULL;
     struct room_data *room, *r = NULL;
     char *name;
-    int num, count, i, j, doors;
+    int num, count, i, doors;
     IDXTYPE trig_vnum = -1;
 
     const char *send_cmd[] =       { "msend ",       "osend ",       "wsend " };
@@ -246,7 +246,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
                 break;
             }  // if (!str_cmp
         }  // for (vd ...
-        trig_vnum = trig.nr
+        trig_vnum = trig->nr;
     }  // if (trig)
 
     // some evil waitstates could crash the mud if sent here with sc == NULL
@@ -276,7 +276,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
                     snprintf(str, slen, "%c%ld", UID_CHAR, (long)((room_data *)go)->number + ROOM_ID_BASE);
                     break;
                 default:
-                    WriteLogF("SYSERR: Unknown trigger type [%d]", type);
+                    WriteLogf("SYSERR: Unknown trigger type [%d]", type);
                 }
             }
             else if (!str_cmp(var, "global")) {
@@ -592,25 +592,28 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
 
         // we hand it over
         if (c) {
-            find_replacement_char(c, go, sc, trig, var, field, subfield, str, slen);
+            find_replacement_char(c, go, sc, trig, type, var, field, subfield, str, slen);
         }  // if (c) ...
         else if (o) {
-            find_replacement_obj(o, go, sc, trig, var, field, subfield, str, slen);
+            find_replacement_obj(o, go, sc, trig, type, var, field, subfield, str, slen);
         }  // if (o) ...
         else if (r) {
-            void find_replacement_room(r, go, sc, trig, var, field, subfield, str, slen);
+            find_replacement_room(r, go, sc, trig, type, var, field, subfield, str, slen);
         }  // if (r) ...
     }
 }  // void find_replacement(void *go, struct script_data *sc, trig_data *trig,
    //              int type, char *var, char *field, char *subfield, char *str, size_t slen)
 
 void find_replacement_char(char_data *c, void *go, struct script_data *sc, trig_data *trig,
-    char *var, char *field, char *subfield, char *str, size_t slen)
+    int type, char *var, char *field, char *subfield, char *str, size_t slen)
 {
+    struct trig_var_data *vd = NULL;
+    obj_data *obj;
+    int i, j;
     IDXTYPE trig_vnum = -1;
 
     if (trig) {
-        trig_vnum = trig.nr;
+        trig_vnum = trig->nr;
     }
 
     if (!str_cmp(field, "global")) {  // get global of something else
@@ -1320,12 +1323,14 @@ void find_replacement_char(char_data *c, void *go, struct script_data *sc, trig_
 }  // void find_replacement_char(char_data *c, void *go, struct script_data *sc, ...
 
 void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_data *trig,
-        char *var, char *field, char *subfield, char *str, size_t slen)
+    int type, char *var, char *field, char *subfield, char *str, size_t slen)
 {
+    struct trig_var_data *vd = NULL;
+    int i;
     IDXTYPE trig_vnum = -1;
 
     if (trig) {
-        trig_vnum = trig.nr;
+        trig_vnum = trig->nr;
     }
 
     *str = '\x1';
@@ -1623,12 +1628,15 @@ void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_da
 }  // void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, ...
 
 void find_replacement_room(struct room_data *r, void *go, struct script_data *sc, trig_data *trig,
-        char *var, char *field, char *subfield, char *str, size_t slen)
+    int type, char *var, char *field, char *subfield, char *str, size_t slen)
 {
+    struct trig_var_data *vd = NULL;
+    obj_data *obj;
+    int i;
     IDXTYPE trig_vnum = -1;
 
     if (trig) {
-        trig_vnum = trig.nr;
+        trig_vnum = trig->nr;
     }
 
     // special handling of the void, as it stores all 'full global' variables

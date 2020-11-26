@@ -1,17 +1,14 @@
 #55500
 Ultima Description Room~
-   A port of the Merc. Ultima area by Casret.
+   A port of the Merc.  Ultima area by Casret.  
 It is mostly ported from a mostly finished port to Smaug.
 The area starts down in room 55685 and uses zone 555 and 556.
+ 
+   The area ranges through all levels.  
 
-   The area ranges through all levels.
-
-   The two mazes (Desert and Whirlpool) may have to be adjusted.
+   The two mazes (Desert and Whirlpool) may have to be adjusted.  
 The maze progs of 130 (Welcor's Mist Maze) are much better but
 seemed a bit too strong for the area.
-
-Edits made for tbaMUD by Parna.
-
 ~
 555 8 0 0 0 0
 D5
@@ -55,7 +52,7 @@ There is a shimmering light to the south.
 S
 #55503
 The New Magincia Moongate~
-   You see another moongate here, exactly between the crossing of two paths.
+   You see another moongate here, exactly between the crossing of two paths.  
 You can see dim shapes through it.
 ~
 555 4 0 0 0 1
@@ -122,7 +119,7 @@ door w west~
 S
 #55506
 Stables~
-   These are the stables for the shepherd.  There are many fine horses here.
+   These are the stables for the shepherd.  There are many fine horses here.  
 You can return to the barn to the south.
 ~
 555 8 0 0 0 0
@@ -282,7 +279,7 @@ E
 book books shelves~
    These shelves deal with the fascinating letter A.  Among the more interesting
 books are, "Andersen's tips on Area Building."  "The Art of Spamming" and "Axes
-and You."
+and You."  
 ~
 S
 #55517
@@ -303,7 +300,7 @@ E
 book books shelves~
    These books are about the letters B and C.  Some titles are: 'Boom Boxes: How
 large will they become?'  And 'Cutlery: The fine points of Killing' and of course
-the classic, 'Casret's Titles.'
+the classic, 'Casret's Titles.'  
 ~
 S
 #55518
@@ -597,13 +594,12 @@ D3
 ~
 0 0 55533
 E
-undefined~
-   'Secret Door: The Shelf' is on the shelf.
+shelf shelves~
+   The shelf to the south looks a bit strange.
 ~
 E
-shelf shelves bookshelves bookcases~
-   The shelf to the south looks a bit strange.  It might be possible to open the
-shelf.
+book books~
+   'Secret Door: The Shelf' is on the shelf.
 ~
 S
 T 55532
@@ -747,7 +743,7 @@ D3
 S
 #55540
 The Northeast corner of the Tavern~
-   Along this east wall of the tavern are all the tables for the meals.
+   Along this east wall of the tavern are all the tables for the meals.  
 Outside the windows you see cobblestone streets.
 ~
 555 8 0 0 0 0
@@ -1084,7 +1080,7 @@ D3
 S
 #55558
 Under the Stone Arch~
-   You stand under a large stone arch.  To your east there is a bonfire.
+   You stand under a large stone arch.  To your east there is a bonfire.  
 Around the bonfire are these same stone arches; they form a circle around the
 clearing.
 ~
@@ -1101,7 +1097,7 @@ D3
 S
 #55559
 Bonfire~
-   The heat from the bonfire warms you even at the fringe of the ceremony.
+   The heat from the bonfire warms you even at the fringe of the ceremony.  
 Here, Druids form a circle and chant the sacred mantra.
 ~
 555 0 0 0 0 3
@@ -1250,22 +1246,22 @@ D0
 You see trees.
 ~
 ~
-0 0 55570
+0 0 55579
 D1
 You see trees.
 ~
 ~
-0 0 55579
+0 0 55573
 D2
 You see trees.
 ~
 ~
-0 0 55573
+0 0 55578
 D3
 You see trees.
 ~
 ~
-0 0 55578
+0 0 55570
 S
 T 55569
 #55570
@@ -1305,22 +1301,22 @@ D0
 You see trees.
 ~
 ~
-0 0 55572
+0 0 55570
 D1
 You see trees.
 ~
 ~
-0 0 55581
+0 0 55576
 D2
 You see trees.
 ~
 ~
-0 0 55570
+0 0 55572
 D3
 You see trees.
 ~
 ~
-0 0 55576
+0 0 55581
 S
 T 55571
 #55572
@@ -1668,7 +1664,7 @@ S
 #55585
 Dungeon Entrance~
    There is a huge maw of an entrance to one of the terrible Dungeons.  After
-the Age of Enlightenment only 8 sources of evil still survive in the world.
+the Age of Enlightenment only 8 sources of evil still survive in the world.  
 These are the eight Dungeons.  Now they are being cleaned out.
 ~
 555 12 0 0 0 0

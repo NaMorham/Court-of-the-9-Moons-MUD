@@ -61,3 +61,8 @@ src/ninemoons/VS*/Backup/**
 UpgradeLog.htm*
 Backup
 baks.zip
+build/**
+bin/**
+ninemoons.opensdf
+lib/**/00
+lib/**/*.bak

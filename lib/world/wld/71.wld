@@ -157,26 +157,16 @@ The ledge continues south.
 ~
 ~
 0 -1 7107
-D5
-The Abyss lies down there.  Who knows what might lurk down there?
-~
-rock step edge~
-1 -1 7279
-E
-edge odd-looking~
-   This is truly a weird piece of craftsmanship in your eyes.  The edge seems to
-form a step leading down, but WHAT a STEP DOWN.  The Abyss opens down there
-leading to seemingly total destruction.  
-~
 E
 step~
    A small rock sticks out right under it, otherwise the way is DOWN, DOWN, and
 SPLAT!!!  
 ~
 E
-rock~
-   It looks as if it can be opened in a door-like fashion.  Maybe this will lead
-the way down.  
+edge odd-looking~
+   This is truly a weird piece of craftsmanship in your eyes.  The edge seems to
+form a step leading down, but WHAT a STEP DOWN.  The Abyss opens down there
+leading to seemingly total destruction.  
 ~
 S
 #7107
@@ -202,7 +192,7 @@ D2
 South.  The ledge leads further south into utter darkness.
 ~
 ~
-0 -1 7108
+0 -1 7110
 S
 #7108
 The Narrow Ledge~
@@ -212,17 +202,6 @@ another exit from here but that leads right into mid-air and with high
 probability of a free fall session afterwards.
 ~
 71 13 0 0 0 0
-D0
-North.  The ledge leads further north.
-~
-~
-0 -1 7107
-D1
-You stare into mid-air, and right under there is absolutely nothing but
-darkness.  You shiver by the thought of falling that distance.
-~
-~
-0 -1 7190
 D2
 The ledge continues further south into darkness.
 ~
@@ -242,17 +221,6 @@ North.  The ledge leads further north.
 ~
 ~
 0 -1 7108
-D1
-You stare into mid-air, and right under there is absolutely nothing but
-darkness.  You shiver by the thought of falling that distance.
-~
-~
-0 -1 7190
-D2
-The ledge continues south into darkness.
-~
-~
-0 -1 7110
 S
 #7110
 The Narrow Ledge~
@@ -307,10 +275,9 @@ The Abyss lies down there.  Who knows what might lurk down there?
 rock step edge~
 1 -1 7279
 E
-edge odd-looking~
-   This is truly a weird piece of craftsmanship in your eyes.  The edge seems to
-form a step leading down, but WHAT a STEP DOWN.  The Abyss opens down there
-leading to seemingly total destruction.  
+rock~
+   It looks as if it can be opened in a door-like fashion.  Maybe this will lead
+the way down.  
 ~
 E
 step~
@@ -318,9 +285,10 @@ step~
 SPLAT!!!  
 ~
 E
-rock~
-   It looks as if it can be opened in a door-like fashion.  Maybe this will lead
-the way down.  
+edge odd-looking~
+   This is truly a weird piece of craftsmanship in your eyes.  The edge seems to
+form a step leading down, but WHAT a STEP DOWN.  The Abyss opens down there
+leading to seemingly total destruction.  
 ~
 S
 #7112
@@ -374,8 +342,16 @@ per second squared, you are now descending the Abyss.  What awaits you
 at the bottom will continue to be a mystery.  Good-bye cruel world.
 ~
 71 12 0 0 0 0
+D0
+~
+~
+0 0 7190
+D5
+~
+~
+0 0 7119
 S
-T 7100
+T 7101
 #7115
 The Broad Ledge~
    You are standing on a ledge that seems quite a lot larger than the
@@ -418,69 +394,20 @@ The ledge continues west.
 ~
 ~
 0 -1 7113
-D5
-You can just make out the outline of a trapdoor here in the soil.  The earth
-is probably there to conceal a secret entrance.  This looks as if it leads
-down into the seemingly solid rock face of the ledge.
-~
-trapdoor secret entrance~
-1 -1 7280
-E
-ground ledge rock~
-   The ground here seems a little different from all the other ledges along the
-Abyss.  There is a kind of soft soil on this ledge, maybe you should look
-carefully at this.  It seems to be of some interest.  
-~
 E
 soil soft earth~
    You can just make out the outline of a trapdoor here in the soil.  The earth
 is probably there to conceal a secret entrance.  This looks as if it leads down
 into the seemingly solid rock face of the ledge.  
 ~
+E
+ground ledge rock~
+   The ground here seems a little different from all the other ledges along the
+Abyss.  There is a kind of soft soil on this ledge, maybe you should look
+carefully at this.  It seems to be of some interest.  
+~
 S
 #7117
-The Narrow Eastern Ledge~
-   You are in the process of walking all the way around the ledge since
-there is no way of turning around on this all too narrow path.  There IS
-another exit from here but that leads right into mid-air and with high
-probability of a free fall session afterwards.  And THAT is west of here
-so watch your step.
-~
-71 13 0 0 0 0
-D2
-The ledge leads further south.
-~
-~
-0 -1 7118
-D3
-You stare into mid-air, and right under there is absolutely nothing but
-darkness.  You shiver by the thought of falling that distance.
-~
-~
-0 -1 7190
-S
-#7118
-The Narrow Eastern Ledge~
-   You are in the process of walking all the way around the ledge since
-there is no way of turning around on this all too narrow path.  There IS
-another exit from here but that leads right into mid-air and with high
-probability of a free fall session afterwards.  And THAT is west of here
-so watch your step.
-~
-71 13 0 0 0 0
-D2
-The ledge leads further south.
-~
-~
-0 -1 7119
-D3
-You stare into mid-air, and right under there is absolutely nothing but
-darkness.  You shiver by the thought of falling that distance.
-~
-~
-0 -1 7114
-S
-#7119
 The Narrow Eastern Ledge~
    You are in the process of walking all the way around the ledge since
 there is no way of turning around on this all too narrow path.  There IS
@@ -499,7 +426,39 @@ You stare into mid-air, and right under there is absolutely nothing but
 darkness.  You shiver by the thought of falling that distance.
 ~
 ~
-0 -1 7114
+0 -1 7190
+S
+#7118
+Slimy Pit at the Bottom of the Abyss~
+Slime and dried blood cake the walls and floor of this pit.  There are shattered
+bones and fragments of armour and clothing scattered around the place.  The pit
+extends to the south.
+~
+71 9 0 0 0 0
+D2
+~
+~
+0 0 7119
+S
+#7119
+Slimy Ramp at the Bottom of the Abyss~
+Slime and dried blood cake the walls and floor of this pit.  There are shattered
+bones and fragments of armour and clothing scattered around the place.  A dirt
+and algae smeared ramp slopes up to the southeast.
+~
+71 9 0 0 0 0
+D0
+~
+~
+0 0 7118
+D2
+~
+~
+0 0 7299
+D3
+~
+~
+0 0 7299
 S
 #7120
 The Narrow Eastern Ledge~
@@ -544,26 +503,16 @@ The ledge leads further west.
 ~
 ~
 0 -1 7115
-D5
-The Abyss lies down there.  Who knows what might lurk down there?
-~
-rock step edge~
-2 -1 7279
-E
-edge odd-looking~
-   This is truly a weird piece of craftsmanship in your eyes.  The edge seems to
-form a step leading down, but WHAT a STEP DOWN.  The Abyss opens down there
-leading to seemingly total destruction.  
-~
 E
 step~
    A small rock sticks out right under it, otherwise the way is DOWN, DOWN, and
 SPLAT!!!  
 ~
 E
-rock~
-   It looks as if it can be opened in a door-like fashion.  Maybe this will lead
-the way down.  
+edge odd-looking~
+   This is truly a weird piece of craftsmanship in your eyes.  The edge seems to
+form a step leading down, but WHAT a STEP DOWN.  The Abyss opens down there
+leading to seemingly total destruction.  
 ~
 S
 #7122
@@ -624,6 +573,14 @@ per second squared, you are now descending the Abyss.  What awaits you
 at the bottom will continue to be a mystery.  Good-bye cruel world.
 ~
 71 12 0 0 0 0
+D2
+~
+~
+0 0 7114
+D5
+~
+~
+0 0 7118
 S
-T 7100
+T 7101
 $~

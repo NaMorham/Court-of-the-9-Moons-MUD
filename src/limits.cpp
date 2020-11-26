@@ -508,17 +508,17 @@ void point_update(void)
                 }
 
                 if (rmRNum_dbg == NOWHERE) {
-                    WriteLogF("For object %d:%s is NOWHERE", GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+                    WriteLogf("For object %d:%s is NOWHERE", GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
                 }
                 else {
                     rmVNum = world[rmRNum_dbg].number;
-                    WriteLogF("Extract obj [%d:%s] from Room %d:%s",
+                    WriteLogf("Extract obj [%d:%s] from Room %d:%s",
                         GET_OBJ_VNUM(j), GET_OBJ_SHORT(j),
                         rmVNum, world[rmRNum_dbg].description);
                 }
 
 #ifdef _DEBUG
-                WriteLogF("Extracting object in %s:%d, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+                WriteLogf("Extracting object in %s:%d, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
 #endif
                 extract_obj(j);
             }
@@ -527,12 +527,12 @@ void point_update(void)
         // note to .rej hand-patchers: make this last in your point-update()
         else if (GET_OBJ_TIMER(j) > 0) {
 #ifdef _DEBUG
-            WriteLogF("Handling object in %s:%d - NOT A CORPSE BUT HAS TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+            WriteLogf("Handling object in %s:%d - NOT A CORPSE BUT HAS TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
 #endif
             GET_OBJ_TIMER(j)--;
             if (!GET_OBJ_TIMER(j)) {
 #ifdef _DEBUG
-                WriteLogF("Handling object in %s:%d - NOT A CORPSE BUT COULD NOT GET TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+                WriteLogf("Handling object in %s:%d - NOT A CORPSE BUT COULD NOT GET TIMER, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
 #endif
                 timer_otrigger(j);
             }

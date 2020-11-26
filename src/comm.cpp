@@ -1612,7 +1612,6 @@ static struct in_addr *get_bind_addr()
         // If the parsing fails, use INADDR_ANY
         if (!parse_ip(CONFIG_DFLT_IP, &bind_addr)) {
             WriteLogf("SYSERR: DFLT_IP of %s appears to be an invalid IP address", CONFIG_DFLT_IP);
-            CONFIG_DFLT_IP);
             bind_addr.s_addr = htonl(INADDR_ANY);
         }
     }

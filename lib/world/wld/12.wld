@@ -36,13 +36,14 @@ S
 The Gods' Mortal Board Room~
    Here the Gods have magically created an exact copy of the mortal board
 room.  Any God can easily post and read messages from the mortal board room
-without being seen by any mortals.  The Immortal Board Room is to the west.
+without being seen by any mortals.  The Builders Board Room is to the west.
 ~
 12 8 0 0 0 0
 D3
+The Builders Board Room can be seen to the west.
 ~
 ~
-0 0 1290
+0 -1 1291
 S
 #1204
 The Immortal Board Room~
@@ -112,35 +113,12 @@ The Social Gathering Room~
 everyone else around in one central location.
 ~
 12 8 0 0 0 0
-D0
-~
-~
-0 0 1233
-D2
-~
-~
-0 0 1292
-D3
-~
-~
-0 0 1202
 D5
 The Immortal Board Room is just down through the floor.  Funny how you
 didn't notice that exit before isn't it?
 ~
 ~
 0 -1 1204
-S
-#1233
-Storeroom of the Gods~
-This looks like a simple storeroom, if it didn't go on for miles and miles of
-tiered shelves, stacked boxes and bookshelves.
-~
-12 1096 0 0 0 0
-D2
-~
-~
-0 0 1206
 S
 #1290
 The Immortal Board Hall~
@@ -156,7 +134,7 @@ D0
 D1
 ~
 ~
-0 0 1203
+0 0 1292
 D2
 ~
 ~
@@ -173,6 +151,10 @@ if you need a refresher.  TBA zone should be able to teach anyone, no matter how
 new, the basics of building.
 ~
 12 8 0 0 0 0
+D1
+~
+~
+0 0 1203
 D2
 ~
 ~
@@ -185,10 +167,10 @@ Any God can easily post and read messages from the mortal board room without
 being seen by any mortals.  The Immortal Board Hall is to the west.
 ~
 12 0 0 0 0 0
-D0
+D3
 ~
 ~
-0 0 1206
+0 0 1290
 S
 #1293
 The Halls Of Justice~

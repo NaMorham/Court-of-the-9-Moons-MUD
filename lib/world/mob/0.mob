@@ -20,7 +20,7 @@ Puff the Fractal Dragon is here, contemplating a higher reality.
    Is that some type of differential curve involving some strange, and unknown
 calculus that she seems to be made out of?  
 ~
-516106 0 0 0 65552 0 0 0 1000 E
+253962 0 0 0 65552 0 0 0 1000 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 2
@@ -146,7 +146,7 @@ sick looking dog~
 a sick looking dog~
 A sick looking dog gags on something in its mouth.
 ~
-   The dog is unkept and unhealthy.  It does not look like it has been eating
+   The dog is unkempt and unhealthy.  It does not look like it has been eating
 very well.  
 ~
 10 0 0 0 0 0 0 0 0 E
@@ -220,7 +220,7 @@ A questmaster is waiting for a brave adventurer to step forth.
    Many adventurers come here to seek glory by attempting to solve the quests
 given to them by this old woman. The quests are not easy, sometimes nearly
 impossible. But they will always be a challenge. The questmaster looks at you
-and says, 'are you up for a challenge? '
+and says, 'Are you up for a challenge? '
 ~
 253962 0 0 0 0 0 0 0 0 E
 30 10 -8 6d6+300 5d5+5
@@ -245,12 +245,12 @@ T 144
 #16
 ogre questogre~
 a quest ogre~
-A huge quest ogre has a pair of wings attached to its back as if he could fly.
+A huge quest ogre has a pair of wings attached to his back as if he could fly.
 ~
    Though large and intimidating this ogre does not seem to realize that he
 would strike fear into the hearts of most mortals. Instead everything seems to
-scare it to death. It is as if he has seen the future and he knows he is going
-to die. A crude pair of small wings are attached to its back and it seems to be
+scare him to death. It is as if he has seen the future and he knows he is going
+to die. A crude pair of small wings are attached to his back and he seems to be
 trying to fly away.
 ~
 253962 0 0 0 0 0 0 0 0 E
@@ -269,7 +269,7 @@ philosophy through his influence on Plato. Born in Athens, the son of
 Sophroniscus, a sculptor, and Phaenarete, a midwife, he received the regular
 elementary education in literature.
 ~
-516106 0 0 0 80 0 0 0 0 E
+253962 0 0 0 80 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -288,11 +288,12 @@ thinkers of the 19th century. One of Nietzsche's fundamental contentions was
 that traditional values had lost their power in the lives of individuals. 
 Nietzsche maintained that all human behavior is motivated by the will to power.
 ~
-516106 0 0 0 80 0 0 0 0 E
+253962 0 0 0 80 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
 E
+T 199
 #19
 aerial servant shape~
 the aerial servant~
@@ -327,7 +328,7 @@ Plato offers advice to any who are in need.
    Plato (circa 428-347 BC), Greek philosopher, one of the most creative and
 influential thinkers in Western philosophy. 
 ~
-516106 0 0 0 80 0 0 0 0 E
+253962 0 0 0 80 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -343,7 +344,7 @@ Aristotle wanders the hallways constantly in search of more knowledge.
 Plato and Socrates the distinction of being the most famous of ancient
 philosophers. 
 ~
-516106 0 0 0 80 0 0 0 0 E
+253962 0 0 0 80 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -362,7 +363,7 @@ influenced the Chinese attitude toward life, set the patterns of living and
 standards of social value, and provided the background for Chinese political
 theories and institutions. 
 ~
-516106 0 0 0 80 0 0 0 0 E
+253962 0 0 0 80 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -395,8 +396,8 @@ The variable questmaster is waiting to set you.
 or not you have done his quest. This way you can only do this quest once. 
 ~
 253962 0 0 0 0 0 0 0 0 E
-1 20 9 0d0+10 1d2+0
-10 100
+0 20 10 1d1+0 1d1+0
+0 0
 8 8 1
 E
 T 192
@@ -435,7 +436,7 @@ than allow himself to be used or let down his fellow POW's. His captors found
 him unconscious and near death. The torture stopped after that and they no
 longer attempted to use him. He received the Medal of Honor for his actions.
 ~
-262154 0 0 0 0 0 0 0 0 E
+10 0 0 0 0 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -452,7 +453,7 @@ Prussian military service at the age of twelve years, eventually attaining the
 rank of Major General. He is most famous for his military treatise Vom Kriege,
 translated into English as On War.
 ~
-262154 0 0 0 0 0 0 0 0 E
+10 0 0 0 0 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -470,7 +471,7 @@ lived a relatively hard life in ill health in Rome, during which time he became
 a cripple due to a bad knee. He was exiled along with other philosophers by the
 emperor Domitian sometime between 89 and 95.
 ~
-262154 0 0 0 0 0 0 0 0 E
+10 0 0 0 0 0 0 0 0 E
 34 9 -10 6d6+340 5d5+5
 340 115600
 8 8 1
@@ -561,9 +562,14 @@ spoon, and enjoys serving the builders who come here in their overalls after a
 hard day laying bricks and writing triggers.
 ~
 24586 0 0 0 0 0 0 0 10 E
-10 10 4 10d10+100 10d10+10
+10 17 4 2d2+100 1d2+1
 100 10000
 8 8 2
+SavingPara: 2
+SavingRod: 2
+SavingPetri: 2
+SavingBreath: 2
+SavingSpell: 2
 E
 #98
 travelling saleswoman woman~
@@ -574,9 +580,9 @@ This saleswoman is laden with gadgets and gizmos that are outrageously priced.
 has made her a success at pushing useless products on uneducated buyers.  Only
 on a rare occasion does she sell anything useful.  
 ~
-253962 0 0 0 2128 0 0 0 0 E
+10 0 0 0 0 0 0 0 0 E
 30 10 -8 6d6+300 5d5+5
-300 90000
+330 108900
 8 8 2
 E
 T 98

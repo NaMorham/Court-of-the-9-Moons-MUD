@@ -981,37 +981,43 @@ void medit_parse(struct descriptor_data *d, char *arg)
         return;
 
     case MEDIT_STR:
-        GET_STR(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        //GET_STR(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        OLC_MOB(d)->aff_abils.setStr(LIMIT(i, 11, 25));
         OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
 
     case MEDIT_INT:
-        GET_INT(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        //GET_INT(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        OLC_MOB(d)->aff_abils.setIntel(LIMIT(i, 11, 25));
         OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
 
     case MEDIT_WIS:
-        GET_WIS(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        //GET_WIS(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        OLC_MOB(d)->aff_abils.setWis(LIMIT(i, 11, 25));
         OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
 
     case MEDIT_DEX:
-        GET_DEX(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        //GET_DEX(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        OLC_MOB(d)->aff_abils.setDex(LIMIT(i, 11, 25));
         OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
 
     case MEDIT_CON:
-        GET_CON(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        //GET_CON(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        OLC_MOB(d)->aff_abils.setCon(LIMIT(i, 11, 25));
         OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
 
     case MEDIT_CHA:
-        GET_CHA(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        //GET_CHA(OLC_MOB(d)) = LIMIT(i, 11, 25);
+        OLC_MOB(d)->aff_abils.setCha(LIMIT(i, 11, 25));
         OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
@@ -1148,12 +1154,18 @@ void medit_autoroll_stats(struct descriptor_data *d)
 
     // 'Advanced' stats are only rolled if advanced options are enabled
     if (CONFIG_MEDIT_ADVANCED) {
-        GET_STR(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18); // 2/3 level in range 11 to 18
-        GET_INT(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
-        GET_WIS(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
-        GET_DEX(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
-        GET_CON(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
-        GET_CHA(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        //GET_STR(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        OLC_MOB(d)->aff_abils.setStr(LIMIT((mob_lev * 2) / 3, 11, 18)); // 2/3 level in range 11 to 18
+        //GET_INT(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        OLC_MOB(d)->aff_abils.setIntel(LIMIT((mob_lev * 2) / 3, 11, 18));
+        //GET_WIS(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        OLC_MOB(d)->aff_abils.setWis(LIMIT((mob_lev * 2) / 3, 11, 18));
+        //GET_DEX(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        OLC_MOB(d)->aff_abils.setDex(LIMIT((mob_lev * 2) / 3, 11, 18));
+        //GET_CON(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        OLC_MOB(d)->aff_abils.setCon(LIMIT((mob_lev * 2) / 3, 11, 18));
+        //GET_CHA(OLC_MOB(d)) = LIMIT((mob_lev * 2) / 3, 11, 18);
+        OLC_MOB(d)->aff_abils.setCha(LIMIT((mob_lev * 2) / 3, 11, 18));
 
         GET_SAVE(OLC_MOB(d), SAVING_PARA) = mob_lev / 4;        // All Saving throws
         GET_SAVE(OLC_MOB(d), SAVING_ROD) = mob_lev / 4;         // set to a quarter

@@ -15,35 +15,6 @@ A non-descript corridor stretches far to the north.
 ~
 0 -1 24102
 E
-credits info~
-    x---------------------------------------------------------------------x
-    |               STARSHIP ENTERPRISE - FOR CIRCLEMUD 3.1               |
-    |                    Written in 2001 by Crazyman                      |
-    |                        www.nt.net/saarinen                          |
-    x---------------------------------------------------------------------x
-     I created this zone because I'm a fan of the show Star Trek: The Next
-     Generation. This zone features all of the main characters from the
-     show, and many of the items too. This zone features about 45 rooms, 
-     and is good for players of level 26-30. Everyone except for the 
-     ensigns, Picard, and Data are rougly a bit stronger than Jupiter. Data 
-     and Picard are much harder, and the ensigns are easier. I have a spot 
-     for a holodeck, but I haven't added anything in yet.
-               
-     Written entirely from scratch in WordPad. Feel free to edit, modify,
-     and do what you want with this zone!
-    x---------------------------------------------------------------------x
-Builder      : Crazyman (Heiach)
-Zone         : 241 Starship Enterprise
-Began        : 2001
-Player Level : 26-30
-Rooms        : 43(46)
-Mobs         : 14(19)
-Objects      : 19(33)
-Shops        : 1
-Triggers     : 0(35)
-Links        : 0(1) <24109 - 35923>
-~
-E
 maps~
    STARSHIP ENTERPRISE
              Turbolift               |                Ten Forward
@@ -80,6 +51,35 @@ maps~
                1022                  |
                                      |
               DECK 3                 |                DECK 4
+~
+E
+credits info~
+    x---------------------------------------------------------------------x
+    |               STARSHIP ENTERPRISE - FOR CIRCLEMUD 3.1               |
+    |                    Written in 2001 by Crazyman                      |
+    |                        www.nt.net/saarinen                          |
+    x---------------------------------------------------------------------x
+     I created this zone because I'm a fan of the show Star Trek: The Next
+     Generation. This zone features all of the main characters from the
+     show, and many of the items too. This zone features about 45 rooms, 
+     and is good for players of level 26-30. Everyone except for the 
+     ensigns, Picard, and Data are rougly a bit stronger than Jupiter. Data 
+     and Picard are much harder, and the ensigns are easier. I have a spot 
+     for a holodeck, but I haven't added anything in yet.
+               
+     Written entirely from scratch in WordPad. Feel free to edit, modify,
+     and do what you want with this zone!
+    x---------------------------------------------------------------------x
+Builder      : Crazyman (Heiach)
+Zone         : 241 Starship Enterprise
+Began        : 2001
+Player Level : 26-30
+Rooms        : 43(46)
+Mobs         : 14(19)
+Objects      : 19(33)
+Shops        : 1
+Triggers     : 0(35)
+Links        : 0(1) <24109 - 35923>
 ~
 S
 #24101
@@ -183,7 +183,6 @@ The transporter room can be found to the east.
 0 -1 24106
 D2
    This corridor continues to the south, leading eventually to main engineering.
-
 ~
 ~
 0 -1 24102
@@ -196,7 +195,6 @@ the Brig.
 E
 control panel computer screen sign~
    The panel says:
-
     ***************************************************
     *                                                 *
     *            NCC-1701-D - "ENTERPRISE"            *
@@ -279,7 +277,6 @@ it.
 0 -1 24109
 D2
    This corridor continues to the south, eventually reaching main engineering.
-
 ~
 ~
 0 -1 24105
@@ -288,28 +285,6 @@ D3
 ~
 ~
 0 -1 24107
-E
-holodeck computer control panel sign~
-   It looks like this:
-   
-    ***************************************************
-    *                                                 *
-    *            NCC-1701-D - "ENTERPRISE"            *
-    *                    HOLODECK 2                   *
-    *                                                 *
-    *              STATUS : Inactive                  *
-    *     CURRENT PROGRAM : N/A                       *
-    *            SAFETIES : N/A                       *
-    *                                                 *
-    *    NOTE: Starfleet is not responsible for       *
-    *          any injuries incurred while on this    *
-    *          holodeck!                              *
-    *                                                 *
-    * WARNING: While the safeties are disabled, you   *
-    *          CAN be injured, or even killed.        *
-    *                                                 *
-    ***************************************************
-~
 E
 map screen~
    STARSHIP ENTERPRISE
@@ -348,6 +323,28 @@ map screen~
                                      |
               DECK 3                 |                DECK 4 
 ~
+E
+holodeck computer control panel sign~
+   It looks like this:
+   
+    ***************************************************
+    *                                                 *
+    *            NCC-1701-D - "ENTERPRISE"            *
+    *                    HOLODECK 2                   *
+    *                                                 *
+    *              STATUS : Inactive                  *
+    *     CURRENT PROGRAM : N/A                       *
+    *            SAFETIES : N/A                       *
+    *                                                 *
+    *    NOTE: Starfleet is not responsible for       *
+    *          any injuries incurred while on this    *
+    *          holodeck!                              *
+    *                                                 *
+    * WARNING: While the safeties are disabled, you   *
+    *          CAN be injured, or even killed.        *
+    *                                                 *
+    ***************************************************
+~
 S
 #24109
 Holodeck 2~
@@ -366,14 +363,11 @@ D3
 E
 screen~
    Holodeck Instructions:
-
 Holodecks work via vocal commands. They are as follows:
-
 Programs (will give you a list of programs)
 <name of program> (Will load up a pragram)
 Difficulty <difficulty> (Will set the difficulty to EASY, MEDIUM or HARD)
 Exit (Will make a door appear)
-
 (Note for some programs, there will be a limit of three credits which will
 restock every half hour or so)
 ~
@@ -398,7 +392,6 @@ corridor.
 E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
-
 'deck 1' (engineering, transporter, the brig and the school)
 'deck 2' (Ten forward, sick bay and the security center)
 'deck 3' (the science labs, the gym and the main shuttle bay)
@@ -424,7 +417,6 @@ D0
 E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
-
 'deck 1' (engineering, transporter, the brig and the school)
 'deck 2' (Ten forward, sick bay and the security center)
 'deck 3' (the science labs, the gym and the main shuttle bay)
@@ -478,25 +470,6 @@ D3
 ~
 0 -1 24112
 E
-control panel computer screen sign~
-   The panel says:
- 
-    ***************************************************
-    *                                                 *
-    *            NCC-1701-D - "ENTERPRISE"            *
-    *                                                 *
-    *              *****                              *
-    *      **********************                     *
-    *      ***********************  _________         *
-    *              *****        ***(___  ____(        *
-    *                            ***** \ \*           *
-    *                             **********          *
-    *                                                 *
-    *          You are currently on deck 2            *
-    *                                                 *
-    ***************************************************
-~
-E
 map screen~
    STARSHIP ENTERPRISE
                                      |                
@@ -534,12 +507,31 @@ map screen~
                                      |
               DECK 3                 |                DECK 4 
 ~
+E
+control panel computer screen sign~
+   The panel says:
+ 
+    ***************************************************
+    *                                                 *
+    *            NCC-1701-D - "ENTERPRISE"            *
+    *                                                 *
+    *              *****                              *
+    *      **********************                     *
+    *      ***********************  _________         *
+    *              *****        ***(___  ____(        *
+    *                            ***** \ \*           *
+    *                             **********          *
+    *                                                 *
+    *          You are currently on deck 2            *
+    *                                                 *
+    ***************************************************
+~
 S
 #24114
 Riker's Quarters~
    The room is very neat and tidy, with a couch and several chairs arranged
 around a coffee table by the eastern wall.  A small partition at the northern
-part of the room seperates his sleeping area with the rest of the room.  Riker
+part of the room separates his sleeping area with the rest of the room.  Riker
 has been dimmed his room, making his romantic red lamps and purple cusions seems
 more exotic and appealing.  
 ~
@@ -670,7 +662,6 @@ is location to the east where most of the ships weaponry is currently stored.
 241 8 0 0 0 0
 D0
    A wonderful place to relax and drink can be seen to the north, Ten Forward.
-
 ~
 ~
 0 -1 24121
@@ -762,7 +753,6 @@ tranquil warmth pulses throughout the area, along with the sweet smell of herbs
 and scented candles.  Several different paintings have been hung from the walls,
 and a small couch and a recliner are positioned around a coffee table.  A neatly
 made bed is partially hidden behind a curtain at the northern part of the room.
-
 ~
 241 8 0 0 0 0
 D1
@@ -888,7 +878,7 @@ entrance.  A large wardrobe, facing south contains his uniforms and general
 away-mission equipment.  A comfortable looking recliner with a matching footrest
 sits beside the door, along with a bright reading lamp and end table.  Two large
 windows offer a great view of space.  A small partition at the northern part of
-the room contains Picard's sleeping a
+the room contains Picard's sleeping area.
 ~
 241 8 0 0 0 0
 D3
@@ -1012,7 +1002,6 @@ D2
 E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
-
 'deck 1' (engineering, transporter, the brig and the school)
 'deck 2' (Ten forward, sick bay and the security center)
 'deck 3' (the science labs, the gym and the main shuttle bay)
@@ -1038,7 +1027,6 @@ non-crew personnel or non-ambassadors to step past this threshhold.
 E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
-
 'deck 1' (engineering, transporter, the brig and the school)
 'deck 2' (Ten forward, sick bay and the security center)
 'deck 3' (the science labs, the gym and the main shuttle bay)
@@ -1146,7 +1134,7 @@ stars glitter and sparkle from every direction, originating from the vast
 expanses of deep space.  Without a spacesuit, one would surely perish out here.
 A large grey door leads into the Enterprise's Shuttle Bay.  
 ~
-241 0 0 0 0 0
+241 0 0 0 0 9
 D0
 The Shuttle Bay is North.
 ~
@@ -1164,9 +1152,8 @@ Outer Space~
    The USS Enterprise is a short distance away, slowly moving at a
 quarter-impulse.  Many thousand, thousand stars dominate the view in every
 direction apart from to the north, where a large red star is going super-nova.
-
 ~
-241 0 0 0 0 0
+241 0 0 0 0 9
 D4
    Millions upon millions of stars slowly burn and radiate their light
 throughout the universe.  
@@ -1186,7 +1173,7 @@ Outer Space~
 the minds of all sentient beings since the begining of time.  The USS Enterprise
 can be spied, some distance away.  
 ~
-241 0 0 0 0 0
+241 0 0 0 0 9
 D5
    Far away, the USS Enterprise can be spied.  A large red planet peacefully
 orbits it's dying sun.  
@@ -1204,11 +1191,10 @@ red lights on the floor and the blue ones on the ceiling.  When activated, the
 whole area flashes the same color as the walls, which only server to intensify
 the bright beams.  
 ~
-241 0 0 0 0 0
+241 0 0 0 0 9
 D2
    The computers that give this machine life, live to the south.  Becareful with
 everything around this area, a transporter can be a very dangerous thing indeed!
-
 ~
 ~
 0 -1 24106
@@ -1262,10 +1248,4 @@ is empty.
 S
 T 24124
 T 24127
-#24146
-The Shooting Range~
-You are in an unfinished room.
-~
-241 8 0 0 0 0
-S
 $~
