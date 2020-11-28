@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(genie_robot)
+project(ninemoons)
 
 #message(STATUS "DBG: CMAKE_CACHEFILE_DIR = " ${CMAKE_CACHEFILE_DIR})
 #message(STATUS "DBG: CMAKE_BINARY_DIR = " ${CMAKE_BINARY_DIR})
@@ -18,45 +18,57 @@ endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 
 set(CMAKE_USE_RELATIVE_PATHS "ON")
 set(NO_UNICODE "ON")
-set(CMAKE_CXX_FLAGS "-std=c++11")
+#set(CMAKE_CXX_FLAGS "-std=c++11")
 
-set(CPP_FILES  
-    src/main.cpp
-    src/robot.cpp
-    src/util.cpp
+set(HDR_FILES
+    src/act.h
+    src/asciimap.h
+    src/ban.h
+    src/boards.h
+    src/bsd-snprintf.h
+    src/CharacterAttributes.h
+    src/class.h
+    src/comm.h
+    src/conf.h
+    src/config.h
+    src/constants.h
+    src/db.h
+    src/dg_event.h
+    src/dg_olc.h
+    src/dg_scripts.h
+    src/fight.h
+    src/genmob.h
+    src/genobj.h
+    src/genolc.h
+    src/genshp.h
+    src/genwld.h
+    src/genzon.h
+    src/graph.h
+    src/handler.h
+    src/hedit.h
+    src/house.h
+    src/ibt.h
+    src/improved-edit.h
+    src/interpreter.h
+    src/mail.h
+    src/modify.h
+    src/mudtypes.h
+    src/oasis.h
+    src/pfdefaults.h
+    src/prefedit.h
+    src/quest.h
+    src/race.h
+    src/screen.h
+    src/shop.h
+    src/spec_procs.h
+    src/spells.h
+    src/structs.h
+    src/sysdep.h
+    src/telnet.h
+    src/trackdata.h
+    src/utils.h
+    src/zmalloc.h
 )
-
-set(HDR_FILES  
-    include/robot.h
-    include/util.h
-)
-
-include_directories(
-    include/
-)
-
-add_executable( ${PROJECT_NAME} ${CPP_FILES} ${HDR_FILES} )
-
-install(TARGETS ${PROJECT_NAME} DESTINATION bin )
-
-set(TEST_FILES
-    test/place_only.t
-    test/back_to_start.t
-    test/no_commands.t
-    test/place_and_move.t
-    test/place_move_turn.t
-)
-
-install(FILES ${TEST_FILES} DESTINATION bin )
-
-enable_testing()
-
-add_test(PlaceOnly cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/place_only.t)
-add_test(PlaceAndMove cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/place_and_move.t)
-add_test(PlaceMoveTurn cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/place_move_turn.t)
-add_test(NoCommands cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/no_commands.t)
-add_test(BackToStart cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/back_to_start.t)
-
 
 set(CPP_FILES
     src/CharacterAttributes.cpp
@@ -140,3 +152,39 @@ set(CPP_FILES
     src/zmalloc.cpp
 )
 
+include_directories(
+    src/
+)
+
+add_executable( ${PROJECT_NAME} ${CPP_FILES} ${HDR_FILES} )
+
+install(TARGETS ${PROJECT_NAME} DESTINATION bin )
+
+
+#
+# TODO: Utils
+#
+
+
+
+#
+# TODO: Tests would be good too
+#
+
+#set(TEST_FILES
+#    test/place_only.t
+#    test/back_to_start.t
+#    test/no_commands.t
+#    test/place_and_move.t
+#    test/place_move_turn.t
+#)
+
+#install(FILES ${TEST_FILES} DESTINATION bin )
+
+#enable_testing()
+
+#add_test(PlaceOnly cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/place_only.t)
+#add_test(PlaceAndMove cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/place_and_move.t)
+#add_test(PlaceMoveTurn cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/place_move_turn.t)
+#add_test(NoCommands cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/no_commands.t)
+#add_test(BackToStart cram -v ${CMAKE_CACHEFILE_DIR}/dist/bin/back_to_start.t)

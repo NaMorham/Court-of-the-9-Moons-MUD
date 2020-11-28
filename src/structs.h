@@ -111,16 +111,17 @@ enum eRoomTypes
 enum eSectorType
 {
     SECT_INSIDE = 0,    //!< Indoors, connected to SECT macro.
-    SECT_CITY,            //!< In a city
-    SECT_FIELD,            //!< In a field
+    SECT_CITY,          //!< In a city
+    SECT_FIELD,         //!< In a field
     SECT_FOREST,        //!< In a forest
-    SECT_HILLS,            //!< In the hills
-    SECT_MOUNTAIN,        //!< On a mountain
+    SECT_HILLS,         //!< In the hills
+    SECT_MOUNTAIN,      //!< On a mountain
     SECT_WATER_SWIM,    //!< Swimmable water
-    SECT_WATER_NOSWIM,    //!< Water - need a boat
+    SECT_WATER_NOSWIM,  //!< Water - need a boat
     SECT_FLYING,        //!< Flying
     SECT_UNDERWATER,    //!< Underwater
     SECT_TRACK,         //!< On a dirt path or track
+    SECT_ROAD,          //!< On a road or non city street
 
     // Must be last
     NUM_ROOM_SECTORS    //<! The total number of room Sector Types

@@ -106,7 +106,7 @@ static struct map_info_type map_info[] =
     { SECT_WATER_NOSWIM, "@c[@b=@c]@n" },
     { SECT_FLYING,       "@c[@C^@c]@n" },
     { SECT_UNDERWATER,   "@c[@bU@c]@n" },
-    { -1,                ""        }, /* 10 */
+    { SECT_ROAD,         "@c[@Wr@c]@n" }, /* 10 */
     { -1,                ""        },
     { -1,                ""        },
     { -1,                ""        },
@@ -143,7 +143,7 @@ static struct map_info_type world_map_info[] =
     { SECT_WATER_NOSWIM, "@b=" },
     { SECT_FLYING,       "@C^" },
     { SECT_UNDERWATER,   "@bU" },
-    { -1,                "" }, /* 10 */
+    { SECT_ROAD,         "@Wr" }, /* 10 */
     { -1,                "" },
     { -1,                "" },
     { -1,                "" },
@@ -482,6 +482,7 @@ static void perform_map(struct char_data *ch, char *argument, bool worldmap)
     count += sprintf(buf + count, "@n%s You\\\\", map_info[SECT_HERE].disp);
     count += sprintf(buf + count, "@n%s Inside\\\\", map_info[SECT_INSIDE].disp);
     count += sprintf(buf + count, "@n%s City\\\\", map_info[SECT_CITY].disp);
+    count += sprintf(buf + count, "@n%s Road\\\\", map_info[SECT_ROAD].disp);
     count += sprintf(buf + count, "@n%s Track\\\\", map_info[SECT_TRACK].disp);
     count += sprintf(buf + count, "@n%s Field\\\\", map_info[SECT_FIELD].disp);
     count += sprintf(buf + count, "@n%s Forest\\\\", map_info[SECT_FOREST].disp);

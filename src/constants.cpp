@@ -122,6 +122,7 @@ const char *sector_types[] = {
     "In Flight",
     "Underwater",
     "Track",
+    "Road",
     "\n"
 };
 
@@ -869,7 +870,8 @@ int movement_loss[] =
     1,  // Unswimable
     1,  // Flying
     5,  // Underwater
-    2   // Track
+    2,  // Track
+    1   // Road
 };
 
 /**

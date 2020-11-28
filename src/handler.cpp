@@ -435,9 +435,13 @@ void char_from_room(struct char_data *ch)
 {
     struct char_data *temp;
 
-    if ((ch == NULL) || (IN_ROOM(ch) == NOWHERE)) {
-        WriteLogf("SYSERR: NULL character or NOWHERE in %s, char_from_room", __FILE__);
+    if (ch == NULL) {
+        WriteLogf("SYSERR: NULL character in %s, char_from_room", __FILE__);
         exit(1);
+    }
+    else if (IN_ROOM(ch) == NOWHERE) {
+        WriteLogf("SYSERR: Character (%d:%s) NOWHERE in %s, char_from_room", IS_NPC(ch) ? ch->id : -1, ch->player.name, __FILE__);
+        return;  // we can survive this
     }
 
     if (FIGHTING(ch) != NULL) {

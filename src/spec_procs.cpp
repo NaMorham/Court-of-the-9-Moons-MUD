@@ -227,18 +227,19 @@ SPECIAL(mayor)
     char actbuf[MAX_INPUT_LENGTH];
 
     const char open_path[] =
-        // "W3a3003b33000c111d0d111Oe333333Oe22c222112212111a1S.";
-        "W3a3003333400500c111d000d111Oe333333Oe222c224225111Bw2212111a1S";
+        "W3a3003b33000c111d0d111Oe333333Oe22c222112212111a1S.";
+        // "W3a3003333400500c111d000d111Oe333333Oe222c224225111Bw2212111a1S";
         // "W3a30033333b333400500c111d000d1111Oe3333333Oe222c224225111Bw112212111a1S";
 
     const char close_path[] =
-        // "W3a3003b33000c111d0d111CE333333CE22c222112212111a1S.";
-        "W3a3003333400500c111d000d111CE333333CE222c224225111Bw2212111a1S";
+        "W3a3003b33000c111d0d111CE333333CE22c222112212111a1S.";
+        // "W3a3003333400500c111d000d111CE333333CE222c224225111Bw2212111a1S";
         // "W3a30033333b333400500c111d000d1111CE3333333CE222c224225111Bw112212111a1S";
 
     static const char *path = NULL;
     static int path_index;
     static bool move = FALSE;
+    char c;
 
     if (!move) {
         if (time_info.hours == 6) {
@@ -256,6 +257,7 @@ SPECIAL(mayor)
         return (FALSE);
     }
 
+    c = path[path_index];
     switch (path[path_index]) {
     case '0':   // NORTH
     case '1':   // EAST
@@ -326,7 +328,7 @@ SPECIAL(mayor)
         break;
 
     default:
-        mudlog(NRM, LVL_IMPL, TRUE, "(Spec - Mayor) Unknown step in path [%c]", path[path_index]);
+        mudlog(NRM, LVL_IMPL, TRUE, "(Spec - Mayor) Unknown step in path [%c]:%c", path[path_index], c);
     }
 
     ++path_index;

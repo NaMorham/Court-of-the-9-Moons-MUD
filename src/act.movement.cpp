@@ -189,13 +189,13 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check)
     }
 
     // Leave Trigger Checks: Does a leave trigger block exit from the room?
-    if (!leave_mtrigger(ch, dir) || IN_ROOM(ch) != was_in) {  // prevent teleport crashes
+    if (!leave_mtrigger(ch, dir) || (IN_ROOM(ch) != was_in)) {  // prevent teleport crashes
         return 0;
     }
-    else if (!leave_wtrigger(&world[IN_ROOM(ch)], ch, dir) || IN_ROOM(ch) != was_in) {  // prevent teleport crashes
+    else if (!leave_wtrigger(&world[IN_ROOM(ch)], ch, dir) || (IN_ROOM(ch) != was_in)) {  // prevent teleport crashes
         return 0;
     }
-    else if (!leave_otrigger(&world[IN_ROOM(ch)], ch, dir) || IN_ROOM(ch) != was_in) {  // prevent teleport crashes
+    else if (!leave_otrigger(&world[IN_ROOM(ch)], ch, dir) || (IN_ROOM(ch) != was_in)) {  // prevent teleport crashes
         return 0;
     }
 
