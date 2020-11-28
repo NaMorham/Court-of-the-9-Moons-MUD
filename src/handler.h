@@ -12,42 +12,42 @@
 #ifndef _HANDLER_H_
 #define _HANDLER_H_
 
-/* handling the affected-structures */
+// handling the affected-structures
 void    affect_total(struct char_data *ch);
 void    affect_to_char(struct char_data *ch, struct affected_type *af);
 void    affect_remove(struct char_data *ch, struct affected_type *af);
 void    affect_from_char(struct char_data *ch, int type);
 bool    affected_by_spell(struct char_data *ch, int type);
 void    affect_join(struct char_data *ch, struct affected_type *af,
-bool add_dur, bool avg_dur, bool add_mod, bool avg_mod);
+bool    add_dur, bool avg_dur, bool add_mod, bool avg_mod);
 
-/* utility */
-const char *money_desc(int amount);
+// utility
+const char      *money_desc(int amount);
 struct obj_data *create_money(int amount);
-int    isname(const char *str, const char *namelist);
-int    is_name(const char *str, const char *namelist);
-char    *fname(const char *namelist);
-int    get_number(char **name);
+int             isname(const char *str, const char *namelist);
+int             is_name(const char *str, const char *namelist);
+char            *fname(const char *namelist);
+int             get_number(char **name);
 
-/* objects */
-void    obj_to_char(struct obj_data *object, struct char_data *ch);
-void    obj_from_char(struct obj_data *object);
+// objects
+void            obj_to_char(struct obj_data *object, struct char_data *ch);
+void            obj_from_char(struct obj_data *object);
 
-void    equip_char(struct char_data *ch, struct obj_data *obj, int pos);
+void            equip_char(struct char_data *ch, struct obj_data *obj, int pos);
 struct obj_data *unequip_char(struct char_data *ch, int pos);
-int    invalid_align(struct char_data *ch, struct obj_data *obj);
+int             invalid_align(struct char_data *ch, struct obj_data *obj);
 
-void    obj_to_room(struct obj_data *object, room_rnum room);
-void    obj_from_room(struct obj_data *object);
-void    obj_to_obj(struct obj_data *obj, struct obj_data *obj_to);
-void    obj_from_obj(struct obj_data *obj);
-void    object_list_new_owner(struct obj_data *list, struct char_data *ch);
+void            obj_to_room(struct obj_data *object, room_rnum room);
+void            obj_from_room(struct obj_data *object);
+void            obj_to_obj(struct obj_data *obj, struct obj_data *obj_to);
+void            obj_from_obj(struct obj_data *obj);
+void            object_list_new_owner(struct obj_data *list, struct char_data *ch);
 
-void    extract_obj(struct obj_data *obj);
+void            extract_obj(struct obj_data *obj);
 
-void update_char_objects(struct char_data *ch);
+void            update_char_objects(struct char_data *ch);
 
-/* characters*/
+// characters
 struct char_data *get_char_room(char *name, int *num, room_rnum room);
 struct char_data *get_char_num(mob_rnum nr);
 
@@ -70,7 +70,7 @@ struct obj_data *get_obj_vis(struct char_data *ch, char *name, int *num);
 struct obj_data *get_obj_in_equip_vis(struct char_data *ch, char *arg, int *number, struct obj_data *equipment[]);
 int              get_obj_pos_in_equip_vis(struct char_data *ch, char *arg, int *num, struct obj_data *equipment[]);
 
-/* find all dots */
+// find all dots
 int    find_all_dots(char *arg);
 
 #define FIND_INDIV    0
@@ -78,7 +78,7 @@ int    find_all_dots(char *arg);
 #define FIND_ALLDOT    2
 
 
-/* Generic Find */
+// Generic Find
 int    generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
         struct char_data **tar_ch, struct obj_data **tar_obj);
 
@@ -90,14 +90,14 @@ int    generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
 #define FIND_OBJ_EQUIP     (1 << 5)
 
 
-/* prototypes from mobact.c */
-void forget(struct char_data *ch, struct char_data *victim);
-void remember(struct char_data *ch, struct char_data *victim);
-void mobile_activity(void);
-void clearMemory(struct char_data *ch);
+// prototypes from mobact.c
+void    forget(struct char_data *ch, struct char_data *victim);
+void    remember(struct char_data *ch, struct char_data *victim);
+void    mobile_activity(void);
+void    clearMemory(struct char_data *ch);
 
 
-/* For new last command: */
+// For new last command:
 #define LAST_FILE LIB_ETC       "last"
 
 #define LAST_CONNECT            0
@@ -113,13 +113,13 @@ void clearMemory(struct char_data *ch);
 #define LAST_PLAYING            10
 
 struct last_entry {
-  int close_type;
-  char hostname[256];
-  char username[16];
-  time_t time;
-  time_t close_time;
-  int idnum;
-  int punique;
+    int close_type;
+    char hostname[256];
+    char username[16];
+    time_t time;
+    time_t close_time;
+    int idnum;
+    int punique;
 };
 
 void add_llog_entry(struct char_data *ch, int type);

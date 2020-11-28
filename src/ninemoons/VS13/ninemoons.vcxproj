@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{240627DA-B713-411E-BACE-AB18ADC2FE79}</ProjectGuid>
+    <RootNamespace>ninemoons</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>..\..\..\build\x86\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)D</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>..\..\..\build\x86\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE ;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Message>Copy executable</Message>
+      <Command>echo copy "$(TargetPath)" ..\..\..\bin\
+copy "$(TargetPath)" ..\..\..\bin\
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE ;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\act.comm.cpp" />
+    <ClCompile Include="..\..\act.informative.cpp" />
+    <ClCompile Include="..\..\act.item.cpp" />
+    <ClCompile Include="..\..\act.movement.cpp" />
+    <ClCompile Include="..\..\act.offensive.cpp" />
+    <ClCompile Include="..\..\act.other.cpp" />
+    <ClCompile Include="..\..\act.social.cpp" />
+    <ClCompile Include="..\..\act.wizard.cpp" />
+    <ClCompile Include="..\..\aedit.cpp" />
+    <ClCompile Include="..\..\asciimap.cpp" />
+    <ClCompile Include="..\..\ban.cpp" />
+    <ClCompile Include="..\..\boards.cpp" />
+    <ClCompile Include="..\..\bsd-snprintf.cpp" />
+    <ClCompile Include="..\..\castle.cpp" />
+    <ClCompile Include="..\..\cedit.cpp" />
+    <ClCompile Include="..\..\CharacterAttributes.cpp" />
+    <ClCompile Include="..\..\class.cpp" />
+    <ClCompile Include="..\..\comm.cpp" />
+    <ClCompile Include="..\..\config.cpp" />
+    <ClCompile Include="..\..\constants.cpp" />
+    <ClCompile Include="..\..\db.cpp" />
+    <ClCompile Include="..\..\dg_comm.cpp" />
+    <ClCompile Include="..\..\dg_db_scripts.cpp" />
+    <ClCompile Include="..\..\dg_event.cpp" />
+    <ClCompile Include="..\..\dg_handler.cpp" />
+    <ClCompile Include="..\..\dg_misc.cpp" />
+    <ClCompile Include="..\..\dg_mobcmd.cpp" />
+    <ClCompile Include="..\..\dg_objcmd.cpp" />
+    <ClCompile Include="..\..\dg_olc.cpp" />
+    <ClCompile Include="..\..\dg_scripts.cpp" />
+    <ClCompile Include="..\..\dg_triggers.cpp" />
+    <ClCompile Include="..\..\dg_variables.cpp" />
+    <ClCompile Include="..\..\dg_wldcmd.cpp" />
+    <ClCompile Include="..\..\fight.cpp" />
+    <ClCompile Include="..\..\genmob.cpp" />
+    <ClCompile Include="..\..\genobj.cpp" />
+    <ClCompile Include="..\..\genolc.cpp" />
+    <ClCompile Include="..\..\genqst.cpp" />
+    <ClCompile Include="..\..\genshp.cpp" />
+    <ClCompile Include="..\..\genwld.cpp" />
+    <ClCompile Include="..\..\genzon.cpp" />
+    <ClCompile Include="..\..\graph.cpp" />
+    <ClCompile Include="..\..\handler.cpp" />
+    <ClCompile Include="..\..\hedit.cpp" />
+    <ClCompile Include="..\..\house.cpp" />
+    <ClCompile Include="..\..\ibt.cpp" />
+    <ClCompile Include="..\..\improved-edit.cpp" />
+    <ClCompile Include="..\..\interpreter.cpp" />
+    <ClCompile Include="..\..\limits.cpp" />
+    <ClCompile Include="..\..\magic.cpp" />
+    <ClCompile Include="..\..\mail.cpp" />
+    <ClCompile Include="..\..\medit.cpp" />
+    <ClCompile Include="..\..\mobact.cpp" />
+    <ClCompile Include="..\..\modify.cpp" />
+    <ClCompile Include="..\..\oasis.cpp" />
+    <ClCompile Include="..\..\oasis_copy.cpp" />
+    <ClCompile Include="..\..\oasis_delete.cpp" />
+    <ClCompile Include="..\..\oasis_list.cpp" />
+    <ClCompile Include="..\..\objsave.cpp" />
+    <ClCompile Include="..\..\oedit.cpp" />
+    <ClCompile Include="..\..\players.cpp" />
+    <ClCompile Include="..\..\prefedit.cpp" />
+    <ClCompile Include="..\..\qedit.cpp" />
+    <ClCompile Include="..\..\quest.cpp" />
+    <ClCompile Include="..\..\race.cpp" />
+    <ClCompile Include="..\..\random.cpp" />
+    <ClCompile Include="..\..\redit.cpp" />
+    <ClCompile Include="..\..\sedit.cpp" />
+    <ClCompile Include="..\..\shop.cpp" />
+    <ClCompile Include="..\..\spec_assign.cpp" />
+    <ClCompile Include="..\..\spec_procs.cpp" />
+    <ClCompile Include="..\..\spells.cpp" />
+    <ClCompile Include="..\..\spell_parser.cpp" />
+    <ClCompile Include="..\..\tedit.cpp" />
+    <ClCompile Include="..\..\trackdata.cpp" />
+    <ClCompile Include="..\..\utils.cpp" />
+    <ClCompile Include="..\..\weather.cpp" />
+    <ClCompile Include="..\..\zedit.cpp" />
+    <ClCompile Include="..\..\zmalloc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\act.h" />
+    <ClInclude Include="..\..\asciimap.h" />
+    <ClInclude Include="..\..\ban.h" />
+    <ClInclude Include="..\..\boards.h" />
+    <ClInclude Include="..\..\bsd-snprintf.h" />
+    <ClInclude Include="..\..\CharacterAttributes.h" />
+    <ClInclude Include="..\..\class.h" />
+    <ClInclude Include="..\..\comm.h" />
+    <ClInclude Include="..\..\conf.h" />
+    <ClInclude Include="..\..\config.h" />
+    <ClInclude Include="..\..\constants.h" />
+    <ClInclude Include="..\..\db.h" />
+    <ClInclude Include="..\..\dg_event.h" />
+    <ClInclude Include="..\..\dg_olc.h" />
+    <ClInclude Include="..\..\dg_scripts.h" />
+    <ClInclude Include="..\..\fight.h" />
+    <ClInclude Include="..\..\genmob.h" />
+    <ClInclude Include="..\..\genobj.h" />
+    <ClInclude Include="..\..\genolc.h" />
+    <ClInclude Include="..\..\genshp.h" />
+    <ClInclude Include="..\..\genwld.h" />
+    <ClInclude Include="..\..\genzon.h" />
+    <ClInclude Include="..\..\graph.h" />
+    <ClInclude Include="..\..\handler.h" />
+    <ClInclude Include="..\..\hedit.h" />
+    <ClInclude Include="..\..\house.h" />
+    <ClInclude Include="..\..\ibt.h" />
+    <ClInclude Include="..\..\improved-edit.h" />
+    <ClInclude Include="..\..\interpreter.h" />
+    <ClInclude Include="..\..\mail.h" />
+    <ClInclude Include="..\..\modify.h" />
+    <ClInclude Include="..\..\mudtypes.h" />
+    <ClInclude Include="..\..\oasis.h" />
+    <ClInclude Include="..\..\pfdefaults.h" />
+    <ClInclude Include="..\..\prefedit.h" />
+    <ClInclude Include="..\..\quest.h" />
+    <ClInclude Include="..\..\race.h" />
+    <ClInclude Include="..\..\screen.h" />
+    <ClInclude Include="..\..\shop.h" />
+    <ClInclude Include="..\..\spec_procs.h" />
+    <ClInclude Include="..\..\spells.h" />
+    <ClInclude Include="..\..\structs.h" />
+    <ClInclude Include="..\..\sysdep.h" />
+    <ClInclude Include="..\..\telnet.h" />
+    <ClInclude Include="..\..\trackdata.h" />
+    <ClInclude Include="..\..\types.h" />
+    <ClInclude Include="..\..\utils.h" />
+    <ClInclude Include="..\..\zmalloc.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

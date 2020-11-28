@@ -13,7 +13,9 @@
 #ifndef _CLASS_H_
 #define _CLASS_H_
 
-/* Functions available through class.c */
+/*
+ * Functions available through class.c
+ */
 int backstab_mult(int level);
 void do_start(struct char_data *ch);
 bitvector_t find_class_bitvector(const char *arg);
@@ -27,7 +29,6 @@ const char *title_female(int chclass, int level);
 const char *title_male(int chclass, int level);
 
 /* Global variables */
-
 #ifndef __CLASS_C__
 
 extern const char *class_abbrevs[];

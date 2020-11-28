@@ -76,7 +76,7 @@ extern int medit_advanced_stats;
 /*
  * Variables not controlled by cedit
  */
-/* Game operation settings. */
+// Game operation settings.
 extern int bitwarning;
 extern int bitsavetodisk;
 extern int auto_pwipe;

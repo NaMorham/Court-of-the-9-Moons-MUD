@@ -218,16 +218,16 @@ You see some sandy stones pressed closely together to form a hard surface.
 stones~
 1 -1 5308
 E
-plaque~
-   The plaque reads:
-                        The Great Pyramid
-                Created by the Andersen work crew.
-~
-E
 stones~
    As you look closer you can make out a crack in the center of the stones
 beneath your feet.  With some effort you might be able to lift that section up
 and get inside!  
+~
+E
+plaque~
+   The plaque reads:
+                        The Great Pyramid
+                Created by the Andersen work crew.
 ~
 S
 #5307
@@ -302,16 +302,16 @@ A small rickety ladder leads up.
 ~
 0 -1 5308
 E
+door stone~
+   The stone door is covered in strange inscriptions and hieroglyphs that warn
+you not to proceed any further.  
+~
+E
 sigils hieroglyphs inscriptions writing~
    You cannot understand the strange glyphs that cover the door, but most of
 them seem to depict scenes of fire and massive creatures of apparently
 tremendous strength.  You have a feeling that the glyphs are serving as a
 warning.  
-~
-E
-door stone~
-   The stone door is covered in strange inscriptions and hieroglyphs that warn
-you not to proceed any further.  
 ~
 S
 #5310
@@ -457,15 +457,14 @@ small rocky crevasse.
 ~
 53 13 0 0 0 0
 D2
-You see a rocky crevasse that proceeds deep under the pyramid.
 ~
 ~
-0 -1 5319
+0 0 5318
 D4
 The hole looks far too slippery to climb back up.
 ~
 ~
-0 -1 -1
+0 -1 5315
 E
 bones~
    The bones have whitened and cracked in the dry air, apparently the remains of
@@ -479,6 +478,10 @@ the pyramid now.   The floor is strewn with bones.  To the south is a
 small rocky crevasse.
 ~
 53 9 0 0 0 0
+D0
+~
+~
+0 0 5317
 D2
 You see a rocky crevasse that proceeds deep under the pyramid.
 ~
@@ -579,18 +582,18 @@ It is too dark for you to see anything along the crevasse.
 ~
 0 -1 5321
 E
+black shape~
+   Wind howls about your ears like the roar of a tiger.  As your eyes adjust to
+the light the shape to the south almost seems to take the form of a massive
+animal head.  
+~
+E
 tiger head animal sesame~
    You are now certain that the wind is the cold breath of some unearthly giant
 animal, whose voice rumbles lowly on the breeze, and whose massive jaws could
 easily swallow you whole.  You move closer for a better look, when suddenly a
 pair of eyes flashes.  A cold voice echoes: 'SEEK YE THE DIAMOND...  IN THE
 ROUGH...  ' ...  Then all is silent.  
-~
-E
-black shape~
-   Wind howls about your ears like the roar of a tiger.  As your eyes adjust to
-the light the shape to the south almost seems to take the form of a massive
-animal head.  
 ~
 S
 #5323
@@ -673,18 +676,18 @@ You see a large stone coffin.
 coffin lid~
 2 5312 5327
 E
-man garments pharoah~
-   As you look closer at the figure sculpted into the stone coffin you notice a
-small marking carved into its chest.  It looks like a scarab or small beetle
-would fit into the small space, if properly sized.  Hmmm.  
-~
-E
 coffin lid~
    The coffin is sculpted into the form of a man, standing several heads above
 you, and clad in the garments of pharoahs.  It has apparently been untouched by
 the ravages of time and the activities of looters.  Several markings on the side
 indicate spots where unsuccessful attempts were made to open the coffin.  You
 can't see any way to open it.  
+~
+E
+man garments pharoah~
+   As you look closer at the figure sculpted into the stone coffin you notice a
+small marking carved into its chest.  It looks like a scarab or small beetle
+would fit into the small space, if properly sized.  Hmmm.  
 ~
 S
 #5327
@@ -705,13 +708,13 @@ It is too dark to see down the stairway.
 ~
 0 -1 5328
 E
-coffin lid~
-   On this side the coffin lid is smooth featureless stone.  
-~
-E
 inscriptions~
    You blow dust away from the inscriptions to read: Beware the curse of the
 mummy.  
+~
+E
+coffin lid~
+   On this side the coffin lid is smooth featureless stone.  
 ~
 S
 #5328
@@ -1055,14 +1058,14 @@ The stone ceiling has some cracks in it, through which a dim light streams.
 ceiling~
 1 -1 5343
 E
-hieroglyphics carvings~
-   The markings indicate that this tomb is indeed the tomb of the greatest
-pharoahs of the ancient civilization that built this massive pyramid.  
-~
-E
 tomb~
    The tomb looks like it has stood for many years, much like the pyramid which
 encloses it.  It is covered in small hieroglyphics.  
+~
+E
+hieroglyphics carvings~
+   The markings indicate that this tomb is indeed the tomb of the greatest
+pharoahs of the ancient civilization that built this massive pyramid.  
 ~
 S
 #5345
@@ -1186,13 +1189,13 @@ You see an arched hall.
 ~
 0 -1 5349
 E
-bricks~
-   The small golden bricks are very smooth and also quite soft.  
-~
-E
 rug rugs tapestry tapestries~
    The rugs and tapestries are very fine and worn with age, their colors now
 faded.  They depict scenes of life in an ancient desert city.  
+~
+E
+bricks~
+   The small golden bricks are very smooth and also quite soft.  
 ~
 S
 #5351
@@ -1409,18 +1412,18 @@ For some reason you seem unable to get to it.
 riddle~
 2 5317 5359
 E
-hieroglyphics symbols~
-   Like most of the ancient hieroglyphics of this land, the symbols are totally
-incomprehensible to you.  Perhaps the Sphinx has the answer to this ancient
-riddle.  
+sand dune~
+   The sand is very white, and very sandy.  There sure is a lot of it.  
 ~
 E
 riddle~
    A vision forms before your eyes, in glowing hieroglyphic symbols.  
 ~
 E
-sand dune~
-   The sand is very white, and very sandy.  There sure is a lot of it.  
+hieroglyphics symbols~
+   Like most of the ancient hieroglyphics of this land, the symbols are totally
+incomprehensible to you.  Perhaps the Sphinx has the answer to this ancient
+riddle.  
 ~
 S
 #5359

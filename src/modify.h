@@ -23,12 +23,15 @@
 void show_string(struct descriptor_data *d, char *input);
 void smash_tilde(char *str);
 void paginate_string(char *str, struct descriptor_data *d);
+
 /** @todo should this really be in modify.c? */
 ACMD(do_skillset);
+
 /* Following function prototypes moved here from comm.h */
 void  string_write(struct descriptor_data *d, char **txt, size_t len, long mailto, void *data);
 void  string_add(struct descriptor_data *d, char *str);
 void  page_string(struct descriptor_data *d, char *str, int keep_internal);
+
 /* page string function & defines */
 #define PAGE_LENGTH 22
 #define PAGE_WIDTH  80

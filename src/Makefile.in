@@ -8,7 +8,7 @@ CC = @CC@
 MYFLAGS = @MYFLAGS@
 
 #flags for profiling (see hacker.doc for more information)
-PROFILE = 
+PROFILE =
 
 ##############################################################################
 # Do Not Modify Anything Below This Line (unless you know what you're doing) #
@@ -21,36 +21,36 @@ CFLAGS = @CFLAGS@ $(MYFLAGS) $(PROFILE)
 LIBS = @LIBS@ @CRYPTLIB@ @NETLIB@
 
 SRCFILES := $(wildcard *.c)
-OBJFILES := $(patsubst %.c,%.o,$(SRCFILES))  
+OBJFILES := $(patsubst %.c,%.o,$(SRCFILES))
 
 default: all
 
 all: .accepted
-	$(MAKE) $(BINDIR)/circle
-	$(MAKE) utils
+    $(MAKE) $(BINDIR)/circle
+    $(MAKE) utils
 
 .accepted:
-	@./licheck @MORE@
+    @./licheck @MORE@
 
 utils: .accepted
-	(cd util; $(MAKE) all)
+    (cd util; $(MAKE) all)
 
 circle:
-	$(MAKE) $(BINDIR)/circle
+    $(MAKE) $(BINDIR)/circle
 
 $(BINDIR)/circle : $(OBJFILES)
-	$(CC) -o $(BINDIR)/circle $(PROFILE) $(OBJFILES) $(LIBS)
+    $(CC) -o $(BINDIR)/circle $(PROFILE) $(OBJFILES) $(LIBS)
 
 $%.o: %.c
-	$(CC) $< $(CFLAGS) -c -o $@ 
+    $(CC) $< $(CFLAGS) -c -o $@
 
 clean:
-	rm -f *.o depend
+    rm -f *.o depend
 
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
 depend:
-	$(CC) -MM *.c > depend
+    $(CC) -MM *.c > depend
 
 -include depend
