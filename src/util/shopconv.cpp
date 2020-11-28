@@ -122,39 +122,39 @@ static int boot_the_shops_conv(FILE * shop_f, FILE * newshop_f, char *filename)
     fprintf(newshop_f, "CircleMUD %s Shop File~\n", VERSION3_TAG);
     for (;;) {
         buf = fread_string(shop_f, buf2);
-        if (*buf == '#') {      // New shop 
+        if (*buf == '#') {      // New shop
             sscanf(buf, "#%d\n", &temp);
             sprintf(buf2, "shop #%d in shop file %s", temp, filename);
             fprintf(newshop_f, "#%d~\n", temp);
-            free(buf);          // Plug memory leak! 
+            free(buf);          // Plug memory leak!
             printf("   #%d\n", temp);
 
-            do_list(shop_f, newshop_f, MAX_PROD);    // Produced Items 
+            do_list(shop_f, newshop_f, MAX_PROD);    // Produced Items
 
-            do_float(shop_f, newshop_f);            // Ratios 
+            do_float(shop_f, newshop_f);            // Ratios
             do_float(shop_f, newshop_f);
 
-            do_list(shop_f, newshop_f, MAX_TRADE);  // Bought Items 
+            do_list(shop_f, newshop_f, MAX_TRADE);  // Bought Items
 
-            for (count = 0; count < 7; count++)     // Keeper msgs 
+            for (count = 0; count < 7; count++)     // Keeper msgs
                 do_string(shop_f, newshop_f, buf2);
 
-            for (count = 0; count < 5; count++)     // Misc   
+            for (count = 0; count < 5; count++)     // Misc
                 do_int(shop_f, newshop_f);
             fprintf(newshop_f, "-1\n");
-            for (count = 0; count < 4; count++)     // Open/Close     
+            for (count = 0; count < 4; count++)     // Open/Close
                 do_int(shop_f, newshop_f);
 
         }
         else {
-            if (*buf == '$') {    // EOF 
-                free(buf);        // Plug memory leak! 
+            if (*buf == '$') {    // EOF
+                free(buf);        // Plug memory leak!
                 fprintf(newshop_f, "$~\n");
                 break;
             }
             else if (strstr(buf, VERSION3_TAG)) {
                 printf("%s: New format detected, conversion aborted!\n", filename);
-                free(buf);        // Plug memory leak! 
+                free(buf);        // Plug memory leak!
                 return (1);
             }
         }
