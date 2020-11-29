@@ -22,7 +22,7 @@ int get_line(FILE *fl, char *buf);
 int main(int argc, char** argv)
 {
     FILE *index_file;
-    if (argc == 1)	{
+    if (argc == 1)    {
         printf("Usage: %s indexfile\n", argv[0]);
         return 0;
     }

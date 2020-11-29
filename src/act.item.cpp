@@ -177,7 +177,7 @@ ACMD(do_put)
                     }
                 }
             }
-        }  // end else   // we have a container that is open 
+        }  // end else   // we have a container that is open
     }
 }
 

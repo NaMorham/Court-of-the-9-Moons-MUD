@@ -43,7 +43,7 @@ char *any_one_name(char *argument, char *first_arg)
         *argument && !isspace(*argument) && (!ispunct(*argument) || *argument == '#' || *argument == '-');
         arg++, argument++) {
         *arg = LOWER(*argument);
-    }
+    }  // for (arg ...
     *arg = '\0';
 
     return argument;
@@ -130,7 +130,7 @@ static void sub_write_to_char(char_data *ch, char *tokens[], void *otokens[], ch
             }
             break;
         }
-    }
+    }  // for (i 
 
     strcat(sb, tokens[i]);
     strcat(sb, "\n\r");
@@ -214,7 +214,7 @@ void sub_write(char *arg, char_data *ch, byte find_invis, int targets)
             if (to != ch && SENDOK(to)) {
                 sub_write_to_char(to, tokens, otokens, type);
             }
-        }
+        }  // for (to ...
     }
 }
 
@@ -222,8 +222,9 @@ void send_to_zone(char *messg, zone_rnum zone)
 {
     struct descriptor_data *i;
 
-    if (!messg || !*messg)
+    if (!messg || !*messg) {
         return;
+    }
 
     for (i = descriptor_list; i; i = i->next) {
         if (!i->connected && i->character && AWAKE(i->character) &&
