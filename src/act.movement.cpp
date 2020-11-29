@@ -22,13 +22,15 @@
 #include "dg_scripts.h"
 #include "act.h"
 #include "fight.h"
-#include "oasis.h" /* for buildwalk */
+#include "oasis.h" // for buildwalk
 
 
-/* local only functions */
-/* do_simple_move utility functions */
+/*
+ *  local only functions
+ */
+// do_simple_move utility functions
 static int has_boat(struct char_data *ch);
-/* do_gen_door utility functions */
+// do_gen_door utility functions
 static int find_door(struct char_data *ch, const char *type, char *dir, const char *cmdname);
 static int has_key(struct char_data *ch, obj_vnum key);
 static void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd);
@@ -56,14 +58,14 @@ static int has_boat(struct char_data *ch)
         if (GET_OBJ_TYPE(obj) == ITEM_BOAT && (find_eq_pos(ch, obj, NULL) < 0)) {
             return (1);
         }
-    }
+    }  // for (obj ...
 
     // and any boat you're wearing will do it too
     for (i = 0; i < NUM_WEARS; i++) {
         if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_BOAT) {
             return (1);
         }
-    }
+    }  // for (i ...
 
     return (0);
 }
@@ -71,7 +73,7 @@ static int has_boat(struct char_data *ch)
 /*
  * Simple function to determine if char can fly.
  */
-int has_flight(struct char_data *ch)
+static int has_flight(struct char_data *ch)
 {
     struct obj_data *obj;
     int i;
@@ -89,14 +91,14 @@ int has_flight(struct char_data *ch)
         if (OBJAFF_FLAGGED(obj, AFF_FLYING) && OBJAFF_FLAGGED(obj, AFF_FLYING)) {
             return (1);
         }
-    }
+    }  // for (obj ...
 
     // Any equipped objects with AFF_FLYING will do it too.
     for (i = 0; i < NUM_WEARS; i++) {
         if (GET_EQ(ch, i) && OBJAFF_FLAGGED(GET_EQ(ch, i), AFF_FLYING)) {
             return (1);
         }
-    }
+    }  // for (i ...
 
     return (0);
 }
@@ -104,7 +106,7 @@ int has_flight(struct char_data *ch)
 /*
  * Simple function to determine if char can scuba.
  */
-int has_scuba(struct char_data *ch)
+static int has_scuba(struct char_data *ch)
 {
     struct obj_data *obj;
     int i;
@@ -122,14 +124,14 @@ int has_scuba(struct char_data *ch)
         if (OBJAFF_FLAGGED(obj, AFF_SCUBA) && (find_eq_pos(ch, obj, NULL) < 0)) {
             return (1);
         }
-    }
+    }  // for (obj ...
 
     // Any equipped objects with AFF_SCUBA will do it too.
     for (i = 0; i < NUM_WEARS; i++) {
         if (GET_EQ(ch, i) && OBJAFF_FLAGGED(GET_EQ(ch, i), AFF_SCUBA)) {
             return (1);
         }
-    }
+    }  // for (i ...
 
     return (0);
 }
@@ -309,6 +311,7 @@ int do_simple_move(struct char_data *ch, int dir, int need_specials_check)
     }
 
     char_from_room(ch);
+    // @todo: add exit dir as arg to char_to_room
     char_to_room(ch, going_to);
 
     //---------------------------------------------------------------------
@@ -378,6 +381,9 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check)
     if ((ch == NULL) || (dir < 0) || (dir >= NUM_OF_DIRS) || FIGHTING(ch)) {
         return (0);
     }
+    else if (!CONFIG_DIAGONAL_DIRS && IS_DIAGONAL(dir)) {
+        send_to_char(ch, "Alas, you cannot go that way...\r\n");
+    }
     else if ((!EXIT(ch, dir) && !buildwalk(ch, dir)) || EXIT(ch, dir)->to_room == NOWHERE) {
         send_to_char(ch, "Alas, you cannot go that way...\r\n");
     }
@@ -407,7 +413,7 @@ int perform_move(struct char_data *ch, int dir, int need_specials_check)
                 act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
                 perform_move(k->follower, dir, 1);
             }
-        }
+        }  // for (k ...
         return (1);
     }
     return (0);
@@ -425,8 +431,10 @@ static int find_door(struct char_data *ch, const char *type, char *dir, const ch
 
     if (*dir) {  // a direction was specified
         if ((door = search_block(dir, dirs, FALSE)) == -1) {  // Partial Match
-            send_to_char(ch, "That's not a direction.\r\n");
-            return (-1);
+            if ((door = search_block(dir, autoexits, FALSE)) == -1) { // Check 'short' dirs too
+                send_to_char(ch, "That's not a direction.\r\n");
+                return (-1);
+            }
         }
         if (EXIT(ch, door)) {  // Braces added according to indent. -gg
             if (EXIT(ch, door)->keyword) {
@@ -452,7 +460,7 @@ static int find_door(struct char_data *ch, const char *type, char *dir, const ch
             send_to_char(ch, "What is it you want to %s?\r\n", cmdname);
             return (-1);
         }
-        for (door = 0; door < NUM_OF_DIRS; door++) {
+        for (door = 0; door < DIR_COUNT; door++)
             if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->keyword) {
                     if (isname(type, EXIT(ch, door)->keyword)) {
@@ -482,7 +490,7 @@ static int find_door(struct char_data *ch, const char *type, char *dir, const ch
                     }
                 }
             }
-        }
+        }  // for (door ...
 
         if ((!IS_NPC(ch)) && (!PRF_FLAGGED(ch, PRF_AUTODOOR))) {
             send_to_char(ch, "There doesn't seem to be %s %s here.\r\n", AN(type), type);
@@ -514,7 +522,7 @@ int has_key(struct char_data *ch, obj_vnum key)
         if (GET_OBJ_VNUM(o) == key) {
             return (1);
         }
-    }
+    }  // for (o ...
     if (GET_EQ(ch, WEAR_HOLD)) {
         if (GET_OBJ_VNUM(GET_EQ(ch, WEAR_HOLD)) == key) {
             return (1);
@@ -734,7 +742,7 @@ ACMD(do_gen_door)
         else if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED) && ((!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOKEY))) && (has_key(ch, keynum)))
         {
             send_to_char(ch, "It is locked, but you have the key.\r\n");
-            send_to_char(ch, "*Click*\r\n");
+            do_doorcmd(ch, obj, door, SCMD_UNLOCK);
             do_doorcmd(ch, obj, door, subcmd);
         }
         else if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED) && ((!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_AUTOKEY))) && (!has_key(ch, keynum)))
@@ -765,8 +773,9 @@ ACMD(do_enter)
     one_argument(argument, buf);
 
     if (*buf) {  // an argument was supplied, search for door keyword
-        for (door = 0; door < NUM_OF_DIRS; door++) {
-            if (EXIT(ch, door)) {
+       for (door = 0; door < DIR_COUNT; door++) {
+           // @todo: use a var here to simplify debugging?
+           if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->keyword) {
                     if (!str_cmp(EXIT(ch, door)->keyword, buf)) {
                         perform_move(ch, door, 1);
@@ -774,16 +783,17 @@ ACMD(do_enter)
                     }
                 }
             }
-        }
+        }  // for (door ...
         send_to_char(ch, "There is no %s here.\r\n", buf);
     }
     else if (ROOM_FLAGGED(IN_ROOM(ch), ROOM_INDOORS)) {
         send_to_char(ch, "You are already indoors.\r\n");
     }
     else {
-        /* try to locate an entrance */
-        for (door = 0; door < NUM_OF_DIRS; door++) {
-            if (EXIT(ch, door)) {
+       // try to locate an entrance
+       for (door = 0; door < DIR_COUNT; door++)
+           // @todo: use a var here to simplify debugging?
+           if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->to_room != NOWHERE) {
                     if (!EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) &&
                         ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_INDOORS)) {
@@ -792,7 +802,7 @@ ACMD(do_enter)
                     }
                 }
             }
-        }
+        }  // for (door ...
         send_to_char(ch, "You can't seem to find anything to enter.\r\n");
     }
 }
@@ -805,7 +815,8 @@ ACMD(do_leave)
         send_to_char(ch, "You are outside.. where do you want to go?\r\n");
     }
     else {
-        for (door = 0; door < NUM_OF_DIRS; door++) {
+        for (door = 0; door < DIR_COUNT; door++)
+            // @todo: use a var here to simplify debugging?
             if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->to_room != NOWHERE) {
                     if (!EXIT_FLAGGED(EXIT(ch, door), EX_CLOSED) &&
@@ -815,7 +826,7 @@ ACMD(do_leave)
                     }
                 }
             }
-        }
+        }  // for (door ...
         send_to_char(ch, "I see no obvious exits to the outside.\r\n");
     }
 }
@@ -849,8 +860,7 @@ ACMD(do_stand)
         break;
     default:
         send_to_char(ch, "You stop floating around, and put your feet on the ground.\r\n");
-        act("$n stops floating around, and puts $s feet on the ground.",
-            TRUE, ch, 0, 0, TO_ROOM);
+        act("$n stops floating around, and puts $s feet on the ground.", TRUE, ch, 0, 0, TO_ROOM);
         GET_POS(ch) = POS_STANDING;
         break;
     }
@@ -875,8 +885,7 @@ ACMD(do_sit)
         found = 1;
     }
 
-    switch (GET_POS(ch))
-    {
+    switch (GET_POS(ch)) {
     case POS_STANDING:
         if (found == 0) {
             send_to_char(ch, "You sit down.\r\n");
@@ -907,7 +916,7 @@ ACMD(do_sit)
                         continue;
                     }
                     NEXT_SITTING(tempch) = ch;
-                }
+                }  // for (tempch ...
                 act("You sit down upon $p.", TRUE, ch, furniture, 0, TO_CHAR);
                 act("$n sits down upon $p.", TRUE, ch, furniture, 0, TO_ROOM);
                 SITTING(ch) = furniture;
@@ -988,8 +997,7 @@ ACMD(do_sleep)
         break;
     default:
         send_to_char(ch, "You stop floating around, and lie down to sleep.\r\n");
-        act("$n stops floating around, and lie down to sleep.",
-            TRUE, ch, 0, 0, TO_ROOM);
+        act("$n stops floating around, and lie down to sleep.", TRUE, ch, 0, 0, TO_ROOM);
         GET_POS(ch) = POS_SLEEPING;
         break;
     }
@@ -1057,7 +1065,12 @@ ACMD(do_follow)
         }
     }
     else {
-        send_to_char(ch, "Whom do you wish to follow?\r\n");
+        if (ch->master != (char_data*)NULL) {
+            send_to_char(ch, "You are following %s.\r\n", GET_NAME(ch->master));
+        }
+        else {
+            send_to_char(ch, "Whom do you wish to follow?\r\n");
+        }
         return;
     }
 
@@ -1084,8 +1097,24 @@ ACMD(do_follow)
             if (ch->master) {
                 stop_follower(ch);
             }
-            REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
             add_follower(ch, leader);
         }
     }
+}
+
+ACMD(do_unfollow)
+{
+    if (ch->master) {
+        if (AFF_FLAGGED(ch, AFF_CHARM)) {
+            send_to_char(ch, "You feel compelled to follow %s.\r\n",
+                GET_NAME(ch->master));
+        }
+        else {
+            stop_follower(ch);
+        }
+    }
+    else {
+        send_to_char(ch, "You are not following anyone.\r\n");
+    }
+    return;
 }

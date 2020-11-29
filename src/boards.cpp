@@ -90,7 +90,7 @@ static int find_slot(void)
             msg_storage_taken[i] = 1;
             return (i);
         }
-    }
+    }  // for (i ...
     return (-1);
 }
 
@@ -130,7 +130,7 @@ static void init_boards(void)
     for (i = 0; i < INDEX_SIZE; i++) {
         msg_storage[i] = 0;
         msg_storage_taken[i] = 0;
-    }
+    }  // for (i ...
 
     for (i = 0; i < NUM_OF_BOARDS; i++) {
         if ((BOARD_RNUM(i) = real_object(BOARD_VNUM(i))) == NOTHING) {
@@ -142,9 +142,9 @@ static void init_boards(void)
         for (j = 0; j < MAX_BOARD_MESSAGES; j++) {
             memset((char *)&(msg_index[i][j]), 0, sizeof(struct board_msginfo));
             msg_index[i][j].slot_num = -1;
-        }
+        }  // for (j ...
         board_load_board(i);
-    }
+    }  // for (i ...
 
     if (fatal_error) {
         exit(1);
@@ -174,8 +174,8 @@ SPECIAL(gen_board)
     ACMD_LOOK = find_command("look");
     ACMD_EXAMINE = find_command("examine");
 
-    if (cmd != ACMD_WRITE && cmd != ACMD_LOOK && cmd != ACMD_EXAMINE &&
-        cmd != ACMD_READ && cmd != ACMD_REMOVE) {
+    if ((cmd != ACMD_WRITE) && (cmd != ACMD_LOOK) && (cmd != ACMD_EXAMINE) &&
+        (cmd != ACMD_READ) && (cmd != ACMD_REMOVE)) {
         return (0);
     }
 
@@ -288,10 +288,11 @@ int board_show_board(int board_type, struct char_data *ch, char *arg, struct obj
             }
 
             nlen = snprintf(buf + len, sizeof(buf) - len, "%-2d : %s\r\n", num_of_msgs[board_type] - i, MSG_HEADING(board_type, i));
-            if (len + nlen >= sizeof(buf) || nlen < 0)
+            if (((len + nlen) >= sizeof(buf)) || (nlen < 0)) {
                 break;
+            }
             len += nlen;
-        }
+        }  // for (i ...
 #else
         for (i = 0; i < num_of_msgs[board_type]; i++) {
             if (!MSG_HEADING(board_type, i)) {
@@ -299,11 +300,11 @@ int board_show_board(int board_type, struct char_data *ch, char *arg, struct obj
             }
 
             nlen = snprintf(buf + len, sizeof(buf) - len, "%-2d : %s\r\n", i + 1, MSG_HEADING(board_type, i));
-            if (len + nlen >= sizeof(buf) || nlen < 0) {
+            if (((len + nlen) >= sizeof(buf)) || (nlen < 0)) {
                 break;
             }
             len += nlen;
-        }
+        }  // for (i ...
 #endif
         page_string(ch->desc, buf, TRUE);
     }
@@ -342,7 +343,7 @@ int board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
         send_to_char(ch, "The board is empty!\r\n");
         return (1);
     }
-    if (msg < 1 || msg > num_of_msgs[board_type]) {
+    if ((msg < 1) || (msg > num_of_msgs[board_type])) {
         send_to_char(ch, "That message exists only in your imagination.\r\n");
         return (1);
     }
@@ -351,8 +352,8 @@ int board_display_msg(int board_type, struct char_data *ch, char *arg, struct ob
 #else
     ind = msg - 1;
 #endif
-    if (MSG_SLOTNUM(board_type, ind) < 0 ||
-        MSG_SLOTNUM(board_type, ind) >= INDEX_SIZE) {
+    if ((MSG_SLOTNUM(board_type, ind) < 0) ||
+        (MSG_SLOTNUM(board_type, ind) >= INDEX_SIZE)) {
         send_to_char(ch, "Sorry, the board is not working.\r\n");
         WriteLogf("SYSERR: Board is screwed up. (Room #%d)", GET_ROOM_VNUM(IN_ROOM(ch)));
         return (1);
@@ -393,7 +394,7 @@ int board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
         send_to_char(ch, "The board is empty!\r\n");
         return (1);
     }
-    if (msg < 1 || msg > num_of_msgs[board_type]) {
+    if ((msg < 1) || (msg > num_of_msgs[board_type])) {
         send_to_char(ch, "That message exists only in your imagination.\r\n");
         return (1);
     }
@@ -417,7 +418,7 @@ int board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
         return (1);
     }
     slot_num = MSG_SLOTNUM(board_type, ind);
-    if (slot_num < 0 || slot_num >= INDEX_SIZE) {
+    if ((slot_num < 0) || (slot_num >= INDEX_SIZE)) {
         send_to_char(ch, "That message is majorly screwed up.\r\n");
         WriteLogf("SYSERR: The board is seriously screwed up. (Room #%d)", GET_ROOM_VNUM(IN_ROOM(ch)));
         return (1);
@@ -427,11 +428,11 @@ int board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
             send_to_char(ch, "At least wait until the author is finished before removing it!\r\n");
             return (1);
         }
-    }
+    }  // for (d ...
     if (msg_storage[slot_num]) {
         free(msg_storage[slot_num]);
     }
-    msg_storage[slot_num] = 0;
+    msg_storage[slot_num] = NULL;
     msg_storage_taken[slot_num] = 0;
     if (MSG_HEADING(board_type, ind)) {
         free(MSG_HEADING(board_type, ind));
@@ -442,7 +443,7 @@ int board_remove_msg(int board_type, struct char_data *ch, char *arg, struct obj
         MSG_HEADING(board_type, ind) = MSG_HEADING(board_type, ind + 1);
         MSG_SLOTNUM(board_type, ind) = MSG_SLOTNUM(board_type, ind + 1);
         MSG_LEVEL(board_type, ind) = MSG_LEVEL(board_type, ind + 1);
-    }
+    }  // for (; ind ...
     num_of_msgs[board_type]--;
 
     send_to_char(ch, "Message removed.\r\n");
@@ -493,7 +494,7 @@ void board_save_board(int board_type)
         if (tmp2) {
             j = fwrite(tmp2, sizeof(char), msg_index[board_type][i].message_len, fl);
         }
-    }
+    }  // for (i ...
 
     fclose(fl);
 }
@@ -518,14 +519,39 @@ void board_load_board(int board_type)
     }
     for (i = 0; i < num_of_msgs[board_type]; i++)
     {
-        j = fread(&(msg_index[board_type][i]), sizeof(struct board_msginfo), 1, fl);
+        if (fread(&(msg_index[board_type][i]), sizeof(struct board_msginfo), 1, fl) != 1) {
+            if (feof(fl)) {
+                log("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
+            }
+            else if (ferror(fl)) {
+                log("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
+            }
+            else {
+                log("SYSERR: Error reading board file %d. Resetting.", board_type);
+            }
+            board_reset_board(board_type);
+        }
         if ((len1 = msg_index[board_type][i].heading_len) <= 0) {
             WriteLogf("SYSERR: Board file %d corrupt!  Resetting.", board_type);
             board_reset_board(board_type);
             return;
         }
+
         CREATE(tmp1, char, len1);
-        j = fread(tmp1, sizeof(char), len1, fl);
+
+        if (fread(tmp1, sizeof(char), len1, fl) != len1) {
+            if (feof(fl)) {
+                log("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
+            }
+            else if (ferror(fl)) {
+                log("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
+            }
+            else {
+                log("SYSERR: Error reading board file %d. Resetting.", board_type);
+            }
+            board_reset_board(board_type);
+        }
+
         MSG_HEADING(board_type, i) = tmp1;
 
         if ((MSG_SLOTNUM(board_type, i) = find_slot()) == -1) {
@@ -535,13 +561,25 @@ void board_load_board(int board_type)
         }
         if ((len2 = msg_index[board_type][i].message_len) > 0) {
             CREATE(tmp2, char, len2);
-            j = fread(tmp2, sizeof(char), len2, fl);
+            if (fread(tmp2, sizeof(char), len2, fl) != sizeof(char) * len2) {
+                if (feof(fl)) {
+                    log("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
+                }
+                else if (ferror(fl)) {
+                    log("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
+                }
+                else {
+                    log("SYSERR: Error reading board file %d. Resetting.", board_type);
+                }
+                board_reset_board(board_type);
+            }
+
             msg_storage[MSG_SLOTNUM(board_type, i)] = tmp2;
         }
         else {
             msg_storage[MSG_SLOTNUM(board_type, i)] = NULL;
         }
-    }
+    }  // for (i ...
 
     fclose(fl);
 }
@@ -571,14 +609,16 @@ void board_clear_board(int board_type)
         }
         if (MSG_HEADING(board_type, i)) {
             free(MSG_HEADING(board_type, i));
+            MSG_HEADING(board_type, i) = NULL;
         }
         if (msg_storage[MSG_SLOTNUM(board_type, i)]) {
             free(msg_storage[MSG_SLOTNUM(board_type, i)]);
+            msg_storage[MSG_SLOTNUM(board_type, i)] = NULL;
         }
         msg_storage_taken[MSG_SLOTNUM(board_type, i)] = 0;
         memset((char *)&(msg_index[board_type][i]), 0, sizeof(struct board_msginfo));
         msg_index[board_type][i].slot_num = -1;
-    }
+    }  // for (i ...
     num_of_msgs[board_type] = 0;
 }
 

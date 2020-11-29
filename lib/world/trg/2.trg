@@ -9,7 +9,7 @@ set  txt[3] Remember... the early bird still has to eat worms.
 set  txt[4] The worst thing about accidents in the kitchen is having to eat them anyway.
 set  txt[5] Never argue with an idiot; people watching the two of you squabbling may not be able to tell who's who.
 set  txt[6] Wouldn't it be nice if whenever we messed up our life we could simply press 'Delete' and then 'copy/paste' to do the really great parts again?
-set  txt[7] Real stress is when you wake up screaming and then you realize  you haven't fallen asleep yet.
+set  txt[7] Real stress is when you wake up screaming and then you realise  you haven't fallen asleep yet.
 set  txt[8] my wife says I never listen to her. At least I think that's what she said.
 set  txt[9] Just remember...if the world didn't suck, we'd all fall off.
 set  txt[10] Lift your right foot off the ground and make clockwise circles. Now, while doing this, draw the number "6" in the air with your right hand and try to keep your foot moving clockwise.
@@ -43,8 +43,8 @@ c~
 if %cmd.mudcommand% == cast && fireshield /= %arg%
   if %actor.class% == Magic User
     %echoaround% %actor% %self.shortdesc% that %actor.name% is wearing glows brightly for a moment.
-    %send% %actor% Your %self.shortdesc% glows brightly for a moment. 
-    dg_cast 'armor' %actor%
+    %send% %actor% Your %self.shortdesc% glows brightly for a moment.
+    dg_cast 'armour' %actor%
   end
   eval ward_major %ward_major%+1
   if %ward_major% == 2
@@ -111,14 +111,14 @@ Crystal Ball to Locate a Mob.~
 1 c 7
 locate~
 * By Rumble of The Builder Academy    tbamud.com 9091
-set find %arg% 
+set find %arg%
 if !%find.is_pc%
-  eval rname %find.room% 
-  %send% %actor% As you gaze into the ball, it starts to glow. You see an image of %find.name% in %rname.name%. 
-else 
-  %send% %actor% All that you see is a blurry haze. 
-end 
-%echoaround% %actor% %actor.name% peers into %actor.hisher% gently glowing crystal ball. 
+  eval rname %find.room%
+  %send% %actor% As you gaze into the ball, it starts to glow. You see an image of %find.name% in %rname.name%.
+else
+  %send% %actor% All that you see is a blurry haze.
+end
+%echoaround% %actor% %actor.name% peers into %actor.hisher% gently glowing crystal ball.
 ~
 #206
 Smelly Bum - M168~
@@ -163,7 +163,7 @@ global from_room
 Mob Blocks opening of chest~
 2 c 100
 o~
-* By Rumble of The Builder Academy    tbamud.com 9091 
+* By Rumble of The Builder Academy    tbamud.com 9091
 * Make sure the command is open, check for any abbrev of chest
 if %cmd.mudcommand% == open && chest /= %arg%
   * findmob checks if the mob is in the room.
@@ -200,24 +200,24 @@ Open a Chest once per zone reset~
 1 c 100
 open~
 * By Mordecai
-if chest /= %arg% 
-  * Verify that the player typed 'open chest' 
-  * Has the player already opened this chest? 
-  context %actor.id% 
-  if %already_opened_chest% 
-    %send% %actor% The chest has already been opened, and emptied. 
-  else 
-    * The first time!  OK, open the chest. 
+if chest /= %arg%
+  * Verify that the player typed 'open chest'
+  * Has the player already opened this chest?
+  context %actor.id%
+  if %already_opened_chest%
+    %send% %actor% The chest has already been opened, and emptied.
+  else
+    * The first time!  OK, open the chest.
     %send% %actor% You get a jar of naphthalene from an iron bound chest.
     %load% obj 306 %actor% inv
     * Remember that the player has already opened this chest until next reboot/copyover. This limits this item to only be found once per boot per player.
-    set already_opened_chest 1 
+    set already_opened_chest 1
     global already_opened_chest
-    return 0 
-  end 
-else 
-  * Not 'open chest' - pass control back to the command parser 
-  return 0 
+    return 0
+  end
+else
+  * Not 'open chest' - pass control back to the command parser
+  return 0
 end
 ~
 #210
@@ -261,7 +261,7 @@ else
   %load% obj 184
   set phoenix_deaths 0
   %echo% Something in the pile of ashes glimmers brightly.
-end  
+end
 * Remember the count for the next time this trig fires
 global phoenix_deaths
 ~
@@ -269,21 +269,30 @@ global phoenix_deaths
 player damage~
 0 b 100
 test~
-dg_cast 'armor' %self%
+dg_cast 'armour' %self%
 %damage% %self% 10
 ~
 #214
-test~
-0 c 100
-north~
-set actor_room %actor.room%
-set this_room %actor_room.vnum%
-%echo% this_room = %actor_room.vnum%
-set new_room %this_room.north(vnum)%
-%echo% new_room = %this_room.north(vnum)%
-wait 10 sec
-%teleport% %actor% %this_room.north(vnum)%
-%force% %actor% look
+bug test~
+0 b 100
+~
+detach 214 %self.id%
+say test crash!
+~
+#215
+Christmas Greet~
+0 h 100
+~
+* By Rumble of The Builder Academy    tbamud.com 9091
+if %actor.is_pc%
+  wait 1 sec
+  if !%actor.has_item(222)%
+    say Merry Christmas!
+    %load% obj 222 %actor% inv
+    %echoaround% %actor% Santa gives %actor.name% a wrapped present.
+    %send% %actor% Santa gives you a wrapped present.
+  end
+end
 ~
 #218
 Holiday Decorations by Interior Design - M218~
@@ -430,5 +439,35 @@ wait 1 s
 eval inv %actor.inventory%
 %echo% As the wrapping falls apart, it reveals... %inv.shortdesc%.
 %purge% %self%
+~
+#221
+Open Sesame~
+2 c 100
+s~
+if %cmd.mudcommand% == say && avaa ovi /= %arg%
+  %echo% open door.
+else
+  %echo% don't open door.
+end
+~
+#222
+Mob Death - weapon name~
+0 f 100
+~
+* By Rumble of The Builder Academy    tbamud.com 9091
+if %actor.eq(wield)%
+  set item   %actor.eq(wield)%
+  say I can not believe I fell at the hands of one such as you.
+  say I curse you %actor.name% and I curse %item.shortdesc% that you use.
+else
+  say I can not believe I fell at the hands of one such as you.
+  say I curse you %actor.name%.
+end
+~
+#227
+new trigger~
+0 g 100
+~
+%echo% This trigger commandlist is not complete!
 ~
 $~

@@ -45,7 +45,7 @@ A beautiful gown has been left here.~
 ~
 9 b 0 0 0 ak 0 0 0 0 0 0 0
 8 0 0 0
-10 1 0 40 0
+10 1 0 25 0
 A
 13 25
 A
@@ -57,7 +57,7 @@ A strange trinket of some sort has been left here.~
 ~
 12 a 0 0 0 ao 0 0 0 0 0 0 0
 0 0 0 0
-10 1 0 35 0
+10 1 0 20 0
 A
 17 -3
 A
@@ -79,7 +79,7 @@ A shimmering crown has been dropped here.~
 ~
 11 a 0 0 0 ae 0 0 0 0 0 0 0
 0 0 0 0
-10 1 0 40 0
+10 1 0 25 0
 A
 17 -6
 A
@@ -93,7 +93,7 @@ A molded fist made of an unknown material has been left here.~
 ~
 5 ajmop 0 0 0 an 0 0 0 0 0 0 0
 3 5 7 7
-8 1 0 45 0
+8 1 0 30 0
 A
 18 2
 A
@@ -145,7 +145,7 @@ A ring with a teardrop insignia has been left here.~
 ~
 11 ajmn 0 0 0 ab 0 0 0 0 0 0 0
 0 0 0 0
-5 1 0 40 0
+5 1 0 25 0
 A
 18 2
 A
@@ -172,15 +172,19 @@ A fine jacket has been left here.~
 8 800 0 20 0
 E
 buttons~
-   The heavy buttons are engraved with small anchors.  
+   The heavy buttons are engraved with small anchors.
 ~
 E
 stately jacket~
-   The dark jacket is really quite nice.  The material is smooth and clean.  
-Heavy metal buttons are sewn in a straight line from top to bottom.  
+   The dark jacket is really quite nice.  The material is smooth and clean.
+Heavy metal buttons are sewn in a straight line from top to bottom.
 ~
 A
 23 2
+A
+18 2
+A
+19 1
 #26415
 boots travelling~
 the boots of travelling~
@@ -192,7 +196,7 @@ Some soft, comfortable boots have been abandoned here.~
 E
 boots travelling~
    These boots are typical of travellers.  Lightweight and comfortable yet
-sturdy.  
+sturdy.
 ~
 A
 14 16

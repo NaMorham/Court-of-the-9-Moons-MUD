@@ -84,7 +84,8 @@ world over the past few years, although they were not part of the original
 DikuMud release, were added to tbaMUD as well. 
 
 The result is that tbaMUD is a launching pad for your own MUD ideas. Our hope
-in releasing it is that it will free potential MUD implementors from having to worry about dealing with bug-ridden code or wasting time reinventing the wheel 
+in releasing it is that it will free potential MUD implementors from having to
+worry about dealing with bug-ridden code or wasting time reinventing the wheel 
 by re-coding standard MUD features, allowing them to devote more effort towards
 creatively shaping tbaMUD into their own unique vision of how a MUD should look
 and feel. The reason why tbaMUD has so few specialized spells, skills, classes,
@@ -150,9 +151,9 @@ itself (using GNU autoconf) and compile under most versions of UNIX, both BSD
 and System V derivatives, including Mac OS X. With minor adjustments 
 (documented below), the same source should compile under Microsoft Windows, IBM
 OS/2, and the Amiga. Users have also reported getting tbaMUD to compile and run
-under MkLinux, the port of Linux to the Power Macintosh. tbaMUD will not work under DOS, Windows 3.x, Windows for Workgroups 3.x, or Mac System. 
-Specifically, the following variants of UNIX have been tested and are known to 
-work with tbaMUD: 
+under MkLinux, the port of Linux to the Power Macintosh. tbaMUD will not work
+under DOS, Windows 3.x, Windows for Workgroups 3.x, or Mac System. Specifically,
+the following variants of UNIX have been tested and are known to work with tbaMUD: 
 
 SunOS 4.1.4 
 Solaris 2.3 and above
@@ -462,8 +463,9 @@ shapeless but omnipresent force on the MUD. Players hear about “the System Log”
 and then get paranoid that everything they do is being recorded, so they tend 
 to behave, lest the evil System Log betray their wrongdoings to the Gods. 
 
-For this reason, when you go to check your logs, it’s a good idea to say something like “Hold on... let me go check the system logs, OK?” because it 
-reinforces the syslog’s presence in the collective psyche of your players. 
+For this reason, when you go to check your logs, it’s a good idea to say something
+like “Hold on... let me go check the system logs, OK?” because it reinforces the
+syslog’s presence in the collective psyche of your players. 
 
 Back to the point. When someone claims that they’ve been wronged by the evil 
 system, always check the logs. The logs give you power to say things like “What

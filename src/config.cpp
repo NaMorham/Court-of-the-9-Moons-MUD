@@ -41,9 +41,11 @@
  * outweighs the efficency of doing it the other way.
  */
 
-/* YES / NO; TRUE / FALSE are all defined in utils.h */
+// YES / NO; TRUE / FALSE are all defined in utils.h
 
-/* Can Scripts be attached to players? */
+/*
+ *  Can Scripts be attached to players?
+ */
 int script_players = NO;
 
 /*
@@ -55,13 +57,13 @@ int script_players = NO;
  */
 int pk_allowed = NO;
 
-/* Is playerthieving allowed? */
+// Is playerthieving allowed?
 int pt_allowed = NO;
 
-/* Minimum level a player must be to shout/holler/gossip/auction. */
+// Minimum level a player must be to shout/holler/gossip/auction.
 int level_can_shout = 1;
 
-/* Number of movement points it costs to holler. */
+// Number of movement points it costs to holler.
 int holler_move_cost = 20;
 
 /*
@@ -70,20 +72,20 @@ int holler_move_cost = 20;
  */
 int tunnel_size = 2;
 
-/* Exp change limits. */
-int max_exp_gain = 100000;    /* max gainable per kill */
-int max_exp_loss = 500000;    /* max losable per death */
+// Exp change limits.
+int max_exp_gain = 100000;    // max gainable per kill
+int max_exp_loss = 500000;    // max losable per death
 
-/* Number of tics (usually 75 seconds) before PC/NPC corpses decompose. */
+// Number of tics (usually 75 seconds) before PC/NPC corpses decompose.
 int max_npc_corpse_time = 5;
 int max_pc_corpse_time = 10;
 
-/* How many ticks before a player is sent to the void or idle-rented. */
+// How many ticks before a player is sent to the void or idle-rented.
 int idle_void = 8;
 int idle_rent_time = 48;
 
-/* This level and up is immune to idling, LVL_IMPL+1 will disable it. */
-int idle_max_level = LVL_GOD;
+// This level and up is immune to idling, LVL_IMPL+1 will disable it.
+int idle_max_level = LVL_IMMORT;
 
 /* Should items in death traps automatically be junked? */
 int dts_are_dumps = YES;
@@ -97,8 +99,9 @@ int dts_are_dumps = YES;
  */
 int load_into_inventory = YES;
 
-/* "okay" etc. */
+// "okay" etc.
 const char *OK = "Okay.\r\n";
+const char *HUH = "Huh!?!\r\n";
 const char *NOPERSON = "No one by that name here.\r\n";
 const char *NOEFFECT = "Nothing seems to happen.\r\n";
 
@@ -117,17 +120,22 @@ int track_through_doors = YES;
  */
 int no_mort_to_immort = YES;
 
-/* RENT/CRASHSAVE OPTIONS */
+/* Are diagonal directions enabled?
+* If set to NO, then only the 6 directions n,e,s,w,u,d are allowed */
+int diagonal_dirs = YES;
+
+
+// ------- RENT/CRASHSAVE OPTIONS -------
 /*
  * Should the MUD allow you to 'rent' for free?  (i.e. if you just quit, your
  * objects are saved at no cost).
  */
 int free_rent = YES;
 
-/* Maximum number of items players are allowed to rent. */
+// Maximum number of items players are allowed to rent.
 int max_obj_save = 30;
 
-/* Receptionist's surcharge on top of item costs. */
+// Receptionist's surcharge on top of item costs.
 int min_rent_cost = 100;
 
 /*
@@ -145,13 +153,13 @@ int auto_save = YES;
  */
 int autosave_time = 5;
 
-/* Lifetime of crashfiles and forced-rent (idlesave) files in days. */
+// Lifetime of crashfiles and forced-rent (idlesave) files in days.
 int crash_file_timeout = 10;
 
-/* Lifetime of normal rent files in days. */
+// Lifetime of normal rent files in days.
 int rent_file_timeout = 30;
 
-/* Do you want to automatically wipe players who've been gone too long? */
+// Do you want to automatically wipe players who've been gone too long?
 int auto_pwipe = NO;
 
 /*
@@ -186,17 +194,18 @@ struct pclean_criteria_data pclean_criteria[] = {
     { -1,            0    }  // no more level checks
 };
 
-/* Do you want players who self-delete to be wiped immediately with no backup? */
-int selfdelete_fastwipe = NO;
+// Do you want players who self-delete to be wiped immediately with no backup?
+int selfdelete_fastwipe = YES;
 
-/* ROOM NUMBERS */
-/* Virtual number of room that mortals should enter at. */
+// ------- ROOM NUMBERS -------
+// Virtual number of room that mortals should enter at.
 room_vnum mortal_start_room = 3001;
 
-/* Virtual number of room that immorts should enter at by default. */
+// Virtual number of room that immorts should enter at by default.
+// @todo: racial start rooms
 room_vnum immort_start_room = 1204;
 
-/* Virtual number of room that frozen players should enter at. */
+// Virtual number of room that frozen players should enter at.
 room_vnum frozen_start_room = 1202;
 
 /*
@@ -207,8 +216,8 @@ room_vnum donation_room_1 = 3063;
 room_vnum donation_room_2 = 5510;
 room_vnum donation_room_3 = 235;
 
-/* GAME OPERATION OPTIONS */
 
+// ------- GAME OPERATION OPTIONS -------
 /*
  * If false stock world files will be converted to 128bit. If true the MUD will
  * exit with a warning when encountering stock world files.
@@ -245,9 +254,7 @@ const char *DFLT_IP = NULL;     // bind to all interfaces
 const char *DFLT_IP = "192.168.1.1";    // bind only to one interface
 //*/
 
-/*
- * Default directory to use as data directory.
- */
+// Default directory to use as data directory.
 const char *DFLT_DIR = "lib";
 
 /*
@@ -257,15 +264,15 @@ const char *DFLT_DIR = "lib";
  * Try 'tail -f' if you have a UNIX machine.)
  */
 const char *LOGNAME = NULL;
-/* const char *LOGNAME = "log/syslog";  -- useful for Windows users */
+// const char *LOGNAME = "log/syslog";  -- useful for Windows users
 
-/* Maximum number of players allowed before game starts to turn people away. */
+// Maximum number of players allowed before game starts to turn people away.
 int max_playing = 300;
 
-/* Maximum size of bug, typo and idea files in bytes (to prevent bombing). */
+// Maximum size of bug, typo and idea files in bytes (to prevent bombing).
 int max_filesize = 50000;
 
-/* Maximum number of password attempts before disconnection. */
+// Maximum number of password attempts before disconnection.
 int max_bad_pws = 3;
 
 /*
@@ -307,47 +314,66 @@ int auto_save_olc = YES;
 int use_new_socials = YES;
 
 const char *MENU =
-"\r\n"
-"Welcome to tbaMUD!\r\n"
-"0) Exit from tbaMUD.\r\n"
-"1) Enter the game.\r\n"
-"2) Enter description.\r\n"
-"3) Read the background story.\r\n"
-"4) Change password.\r\n"
-"5) Delete this character.\r\n"
-"\r\n"
-"   Make your choice: ";
+    "\r\n"
+    "Welcome to tbaMUD!\r\n"
+    "\t(0\t)) Exit from tbaMUD.\r\n"
+    "\t(1\t)) Enter the game.\r\n"
+    "\t(2\t)) Enter description.\r\n"
+    "\t(3\t)) Read the background story.\r\n"
+    "\t(4\t)) Change password.\r\n"
+    "\t(5\t)) Delete this character.\r\n"
+    "\r\n"
+    "   Make your choice: ";
 
 const char *WELC_MESSG =
-"\r\n"
-"Welcome to the Court of the Nine Moons!  May your visit here be... Enlightening"
-"\r\n\r\n";
+    "\r\n"
+    "Welcome to the Court of the Nine Moons!  May your visit here be... Enlightening"
+    "\r\n\r\n";
 
 const char *START_MESSG =
-"Welcome.  This is your new tbaMUD character!  You can now earn gold,\r\n"
-"gain experience, find weapons and equipment, and much more -- while\r\n"
-"meeting people from around the world!\r\n";
+    "Welcome.  This is your new Nine Moons character!  You can now earn gold,\r\n"
+    "gain experience, find weapons and equipment, and much more -- while\r\n"
+    "meeting people from around the world!\r\n";
 
-/* AUTOWIZ OPTIONS */
-/* Should the game automatically create a new wizlist/immlist every time someone
+
+// ------- AUTOWIZ OPTIONS -------
+/*
+ * Should the game automatically create a new wizlist/immlist every time someone
  * immorts, or is promoted to a higher (or lower) god level? NOTE: this only
- * works under UNIX systems. */
+ * works under UNIX systems.
+ */
 int use_autowiz = YES;
 
-/* If yes, what is the lowest level which should be on the wizlist?  (All immort
- * levels below the level you specify will go on the immlist instead.) */
+/*
+ * If yes, what is the lowest level which should be on the wizlist?  (All immort
+ * levels below the level you specify will go on the immlist instead.)
+ */
 int min_wizlist_lev = LVL_GOD;
 
-/* To mimic stock behavior set to NO. To allow mortals to see doors in exits
- * set to YES. */
+/*
+ * To mimic stock behavior set to NO. To allow mortals to see doors in exits
+ * set to YES.
+ */
 int display_closed_doors = YES;
 
 
-/* Automap and map options */
-/* Default is to have automap and map command only enabled for immortals */
+// ------- Automap and map options -------
+// Default is to have automap and map command only enabled for immortals
 int map_option = MAP_IMM_ONLY;
 int default_map_size = 6;
 int default_minimap_size = 2;
 
-/* Medit Stats menu - show 'advanced' options? */
+// Medit Stats menu - show 'advanced' options?
 int medit_advanced_stats = YES;
+
+// Does "bug resolve" autosave?
+int ibt_autosave = YES;
+
+// Use the protocol negotiation system
+int protocol_negotiation = YES;
+
+// Use the special character in communication channels
+int special_in_comm = YES;
+
+// Current Debug Mode
+int debug_mode = OFF;

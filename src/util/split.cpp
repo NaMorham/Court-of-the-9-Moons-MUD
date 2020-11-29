@@ -1,10 +1,10 @@
 /* ************************************************************************
-*  file:  split.c                                          Part of tbaMUD *
-*  Usage: split one large file into multiple smaller ones, with index     *
-*  Written by Jeremy Elson                                                *
-*  All Rights Reserved                                                    *
-*  Copyright (C) 1993 The Trustees of The Johns Hopkins University        *
-************************************************************************* */
+ *  file:  split.c                                        Part of tbaMUD  *
+ *  Usage: split one large file into multiple smaller ones, with index    *
+ *  Written by Jeremy Elson                                               *
+ *  All Rights Reserved                                                   *
+ *  Copyright (C) 1993 The Trustees of The Johns Hopkins University       *
+ **************************************************************************/
 
 /*
  * This utility is meant to split a large file into multiple smaller ones,
@@ -15,9 +15,9 @@
  * containng "=filename" at the break point.
  */
 
-#define INDEX_NAME "index"
-#define BSZ 256
-#define MAGIC_CHAR '='
+#define INDEX_NAME  "index"
+#define BSZ         256
+#define MAGIC_CHAR  '='
 
 #include "conf.h"
 #include "sysdep.h"
@@ -49,7 +49,7 @@ int main(void)
         else if (outfile) {
             fputs(line, outfile);
         }
-    }
+    }  // while (fgets(line ...
 
     fputs("$\r\n", index);
     fclose(index);

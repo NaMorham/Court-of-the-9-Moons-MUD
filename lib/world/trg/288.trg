@@ -30,7 +30,7 @@ eval new_current_hp %current_hp% - %dmg%
 eval dmgpc (%dmg% * 100) / %current_hp%
 if %dmgpc% == 0
   set vp misses
-elseif %dmgpc% <= 4 
+elseif %dmgpc% <= 4
   set vp scratches
 elseif %dmgpc% <= 8
   set vp grazes
@@ -75,7 +75,7 @@ switch %rand%
     dg_cast 'curse' %actor%
   break
   case 3
-    dg_cast 'blind' %actor%
+    dg_cast 'blindness' %actor%
   break
   case 4
     dg_cast 'earthquake'
@@ -109,7 +109,7 @@ switch %rand%
     set spellname lightning bolt
     case 4
     eval dmg (%random.9% * %random.8%) + 9
-    set spellname color spray
+    set spellname colour spray
     case 5
     eval dmg (%random.11% * %random.8%) + 11
     set spellname fireball
@@ -119,7 +119,7 @@ eval new_current_hp %current_hp% - %dmg%
 eval dmgpc (%dmg% * 100) / %current_hp%
 if %dmgpc% == 0
   set vp misses
-elseif %dmgpc% <= 4 
+elseif %dmgpc% <= 4
   set vp scratches
 elseif %dmgpc% <= 8
   set vp grazes
@@ -185,7 +185,7 @@ eval dmgpc (%dmg% * 100) / %current_hp%
 set spellname fire breath
 if %dmgpc% == 0
   set vp misses
-elseif %dmgpc% <= 4 
+elseif %dmgpc% <= 4
   set vp scratches
 elseif %dmgpc% <= 8
   set vp grazes
@@ -237,7 +237,7 @@ eval dmgpc (%dmg% * 100) / %current_hp%
 set spellname acid breath
 if %dmgpc% == 0
   set vp misses
-elseif %dmgpc% <= 4 
+elseif %dmgpc% <= 4
   set vp scratches
 elseif %dmgpc% <= 8
   set vp grazes

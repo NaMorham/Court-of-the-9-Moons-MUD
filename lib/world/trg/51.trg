@@ -4,7 +4,7 @@ Near Death Trap Sacrificial Pit - 5143~
 ~
 * Near Death Trap stuns actor
 wait 4 sec
-set stunned %actor.hitp% 
+set stunned %actor.hitp%
 %damage% %actor% %stunned%
 wait 2 sec
 %send% %actor% The spiders bring you to the brink of death.
@@ -38,7 +38,7 @@ switch %actor.level%
     dg_cast 'lightning bolt' %actor%
   break
   case 12
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 13
     dg_cast 'energy drain' %actor%

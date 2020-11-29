@@ -290,7 +290,7 @@ static int find_action(int cmd)
         else {
             bot = ++mid;
         }
-    }
+    }  // for (;;)
 }
 
 ACMD(do_gmote)
@@ -307,7 +307,7 @@ ACMD(do_gmote)
             if (!strncmp(complete_cmd_info[cmd].command, buf, length)) {
                 break;
             }
-        }
+        }  // for (length ...
     }
 
     if ((act_nr = find_action(cmd)) < 0) {

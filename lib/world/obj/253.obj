@@ -1,15 +1,15 @@
 #25300
-armor suit steel~
-a suit of steel MoS armor~
+armour suit steel~
+a suit of steel MoS armour~
 A steel suit of MoS is laying here on the ground.~
 ~
 9 0 0 0 0 ad 0 0 0 0 0 0 0
 8 0 0 0
-11 450 0 30 0
+11 450 0 10 0
 E
-armor suit steal~
+armour suit steal~
    Polished to a high sheen, this suit of steel completely encases the upper
-torso.  Looks as if it has never seen battle.  
+torso.  Looks as if it has never seen battle.
 ~
 A
 19 2
@@ -28,7 +28,7 @@ A steel sword with a blade-breaker guard sits on the ground.~
 E
 sword steel~
    This finely crafted weapon still shines when the light hits it right, it
-looks as if it has never been to battle.  
+looks as if it has never been to battle.
 ~
 #25302
 shield steel~
@@ -37,11 +37,11 @@ An MoS shield has been left here.~
 ~
 9 0 0 0 0 aj 0 0 0 0 0 0 0
 8 0 0 0
-5 12 0 30 0
+5 12 0 10 0
 E
 shield steel~
    This shield bears the sigil of the Militant Order of the Sword two swords,
-point down, crossing each other.  
+point down, crossing each other.
 ~
 #25303
 clipboard board~
@@ -72,7 +72,7 @@ A steel wrist band have been left here.~
 5 46 0 0 0
 E
 bands wrist steel~
-   Quite simply, you wear it on your wrist and it is steel.  
+   Quite simply, you wear it on your wrist and it is steel.
 ~
 A
 1 1
@@ -81,7 +81,7 @@ A
 A
 13 -5
 #25305
-banner~
+banner gray piece cloth~
 a gray piece of cloth~
 A gray piece of cloth lies thrown in a corner.~
 ~
@@ -89,10 +89,10 @@ A gray piece of cloth lies thrown in a corner.~
 0 0 0 0
 5 100 0 0 0
 E
-banner~
+banner gray piece cloth~
    This cloth tapestry depicts the Elven Lore of the Ancients, from the
 beginning of time to present day.  All the history and magic that is the Elven
-Society is depicted on this tapestry.  
+Society is depicted on this tapestry.
 ~
 A
 4 2

@@ -1,12 +1,12 @@
-/**************************************************************************
-*  File: class.c                                           Part of tbaMUD *
-*  Usage: Source file for class-specific code.                            *
-*                                                                         *
-*  All rights reserved.  See license for complete information.            *
-*                                                                         *
-*  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
-*  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
-**************************************************************************/
+/***************************************************************************
+ *  File: class.c                                          Part of tbaMUD  *
+ *  Usage: Source file for class-specific code.                            *
+ *                                                                         *
+ *  All rights reserved.  See license for complete information.            *
+ *                                                                         *
+ *  Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
+ *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
+ ***************************************************************************/
 
 /** Help buffer the global variable definitions */
 #define __CLASS_C__
@@ -26,9 +26,12 @@
 #include "interpreter.h"
 #include "constants.h"
 #include "act.h"
+#include "class.h"
 
 
-// Names first
+/*
+ *  Names first
+ */
 const char *class_abbrevs[] = {
     "Mu",
     "Cl",
@@ -51,10 +54,10 @@ const char *pc_class_types[] = {
 const char *class_menu =
 "\r\n"
 "Select a class:\r\n"
-"  [C]leric\r\n"
-"  [T]hief\r\n"
-"  [W]arrior\r\n"
-"  [M]agic-user\r\n";
+"    [\t(C\t)]leric\r\n"
+"    [\t(T\t)]hief\r\n"
+"    [\t(W\t)]arrior\r\n"
+"    [\t(M\t)]agic-user\r\n";
 
 /*
  * The code to interpret a class letter -- used in interpreter.c when a new
@@ -113,10 +116,10 @@ bitvector_t find_class_bitvector(const char *arg)
 #define SPELL    0
 #define SKILL    1
 
-/* #define LEARNED_LEVEL    0  % known which is considered "learned"     */
-/* #define MAX_PER_PRAC        1  max percent gain in skill per practice */
-/* #define MIN_PER_PRAC        2  min percent gain in skill per practice */
-/* #define PRAC_TYPE        3  should it say 'spell' or 'skill'?         */
+//#define LEARNED_LEVEL    0  // % known which is considered "learned"
+//#define MAX_PER_PRAC        1  // max percent gain in skill per practice
+//#define MIN_PER_PRAC        2  // min percent gain in skill per practice
+//#define PRAC_TYPE        3  // should it say 'spell' or 'skill'?
 
 int prac_params[4][NUM_CLASSES] = {
     // MAG       CLE     THE     WAR
@@ -138,18 +141,19 @@ int prac_params[4][NUM_CLASSES] = {
  */
 struct guild_info_type guild_info[] = {
     // Midgaard
-    { CLASS_MAGIC_USER,    3017,    SOUTH   },
-    { CLASS_CLERIC,        3004,    NORTH   },
-    { CLASS_THIEF,         3027,    EAST   },
-    { CLASS_WARRIOR,       3021,    EAST   },
+    { CLASS_MAGIC_USER, 3017,   SOUTH },
+    { CLASS_CLERIC,     3004,   NORTH },
+    { CLASS_THIEF,      3027,   EAST },
+    { CLASS_WARRIOR,    3021,   EAST },
 
     // Brass Dragon - trains all
-    { -999 /* all */ ,    5065,    WEST    },
+    { -999 /* all */,   5065,   WEST },
 
     // this must go last -- add new guards above!
-    { -1, NOWHERE, -1}
+    { -1,               NOWHERE, -1}
 };
 
+// @todo: replace/wrap this to incude racial adjustments for saving throws
 /*
  * Saving throws for : MCTW : PARA, ROD, PETRI, BREATH, SPELL. Levels 0-40. Do
  * not forget to change extern declaration in magic.c if you add to this.
@@ -1446,11 +1450,13 @@ void do_start(struct char_data *ch)
     GET_MAX_MANA(ch) = 100;
     GET_MAX_MOVE(ch) = 82;
 
+    // populate default skills here (and inate 100% racial things?)
     switch (GET_CLASS(ch)) {
     case CLASS_MAGIC_USER:
         break;
 
     case CLASS_CLERIC:
+        SET_SKILL(ch, SKILL_BANDAGE, 15);
         break;
 
     case CLASS_THIEF:
@@ -1476,7 +1482,7 @@ void do_start(struct char_data *ch)
     GET_COND(ch, HUNGER) = 24;
     GET_COND(ch, DRUNK) = 0;
 
-    SET_BIT_AR(PRF_FLAGS(ch), PRF_AUTOEXIT);
+    SET_BIT_AR(PRF_FLAGS(ch), PRF_AUTOEXIT);  // autoexit on by default
 
     if (CONFIG_SITEOK_ALL) {
         SET_BIT_AR(PLR_FLAGS(ch), PLR_SITEOK);
@@ -1622,6 +1628,7 @@ void init_spell_levels(void)
     spell_level(SPELL_LIGHTNING_BOLT, CLASS_MAGIC_USER, 9);
     spell_level(SPELL_BLINDNESS, CLASS_MAGIC_USER, 9);
     spell_level(SPELL_DETECT_POISON, CLASS_MAGIC_USER, 10);
+    spell_level(SKILL_BANDAGE, CLASS_MAGIC_USER, 10);
     spell_level(SPELL_COLOR_SPRAY, CLASS_MAGIC_USER, 11);
     spell_level(SPELL_ENERGY_DRAIN, CLASS_MAGIC_USER, 13);
     spell_level(SPELL_CURSE, CLASS_MAGIC_USER, 14);
@@ -1629,10 +1636,12 @@ void init_spell_levels(void)
     spell_level(SPELL_FIREBALL, CLASS_MAGIC_USER, 15);
     spell_level(SPELL_CHARM, CLASS_MAGIC_USER, 16);
     spell_level(SPELL_IDENTIFY, CLASS_MAGIC_USER, 20);
+    spell_level(SPELL_FLY, CLASS_MAGIC_USER, 22);
     spell_level(SPELL_ENCHANT_WEAPON, CLASS_MAGIC_USER, 26);
     spell_level(SPELL_CLONE, CLASS_MAGIC_USER, 30);
 
     // CLERICS
+    spell_level(SKILL_BANDAGE, CLASS_CLERIC, 1);
     spell_level(SPELL_CURE_LIGHT, CLASS_CLERIC, 1);
     spell_level(SPELL_ARMOR, CLASS_CLERIC, 1);
     spell_level(SPELL_CREATE_FOOD, CLASS_CLERIC, 2);
@@ -1652,6 +1661,7 @@ void init_spell_levels(void)
     spell_level(SPELL_REMOVE_POISON, CLASS_CLERIC, 10);
     spell_level(SPELL_IDENTIFY, CLASS_CLERIC, 11);
     spell_level(SPELL_WORD_OF_RECALL, CLASS_CLERIC, 12);
+    spell_level(SPELL_DARKNESS, CLASS_CLERIC, 12);
     spell_level(SPELL_EARTHQUAKE, CLASS_CLERIC, 12);
     spell_level(SPELL_DISPEL_EVIL, CLASS_CLERIC, 14);
     spell_level(SPELL_DISPEL_GOOD, CLASS_CLERIC, 14);
@@ -1671,12 +1681,15 @@ void init_spell_levels(void)
     spell_level(SKILL_STEAL, CLASS_THIEF, 4);
     spell_level(SKILL_HIDE, CLASS_THIEF, 5);
     spell_level(SKILL_TRACK, CLASS_THIEF, 6);
+    spell_level(SKILL_BANDAGE, CLASS_THIEF, 10);
 
     // WARRIORS
     spell_level(SKILL_KICK, CLASS_WARRIOR, 1);
     spell_level(SKILL_RESCUE, CLASS_WARRIOR, 3);
+    spell_level(SKILL_BANDAGE, CLASS_WARRIOR, 7);
     spell_level(SKILL_TRACK, CLASS_WARRIOR, 9);
     spell_level(SKILL_BASH, CLASS_WARRIOR, 12);
+    spell_level(SKILL_WHIRLWIND, CLASS_WARRIOR, 16);
 }
 
 /*
@@ -1690,7 +1703,7 @@ void init_spell_levels(void)
  */
 int level_exp(int chclass, int level)
 {
-    if (level > LVL_IMPL || level < 0) {
+    if ((level > LVL_IMPL) || (level < 0)) {
         WriteLogf("SYSERR: Requesting exp for invalid level %d!", level);
         return 0;
     }
@@ -1700,6 +1713,8 @@ int level_exp(int chclass, int level)
     if (level > LVL_IMMORT) {
         return EXP_MAX - ((LVL_IMPL - level) * 1000);
     }
+
+    // @todo: replace these with a calculation/function?
 
     // Exp required for normal mortals is below
     switch (chclass) {
@@ -1868,7 +1883,7 @@ int level_exp(int chclass, int level)
  */
 const char *title_male(int chclass, int level)
 {
-    if (level <= 0 || level > LVL_IMPL) {
+    if ((level <= 0) || (level > LVL_IMPL)) {
         return "the Man";
     }
     if (level == LVL_IMPL) {
@@ -2033,7 +2048,7 @@ const char *title_male(int chclass, int level)
  */
 const char *title_female(int chclass, int level)
 {
-    if (level <= 0 || level > LVL_IMPL) {
+    if ((level <= 0) || (level > LVL_IMPL)) {
         return "the Woman";
     }
     if (level == LVL_IMPL) {

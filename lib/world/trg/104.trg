@@ -102,7 +102,7 @@ if %room.vnum% == 1209
 end
 ~
 #10411
-Quest for Armor~
+Quest for Armour~
 0 g 100
 ~
 if %actor.is_pc%
@@ -115,9 +115,9 @@ if %actor.is_pc%
           say Hello there young one.
           wait 2 sec
           say I am the village elder, the oldest and wisest of them all.
-          wait 4 sec          
+          wait 4 sec
           say %actor.name%, if you bring me back the item from the center of the maze, I will reward you with great riches and power.
-          wait 4 sec          
+          wait 4 sec
           say Will you accept my quest? Will you go to the center of the maze and retrieve the sacred item?
         end
       end
@@ -143,39 +143,39 @@ wait 3 sec
 %force% %actor% look
 ~
 #10413
-Finding the Armor~
+Finding the Armour~
 1 g 100
 ~
-%echoaround% %actor% As %actor.name% picks up the armor, the room is filled with a mystical @Wwhite@n light.
-%send% %actor% You pick up the armor and you are engulfed in a @Wwhite@n light.
+%echoaround% %actor% As %actor.name% picks up the armour, the room is filled with a mystical @Wwhite@n light.
+%send% %actor% You pick up the armour and you are engulfed in a @Wwhite@n light.
 %teleport% %actor% 10413
 %echoaround% %actor% As the light fades, you notice %actor.name% is no longer there.
-%echoaround% %actor% Nor is the armor.
+%echoaround% %actor% Nor is the armour.
 wait 2 sec
 %send% %actor% The light fades away and you notice you are no longer in the maze.
 %force% %actor% look
 ~
 #10414
-bringing armor back~
+bringing armour back~
 0 j 100
 ~
 if %object.vnum% == 10429
-  %force% %actor% give armor elder
+  %force% %actor% give armour elder
   wait 2 s
-  say Hmmm, this looks like the armor.
+  say Hmmm, this looks like the armour.
   wait 2 s
-  say If you obtained this armor, you must be strong.
+  say If you obtained this armour, you must be strong.
   wait 2 s
-  say The armor is yours, take it.
+  say The armour is yours, take it.
   %load% obj 10434 %actor% inv
   wait 2 sec
-  %send% %actor% The Village Elder hands you the armor then you watch as %self.name% rummages through a bag on his side and pulls out some coins.
+  %send% %actor% The Village Elder hands you the armour then you watch as %self.name% rummages through a bag on his side and pulls out some coins.
   wait 2 s
   say You may also have this.
   wait 2 s
   %send% %actor% %self.name% hands you the coins, you feel a slight surge of energy.
   %echoaround% %actor% %self.name% rummages through a bag and pulls out a couple coins.
-  wait 2 s 
+  wait 2 s
   %echoaround% %actor% %self.name% hands the coins to %actor.name% , a small light emits from the coins.
   nop %actor.gold(150)%
   nop %actor.exp(400)%
@@ -262,12 +262,12 @@ if %actor.is_pc%
   wait 2s
   %send% %actor% You begin to feel your self lose sight of the room.
   %echoaround% %actor% %actor.name%'s eyes shut and %actor.heshe% slumps over.
-  %actor.pos(Sleeping)%
+  nop %actor.pos(sleeping)%
   wait 3s
-  %echoaround% %actor% Strange words can be heard comeing from somewhere, and %actor.name%'s body floats into the air and vanishes.
+  %echoaround% %actor% Strange words can be heard coming from somewhere, and %actor.name%'s body floats into the air and vanishes.
   wait 1s
   %teleport% %actor% 10424
-  %lag% %actor.name% 200
+  nop %actor.wait(200)%
 end
 ~
 #10499

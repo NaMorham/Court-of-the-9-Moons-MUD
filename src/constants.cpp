@@ -18,6 +18,7 @@
 #include "structs.h"
 #include "utils.h"
 #include "interpreter.h"    // alias_data
+#include "constants.h"
 
 
 /**
@@ -27,7 +28,7 @@
  * works correctly with C compilers (at least in my Experience)
  * Jeremy Osborne 1/28/2008
  */
-cpp_extern const char *tbamud_version = "tbaMUD 3.62";
+cpp_extern const char *tbamud_version = "tbaMUD 2020";
 
 /* strings corresponding to ordinals/bitvectors in structs.h */
 /* (Note: strings for class definitions in class.c instead of here) */
@@ -45,6 +46,25 @@ const char *dirs[] =
     "west",
     "up",
     "down",
+    "northwest", // Diagonals only used if CONFIG_DIAGONAL_DIRS is set
+    "northeast",
+    "southeast",
+    "southwest",
+    "\n"
+};
+
+const char *autoexits[] =
+{
+    "n",
+    "e",
+    "s",
+    "w",
+    "u",
+    "d",
+    "nw",
+    "ne",
+    "se",
+    "sw",
     "\n"
 };
 
@@ -86,6 +106,7 @@ const char *zone_bits[] = {
     "GRID",
     "NOBUILD",
     "!ASTRAL",
+    "WORLDMAP",
     "\n"
 };
 
@@ -260,6 +281,7 @@ const char *preference_bits[] = {
     "AUTOMAP",
     "AUTOKEY",
     "AUTODOOR",
+    "ZONERESETS",
     "\n"
 };
 
@@ -270,7 +292,7 @@ const char *preference_bits[] = {
  */
 const char *affected_bits[] =
 {
-    "\0", /* DO NOT REMOVE!! */
+    "\0",    // DO NOT REMOVE!!
     "BLIND",
     "INVIS",
     "DET-ALIGN",
@@ -333,6 +355,8 @@ const char *connected_types[] = {
     "Quest edit",
     "Preference edit",
     "IBT edit",
+    "Message edit",
+    "Protocol Detection",
     "\n"
 };
 
@@ -555,8 +579,7 @@ const char *drinks[] = {
  * @pre Must be in the same order as the defines.
  * Must end array with a single newline.
  */
-const char *drinknames[] =
-{
+const char *drinknames[] = {
     "water",
     "beer",
     "wine",
@@ -605,8 +628,7 @@ int drink_aff[][3] = {
  * @pre Must be in the same order as the defines.
  * Must end array with a single newline.
  */
-const char *color_liquid[] =
-{
+const char *color_liquid[] = {
     "clear",
     "brown",
     "clear",
@@ -630,8 +652,7 @@ const char *color_liquid[] =
  * Used to describe the level of fullness of a drink container. Not used in
  * sprinttype() so no \n.
  */
-const char *fullness[] =
-{
+const char *fullness[] = {
     "less than half ",
     "about half ",
     "more than half ",
@@ -745,7 +766,7 @@ cpp_extern const struct dex_app_type dex_app[] = {
 
 /**
  * Constitution attribute affects.
- * The fields referenced are hit points and system shock survival.
+ * The field referenced is for hitpoint bonus.
  */
 cpp_extern const struct con_app_type con_app[] = {
     {-4},   // con = 0
@@ -845,21 +866,23 @@ cpp_extern const struct wis_app_type wis_app[] = {
 /**
  * Define a set of opposite directions from the cardinal directions.
  */
-int rev_dir[] =
-{
+int rev_dir[] = {
     SOUTH,
     WEST,
     NORTH,
     EAST,
     DOWN,
-    UP
+    UP,
+    SOUTHEAST,
+    SOUTHWEST,
+    NORTHWEST,
+    NORTHEAST
 };
 
 /**
  * How much movement is lost moving through a particular sector type.
  */
-int movement_loss[] =
-{
+int movement_loss[] = {
     1,  // Inside
     1,  // City
     2,  // Field
@@ -1018,19 +1041,19 @@ const char *ibt_bits[] = {
     "InProgress",
     "\n"
 };
-/* --- End of constants arrays. --- */
+// --- End of constants arrays. ---
 
 /*
  * Various arrays we count so we can check the world files.  These
  * must be at the bottom of the file so they're pre-declared.
  */
-/** Number of defined room bit descriptions. */
+// Number of defined room bit descriptions.
 size_t    room_bits_count = sizeof(room_bits) / sizeof(room_bits[0]) - 1,
-/** Number of defined action bit descriptions. */
+// Number of defined action bit descriptions.
 action_bits_count = sizeof(action_bits) / sizeof(action_bits[0]) - 1,
-/** Number of defined affected bit descriptions. */
+// Number of defined affected bit descriptions.
 affected_bits_count = sizeof(affected_bits) / sizeof(affected_bits[0]) - 1,
-/** Number of defined extra bit descriptions. */
+// Number of defined extra bit descriptions.
 extra_bits_count = sizeof(extra_bits) / sizeof(extra_bits[0]) - 1,
-/** Number of defined wear bit descriptions. */
+// Number of defined wear bit descriptions.
 wear_bits_count = sizeof(wear_bits) / sizeof(wear_bits[0]) - 1;

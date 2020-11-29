@@ -84,7 +84,8 @@ wrong.
 
 If you want your MUD to succeed and flourish, you’ll have to know how to code in C. 
 Otherwise, your MUD will be exactly like every other MUD out there. You’re not the
-only person who knows how to type make! Although the quality and originality of your areas is also very important, it is the code and trigedit that transforms the
+only person who knows how to type make! Although the quality and originality of your
+areas is also very important, it is the code and trigedit that transforms the
 areas from lifeless text files into a living, breathing virtual world. If you don’t
 know how to code, you won’t be able to add new features, respond to requests of 
 your players, add new world flags for your area builders, or even fix the simplest 
@@ -179,7 +180,8 @@ Let’s make this idea more concrete with an example. Imagine that your first
 programming assignment in a C class is to write a simple calculator that gets two 
 numbers from a user as input, multiplies them together, and then prints the product 
 on the screen as output. Your program would probably be quite simple: it would 
-prompt the user for the two numbers, then stop and wait while the user types the numbers in. 
+prompt the user for the two numbers, then stop and wait while the user types the
+numbers in. 
 
 Now, imagine that your project is to write a program that lets 10 people 
 simultaneously connect to your calculator and multiply their own numbers together. 
@@ -346,7 +348,8 @@ redirected to the mortal start room to allow booting to continue. The mortal sta
 room must exist in a room file loaded by lib/world/wld/index.mini file for mini-MUD
 mode to work. 
 
-Mobiles from lib/world/mob/index and objects from lib/world/obj/index are loaded afterward. Mobile and object virtual numbers need not correspond to the zone number 
+Mobiles from lib/world/mob/index and objects from lib/world/obj/index are loaded
+afterward. Mobile and object virtual numbers need not correspond to the zone number 
 ranges as rooms do but it is encouraged. There are various sanity checks done to 
 mobiles and objects that may be printed during startup. Any warnings issued should 
 be fixed but should not adversely affect the MUD itself. 
@@ -358,7 +361,8 @@ translate from virtual to real. Any virtual numbers that cannot be resolved resu
 in that zone command being disabled. Such entries have their type set to ‘*’ to 
 avoid the error in the future. 
 
-Triggers from lib/world/trg/index are loaded next. Trigger virtual numbers also do not need to correspond to the zone number ranges as rooms do but it is encouraged. 
+Triggers from lib/world/trg/index are loaded next. Trigger virtual numbers also
+do not need to correspond to the zone number ranges as rooms do but it is encouraged. 
 There are various sanity checks done that may be printed during startup. Any 
 warnings issued should be fixed but should not adversely affect the MUD itself. 
 
@@ -413,7 +417,8 @@ of messages present in the system is printed when finished.
 The stupid-people prevention code of site banning and invalid name rejection comes 
 next. The site ban code loads a text file list of all sites that have been deemed 
 unworthy to connect to the MUD. Invalid name rejection loads a list of substrings 
-that must not appear in any character’s name that is being created. The invalid name list can be found at lib/misc/xnames.
+that must not appear in any character’s name that is being created. The invalid name
+list can be found at lib/misc/xnames.
 
 After deleting any expired rent files, the house code loads up any abodes defined. 
 It must make sure the rooms still exist and the owner is still in the game before 
@@ -438,7 +443,7 @@ from their own MUD. A 3-minute timer signal prevents the MUD from being stuck in
 infinite loop forever. The common shutdown signals of SIGHUP (Unix), SIGTERM, and 
 SIGINT are mapped to a function that prints their reception and then quits the 
 program. The children signal, SIGCHLD, is set up to remove finished 
-autowizinstances. 
+autowiz instances. 
 
 From here, the .killscript file is removed since if we’ve made it this far, we can 
 start successfully. The only thing left now is to enter the interactive phase in 
@@ -693,7 +698,8 @@ case as part of the process of storing them in the user-supplied buffer.
 
 char *one_word (char *argument, char *first_arg) Peels an argument off from a 
 string like one_argument, but respects grouping via quoting. If the user supplies, 
-‘ "moby dick"’, one_argument() would return an argument of ’"moby’, while one_word() would return an argument of ‘moby dick’. This function converts the 
+‘ "moby dick"’, one_argument() would return an argument of ’"moby’, while one_word()
+would return an argument of ‘moby dick’. This function converts the 
 peeled off argument(s) to lower case as part of the process of storing them in the 
 user-supplied buffer. 
 
@@ -723,7 +729,8 @@ like the C library’s printf() and sprintf()functions.
 void act (const char *str, bool hide_invisible, struct char_data *ch, struct 
 obj_data *obj, const void *vict_obj, int When dealing with character interactions 
 there are frequently three situations to cover: the actor, the target, and the 
-observers. This function takes care of such output along with handy cases for his/her, he/she/it, and other language special cases. 
+observers. This function takes care of such output along with handy cases for his/her,
+he/she/it, and other language special cases. 
 
 See the ’act()’ documentation (act.txt) for more information on what each 
 particular parameter is used for. 
@@ -745,8 +752,9 @@ int get_filename (char *orig_name, char *filename, int mode) Fills in the
 ’filename’ buffer with the name of a file of type ‘mode’ for a player with name 
 ‘orig_name’. The mode parameter can be one of: 
 
-CRASH_FILE, for player object files, PLR_FILE, for player files, The returned filename contains a path to a file in a directory based upon the file type and the 
-first letter of ‘orig_name’. 
+CRASH_FILE, for player object files, PLR_FILE, for player files, The returned filename
+contains a path to a file in a directory based upon the file type and the first letter
+of ‘orig_name’. 
 
 2.4.5 Utility Functions 
 
@@ -1221,7 +1229,8 @@ the spell as the recipient of the message.
 
 Group spells simply call another spell on everyone in your current group. If you 
 want a ‘group fly’ spell, then you make a ‘fly’ spell first. Afterward, you make 
-the ‘group fly’ definition and then fill in some template areas of the perform_mag_groups() function. What you write there will depend on how your spell 
+the ‘group fly’ definition and then fill in some template areas of the
+perform_mag_groups() function. What you write there will depend on how your spell
 is designed. 
 
 General summoning spells (not ‘summon’ itself) deal with the conjuration of 
@@ -1391,7 +1400,7 @@ values into consideration. See do_bash() in act.offensive.c.
 3.5 Adding Classes 
 
 Classes are one of the implementors’ most important decisions because the players 
-will constantly deal with them, their advantanges, and their limitations. A good 
+will constantly deal with them, their advantages, and their limitations. A good 
 class should be balanced so that it has its own unique perks and flaws, never 
 making other classes pointless to play. 
 
@@ -1471,9 +1480,11 @@ to change the ’byte’ to something larger, like ush_int (65,535) or unsigned int(
 billion). 
 
 Once you’ve changed the number of levels on your MUD, the implementor character you 
-may have already created will now have the wrong level to be an implementor. The first player to login with UID 1 by default has acces to the cheat command and can increase theri level to IMP. If you’ve decreased the levels then a ’set self level 
-XX’ command should work to drop yourself to the proper level, since you’re 
-considered above the new implementor level still. 
+may have already created will now have the wrong level to be an implementor. The first
+player to login with UID 1 by default has acces to the cheat command and can increase
+their level to IMP. If you’ve decreased the levels then a ’set self level XX’ command
+should work to drop yourself to the proper level, since you’re considered above the
+new implementor level still. 
 
 Now remember to change all the mobiles too so they have proper levels. If you added 
 levels, it’ll make the mobiles weaker unless fixed. If reducing the levels, then 
@@ -1545,7 +1556,7 @@ foreground colors.
 
 4 Writing Special Procedures 
 
-Basic pecial procedures have largely been replaced by trigedit. Thus shifting the 
+Basic special procedures have largely been replaced by trigedit. Thus shifting the 
 workload from the coder to the builder to add life and creativity into their zones. 
 While it is easier, and less time consuming, to make triggers than special 
 procedures they are still used for such functions as banks and guildmasters.
@@ -1643,7 +1654,8 @@ the functions assign_mobiles, assign_objects, and assign_roomsin spec_assign.c.
 
 4.4 The Special Procedure Function Header 
 
-The function header of any special procedure is defined in the macro SPECIAL(<name>) and is as follows: 
+The function header of any special procedure is defined in the macro SPECIAL(<name>)
+and is as follows: 
 
 int (<name>)(struct char\_data *ch, void *me, int cmd, char *argument) 
 

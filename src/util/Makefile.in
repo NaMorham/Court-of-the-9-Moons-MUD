@@ -26,6 +26,8 @@ default: all
 all: $(BINDIR)/asciipasswd \
     $(BINDIR)/autowiz \
     $(BINDIR)/plrtoascii \
+    $(BINDIR)/rebuildIndex \
+    $(BINDIR)/rebuildMailIndex \
     $(BINDIR)/shopconv \
     $(BINDIR)/sign \
     $(BINDIR)/split \
@@ -37,6 +39,10 @@ autowiz: $(BINDIR)/autowiz
 
 plrtoascii: $(BINDIR)/plrtoascii
 
+rebuildIndex: $(BINDIR)/rebuildIndex
+
+rebuildMailIndex: $(BINDIR)/rebuildMailIndex
+
 shopconv: $(BINDIR)/shopconv
 
 sign: $(BINDIR)/sign
@@ -47,34 +53,40 @@ wld2html: $(BINDIR)/wld2html
 
 webster: $(BINDIR)/webster
 
-$(BINDIR)/asciipasswd: asciipasswd.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/asciipasswd asciipasswd.c @CRYPTLIB@
+$(BINDIR)/asciipasswd: asciipasswd.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/asciipasswd asciipasswd.cpp @CRYPTLIB@
 
-$(BINDIR)/autowiz: autowiz.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/autowiz autowiz.c
+$(BINDIR)/autowiz: autowiz.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/autowiz autowiz.cpp
 
-$(BINDIR)/plrtoascii: plrtoascii.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/plrtoascii plrtoascii.c
+$(BINDIR)/plrtoascii: plrtoascii.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/plrtoascii plrtoascii.cpp
 
-$(BINDIR)/shopconv: shopconv.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/shopconv shopconv.c
+$(BINDIR)/rebuildIndex: rebuildAsciiIndex.cpp
+	$(CC) $(CFLAGS) -o $(BINDIR)/rebuildIndex rebuildAsciiIndex.cpp
 
-$(BINDIR)/sign: sign.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/sign sign.c @NETLIB@
+$(BINDIR)/rebuildMailIndex: rebuildMailIndex.cpp
+	$(CC) $(CFLAGS) -o $(BINDIR)/rebuildMailIndex rebuildMailIndex.cpp
 
-$(BINDIR)/split: split.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/split split.c
+$(BINDIR)/shopconv: shopconv.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/shopconv shopconv.cpp
 
-$(BINDIR)/wld2html: wld2html.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/wld2html wld2html.c
+$(BINDIR)/sign: sign.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/sign sign.cpp @NETLIB@
 
-$(BINDIR)/webster: webster.c
-    $(CC) $(CFLAGS) -o $(BINDIR)/webster webster.c
+$(BINDIR)/split: split.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/split split.cpp
+
+$(BINDIR)/wld2html: wld2html.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/wld2html wld2html.cpp
+
+$(BINDIR)/webster: webster.cpp
+    $(CC) $(CFLAGS) -o $(BINDIR)/webster webster.cpp
 
 # Dependencies for the object files (automagically generated with
 # gcc -MM)
 
 depend:
-    $(CC) -I$(INCDIR) -MM *.c > depend
+    $(CC) -I$(INCDIR) -MM *.cpp > depend
 
 -include depend

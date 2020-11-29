@@ -13,15 +13,15 @@
 /*
  * Map options (settable in cedit)
  */
-#define MAP_OFF      0
-#define MAP_ON       1
-#define MAP_IMM_ONLY 2
+#define MAP_OFF         0
+#define MAP_ON          1
+#define MAP_IMM_ONLY    2
 
 /*
  * Exported function prototypes
  */
-bool can_see_map(struct char_data *ch);
-void str_and_map(char *str, struct char_data *ch, room_vnum target_room );
+bool    can_see_map(struct char_data *ch);
+void    str_and_map(char *str, struct char_data *ch, room_vnum target_room);
 ACMD(do_map);
 
 #endif /* ASCIIMAP_H_*/

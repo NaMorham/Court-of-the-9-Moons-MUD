@@ -1,9 +1,9 @@
 /* ************************************************************************
-*  file: sign.c                                            Part of tbaMUD *
-*  Usage: A program to present text on a TCP port.                        *
-*         sign <port> <filename | port>                                   *
-*  Written by Jeremy Elson                                                *
-************************************************************************* */
+ *  file: sign.c                                          Part of tbaMUD  *
+ *  Usage: A program to present text on a TCP port.                       *
+ *         sign <port> <filename | port>                                  *
+ *  Written by Jeremy Elson                                               *
+ **************************************************************************/
 
 #define MAX_FILESIZE    8192
 #define LINEBUF_SIZE    128
@@ -21,16 +21,14 @@ int init_socket(int port)
     int s, opt;
     struct sockaddr_in sa;
 
-    /*
-     * Should the first argument to socket() be AF_INET or PF_INET?  I don't
-     * know, take your pick.  PF_INET seems to be more widely adopted, and
-     * Comer (_Internetworking with TCP/IP_) even makes a point to say that
-     * people erroneously use AF_INET with socket() when they should be using
-     * PF_INET.  However, the man pages of some systems indicate that AF_INET
-     * is correct; some such as ConvexOS even say that you can use either one.
-     * All implementations I've seen define AF_INET and PF_INET to be the same
-     * number anyway, so ths point is (hopefully) moot.
-     */
+    // Should the first argument to socket() be AF_INET or PF_INET?  I don't
+    // know, take your pick.  PF_INET seems to be more widely adopted, and
+    // Comer (_Internetworking with TCP/IP_) even makes a point to say that
+    // people erroneously use AF_INET with socket() when they should be using
+    // PF_INET.  However, the man pages of some systems indicate that AF_INET
+    // is correct; some such as ConvexOS even say that you can use either one.
+    // All implementations I've seen define AF_INET and PF_INET to be the same
+    // number anyway, so ths point is (hopefully) moot.
 
     if ((s = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Create socket");
@@ -45,29 +43,29 @@ int init_socket(int port)
 #endif
 
 #if defined(SO_LINGER)
-  {
-      struct linger ld;
+    {
+        struct linger ld;
 
-      ld.l_onoff = 0;
-      ld.l_linger = 0;
-      if (setsockopt(s, SOL_SOCKET, SO_LINGER, (char *)&ld, sizeof(ld)) < 0) {
-          perror("setsockopt LINGER");
-          exit(1);
-      }
-  }
+        ld.l_onoff = 0;
+        ld.l_linger = 0;
+        if (setsockopt(s, SOL_SOCKET, SO_LINGER, (char *)&ld, sizeof(ld)) < 0) {
+            perror("setsockopt LINGER");
+            exit(1);
+        }
+    }
 #endif
 
-  sa.sin_family = AF_INET;
-  sa.sin_port = htons(port);
-  sa.sin_addr.s_addr = htonl(INADDR_ANY);
+    sa.sin_family = AF_INET;
+    sa.sin_port = htons(port);
+    sa.sin_addr.s_addr = htonl(INADDR_ANY);
 
-  if (bind(s, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
-      perror("bind");
-      close(s);
-      exit(1);
-  }
-  listen(s, 5);
-  return (s);
+    if (bind(s, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
+        perror("bind");
+        close(s);
+        exit(1);
+    }
+    listen(s, 5);
+    return (s);
 }
 
 
@@ -81,8 +79,9 @@ char *get_text(char *fname)
 
     if (!strcmp(fname, "-")) {
         fl = stdin;
-        if (isatty(STDIN_FILENO))
+        if (isatty(STDIN_FILENO)) {
             fprintf(stderr, "Enter sign text; terminate with Ctrl-D.\n");
+        }
     }
     else {
         if (!(fl = fopen(fname, "r"))) {
@@ -99,11 +98,10 @@ char *get_text(char *fname)
             fprintf(stderr, "String too long.  Truncated.\n");
             break;
         }
-    }
+    } // while (fgets(tmp ...
 
     return (t);
 }
-
 
 /*
  * Clean up our zombie kids to avoid defunct processes
@@ -153,5 +151,5 @@ int main(int argc, char *argv[])
             exit(0);
         }
         close(desc);
-    }
+    }  // for (;;)
 }

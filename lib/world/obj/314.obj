@@ -10,7 +10,7 @@ E
 statue~
    The man appears very proud, very noble and very learned.  His stained head is
 held high, his unseeing eyes fixed onto brighter futures and promise of great
-things.  
+things.
 ~
 #31401
 glass pieces~
@@ -49,7 +49,7 @@ altar~
    It appears that the altar is nothing more than a loose piece of stone from
 the courtyard floor or maybe one of the nearby buildings.  However, with the
 black cloth that is draped over top of it and the layers of blood stains upon
-it, it appears ghastly and otherwordly.  
+it, it appears ghastly and otherwordly.
 ~
 #31405
 bookshelf shelf old~
@@ -96,7 +96,7 @@ corpse~
    It looks as if it might have been alive just minutes ago.  The blood which
 wells over its chest is still warm, still flowing - undried.  Its chest is torn
 open, split in two.  From the amount blood and innards splayed over the corpse's
-chest, it appears the heart was taken.  
+chest, it appears the heart was taken.
 ~
 #31410
 decayed carcass~
@@ -121,15 +121,15 @@ A
 #31412
 robe soiled~
 a soiled and bloodstained robe~
-A soiled and bloodstained robe has been dicarded.~
+A soiled and bloodstained robe has been discarded.~
 ~
 9 0 0 0 0 ak 0 0 0 0 0 0 0
 6 0 0 0
-0 0 0 1 0
+4 10 0 1 0
 #31413
 ring enchantment~
 the Ring of Enchantment~
-A dark colored ring has been dropped here.~
+A dark coloured ring has been dropped here.~
 ~
 9 0 0 0 0 ab 0 0 0 0 0 0 0
 3 0 0 0
@@ -151,7 +151,7 @@ blood innocent~
 the blood of an innocent~
 A smear of blood is on the ground.~
 ~
-11 0 0 0 0 ad 0 0 0 0 0 0 0
+11 0 0 0 0 ai 0 0 0 0 0 0 0
 0 0 0 0
 1 1 0 24 0
 A
@@ -159,9 +159,9 @@ A
 A
 18 3
 #31416
-shredded leather armor~
-some badly shredded leather armor~
-Some shreds of leather armor has been left here.~
+shredded leather armour~
+some badly shredded leather armour~
+Some shreds of leather armour has been left here.~
 ~
 9 0 0 0 0 ad 0 0 0 0 0 0 0
 2 0 0 0

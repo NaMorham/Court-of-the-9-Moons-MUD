@@ -2,15 +2,15 @@
 Mage Guildguard - 3024~
 0 q 100
 ~
-* Check the direction the player must go to enter the guild. 
-if %direction% == south 
-  * Stop them if they are not the appropriate class. 
-  if %actor.class% != Magic User 
-    return 0 
-    %send% %actor% The guard humiliates you, and blocks your way. 
-    %echoaround% %actor% The guard humiliates %actor.name%, and blocks %actor.hisher% way. 
-  end 
-end 
+* Check the direction the player must go to enter the guild.
+if %direction% == south
+  * Stop them if they are not the appropriate class.
+  if %actor.class% != Magic User
+    return 0
+    %send% %actor% The guard humiliates you, and blocks your way.
+    %echoaround% %actor% The guard humiliates %actor.name%, and blocks %actor.hisher% way.
+  end
+end
 ~
 #3001
 Cleric Guildguard - 3025~
@@ -58,11 +58,9 @@ end
 Dump - 3030~
 2 h 100
 ~
-%echo% %object.shortdesc% vanishes in a puff of smoke!
 %send% %actor% You are awarded for outstanding performance.
 %echoaround% %actor% %actor.name% has been awarded for being a good citizen.
 eval value %object.cost% / 10
-%purge% %object%
 if %value% > 50
   set value 50
 elseif %value% < 1
@@ -73,6 +71,7 @@ if %actor.level% < 3
 else
   nop %actor.gold(%value%)%
 end
+%purge% %object%
 ~
 #3005
 Stock Thief~
@@ -125,7 +124,7 @@ switch %actor.level%
     dg_cast 'lightning bolt' %actor%
   break
   case 12
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 13
     dg_cast 'energy drain' %actor%
@@ -164,7 +163,7 @@ Near Death Trap~
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
 * Near Death Trap stuns actor
-set stunned %actor.hitp% 
+set stunned %actor.hitp%
 %damage% %actor% %stunned%
 %send% %actor% You are on the brink of life and death.
 %send% %actor% The Gods must favor you this day.
@@ -224,7 +223,7 @@ eval item %inroom.contents%
 while %item%
   * Target the next item in room. In case it is picked up.
   set next_item %item.next_in_list%
-* TODO: if %item.wearflag(take)% 
+* TODO: if %item.wearflag(take)%
   * Check for fountains and expensive items.
   if %item.type% != FOUNTAIN && %item.cost% <= 15
     take %item.name%
@@ -254,7 +253,7 @@ eval inroom %self.room%
 Teleporter~
 1 c 3
 teleport~
-* By Rumble w/help from Jamie Nelson on http://groups.yahoo.com/group/dg_scripts/
+* By Rumble and Jamie Nelson of The Builder Academy    tbamud.com 9091
 %send% %actor% You attempt to manipulate space and time.
 %echoaround% %actor% %actor.name% attempts to manipulate space and time.
 wait 1 sec
@@ -377,13 +376,16 @@ set leper 31200
 set altar 31400
 set mcgintey 31500
 set wharf 31700
-set dock 31800
+set dock 31801
 set yllnthad 31900
 set bay 32200
 set pale 32300
 set army 32400
 set revelry 32500
 set perimeter 32600
+set asylum 34501
+set ultima 55685
+set tarot 21101
 if !%arg%
   *they didnt type a location
   set fail 1
@@ -407,14 +409,27 @@ end
 %echoaround% %actor% %actor.name% steps out of space and time.
 ~
 #3015
-Teleporter Recall~
+Teleporter Recall and Return~
 1 c 7
-recall~
+re~
 * By Rumble of The Builder Academy    tbamud.com 9091
-%send% %actor% You recall to safety.
-%echoaround% %actor% %actor.name% recalls.
-%teleport% %actor% 3001
-%force% %actor% look
+if %cmd% == recall
+  eval teleporter_return_room %actor.room.vnum%
+  remote  teleporter_return_room %actor.id%
+  %send% %actor% You recall to safety.
+  %echoaround% %actor% %actor.name% recalls.
+  %teleport% %actor% 3001
+  %force% %actor% look
+  %echoaround% %actor% %actor.name% appears in the room.
+elseif %cmd% == return
+  %send% %actor% You return to your previous location.
+  %echoaround% %actor% %actor.name% teleports out of the room.
+  %teleport% %actor% %actor.teleporter_return_room%
+  %force% %actor% look
+  %echoaround% %actor% %actor.name% appears in the room.
+else
+  return 0
+end
 ~
 #3016
 Kind Soul Gives Newbie Equipment~
@@ -448,89 +463,89 @@ if %actor.is_pc% && %actor.level% < 5
     halt
   end
   if !%actor.eq(light)%
-    Say you really shouldn't be wandering these parts without a light source %actor.name%.
+    say you really shouldn't be wandering these parts without a light source %actor.name%.
     shake
     %load% obj 3037
     give candle %actor.name%
     halt
   end
   if !%actor.eq(rfinger)% || !%actor.eq(lfinger)%
-    Say did you lose one of your rings?
+    say did you lose one of your rings?
     sigh
     %load% obj 3083
     give ring %actor.name%
     halt
   end
   if !%actor.eq(neck1)% || !%actor.eq(neck2)%
-    Say you lose everything don't you?
+    say you lose everything don't you?
     roll
     %load% obj 3082
     give neck %actor.name%
     halt
   end
   if !%actor.eq(body)%
-    say you won't get far without some body armor %actor.name%.
+    say you won't get far without some body armour %actor.name%.
     %load% obj 3040
     give plate %actor.name%
     halt
   end
   if !%actor.eq(head)%
-    Say protect that noggin of yours, %actor.name%.
+    say protect that noggin of yours, %actor.name%.
     %load% obj 3076
     give cap %actor.name%
     halt
   end
   if !%actor.eq(legs)%
-    Say why do you always lose your pants %actor.name%?
+    say why do you always lose your pants %actor.name%?
     %load% obj 3080
     give leggings %actor.name%
     halt
   end
   if !%actor.eq(feet)%
-    Say you can't go around barefoot %actor.name%.
+    say you can't go around barefoot %actor.name%.
     %load% obj 3084
     give boots %actor.name%
     halt
   end
   if !%actor.eq(hands)%
-    Say need some gloves %actor.name%?
+    say need some gloves %actor.name%?
     %load% obj 3071
     give gloves %actor.name%
     halt
   end
   if !%actor.eq(arms)%
-    Say you must be freezing %actor.name%.
+    say you must be freezing %actor.name%.
     %load% obj 3086
     give sleeve %actor.name%
     halt
   end
   if !%actor.eq(shield)%
-    Say you need one of these to protect yourself %actor.name%.
+    say you need one of these to protect yourself %actor.name%.
     %load% obj 3042
     give shield %actor.name%
     halt
   end
   if !%actor.eq(about)%
-    Say you are going to catch a cold %actor.name%.
+    say you are going to catch a cold %actor.name%.
     %load% obj 3087
     give cape %actor.name%
     halt
   end
   if !%actor.eq(waist)%
-    Say better use this to hold your pants up %actor.name%.
+    say better use this to hold your pants up %actor.name%.
     %load% obj 3088
     give belt %actor.name%
     halt
   end
   if !%actor.eq(rwrist)% || !%actor.eq(lwrist)%
-    Say misplace something?
+    say misplace something?
     smile
     %load% obj 3089
     give wristguard %actor.name%
     halt
   end
   if !%actor.eq(wield)%
-    Say without a weapon you will be Fido food %actor.name%.
+    say without a weapon you will be Fido food %actor.name%.
     %load% obj 3021
     give sword %actor.name%
     halt
@@ -571,5 +586,11 @@ if %actor.level% == 0
 end
 wait 3 sec
 %zoneecho% 3001 A booming voice announces, 'Welcome %actor.name% to the realm!'
+~
+#3099
+Test~
+2 b 1
+~
+%zoneecho% 3001 You hear a loud --=BOOM=--,
 ~
 $~

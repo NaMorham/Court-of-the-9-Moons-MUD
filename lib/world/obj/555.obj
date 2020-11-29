@@ -266,7 +266,7 @@ a chicken~
 A chicken is lying on the ground.~
 ~
 5 0 0 0 0 a 0 0 0 0 0 0 0
-0 16 3 5
+0 1 2 2
 6 250 0 20 0
 E
 chicken~
@@ -436,9 +436,9 @@ A sword lies on the ground.~
 A
 18 2
 #55542
-armor~
-shiny armor~
-A paladin's suit of armor lies here.~
+armour~
+shiny armour~
+A paladin's suit of armour lies here.~
 ~
 9 0 0 0 0 ad 0 0 0 0 0 0 0
 3 0 0 0
@@ -552,9 +552,9 @@ A
 A
 19 5
 #55551
-black death armor~
-a completely black armor~
-This completely black armor reeks of death.~
+black death armour~
+a completely black armour~
+This completely black armour reeks of death.~
 ~
 9 0 0 0 0 ad 0 0 0 0 0 0 0
 8 0 0 0
@@ -679,9 +679,9 @@ A
 A
 18 3
 #55561
-armor~
-Sentri's armor~
-Sentri left his armor here.~
+armour~
+Sentri's armour~
+Sentri left his armour here.~
 ~
 9 k 0 0 0 ad 0 0 0 0 0 0 0
 6 0 0 0
