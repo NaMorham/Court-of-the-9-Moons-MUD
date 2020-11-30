@@ -24,6 +24,7 @@
 #include "dg_event.h"
 #include "constants.h"
 #include "comm.h"       // For access to the game pulse
+#include "mud_event.h"
 
 
 /***************************************************************************
@@ -92,10 +93,28 @@ void event_cancel(struct mud_event_t *the_event)
         queue_deq(event_q, the_event->q_el);
     }
 
-    if (the_event->event_obj)
-        free(the_event->event_obj);
+    if (the_event->event_obj) {
+        cleanup_event_obj(the_event);
+    }
     free(the_event);
     the_event = NULL;
+}
+
+/*
+ *  The memory freeing routine tied into the mud event system
+ */
+void cleanup_event_obj(struct mud_event_t *the_event)
+{
+    struct mud_event_data * mud_event;
+
+    if (the_event->isMudEvent) {
+        mud_event = (struct mud_event_data *) the_event->event_obj;
+        free_mud_event(mud_event);
+    }
+    else {
+        free(the_event->event_obj);
+        the_event->event_obj = NULL;
+    }
 }
 
 /**
@@ -122,14 +141,16 @@ void event_process(void)
         if ((new_time = (the_event->func)(the_event->event_obj)) > 0) {
             the_event->q_el = queue_enq(event_q, the_event, new_time + pulse);
         }
-        else
-        {
+        else {
+            if (the_event->isMudEvent && the_event->event_obj != NULL) {
+                free_mud_event((struct mud_event_data *) the_event->event_obj);
+            }
             // It is assumed that the_event will already have freed ->event_obj.
             free(the_event);
             the_event = NULL;
         }
 
-    }
+    }  // while ((long)pulse >= ...
 }
 
 /**
@@ -151,7 +172,10 @@ long event_time(struct mud_event_t *the_event)
  */
 void event_free_all(void)
 {
-    queue_free(event_q);
+    if (event_q != NULL) {
+        queue_free(event_q);
+        // event_q = NULL;  todo?
+    }
 }
 
 /**
@@ -231,7 +255,7 @@ struct q_element *queue_enq(struct dg_queue *q, void *data, long key)
                 i->next = qe;
                 break;
             }
-        }
+        }  // for (i ...
 
         if (i == NULL) {  // insertion point is front of list
             qe->next = q->head[bucket];
@@ -343,15 +367,12 @@ void queue_free(struct dg_queue *q)
     struct q_element *qe, *next_qe;
     struct mud_event_t *m_event;
 
-    for (i = 0; i < NUM_EVENT_QUEUES; i++)
-    {
-        for (qe = q->head[i]; qe; qe = next_qe)
-        {
+    for (i = 0; i < NUM_EVENT_QUEUES; i++) {
+        for (qe = q->head[i]; qe; qe = next_qe) {
             next_qe = qe->next;
-            if ((m_event = (struct mud_event_t*) qe->data) != NULL)
-            {
+            if ((m_event = (struct mud_event_t*) qe->data) != NULL) {
                 if (m_event->event_obj) {
-                    free(m_event->event_obj);
+                    cleanup_event_obj(m_event);
                     m_event->event_obj = NULL;
                 }
                 free(m_event);
@@ -365,4 +386,3 @@ void queue_free(struct dg_queue *q)
     free(q);
     q = NULL;
 }
-

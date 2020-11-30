@@ -94,10 +94,7 @@ void do_dg_cast(void *go, struct script_data *sc, trig_data *trig, int type, cha
         one_argument(strcpy(buf2, t), t);
         skip_spaces(&t);
     }
-    if (IS_SET(SINFO.targets, TAR_IGNORE)) {
-        target = TRUE;
-    }
-    else if (t != NULL && *t) {
+    if (!IS_SET(SINFO.targets, TAR_IGNORE) && t != NULL && *t) {
         if (!target &&
             (IS_SET(SINFO.targets, TAR_CHAR_ROOM) ||
             IS_SET(SINFO.targets, TAR_CHAR_WORLD))) {
@@ -178,8 +175,10 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
     half_chop(cmd, value_p, duration_p);
 
     // make sure all parameters are present
-    if (charname == NULL || !*charname || propertyname == NULL || !*propertyname ||
-        value_p == NULL || !*value_p || duration_p == NULL || !*duration_p) {
+    if ((charname == NULL) || !*charname ||
+        (propertyname == NULL) || !*propertyname ||
+        (value_p == NULL) || !*value_p || 
+        (duration_p == NULL) || !*duration_p) {
         script_log("Trigger: %s, VNum %d. dg_affect usage: <target> <property> <value> <duration>",
             GET_TRIG_NAME(trig), GET_TRIG_VNUM(trig));
         return;
@@ -236,17 +235,16 @@ void do_dg_affect(void *go, struct script_data *sc, trig_data *trig,
     }
 
     // add the affect
-    af.type = SPELL_DG_AFFECT;
+    new_affect(&af);
+    af.spell = SPELL_DG_AFFECT;
     af.duration = duration - 1;
     af.modifier = value;
 
     if (type == APPLY_TYPE) {
         af.location = i;
-        af.bitvector = 0;
     }
     else {
-        af.location = 0;
-        af.bitvector = i;
+        SET_BIT_AR(af.bitvector, i);
     }
 
     affect_to_char(ch, &af);
@@ -326,8 +324,8 @@ void script_damage(struct char_data *vict, int dam)
 
     if (GET_POS(vict) == POS_DEAD) {
         if (!IS_NPC(vict)) {
-            mudlog(BRF, 0, TRUE, "%s killed by script at %s",
-                GET_NAME(vict), world[vict->in_room].name);
+            mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(vict)), TRUE, "%s killed by script at %s",
+                GET_NAME(vict), vict->in_room == NOWHERE ? "NOWHERE" : world[vict->in_room].name);
         }
         die(vict, NULL);
     }

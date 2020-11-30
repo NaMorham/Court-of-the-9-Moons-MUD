@@ -47,7 +47,6 @@ static void mob_log(char_data *mob, const char *format, ...)
 // Macro to determine if a mob is permitted to use these commands.
 #define MOB_OR_IMPL(ch) \
  ((IS_NPC(ch) && (!(ch)->desc || GET_LEVEL((ch)->desc->original) >= LVL_IMPL)) || (SCRIPT(ch) && TRIGGERS(SCRIPT(ch))))
-#define MOB_OR_PLAYER(ch) (GET_LEVEL(ch) > 0)
 
 // mob commands
 /*
@@ -59,7 +58,7 @@ ACMD(do_masound)
     int  door;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -75,7 +74,7 @@ ACMD(do_masound)
     skip_spaces(&argument);
 
     was_in_room = IN_ROOM(ch);
-    for (door = 0; door < NUM_OF_DIRS; door++)
+    for (door = 0; door < DIR_COUNT; door++)
     {
         struct room_direction_data *newexit;
 
@@ -84,7 +83,7 @@ ACMD(do_masound)
             IN_ROOM(ch) = newexit->to_room;
             sub_write(argument, ch, TRUE, TO_ROOM);
         }
-    }
+    }  // for (door ...
 
     IN_ROOM(ch) = was_in_room;
 }
@@ -98,7 +97,7 @@ ACMD(do_mkill)
     char_data *victim;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -156,7 +155,7 @@ ACMD(do_mjunk)
     obj_data *obj_next;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -211,7 +210,7 @@ ACMD(do_mechoaround)
     char *p;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -251,7 +250,7 @@ ACMD(do_msend)
     char *p;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -289,7 +288,7 @@ ACMD(do_mecho)
     char *p;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -308,13 +307,37 @@ ACMD(do_mecho)
     sub_write(p, ch, TRUE, TO_CHAR);
 }
 
+ACMD(do_mlog)
+{
+    char *p;
+
+    if (!MOB_OR_IMPL(ch)) {
+        send_to_char(ch, "%s", CONFIG_HUH);
+        return;
+    }
+
+    if (AFF_FLAGGED(ch, AFF_CHARM)) {
+        return;
+    }
+
+    if (!*argument) {
+        return;
+    }
+
+    p = argument;
+    skip_spaces(&p);
+
+    mob_log(ch, p);
+
+}
+
 ACMD(do_mzoneecho)
 {
     int zone;
     char room_number[MAX_INPUT_LENGTH], buf[MAX_INPUT_LENGTH], *msg;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
     msg = any_one_arg(argument, room_number);
@@ -348,7 +371,7 @@ ACMD(do_mload)
     int pos;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -387,7 +410,7 @@ ACMD(do_mload)
         char_to_room(mob, rnum);
         if (SCRIPT(ch)) {  // It _should_ have, but it might be detached.
             char buf[MAX_INPUT_LENGTH];
-            sprintf(buf, "%c%ld", UID_CHAR, GET_ID(mob));
+            sprintf(buf, "%c%ld", UID_CHAR, char_script_id(mob));
             add_var(&(SCRIPT(ch)->global_vars), "lastloaded", buf, 0);
         }
         load_mtrigger(mob);
@@ -400,7 +423,7 @@ ACMD(do_mload)
         }
         if (SCRIPT(ch)) {  // It _should_ have, but it might be detached.
             char buf[MAX_INPUT_LENGTH];
-            sprintf(buf, "%c%ld", UID_CHAR, GET_ID(object));
+            sprintf(buf, "%c%ld", UID_CHAR, obj_script_id(object));
             add_var(&(SCRIPT(ch)->global_vars), "lastloaded", buf, 0);
         }
         // special handling to make objects able to load on a person/in a container/worn etc.
@@ -455,7 +478,7 @@ ACMD(do_mpurge)
     obj_data  *obj;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -536,7 +559,7 @@ ACMD(do_mgoto)
     room_rnum location;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -574,7 +597,7 @@ ACMD(do_mat)
     room_rnum location, original;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -617,7 +640,7 @@ ACMD(do_mteleport)
     char_data *vict, *next_ch;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -651,7 +674,7 @@ ACMD(do_mteleport)
             if (valid_dg_target(vict, DG_ALLOW_GODS)) {
                 char_from_room(vict);
                 char_to_room(vict, target);
-                enter_wtrigger(&world[IN_ROOM(ch)], ch, -1);
+                enter_wtrigger(&world[IN_ROOM(vict)], vict, -1);
             }
         }  // for (vict ...
     }
@@ -667,10 +690,10 @@ ACMD(do_mteleport)
             return;
         }
 
-        if (valid_dg_target(ch, DG_ALLOW_GODS)) {
+        if (valid_dg_target(vict, DG_ALLOW_GODS)) {
             char_from_room(vict);
             char_to_room(vict, target);
-            enter_wtrigger(&world[IN_ROOM(ch)], ch, -1);
+            enter_wtrigger(&world[IN_ROOM(vict)], vict, -1);
         }
     }
 }
@@ -681,7 +704,7 @@ ACMD(do_mdamage) {
     char_data *vict;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -720,7 +743,7 @@ ACMD(do_mforce)
     char arg[MAX_INPUT_LENGTH];
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -752,7 +775,7 @@ ACMD(do_mforce)
                     command_interpreter(vch, argument);
                 }
             }
-        }
+        }  // for (i ...
     }
     else {
         char_data *victim;
@@ -788,7 +811,7 @@ ACMD(do_mhunt)
     char arg[MAX_INPUT_LENGTH];
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -834,7 +857,7 @@ ACMD(do_mremember)
     char arg[MAX_INPUT_LENGTH];
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -871,12 +894,14 @@ ACMD(do_mremember)
     }
     else {
         struct script_memory *tmpmem = SCRIPT_MEM(ch);
-        while (tmpmem->next) tmpmem = tmpmem->next;
+        while (tmpmem->next) {
+            tmpmem = tmpmem->next;
+        }
         tmpmem->next = mem;
     }
 
     // fill in the structure
-    mem->id = GET_ID(victim);
+    mem->id = char_script_id(victim);
     if (argument && *argument) {
         mem->cmd = strdup(argument);
     }
@@ -892,7 +917,7 @@ ACMD(do_mforget)
     char arg[MAX_INPUT_LENGTH];
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -925,7 +950,7 @@ ACMD(do_mforget)
     mem = SCRIPT_MEM(ch);
     prev = NULL;
     while (mem) {
-        if (mem->id == GET_ID(victim)) {
+        if (mem->id == char_script_id(victim)) {
             if (mem->cmd) {
                 free(mem->cmd);
                 mem->cmd = NULL;
@@ -945,7 +970,7 @@ ACMD(do_mforget)
             prev = mem;
             mem = mem->next;
         }
-    }
+    }  // while (mem)
 }
 
 /*
@@ -961,7 +986,7 @@ ACMD(do_mtransform)
     int pos;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -1003,7 +1028,7 @@ ACMD(do_mtransform)
             else {
                 obj[pos] = NULL;
             }
-        }
+        }  // for (pos ...
 
         // put the mob in the same room as ch so extract will work
         char_to_room(m, IN_ROOM(ch));
@@ -1028,17 +1053,19 @@ ACMD(do_mtransform)
             tmpmob.player.description = strdup(m->player.description);
         }
 
-        tmpmob.id = ch->id;
+        tmpmob.script_id = ch->script_id;
         tmpmob.affected = ch->affected;
         tmpmob.carrying = ch->carrying;
         tmpmob.proto_script = ch->proto_script;
         tmpmob.script = ch->script;
         tmpmob.memory = ch->memory;
+        tmpmob.events = ch->events;
         tmpmob.next_in_room = ch->next_in_room;
         tmpmob.next = ch->next;
         tmpmob.next_fighting = ch->next_fighting;
         tmpmob.followers = ch->followers;
         tmpmob.master = ch->master;
+        tmpmob.group = ch->group;
 
         GET_WAS_IN(&tmpmob) = GET_WAS_IN(ch);
         if (keep_hp) {
@@ -1084,7 +1111,7 @@ ACMD(do_mdoor)
     };
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+             send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
@@ -1181,12 +1208,13 @@ ACMD(do_mfollow)
     struct follow_type *j, *k;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
 
-    if (AFF_FLAGGED(ch, AFF_CHARM))
+    if (AFF_FLAGGED(ch, AFF_CHARM)) {
         return;
+    }
 
     one_argument(argument, buf);
 
@@ -1227,6 +1255,7 @@ ACMD(do_mfollow)
             j = k->next;
             k->next = j->next;
             free(j);
+            j = NULL;
         }
         ch->master = NULL;
     }
@@ -1258,7 +1287,7 @@ ACMD(do_mrecho)
     char start[MAX_INPUT_LENGTH], finish[MAX_INPUT_LENGTH], *msg;
 
     if (!MOB_OR_IMPL(ch)) {
-        send_to_char(ch, "Huh?!?\r\n");
+        send_to_char(ch, "%s", CONFIG_HUH);
         return;
     }
     msg = two_arguments(argument, start, finish);
