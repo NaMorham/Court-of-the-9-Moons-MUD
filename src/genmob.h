@@ -30,7 +30,9 @@ int  copy_mobile_strings(struct char_data *t, struct char_data *f);
 int  write_mobile_mobprog(mob_vnum mvnum, struct char_data *mob, FILE *fd);
 #endif
 
-/* Handy macros. */
+/*
+ *  Handy macros.
+ */
 #define GET_NDD(mob)    ((mob)->mob_specials.damnodice)
 #define GET_SDD(mob)    ((mob)->mob_specials.damsizedice)
 #define GET_ALIAS(mob)  ((mob)->player.name)

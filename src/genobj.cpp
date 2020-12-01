@@ -11,11 +11,13 @@
 #include "utils.h"
 #include "db.h"
 #include "shop.h"
+#include "constants.h"
 #include "genolc.h"
 #include "genobj.h"
 #include "genzon.h"
 #include "dg_olc.h"
 #include "handler.h"
+#include "interpreter.h"
 #include "boards.h"     // for board_info
 
 
@@ -65,7 +67,7 @@ static int update_all_objects(struct obj_data *refobj)
         *obj = *refobj;
 
         // Copy game-time dependent variables over.
-        GET_ID(obj) = swap.id;
+        obj->script_id = swap.script_id;
         IN_ROOM(obj) = swap.in_room;
         obj->carried_by = swap.carried_by;
         obj->worn_by = swap.worn_by;
@@ -190,7 +192,7 @@ obj_rnum index_object(struct obj_data *obj, obj_vnum ovnum, obj_rnum ornum)
 
 int save_objects(zone_rnum zone_num)
 {
-    char filename[128], buf[MAX_STRING_LENGTH];
+    char filename[128], buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
     char ebuf1[MAX_STRING_LENGTH], ebuf2[MAX_STRING_LENGTH], ebuf3[MAX_STRING_LENGTH], ebuf4[MAX_STRING_LENGTH];
     char wbuf1[MAX_STRING_LENGTH], wbuf2[MAX_STRING_LENGTH], wbuf3[MAX_STRING_LENGTH], wbuf4[MAX_STRING_LENGTH];
     char pbuf1[MAX_STRING_LENGTH], pbuf2[MAX_STRING_LENGTH], pbuf3[MAX_STRING_LENGTH], pbuf4[MAX_STRING_LENGTH];
@@ -224,7 +226,7 @@ int save_objects(zone_rnum zone_num)
                 *buf = '\0';
             }
 
-            fprintf(fp,
+            int n = snprintf(buf2, MAX_STRING_LENGTH,
                 "#%d\n"
                 "%s~\n"
                 "%s~\n"
@@ -237,6 +239,14 @@ int save_objects(zone_rnum zone_num)
                 (obj->description && *obj->description) ? obj->description : "undefined",
                 buf);
 
+            if (n >= MAX_STRING_LENGTH) {
+                mudlog(BRF, LVL_BUILDER, TRUE,
+                    "SYSERR: Could not save object #%d due to size (%d > maximum of %d).",
+                    GET_OBJ_VNUM(obj), n, MAX_STRING_LENGTH);
+                continue;
+            }
+
+            fprintf(fp, "%s", convert_from_tabs(buf2));
             sprintascii(ebuf1, GET_OBJ_EXTRA(obj)[0]);
             sprintascii(ebuf2, GET_OBJ_EXTRA(obj)[1]);
             sprintascii(ebuf3, GET_OBJ_EXTRA(obj)[2]);
@@ -245,10 +255,10 @@ int save_objects(zone_rnum zone_num)
             sprintascii(wbuf2, GET_OBJ_WEAR(obj)[1]);
             sprintascii(wbuf3, GET_OBJ_WEAR(obj)[2]);
             sprintascii(wbuf4, GET_OBJ_WEAR(obj)[3]);
-            sprintascii(pbuf1, GET_OBJ_PERM(obj)[0]);
-            sprintascii(pbuf2, GET_OBJ_PERM(obj)[1]);
-            sprintascii(pbuf3, GET_OBJ_PERM(obj)[2]);
-            sprintascii(pbuf4, GET_OBJ_PERM(obj)[3]);
+            sprintascii(pbuf1, GET_OBJ_AFFECT(obj)[0]);
+            sprintascii(pbuf2, GET_OBJ_AFFECT(obj)[1]);
+            sprintascii(pbuf3, GET_OBJ_AFFECT(obj)[2]);
+            sprintascii(pbuf4, GET_OBJ_AFFECT(obj)[3]);
 
             fprintf(fp, "%d %s %s %s %s %s %s %s %s %s %s %s %s\n"
                 "%d %d %d %d\n"
@@ -530,6 +540,8 @@ int delete_object(obj_rnum rnum)
                     ZCMD(zone, cmd_no).arg2 -= (ZCMD(zone, cmd_no).arg2 > rnum);
                 }
                 break;
+            default:
+                WriteLogf("GenOLC (obj): Unknown zone command (%c).", ZCMD(zone, cmd_no).command);
             }
         }  // for (cmd_no
     }  // for (zone ...
@@ -537,4 +549,127 @@ int delete_object(obj_rnum rnum)
     save_objects(zrnum);
 
     return rnum;
+}
+
+/*
+ *  oset handling, this location should be temporary
+ */
+bool oset_alias(struct obj_data *obj, char * argument)
+{
+    static size_t max_len = 64;
+    int i = GET_OBJ_RNUM(obj);
+
+    skip_spaces(&argument);
+
+    if (strlen(argument) > max_len) {
+        return FALSE;
+    }
+
+    if (i != NOWHERE && obj->name && obj->name != obj_proto[i].name) {
+        free(obj->name);
+    }
+
+    obj->name = strdup(argument);
+
+    return TRUE;
+}
+
+bool oset_apply(struct obj_data *obj, char * argument)
+{
+    int i = 0, apply = -1, location = -1, mod = 0, empty = -1, value;
+    char arg[MAX_INPUT_LENGTH];
+
+    argument = one_argument(argument, arg);
+
+    skip_spaces(&argument);
+
+    if ((value = atoi(argument)) == 0) {
+        return FALSE;
+    }
+
+    while (*apply_types[i] != '\n') {
+        if (is_abbrev(apply_types[i], arg)) {
+            apply = i;
+            break;
+        }
+        i++;
+    }
+
+    if (apply == -1) {
+        return FALSE;
+    }
+
+    for (i = 0; i < MAX_OBJ_AFFECT; i++) {
+        if (obj->affected[i].location == apply) {
+            location = i;
+            mod = obj->affected[i].modifier;
+            break;
+        }
+        else if (obj->affected[i].location == APPLY_NONE && empty == -1) {
+            empty = i;
+        }
+    }  // for (i ...
+
+    // No slot already using APPLY_XXX, so use an empty one... if available
+    if (location == -1) {
+        location = empty;
+    }
+
+    // There is no slot already using our APPLY_XXX type, and no empty slots either
+    if (location == -1) {
+        return FALSE;
+    }
+
+    obj->affected[location].modifier = mod + value;
+
+    /* Our modifier is set at 0, so lets just clear the apply location so that it may
+    * be reused at a later point */
+    if (obj->affected[location].modifier != 0) {
+        obj->affected[location].location = apply;
+    }
+    else {
+        obj->affected[location].location = APPLY_NONE;
+    }
+
+    return TRUE;
+}
+
+bool oset_short_description(struct obj_data *obj, char * argument)
+{
+    static size_t max_len = 64;
+    int i = GET_OBJ_RNUM(obj);
+
+    skip_spaces(&argument);
+
+    if (strlen(argument) > max_len) {
+        return FALSE;
+    }
+
+    if (i != NOWHERE && obj->short_description && obj->short_description != obj_proto[i].short_description) {
+        free(obj->short_description);
+    }
+
+    obj->short_description = strdup(argument);
+
+    return TRUE;
+}
+
+bool oset_long_description(struct obj_data *obj, char * argument)
+{
+    static size_t max_len = 128;
+    int i = GET_OBJ_RNUM(obj);
+
+    skip_spaces(&argument);
+
+    if (strlen(argument) > max_len) {
+        return FALSE;
+    }
+
+    if (i != NOWHERE && obj->description && obj->description != obj_proto[i].description) {
+        free(obj->description);
+    }
+
+    obj->description = strdup(argument);
+
+    return TRUE;
 }

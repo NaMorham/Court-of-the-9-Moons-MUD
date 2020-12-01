@@ -1620,10 +1620,10 @@ void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_da
                           strcpy(str, "0");
                     }
                 }
-                break;
         else {
             script_log("Unknown field [%s] on trigger [%d].", field, trig_vnum);
         }
+                break;
     case 'p':
     case 'q':
         script_log("Unknown field [%s] on trigger [%d].", field, trig_vnum);
@@ -1715,7 +1715,7 @@ void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_da
         }
         else if (!str_cmp(field, "worn_by")) {
             if (o->worn_by) {
-                snprintf(str, slen, "%c%ld", UID_CHAR, GET_ID(o->worn_by));
+                       snprintf(str, slen,"%c%ld",UID_CHAR, char_script_id(o->worn_by));
             }
             else {
                 *str = '\0';
@@ -1808,7 +1808,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
             for (obj = r->contents; obj; obj = obj->next_content) {
                 if (GET_OBJ_VNUM(obj) == atoi(subfield)) {
                     // arg given, found
-                    snprintf(str, slen, "%c%ld", UID_CHAR, GET_ID(obj));
+                    snprintf(str, slen, "%c%ld", UID_CHAR, obj_script_id(obj));
                     return;
                 }
             }  // for (obj ...
@@ -1818,7 +1818,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
         }
         else {  // no arg given
             if (r->contents) {
-                snprintf(str, slen, "%c%ld", UID_CHAR, GET_ID(r->contents));
+                snprintf(str, slen, "%c%ld", UID_CHAR, obj_script_id(r->contents));
             }
             else {
                 *str = '\0';
@@ -1827,7 +1827,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
     }
     else if (!str_cmp(field, "people")) {
         if (r->people) {
-            snprintf(str, slen, "%c%ld", UID_CHAR, GET_ID(r->people));
+            snprintf(str, slen, "%c%ld", UID_CHAR, char_script_id(r->people));
         }
         else {
             *str = '\0';
@@ -1836,7 +1836,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
     else if (!str_cmp(field, "id")) {
         room_rnum rnum = real_room(r->number);
         if (rnum != NOWHERE) {
-            snprintf(str, slen, "%ld", (long)world[rnum].number + ROOM_ID_BASE);
+            snprintf(str, slen, "%ld", room_script_id(world + rnum));
         }
         else {
             *str = '\0';
@@ -1886,6 +1886,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
             snprintf(str, slen, "0");
         }
     }
+    // @todo: Move to a method, all of these cases are the same except for the direction
     else if (!str_cmp(field, "north")) {
         room_direction_data *northDir = R_EXIT(r, NORTH);
         if (northDir) {
@@ -2066,6 +2067,126 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
             *str = '\0';
         }
     }
+    else if (!str_cmp(field, "northeast")) {
+        room_direction_data *neDir = R_EXIT(r, NORTHEAST);
+        if (downDir) {
+            if (subfield && *subfield) {
+                if (!str_cmp(subfield, "vnum")) {
+                    snprintf(str, slen, "%d", GET_ROOM_VNUM(neDir->to_room));
+                }
+                else if (!str_cmp(subfield, "key")) {
+                    snprintf(str, slen, "%d", neDir->key);
+                }
+                else if (!str_cmp(subfield, "bits")) {
+                    sprintbit(neDir->exit_info, exit_bits, str, slen);
+                }
+                else if (!str_cmp(subfield, "room")) {
+                    if (neDir->to_room != NOWHERE) {
+                        snprintf(str, slen, "%c%ld", UID_CHAR, (long)world[neDir->to_room].number + ROOM_ID_BASE);
+                    }
+                    else {
+                        *str = '\0';
+                    }
+                }
+            }
+            else {  // no subfield - default to bits
+                sprintbit(neDir->exit_info, exit_bits, str, slen);
+            }
+        }
+        else {
+            *str = '\0';
+        }
+    }
+    else if (!str_cmp(field, "northwest")) {
+        room_direction_data *nwDir = R_EXIT(r, NORTHWEST);
+        if (nwDir) {
+            if (subfield && *subfield) {
+                if (!str_cmp(subfield, "vnum")) {
+                    snprintf(str, slen, "%d", GET_ROOM_VNUM(nwDir->to_room));
+                }
+                else if (!str_cmp(subfield, "key")) {
+                    snprintf(str, slen, "%d", nwDir->key);
+                }
+                else if (!str_cmp(subfield, "bits")) {
+                    sprintbit(nwDir->exit_info, exit_bits, str, slen);
+                }
+                else if (!str_cmp(subfield, "room")) {
+                    if (nwDir->to_room != NOWHERE) {
+                        snprintf(str, slen, "%c%ld", UID_CHAR, (long)world[nwDir->to_room].number + ROOM_ID_BASE);
+                    }
+                    else {
+                        *str = '\0';
+                    }
+                }
+            }
+            else {  // no subfield - default to bits
+                sprintbit(nwDir->exit_info, exit_bits, str, slen);
+            }
+        }
+        else {
+            *str = '\0';
+        }
+    }
+    else if (!str_cmp(field, "southeast")) {
+        room_direction_data *seDir = R_EXIT(r, SOUTHEAST);
+        if (seDir) {
+            if (subfield && *subfield) {
+                if (!str_cmp(subfield, "vnum")) {
+                    snprintf(str, slen, "%d", GET_ROOM_VNUM(seDir->to_room));
+                }
+                else if (!str_cmp(subfield, "key")) {
+                    snprintf(str, slen, "%d", seDir->key);
+                }
+                else if (!str_cmp(subfield, "bits")) {
+                    sprintbit(seDir->exit_info, exit_bits, str, slen);
+                }
+                else if (!str_cmp(subfield, "room")) {
+                    if (seDir->to_room != NOWHERE) {
+                        snprintf(str, slen, "%c%ld", UID_CHAR, (long)world[seDir->to_room].number + ROOM_ID_BASE);
+                    }
+                    else {
+                        *str = '\0';
+                    }
+                }
+            }
+            else {  // no subfield - default to bits
+                sprintbit(seDir->exit_info, exit_bits, str, slen);
+            }
+        }
+        else {
+            *str = '\0';
+        }
+    }
+    else if (!str_cmp(field, "southwest")) {
+        room_direction_data *swDir = R_EXIT(r, NORTHEAST);
+        if (swDir) {
+            if (subfield && *subfield) {
+                if (!str_cmp(subfield, "vnum")) {
+                    snprintf(str, slen, "%d", GET_ROOM_VNUM(swDir->to_room));
+                }
+                else if (!str_cmp(subfield, "key")) {
+                    snprintf(str, slen, "%d", swDir->key);
+                }
+                else if (!str_cmp(subfield, "bits")) {
+                    sprintbit(swDir->exit_info, exit_bits, str, slen);
+                }
+                else if (!str_cmp(subfield, "room")) {
+                    if (swDir->to_room != NOWHERE) {
+                        snprintf(str, slen, "%c%ld", UID_CHAR, (long)world[swDir->to_room].number + ROOM_ID_BASE);
+                    }
+                    else {
+                        *str = '\0';
+                    }
+                }
+            }
+            else {  // no subfield - default to bits
+                sprintbit(swDir->exit_info, exit_bits, str, slen);
+            }
+        }
+        else {
+            *str = '\0';
+        }
+    }
     else {
         if (SCRIPT(r)) {  // check for global var
             for (vd = (SCRIPT(r))->global_vars; vd; vd = vd->next) {
@@ -2105,7 +2226,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
 void var_subst(void *go, struct script_data *sc, trig_data *trig,
     int type, char *line, char *buf)
 {
-    char tmp[MAX_INPUT_LENGTH], repl_str[MAX_INPUT_LENGTH];
+    char tmp[MAX_INPUT_LENGTH], repl_str[MAX_INPUT_LENGTH - 20]; // - 20 to make room for "eval tmpvr "
     char *var = NULL, *field = NULL, *p = NULL;
     char tmp2[MAX_INPUT_LENGTH];
     char *subfield_p, subfield[MAX_INPUT_LENGTH];
@@ -2144,8 +2265,8 @@ void var_subst(void *go, struct script_data *sc, trig_data *trig,
         }
         // so it wasn't double %'s
         else if (*p && (left > 0)) {
-            //* search until end of var or beginning of field
-            for (var = p; *p && (*p != '%') && (*p != '.'); p++) {}
+            // search until end of var or beginning of field
+            for (var = p; *p && (*p != '%') && (*p != '.'); p++) { }
 
             field = p;
             if (*p == '.') {
@@ -2199,4 +2320,5 @@ void var_subst(void *go, struct script_data *sc, trig_data *trig,
             left -= len;
         }  // else if *p ..
     }  // while *p ..
+    buf[sizeof(buf) - 1] = '\0';
 }

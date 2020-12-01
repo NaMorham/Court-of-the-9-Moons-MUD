@@ -37,7 +37,7 @@ struct wld_command_info {
     char *command;
     void(*command_pointer)
         (room_data *room, char *argument, int cmd, int subcmd);
-    int        subcmd;
+    int subcmd;
 };
 
 void wld_log(room_data *room, const char *format, ...);
@@ -55,6 +55,7 @@ WCMD(do_wload);
 WCMD(do_wdamage);
 WCMD(do_wat);
 WCMD(do_wmove);
+WCMD(do_wlog);
 
 
 /*
@@ -104,7 +105,7 @@ WCMD(do_wasound)
         return;
     }
 
-    for (door = 0; door < NUM_OF_DIRS; door++) {
+    for (door = 0; door < DIR_COUNT; door++) {
         struct room_direction_data *newexit;
 
         if ((newexit = room->dir_option[door]) && (newexit->to_room != NOWHERE) &&
@@ -124,6 +125,17 @@ WCMD(do_wecho)
     else {
         act_to_room(argument, room);
     }
+}
+
+WCMD(do_wlog)
+{
+    skip_spaces(&argument);
+
+    if (!*argument) {
+        return;
+    }
+
+    wld_log(room, argument);
 }
 
 WCMD(do_wsend)
@@ -388,7 +400,7 @@ WCMD(do_wpurge)
 {
     char arg[MAX_INPUT_LENGTH];
     char_data *ch, *next_ch;
-    obj_data *obj, *next_obj;
+    obj_data *obj = NULL, *next_obj;
 
     one_argument(argument, arg);
 
@@ -482,7 +494,7 @@ WCMD(do_wload)
         char_to_room(mob, rnum);
         if (SCRIPT(room)) {  // It _should_ have, but it might be detached.
             char buf[MAX_INPUT_LENGTH];
-            sprintf(buf, "%c%ld", UID_CHAR, GET_ID(mob));
+            sprintf(buf, "%c%ld", UID_CHAR, char_script_id(mob));
             add_var(&(SCRIPT(room)->global_vars), "lastloaded", buf, 0);
         }
         load_mtrigger(mob);
@@ -497,7 +509,7 @@ WCMD(do_wload)
             obj_to_room(object, real_room(room->number));
             if (SCRIPT(room)) {  // It _should_ have, but it might be detached.
                 char buf[MAX_INPUT_LENGTH];
-                sprintf(buf, "%c%ld", UID_CHAR, GET_ID(object));
+                sprintf(buf, "%c%ld", UID_CHAR, obj_script_id(object));
                 add_var(&(SCRIPT(room)->global_vars), "lastloaded", buf, 0);
             }
             load_otrigger(object);
@@ -507,7 +519,7 @@ WCMD(do_wload)
         two_arguments(target, arg1, arg2);  // recycling ...
         tch = get_char_in_room(room, arg1);
         if (tch) {
-            if (arg2 != NULL && *arg2 && (pos = find_eq_pos_script(arg2)) >= 0 &&
+            if (arg2 && *arg2 && (pos = find_eq_pos_script(arg2)) >= 0 &&
                 !GET_EQ(tch, pos) && can_wear_on_pos(object, pos)) {
                 equip_char(tch, object, pos);
                 load_otrigger(object);
@@ -632,8 +644,8 @@ WCMD(do_wmove)
     }
 }
 
-const struct wld_command_info wld_cmd_info[] = {
-    { "RESERVED",     0,             0 },   /* this must be first -- for specprocs */
+static const struct wld_command_info wld_cmd_info[] = {
+    { "RESERVED",     0,             0 },   // this must be first -- for specprocs
 
     { "wasound ",     do_wasound,    0 },
     { "wdoor ",       do_wdoor,      0 },
@@ -649,6 +661,7 @@ const struct wld_command_info wld_cmd_info[] = {
     { "wdamage ",     do_wdamage,    0 },
     { "wat ",         do_wat,        0 },
     { "wmove ",       do_wmove,      0 },
+    { "wlog",         do_wlog,       0 },
 
     { "\n",           0,             0 }    // this must be last
 };
