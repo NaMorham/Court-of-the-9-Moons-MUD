@@ -20,9 +20,13 @@
 #include "dg_scripts.h"
 #include "class.h"
 #include "fight.h"
+#include "screen.h"
+#include "mud_event.h"
 
 
-// local file scope function prototypes
+/*
+ *  local file scope function prototypes
+ */
 static int graf(int grafage, int p0, int p1, int p2, int p3, int p4, int p5, int p6);
 static void check_idling(struct char_data *ch);
 
@@ -126,8 +130,8 @@ int hit_gain(struct char_data *ch)
 
         // Class/Level calculations
         // Skill/Spell calculations
-
         // Position calculations
+
         switch (GET_POS(ch)) {
         case POS_SLEEPING:
             gain += (gain / 2);    // Divide by 2
@@ -236,8 +240,11 @@ void run_autowiz(void)
         // Abusing signed -> unsigned conversion to avoid '-1' check.
         if (res < sizeof(buf)) {
             mudlog(CMP, LVL_IMMORT, FALSE, "Initiating autowiz.");
-            i = system(buf);
             reboot_wizlists();
+            int rval = system(buf);
+            if (rval != 0) {
+                mudlog(BRF, LVL_IMMORT, TRUE, "Warning: autowiz failed with return value %d", rval);
+            }
         }
         else {
             WriteLogf("Cannot run autowiz: command-line doesn't fit in buffer.");
@@ -251,7 +258,7 @@ void gain_exp(struct char_data *ch, int gain)
     int is_altered = FALSE;
     int num_levels = 0;
 
-    if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || GET_LEVEL(ch) >= LVL_IMMORT))) {
+    if (!IS_NPC(ch) && ((GET_LEVEL(ch) < 1 || (GET_LEVEL(ch) >= LVL_IMMORT)))) {
         return;
     }
 
@@ -260,10 +267,14 @@ void gain_exp(struct char_data *ch, int gain)
         return;
     }
     if (gain > 0) {
+        if ((IS_HAPPYHOUR) && (IS_HAPPYEXP)) {
+            gain += (int)((float)gain * ((float)HAPPY_EXP / (float)(100)));
+        }
+
         gain = MIN(CONFIG_MAX_EXP_GAIN, gain);    // put a cap on the max gain per kill
         GET_EXP(ch) += gain;
-        while (GET_LEVEL(ch) < LVL_IMMORT - CONFIG_NO_MORT_TO_IMMORT &&
-            GET_EXP(ch) >= level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1)) {
+        while ((GET_LEVEL(ch) < (LVL_IMMORT - CONFIG_NO_MORT_TO_IMMORT)) &&
+            (GET_EXP(ch) >= level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1))) {
             GET_LEVEL(ch) += 1;
             num_levels++;
             advance_level(ch);
@@ -302,14 +313,18 @@ void gain_exp_regardless(struct char_data *ch, int gain)
     int is_altered = FALSE;
     int num_levels = 0;
 
+    if ((IS_HAPPYHOUR) && (IS_HAPPYEXP)) {
+        gain += (int)((float)gain * ((float)HAPPY_EXP / (float)(100)));
+    }
+
     GET_EXP(ch) += gain;
     if (GET_EXP(ch) < 0) {
         GET_EXP(ch) = 0;
     }
 
     if (!IS_NPC(ch)) {
-        while (GET_LEVEL(ch) < LVL_IMPL &&
-            GET_EXP(ch) >= level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1)) {
+        while ((GET_LEVEL(ch) < LVL_IMPL) &&
+            (GET_EXP(ch) >= level_exp(GET_CLASS(ch), GET_LEVEL(ch) + 1))) {
             GET_LEVEL(ch) += 1;
             num_levels++;
             advance_level(ch);
@@ -337,7 +352,7 @@ void gain_condition(struct char_data *ch, int condition, int value)
 {
     bool intoxicated;
 
-    if (IS_NPC(ch) || GET_COND(ch, condition) == -1) {  // No change
+    if (IS_NPC(ch) || (GET_COND(ch, condition) == -1)) {  // No change
         return;
     }
 
@@ -360,8 +375,9 @@ void gain_condition(struct char_data *ch, int condition, int value)
         send_to_char(ch, "You are thirsty.\r\n");
         break;
     case DRUNK:
-        if (intoxicated)
+        if (intoxicated) {
             send_to_char(ch, "You are now sober.\r\n");
+        }
         break;
     default:
         break;
@@ -402,7 +418,7 @@ static void check_idling(struct char_data *ch)
             else {
                 Crash_idlesave(ch);
             }
-            mudlog(CMP, LVL_GOD, TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch));
+            mudlog(CMP, MAX(LVL_GOD, GET_INVIS_LEV(ch)), TRUE, "%s force-rented and extracted (idle).", GET_NAME(ch));
             add_llog_entry(ch, LAST_IDLEOUT);
             extract_char(ch);
         }
@@ -457,7 +473,7 @@ void point_update(void)
                 check_idling(i);
             }
         }
-    }
+    }  // for (i ...
 
     // objects
     for (j = object_list; j; j = next_thing) {
@@ -500,7 +516,7 @@ void point_update(void)
                     }
                 }  // for (jj ...
 
-                if (pCarriedBy) {
+                /*if (pCarriedBy) {
                     rmRNum_dbg = IN_ROOM(pCarriedBy);
                 }
                 else {
@@ -513,9 +529,9 @@ void point_update(void)
                 else {
                     rmVNum = world[rmRNum_dbg].number;
                     WriteLogf("Extract obj [%d:%s] from Room %d:%s",
-                        GET_OBJ_VNUM(j), GET_OBJ_SHORT(j),
-                        rmVNum, world[rmRNum_dbg].description);
-                }
+                    GET_OBJ_VNUM(j), GET_OBJ_SHORT(j),
+                    rmVNum, world[rmRNum_dbg].description);
+                }*/
 
 #ifdef _DEBUG
                 WriteLogf("Extracting object in %s:%d, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
@@ -523,6 +539,7 @@ void point_update(void)
                 extract_obj(j);
             }
         } // if this is a corpse
+
         // If the timer is set, count it down and at 0, try the trigger
         // note to .rej hand-patchers: make this last in your point-update()
         else if (GET_OBJ_TIMER(j) > 0) {
@@ -537,5 +554,91 @@ void point_update(void)
                 timer_otrigger(j);
             }
         }
+    }  // for (j ...
+
+    // Take 1 from the happy-hour tick counter, and end happy-hour if zero
+    if (HAPPY_TIME > 1) {
+        HAPPY_TIME--;
     }
+    else if (HAPPY_TIME <= 1) {  // Last tick - set everything back to zero
+        HAPPY_QP = 0;
+        HAPPY_EXP = 0;
+        HAPPY_GOLD = 0;
+        HAPPY_TIME = 0;
+        game_info("Happy hour has ended!");
+    }
+}
+
+/*
+ *  Note: amt may be negative
+ */
+int increase_gold(struct char_data *ch, int amt)
+{
+    int curr_gold;
+
+    curr_gold = GET_GOLD(ch);
+
+    if (amt < 0) {
+        GET_GOLD(ch) = MAX(0, curr_gold + amt);
+        // Validate to prevent overflow
+        if (GET_GOLD(ch) > curr_gold) {
+            GET_GOLD(ch) = 0;
+        }
+    }
+    else {
+        GET_GOLD(ch) = MIN(MAX_GOLD, curr_gold + amt);
+        // Validate to prevent overflow
+        if (GET_GOLD(ch) < curr_gold) {
+            GET_GOLD(ch) = MAX_GOLD;
+        }
+    }
+    if (GET_GOLD(ch) == MAX_GOLD) {
+        send_to_char(ch, "%sYou have reached the maximum gold!\r\n%sYou must spend it or bank it before you can gain any more.\r\n", QBRED, QNRM);
+    }
+
+    return (GET_GOLD(ch));
+}
+
+int decrease_gold(struct char_data *ch, int deduction)
+{
+    int amt;
+    amt = (deduction * -1);
+    increase_gold(ch, amt);
+    return (GET_GOLD(ch));
+}
+
+int increase_bank(struct char_data *ch, int amt)
+{
+    int curr_bank;
+
+    if (IS_NPC(ch)) {
+        return 0;
+    }
+
+    curr_bank = GET_BANK_GOLD(ch);
+
+    if (amt < 0) {
+        GET_BANK_GOLD(ch) = MAX(0, curr_bank + amt);
+        // Validate to prevent overflow
+        if (GET_BANK_GOLD(ch) > curr_bank) {
+            GET_BANK_GOLD(ch) = 0;
+        }
+    }
+    else {
+        GET_BANK_GOLD(ch) = MIN(MAX_BANK, curr_bank + amt);
+        // Validate to prevent overflow
+        if (GET_BANK_GOLD(ch) < curr_bank) GET_BANK_GOLD(ch) = MAX_BANK;
+    }
+    if (GET_BANK_GOLD(ch) == MAX_BANK) {
+        send_to_char(ch, "%sYou have reached the maximum bank balance!\r\n%sYou cannot put more into your account unless you withdraw some first.\r\n", QBRED, QNRM);
+    }
+    return (GET_BANK_GOLD(ch));
+}
+
+int decrease_bank(struct char_data *ch, int deduction)
+{
+    int amt;
+    amt = (deduction * -1);
+    increase_bank(ch, amt);
+    return (GET_BANK_GOLD(ch));
 }

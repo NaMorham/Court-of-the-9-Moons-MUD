@@ -16,7 +16,7 @@
  */
 #define PFDEF_SEX           0
 #define PFDEF_CLASS         0
-#define PFDEF_RACE            0
+#define PFDEF_RACE          0
 #define PFDEF_LEVEL         0
 #define PFDEF_HEIGHT        0
 #define PFDEF_WEIGHT        0
@@ -64,4 +64,4 @@
 #define PFDEF_LASTMOTD      0
 #define PFDEF_LASTNEWS      0
 
-#endif /* _PFDEFAULTS_H_ */
+#endif      // _PFDEFAULTS_H_

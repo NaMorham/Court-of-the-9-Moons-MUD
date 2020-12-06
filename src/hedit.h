@@ -15,19 +15,22 @@
 
 #include "utils.h"      // for ACMD definition
 
-// Functions made externally available
-// Utility functions
+/*
+ *  Functions made externally available
+ */
+/*
+ *  Utility functions
+ */
 /*
  * All the following functions are declared in oasis.h
 void hedit_parse(struct descriptor_data *, char *);
 void hedit_string_cleanup(struct descriptor_data *, int);
 ACMD(do_oasis_hedit);
 */
-
-// Action fuctions
+/*
+ *  Action fuctions
+ */
 ACMD(do_helpcheck);
 ACMD(do_hindex);
 
-
-#endif /* _HEDIT_H_*/
-
+#endif  // _HEDIT_H_

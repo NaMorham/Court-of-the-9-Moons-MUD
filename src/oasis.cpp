@@ -25,6 +25,8 @@
 #include "act.h"
 #include "handler.h"    // for is_name
 #include "quest.h"
+#include "ibt.h"
+#include "msgedit.h"
 
 
 /******************************
@@ -66,8 +68,9 @@ static void free_config(struct config_data *data);
  */
 void clear_screen(struct descriptor_data *d)
 {
-    if (PRF_FLAGGED(d->character, PRF_CLS))
+    if (PRF_FLAGGED(d->character, PRF_CLS)) {
         write_to_output(d, "[H[J");
+    }
 }
 
 /************************
@@ -124,11 +127,13 @@ void cleanup_olc(struct descriptor_data *d, byte cleanup_type)
     if (OLC_OBJ(d)) {
         free_object_strings(OLC_OBJ(d));
         free(OLC_OBJ(d));
+        OLC_OBJ(d) = NULL;
     }
 
     // Check for a mob.  free_mobile() makes sure strings are not in the prototype.
-    if (OLC_MOB(d))
+    if (OLC_MOB(d)) {
         free_mobile(OLC_MOB(d));
+    }
 
     // Check for a zone.  cleanup_type is irrelevant here, free() everything.
     if (OLC_ZONE(d)) {
@@ -198,6 +203,17 @@ void cleanup_olc(struct descriptor_data *d, byte cleanup_type)
         }
     }
 
+    if (OLC_IBT(d)) {
+        free_olc_ibt(OLC_IBT(d));
+        OLC_IBT(d) = NULL;
+    }
+
+    if (OLC_MSG_LIST(d)) {
+        free_message_list(OLC_MSG_LIST(d));
+        OLC_MSG_LIST(d) = NULL;
+        OLC_MSG(d) = NULL;
+    }
+
     // Free storage if allocated (tedit, aedit, and trigedit). This is the command
     // list - it's been copied to disk already, so just free it -Welcor.
     if (OLC_STORAGE(d)) {
@@ -230,16 +246,21 @@ void cleanup_olc(struct descriptor_data *d, byte cleanup_type)
         act("$n stops using OLC.", TRUE, d->character, NULL, NULL, TO_ROOM);
 
         if (cleanup_type == CLEANUP_CONFIG) {
-            mudlog(BRF, LVL_IMMORT, TRUE, "OLC: %s stops editing the game configuration", GET_NAME(d->character));
+            mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)),
+                TRUE, "OLC: %s stops editing the game configuration", GET_NAME(d->character));
         }
         else if (STATE(d) == CON_TEDIT) {
-            mudlog(BRF, LVL_IMMORT, TRUE, "OLC: %s stops editing text files.", GET_NAME(d->character));
+            mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)),
+                TRUE, "OLC: %s stops editing text files.", GET_NAME(d->character));
         }
         else if (STATE(d) == CON_HEDIT) {
-            mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s stops editing help files.", GET_NAME(d->character));
+            mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)),
+                TRUE, "OLC: %s stops editing help files.", GET_NAME(d->character));
         }
         else {
-            mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s stops editing zone %d allowed zone %d", GET_NAME(d->character), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(d->character));
+            mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)),
+                TRUE, "OLC: %s stops editing zone %d allowed zone %d",
+                GET_NAME(d->character), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(d->character));
         }
 
         STATE(d) = CON_PLAYING;
@@ -255,7 +276,7 @@ void split_argument(char *argument, char *tag)
     int i;
 
     for (i = 0; *tmp; tmp++, i++) {
-        if (*tmp != ' ' && *tmp != '=') {
+        if ((*tmp != ' ') && (*tmp != '=')) {
             *(ttag++) = *tmp;
         }
         else if (*tmp == '=') {
@@ -265,7 +286,7 @@ void split_argument(char *argument, char *tag)
 
     *ttag = '\0';
 
-    while (*tmp == '=' || *tmp == ' ') {
+    while ((*tmp == '=') || (*tmp == ' ')) {
         tmp++;
     }
 

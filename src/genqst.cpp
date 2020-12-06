@@ -241,7 +241,7 @@ int save_quests(zone_rnum zone_num)
             strip_cr(quest_quit);
             // Save the quest details to the file.
             sprintascii(quest_flags, QST_FLAGS(rnum));
-          int n = snprintf(buf, MAX_STRING_LENGTH,
+            int n = snprintf(buf, MAX_STRING_LENGTH,
                 "#%d\n"
                 "%s%c\n"
                 "%s%c\n"
@@ -271,14 +271,16 @@ int save_quests(zone_rnum zone_num)
                 QST_QUANTITY(rnum), QST_GOLD(rnum), QST_EXP(rnum), QST_OBJ(rnum)
                 );
 
-          if(n < MAX_STRING_LENGTH) {
-             fprintf(sf, "%s", convert_from_tabs(buf));
-            num_quests++;
-          } else {
-             mudlog(BRF,LVL_BUILDER,TRUE,
-                        "SYSERR: Could not save quest #%d due to size (%d > maximum of %d).",
-                        QST_NUM(rnum), n, MAX_STRING_LENGTH);
-          }
+            if (n < MAX_STRING_LENGTH) {
+                fprintf(sf, "%s", convert_from_tabs(buf));
+                num_quests++;
+            }
+            else {
+                mudlog(BRF, LVL_BUILDER, TRUE,
+                    "SYSERR: Could not save quest #%d due to size (%d > maximum of %d).",
+                    QST_NUM(rnum), n, MAX_STRING_LENGTH);
+            }
+        }
     }  // for (i = genolc_zone_bottom(zone_num)  ...
 
     // Write the final line and close it.

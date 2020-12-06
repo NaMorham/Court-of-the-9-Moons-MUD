@@ -35,6 +35,8 @@ static void medit_save_to_disk(zone_vnum zone_num);
 static void medit_disp_positions(struct descriptor_data *d);
 static void medit_disp_sex(struct descriptor_data *d);
 static void medit_disp_attack_types(struct descriptor_data *d);
+static bool medit_illegal_mob_flag(int fl);
+static int    medit_get_mob_flag_by_number(int num);
 static void medit_disp_mob_flags(struct descriptor_data *d);
 static void medit_disp_aff_flags(struct descriptor_data *d);
 static void medit_disp_menu(struct descriptor_data *d);
@@ -46,7 +48,6 @@ ACMD(do_oasis_medit)
 {
     int number = NOBODY, save = 0, real_num;
     struct descriptor_data *d;
-    char *buf3;
     char buf1[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
 
@@ -93,6 +94,11 @@ ACMD(do_oasis_medit)
     // If a numeric argument was given (like a room number), get it.
     if (number == NOBODY) {
         number = atoi(buf1);
+    }
+
+    if (number < IDXTYPE_MIN || number > IDXTYPE_MAX) {
+        send_to_char(ch, "That mobile VNUM can't exist.\r\n");
+        return;
     }
 
     // Check that whatever it is isn't already being edited.
@@ -171,7 +177,7 @@ ACMD(do_oasis_medit)
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
-    mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s starts editing zone %d allowed zone %d",
+    mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "OLC: %s starts editing zone %d allowed zone %d",
         GET_NAME(ch), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(ch));
 }
 
@@ -287,7 +293,7 @@ void medit_save_internally(struct descriptor_data *d)
         free_proto_script(mob, MOB_TRIGGER);
         copy_proto_script(&mob_proto[new_rnum], mob, MOB_TRIGGER);
         assign_triggers(mob, MOB_TRIGGER);
-    }
+    }  // for (mob ...
     // end trigger update
 
     if (!i) {  // Only renumber on new mobiles.
@@ -358,15 +364,70 @@ static void medit_disp_attack_types(struct descriptor_data *d)
 }
 
 /*
+ *  Find mob flags that shouldn't be set by builders
+ */
+static bool medit_illegal_mob_flag(int fl)
+{
+    int i;
+
+    // add any other flags you dont want them setting
+    const int illegal_flags[] = {
+        MOB_ISNPC,
+        MOB_NOTDEADYET,
+    };
+
+    const int num_illegal_flags = sizeof(illegal_flags) / sizeof(int);
+
+
+    for (i = 0; i < num_illegal_flags; i++) {
+        if (fl == illegal_flags[i]) {
+            return (TRUE);
+        }
+    }
+
+    return (FALSE);
+
+}
+
+/*
+ * Due to illegal mob flags not showing in the mob flags list,
+ * we need this to convert the list number back to flag value
+ */
+static int medit_get_mob_flag_by_number(int num)
+{
+    int i, count = 0;
+    for (i = 0; i < NUM_MOB_FLAGS; i++) {
+        if (medit_illegal_mob_flag(i)) {
+            continue;
+        }
+        if ((++count) == num) {
+            return i;
+        }
+    }
+    // Return 'illegal flag' value
+    return -1;
+}
+
+/*
  * Display mob-flags menu.
  */
 static void medit_disp_mob_flags(struct descriptor_data *d)
 {
+    int i, count = 0, columns = 0;
     char flags[MAX_STRING_LENGTH];
 
     get_char_colors(d->character);
     clear_screen(d);
-    column_list(d->character, 0, action_bits, NUM_MOB_FLAGS, TRUE);
+
+    // Mob flags has special handling to remove illegal flags from the list
+    for (i = 0; i < NUM_MOB_FLAGS; i++) {
+        if (medit_illegal_mob_flag(i)) {
+            continue;
+        }
+        write_to_output(d, "%s%2d%s) %-20.20s    %s", grn, ++count, nrm, action_bits[i],
+            !(++columns % 2) ? "\r\n" : "");
+    }
+
     sprintbitarray(MOB_FLAGS(OLC_MOB(d)), action_bits, AF_ARRAY_MAX, flags);
     write_to_output(d, "\r\nCurrent flags : %s%s%s\r\nEnter mob flags (0 to quit) : ", cyn, flags, nrm);
 }
@@ -380,8 +441,8 @@ static void medit_disp_aff_flags(struct descriptor_data *d)
 
     get_char_colors(d->character);
     clear_screen(d);
-    // +1 since AFF_FLAGS don't start at 0.
-    column_list(d->character, 0, affected_bits + 1, NUM_AFF_FLAGS, TRUE);
+    // +1/-1 antics needed because AFF_FLAGS doesn't start at 0.
+    column_list(d->character, 0, affected_bits + 1, NUM_AFF_FLAGS - 1, TRUE);
     sprintbitarray(AFF_FLAGS(OLC_MOB(d)), affected_bits, AF_ARRAY_MAX, flags);
     write_to_output(d, "\r\nCurrent flags   : %s%s%s\r\nEnter aff flags (0 to quit) : ",
         cyn, flags, nrm);
@@ -403,8 +464,8 @@ static void medit_disp_menu(struct descriptor_data *d)
         "-- Mob Number:  [%s%d%s]\r\n"
         "%s1%s) Sex: %s%-7.7s%s             %s2%s) Keywords: %s%s\r\n"
         "%s3%s) S-Desc: %s%s\r\n"
-        "%s4%s) L-Desc:-\r\n%s%s"
-        "%s5%s) D-Desc:-\r\n%s%s",
+        "%s4%s) L-Desc:-\r\n%s%s\r\n"
+        "%s5%s) D-Desc:-\r\n%s%s\r\n",
 
         cyn, OLC_NUM(d), nrm,
         grn, nrm, yel, genders[(int)GET_SEX(mob)], nrm,
@@ -457,7 +518,7 @@ static void medit_disp_stats_menu(struct descriptor_data *d)
     clear_screen(d);
 
     // Color codes have to be used here, for count_color_codes to work
-    sprintf(buf, "(range @y%d@n to @y%d@n)", GET_HIT(mob) + GET_MOVE(mob), (GET_HIT(mob) * GET_MANA(mob)) + GET_MOVE(mob));
+    sprintf(buf, "(range \ty%d\tn to \ty%d\tn)", GET_HIT(mob) + GET_MOVE(mob), (GET_HIT(mob) * GET_MANA(mob)) + GET_MOVE(mob));
 
     // Top section - standard stats
     write_to_output(d,
@@ -515,7 +576,7 @@ static void medit_disp_stats_menu(struct descriptor_data *d)
 
 void medit_parse(struct descriptor_data *d, char *arg)
 {
-    int i = -1;
+    int i = -1, j;
     char *oldtext = NULL;
 
     if (OLC_MODE(d) > MEDIT_NUMERICAL_RESPONSE) {
@@ -562,7 +623,6 @@ void medit_parse(struct descriptor_data *d, char *arg)
             write_to_output(d, "Do you wish to save your changes? : ");
             return;
         }
-        break;
 
     case MEDIT_MAIN_MENU:
         i = 0;
@@ -893,8 +953,13 @@ void medit_parse(struct descriptor_data *d, char *arg)
         if ((i = atoi(arg)) <= 0) {
             break;
         }
-        else if (i <= NUM_MOB_FLAGS) {
-            TOGGLE_BIT_AR(MOB_FLAGS(OLC_MOB(d)), (i - 1));
+        else if ((j = medit_get_mob_flag_by_number(i)) == -1) {
+            write_to_output(d, "Invalid choice!\r\n");
+            write_to_output(d, "Enter mob flags (0 to quit) :");
+            return;
+        }
+        else if (j <= NUM_MOB_FLAGS) {
+            TOGGLE_BIT_AR(MOB_FLAGS(OLC_MOB(d)), (j - 1));
         }
         medit_disp_mob_flags(d);
         return;
@@ -910,12 +975,11 @@ void medit_parse(struct descriptor_data *d, char *arg)
         // Remove unwanted bits right away.
         REMOVE_BIT_AR(AFF_FLAGS(OLC_MOB(d)), AFF_CHARM);
         REMOVE_BIT_AR(AFF_FLAGS(OLC_MOB(d)), AFF_POISON);
-        REMOVE_BIT_AR(AFF_FLAGS(OLC_MOB(d)), AFF_GROUP);
         REMOVE_BIT_AR(AFF_FLAGS(OLC_MOB(d)), AFF_SLEEP);
         medit_disp_aff_flags(d);
         return;
 
-    // Numerical responses.
+        // Numerical responses.
     case MEDIT_SEX:
         GET_SEX(OLC_MOB(d)) = LIMIT(i - 1, 0, NUM_GENDERS - 1);
         break;
@@ -1072,6 +1136,7 @@ void medit_parse(struct descriptor_data *d, char *arg)
 
     case MEDIT_ALIGNMENT:
         GET_ALIGNMENT(OLC_MOB(d)) = LIMIT(i, -1000, 1000);
+        OLC_VAL(d) = TRUE;
         medit_disp_stats_menu(d);
         return;
 
@@ -1085,7 +1150,7 @@ void medit_parse(struct descriptor_data *d, char *arg)
         break;
 
     case MEDIT_DELETE:
-        if (*arg == 'y' || *arg == 'Y') {
+        if ((*arg == 'y') || (*arg == 'Y')) {
             if (delete_mobile(GET_MOB_RNUM(OLC_MOB(d))) != NOBODY) {
                 write_to_output(d, "Mobile deleted.\r\n");
             }
@@ -1096,7 +1161,7 @@ void medit_parse(struct descriptor_data *d, char *arg)
             cleanup_olc(d, CLEANUP_ALL);
             return;
         }
-        else if (*arg == 'n' || *arg == 'N') {
+        else if ((*arg == 'n') || (*arg == 'N')) {
             medit_disp_menu(d);
             OLC_MODE(d) = MEDIT_MAIN_MENU;
             return;

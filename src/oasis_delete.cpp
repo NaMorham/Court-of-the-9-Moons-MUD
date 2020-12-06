@@ -54,7 +54,7 @@ int free_strings(void *data, int type)
     case OASIS_EXI:
         room = (struct room_data *) data;
 
-        for (i = 0; i < NUM_OF_DIRS; i++) {
+        for (i = 0; i < NUM_OF_DIRS; i++) { // NUM_OF_DIRS, not DIR_COUNT
             if (room->dir_option[i]) {
                 if (room->dir_option[i]->general_description) {
                     free(room->dir_option[i]->general_description);
@@ -67,7 +67,7 @@ int free_strings(void *data, int type)
                 free(room->dir_option[i]);
                 room->dir_option[i] = NULL;
             }
-        }
+        }  // for (i ...
 
         return (TRUE);
 
@@ -81,6 +81,10 @@ int free_strings(void *data, int type)
         if (config->play.OK) {
             free(config->play.OK);
             config->play.OK = NULL;
+        }
+        if (config->play.HUH) {
+            free(config->play.HUH);
+            config->play.HUH = NULL;
         }
         if (config->play.NOPERSON) {
             free(config->play.NOPERSON);
@@ -119,5 +123,5 @@ int free_strings(void *data, int type)
     default:
         mudlog(BRF, LVL_GOD, TRUE, "SYSERR: oasis_delete.c: free_strings: Invalid type handled (Type %d).", type);
         return (FALSE);
-    }
+    }  // switch (type)
 }
