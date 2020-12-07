@@ -81,6 +81,7 @@ struct shop_data {
 #define TRADE_NOCLERIC     (1 << 4)
 #define TRADE_NOTHIEF      (1 << 5)
 #define TRADE_NOWARRIOR    (1 << 6)
+// @todo: race specific trade flags
 /** Total number of trade types */
 #define NUM_TRADERS     7
 
@@ -126,13 +127,14 @@ struct stack_data {
 #define NOTRADE_CLERIC(i)       (IS_SET(SHOP_TRADE_WITH((i)), TRADE_NOCLERIC))
 #define NOTRADE_THIEF(i)        (IS_SET(SHOP_TRADE_WITH((i)), TRADE_NOTHIEF))
 #define NOTRADE_WARRIOR(i)      (IS_SET(SHOP_TRADE_WITH((i)), TRADE_NOWARRIOR))
+// @todo: race specific flags
 
 /* Shop flags */
 #define WILL_START_FIGHT    (1 << 0)
 #define WILL_BANK_MONEY     (1 << 1)
 #define HAS_UNLIMITED_CASH  (1 << 2)
 /** Total number of shop flags */
-#define NUM_SHOP_FLAGS    3
+#define NUM_SHOP_FLAGS      3
 
 #define SHOP_KILL_CHARS(i)      (IS_SET(SHOP_BITVECTOR(i), WILL_START_FIGHT))
 #define SHOP_USES_BANK(i)       (IS_SET(SHOP_BITVECTOR(i), WILL_BANK_MONEY))
@@ -147,6 +149,7 @@ struct stack_data {
 #define MSG_NO_SEE_CHAR         "I don't trade with someone I can't see!"
 #define MSG_NO_SELL_ALIGN       "Get out of here before I call the guards!"
 #define MSG_NO_SELL_CLASS       "We don't serve your kind here!"
+#define MSG_NO_SELL_RACE        "We don't serve you people here!"
 #define MSG_NO_USED_WANDSTAFF   "I don't buy used up wands or staves!"
 #define MSG_CANT_KILL_KEEPER    "Get out of here before I call the guards!"
 
@@ -156,6 +159,6 @@ struct stack_data {
 extern const char *trade_letters[];
 extern const char *shop_bits[];
 
-#endif /* __SHOP_C__ */
+#endif // __SHOP_C__
 
-#endif /* _SHOP_H_ */
+#endif // _SHOP_H_

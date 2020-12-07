@@ -12,6 +12,8 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
+#include "protocol.h" /* Kavir Plugin*/
+#include "lists.h"
 #include "mudtypes.h"
 
 /**

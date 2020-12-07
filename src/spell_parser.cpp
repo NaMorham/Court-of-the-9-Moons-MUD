@@ -31,8 +31,11 @@ char cast_arg2[MAX_INPUT_LENGTH];
 const char *unused_spellname = "!UNUSED!";  // So we can get &unused_spellname
 
 /* Local (File Scope) Function Prototypes */
-static void say_spell(struct char_data *ch, int spellnum, struct char_data *tch, struct obj_data *tobj);
-static void spello(int spl, const char *name, int max_mana, int min_mana, int mana_change, int minpos, int targets, int violent, int routines, const char *wearoff);
+static void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
+       struct obj_data *tobj);
+static void spello(int spl, const char *name, int max_mana, int min_mana,
+       int mana_change, int minpos, int targets, int violent, int routines,
+       const char *wearoff);
 static int mag_manacost(struct char_data *ch, int spellnum);
 
 /*
@@ -43,40 +46,20 @@ struct syllable {
     const char *news;
 };
 
-static struct syllable syls[] = {
-    {" ",       " "},
-    {"ar",      "abra"},
-    {"ate",     "i"},
-    {"cau",     "kada"},
-    {"blind",   "nose"},
-    {"bur",     "mosa"},
-    {"cu",      "judi"},
-    {"de",      "oculo"},
-    {"dis",     "mar"},
-    {"ect",     "kamina"},
-    {"en",      "uns"},
-    {"gro",     "cra"},
-    {"light",   "dies"},
-    {"lo",      "hi"},
-    {"magi",    "kari"},
-    {"mon",     "bar"},
-    {"mor",     "zak"},
-    {"move",    "sido"},
-    {"ness",    "lacri"},
-    {"ning",    "illa"},
-    {"per",     "duda"},
-    {"ra",      "gru"},
-    {"re",      "candus"},
-    {"son",     "sabru"},
-    {"tect",    "infra"},
-    {"tri",     "cula"},
-    {"ven",     "nofo"},
-    {"word of", "inset"},
-    {"a", "i"}, {"b", "v"}, {"c", "q"}, {"d", "m"}, {"e", "o"}, {"f", "y"}, {"g", "t"},
-    {"h", "p"}, {"i", "u"}, {"j", "y"}, {"k", "t"}, {"l", "r"}, {"m", "w"}, {"n", "b"},
-    {"o", "a"}, {"p", "s"}, {"q", "d"}, {"r", "f"}, {"s", "g"}, {"t", "h"}, {"u", "e"},
-    {"v", "z"}, {"w", "x"}, {"x", "n"}, {"y", "l"}, {"z", "k"}, {"", ""}
-};
+static struct syllable syls[] = { { " ", " " }, { "ar", "abra" },
+       { "ate", "i" }, { "cau", "kada" }, { "blind", "nose" }, { "bur", "mosa" }, {
+             "cu", "judi" }, { "de", "oculo" }, { "dis", "mar" },
+       { "ect", "kamina" }, { "en", "uns" }, { "gro", "cra" }, { "light", "dies" },
+       { "lo", "hi" }, { "magi", "kari" }, { "mon", "bar" }, { "mor", "zak" }, {
+             "move", "sido" }, { "ness", "lacri" }, { "ning", "illa" }, { "per",
+             "duda" }, { "ra", "gru" }, { "re", "candus" }, { "son", "sabru" }, {
+             "tect", "infra" }, { "tri", "cula" }, { "ven", "nofo" }, { "word of",
+             "inset" }, { "a", "i" }, { "b", "v" }, { "c", "q" }, { "d", "m" }, {
+             "e", "o" }, { "f", "y" }, { "g", "t" }, { "h", "p" }, { "i", "u" }, {
+             "j", "y" }, { "k", "t" }, { "l", "r" }, { "m", "w" }, { "n", "b" }, {
+             "o", "a" }, { "p", "s" }, { "q", "d" }, { "r", "f" }, { "s", "g" }, {
+             "t", "h" }, { "u", "e" }, { "v", "z" }, { "w", "x" }, { "x", "n" }, {
+             "y", "l" }, { "z", "k" }, { "", "" } };
 
 static int mag_manacost(struct char_data *ch, int spellnum)
 {
@@ -85,34 +68,50 @@ static int mag_manacost(struct char_data *ch, int spellnum)
         SINFO.mana_min);
 }
 
-static void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
-    struct obj_data *tobj)
+static char *obfuscate_spell(const char *unobfuscated)
 {
-    char lbuf[256], buf[256], buf1[256], buf2[256];    /* FIXME */
-    const char *format;
+    static char obfuscated[200];
+    int maxlen = 200;
 
-    struct char_data *i;
     int j, ofs = 0;
 
-    *buf = '\0';
-    strlcpy(lbuf, skill_name(spellnum), sizeof(lbuf));
+    *obfuscated = '\0';
 
-    while (lbuf[ofs]) {
+    while (unobfuscated[ofs]) {
         for (j = 0; *(syls[j].org); j++) {
-            if (!strncmp(syls[j].org, lbuf + ofs, strlen(syls[j].org))) {
-                strcat(buf, syls[j].news);    // strcat: BAD
+            if (!strncmp(syls[j].org, unobfuscated + ofs, strlen(syls[j].org))) {
+                if (strlen(syls[j].news) < maxlen) {
+                    strncat(obfuscated, syls[j].news, maxlen);
+                    maxlen -= strlen(syls[j].news);
+                }
+                else {
+                    log("No room in obfuscated version of '%s' (currently obfuscated to '%s') to add syllable '%s'.",
+                        unobfuscated, obfuscated, syls[j].news);
+                }
                 ofs += strlen(syls[j].org);
                 break;
             }
         }  // for (j ...
+
         // i.e., we didn't find a match in syls[]
         if (!*syls[j].org) {
-            WriteLogf("No entry in syllable table for substring of '%s'", lbuf);
+            log("No entry in syllable table for substring of '%s' starting at '%s'.", unobfuscated, unobfuscated + ofs);
             ofs++;
         }
-    }  // while (lbuf[ofs])
+    }  // while (unobfuscated[ofs])
+    return obfuscated;
+}
 
-    if (tch != NULL && IN_ROOM(tch) == IN_ROOM(ch)) {
+static void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
+struct obj_data *tobj)
+{
+    const char *format, *spell = skill_name(spellnum);
+    char act_buf_original[256], act_buf_obfuscated[256], *obfuscated = obfuscate_spell(spell);
+
+
+    struct char_data *i;
+
+    if ((tch != NULL) && (IN_ROOM(tch) == IN_ROOM(ch))) {
         if (tch == ch) {
             format = "$n closes $s eyes and utters the words, '%s'.";
         }
@@ -120,32 +119,33 @@ static void say_spell(struct char_data *ch, int spellnum, struct char_data *tch,
             format = "$n stares at $N and utters the words, '%s'.";
         }
     }
-    else if (tobj != NULL &&
-        ((IN_ROOM(tobj) == IN_ROOM(ch)) || (tobj->carried_by == ch))) {
+    else if ((tobj != NULL)
+        && ((IN_ROOM(tobj) == IN_ROOM(ch)) || (tobj->carried_by == ch))) {
         format = "$n stares at $p and utters the words, '%s'.";
     }
-    else
+    else {
         format = "$n utters the words, '%s'.";
+    }
 
-    snprintf(buf1, sizeof(buf1), format, skill_name(spellnum));
-    snprintf(buf2, sizeof(buf2), format, buf);
+    snprintf(act_buf_original, sizeof(act_buf_original), format, spell);
+    snprintf(act_buf_obfuscated, sizeof(act_buf_obfuscated), format, obfuscated);
 
     for (i = world[IN_ROOM(ch)].people; i; i = i->next_in_room) {
-        if (i == ch || i == tch || !i->desc || !AWAKE(i)) {
+        if ((i == ch) || (i == tch) || !i->desc || !AWAKE(i)) {
             continue;
         }
         if (GET_CLASS(ch) == GET_CLASS(i)) {
-            perform_act(buf1, ch, tobj, tch, i);
+            perform_act(act_buf_original, ch, tobj, tch, i);
         }
         else {
-            perform_act(buf2, ch, tobj, tch, i);
+            perform_act(act_buf_obfuscated, ch, tobj, tch, i);
         }
     }  // for (i ...
 
-    if (tch != NULL && tch != ch && IN_ROOM(tch) == IN_ROOM(ch)) {
-        snprintf(buf1, sizeof(buf1), "$n stares at you and utters the words, '%s'.",
-            GET_CLASS(ch) == GET_CLASS(tch) ? skill_name(spellnum) : buf);
-        act(buf1, FALSE, ch, NULL, tch, TO_VICT);
+    if ((tch != NULL) && (tch != ch) && (IN_ROOM(tch) == IN_ROOM(ch))) {
+        snprintf(act_buf_original, sizeof(act_buf_original), "$n stares at you and utters the words, '%s'.",
+            GET_CLASS(ch) == GET_CLASS(tch) ? spell : obfuscated);
+        act(act_buf_original, FALSE, ch, NULL, tch, TO_VICT);
     }
 }
 
@@ -193,7 +193,7 @@ int find_skill_num(char *name)
         if (ok && !*first2) {
             return (skindex);
         }
-    }
+    }  // for (skindex ...
 
     return (-1);
 }
@@ -206,7 +206,7 @@ int find_skill_num(char *name)
  * ignored here, to make callers simpler.
  */
 int call_magic(struct char_data *caster, struct char_data *cvict,
-    struct obj_data *ovict, int spellnum, int level, int casttype)
+struct obj_data *ovict, int spellnum, int level, int casttype)
 {
     int savetype;
 
@@ -295,6 +295,9 @@ int call_magic(struct char_data *caster, struct char_data *cvict,
     if (IS_SET(SINFO.routines, MAG_CREATIONS)) {
         mag_creations(level, caster, spellnum);
     }
+    if (IS_SET(SINFO.routines, MAG_ROOMS)) {
+        mag_rooms(level, caster, spellnum);
+    }
 
     if (IS_SET(SINFO.routines, MAG_MANUAL)) {
         switch (spellnum) {
@@ -342,8 +345,7 @@ int call_magic(struct char_data *caster, struct char_data *cvict,
  * Staves and wands will default to level 14 if the level is not specified; the
  * DikuMUD format did not specify staff and wand levels in the world files
  */
-void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
-    char *argument)
+void mag_objectmagic(struct char_data *ch, struct obj_data *obj, char *argument)
 {
     char arg[MAX_INPUT_LENGTH];
     int i, k;
@@ -420,7 +422,8 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
                 act("$n points $p at $P.", TRUE, ch, obj, tobj, TO_ROOM);
             }
         }
-        else if (IS_SET(spell_info[GET_OBJ_VAL(obj, 3)].routines, MAG_AREAS | MAG_MASSES)) {
+        else if (IS_SET(spell_info[GET_OBJ_VAL(obj, 3)].routines,
+            MAG_AREAS | MAG_MASSES)) {
             // Wands with area spells don't need to be pointed.
             act("You point $p outward.", FALSE, ch, obj, NULL, TO_CHAR);
             act("$n points $p outward.", TRUE, ch, obj, NULL, TO_ROOM);
@@ -454,8 +457,9 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
                 return;
             }
         }
-        else
+        else {
             tch = ch;
+        }
 
         act("You recite $p which dissolves.", TRUE, ch, obj, 0, TO_CHAR);
         if (obj->action_description) {
@@ -504,6 +508,7 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
             extract_obj(obj);
         }
         break;
+
     default:
         WriteLogf("SYSERR: Unknown object_type %d in mag_objectmagic.",
             GET_OBJ_TYPE(obj));
@@ -518,9 +523,9 @@ void mag_objectmagic(struct char_data *ch, struct obj_data *obj,
  * for spells cast by NPCs via specprocs.
  */
 int cast_spell(struct char_data *ch, struct char_data *tch,
-    struct obj_data *tobj, int spellnum)
+struct obj_data *tobj, int spellnum)
 {
-    if (spellnum < 0 || spellnum > TOP_SPELL_DEFINE) {
+    if ((spellnum < 0) || (spellnum > TOP_SPELL_DEFINE)) {
         WriteLogf("SYSERR: cast_spell trying to call spellnum %d/%d.", spellnum,
             TOP_SPELL_DEFINE);
         return (0);
@@ -558,7 +563,7 @@ int cast_spell(struct char_data *ch, struct char_data *tch,
         send_to_char(ch, "You cannot cast this spell upon yourself!\r\n");
         return (0);
     }
-    if (IS_SET(SINFO.routines, MAG_GROUPS) && !AFF_FLAGGED(ch, AFF_GROUP)) {
+    if (IS_SET(SINFO.routines, MAG_GROUPS) && !GROUP(ch)) {
         send_to_char(ch, "You can't cast this spell if you're not in a group!\r\n");
         return (0);
     }
@@ -735,18 +740,18 @@ void spell_level(int spell, int chclass, int level)
 {
     int bad = 0;
 
-    if (spell < 0 || spell > TOP_SPELL_DEFINE) {
+    if ((spell < 0) || (spell > TOP_SPELL_DEFINE)) {
         WriteLogf("SYSERR: attempting assign to illegal spellnum %d/%d", spell, TOP_SPELL_DEFINE);
         return;
     }
 
-    if (chclass < 0 || chclass >= NUM_CLASSES) {
+    if ((chclass < 0) || (chclass >= NUM_CLASSES)) {
         WriteLogf("SYSERR: assigning '%s' to illegal class %d/%d.", skill_name(spell),
             chclass, NUM_CLASSES - 1);
         bad = 1;
     }
 
-    if (level < 1 || level > LVL_IMPL) {
+    if ((level < 1) || (level > LVL_IMPL)) {
         WriteLogf("SYSERR: assigning '%s' to illegal level %d/%d.", skill_name(spell),
             level, LVL_IMPL);
         bad = 1;
@@ -834,12 +839,10 @@ void mag_assign_spells(void)
     // Do not change the loop above.
 
     spello(SPELL_ANIMATE_DEAD, "animate dead", 35, 10, 3, POS_STANDING,
-        TAR_OBJ_ROOM, FALSE, MAG_SUMMONS,
-        NULL);
+        TAR_OBJ_ROOM, FALSE, MAG_SUMMONS, NULL);
 
     spello(SPELL_ARMOR, "armor", 30, 15, 3, POS_FIGHTING,
-        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS,
-        "You feel less protected.");
+        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS, "You feel less protected.");
 
     spello(SPELL_BLESS, "bless", 35, 5, 3, POS_STANDING,
         TAR_CHAR_ROOM | TAR_OBJ_INV, FALSE, MAG_AFFECTS | MAG_ALTER_OBJS,
@@ -891,9 +894,11 @@ void mag_assign_spells(void)
         TAR_CHAR_ROOM | TAR_OBJ_INV, TRUE, MAG_AFFECTS | MAG_ALTER_OBJS,
         "You feel more optimistic.");
 
+    spello(SPELL_DARKNESS, "darkness", 30, 5, 4, POS_STANDING,
+        TAR_IGNORE, FALSE, MAG_ROOMS, NULL);
+
     spello(SPELL_DETECT_ALIGN, "detect alignment", 20, 10, 2, POS_STANDING,
-        TAR_CHAR_ROOM | TAR_SELF_ONLY, FALSE, MAG_AFFECTS,
-        "You feel less aware.");
+        TAR_CHAR_ROOM | TAR_SELF_ONLY, FALSE, MAG_AFFECTS, "You feel less aware.");
 
     spello(SPELL_DETECT_INVIS, "detect invisibility", 20, 10, 2, POS_STANDING,
         TAR_CHAR_ROOM | TAR_SELF_ONLY, FALSE, MAG_AFFECTS,
@@ -928,6 +933,9 @@ void mag_assign_spells(void)
     spello(SPELL_FIREBALL, "fireball", 40, 30, 2, POS_FIGHTING,
         TAR_CHAR_ROOM | TAR_FIGHT_VICT, TRUE, MAG_DAMAGE, NULL);
 
+    spello(SPELL_FLY, "fly", 40, 20, 2, POS_FIGHTING,
+        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS, "You drift slowly to the ground.");
+
     spello(SPELL_GROUP_HEAL, "group heal", 80, 60, 5, POS_STANDING,
         TAR_IGNORE, FALSE, MAG_GROUPS, NULL);
 
@@ -942,8 +950,8 @@ void mag_assign_spells(void)
         "Your night vision seems to fade.");
 
     spello(SPELL_INVISIBLE, "invisibility", 35, 25, 1, POS_STANDING,
-        TAR_CHAR_ROOM | TAR_OBJ_INV | TAR_OBJ_ROOM, FALSE, MAG_AFFECTS | MAG_ALTER_OBJS,
-        "You feel yourself exposed.");
+        TAR_CHAR_ROOM | TAR_OBJ_INV | TAR_OBJ_ROOM, FALSE,
+        MAG_AFFECTS | MAG_ALTER_OBJS, "You feel yourself exposed.");
 
     spello(SPELL_LIGHTNING_BOLT, "lightning bolt", 30, 15, 1, POS_FIGHTING,
         TAR_CHAR_ROOM | TAR_FIGHT_VICT, TRUE, MAG_DAMAGE, NULL);
@@ -956,8 +964,7 @@ void mag_assign_spells(void)
 
     spello(SPELL_POISON, "poison", 50, 20, 3, POS_STANDING,
         TAR_CHAR_ROOM | TAR_NOT_SELF | TAR_OBJ_INV, TRUE,
-        MAG_AFFECTS | MAG_ALTER_OBJS,
-        "You feel less sick.");
+        MAG_AFFECTS | MAG_ALTER_OBJS, "You feel less sick.");
 
     spello(SPELL_PROT_FROM_EVIL, "protection from evil", 40, 10, 3, POS_STANDING,
         TAR_CHAR_ROOM | TAR_SELF_ONLY, FALSE, MAG_AFFECTS,
@@ -968,7 +975,8 @@ void mag_assign_spells(void)
         MAG_UNAFFECTS | MAG_ALTER_OBJS, NULL);
 
     spello(SPELL_REMOVE_POISON, "remove poison", 40, 8, 4, POS_STANDING,
-        TAR_CHAR_ROOM | TAR_OBJ_INV | TAR_OBJ_ROOM, FALSE, MAG_UNAFFECTS | MAG_ALTER_OBJS, NULL);
+        TAR_CHAR_ROOM | TAR_OBJ_INV | TAR_OBJ_ROOM, FALSE,
+        MAG_UNAFFECTS | MAG_ALTER_OBJS, NULL);
 
     spello(SPELL_SANCTUARY, "sanctuary", 110, 85, 5, POS_STANDING,
         TAR_CHAR_ROOM, FALSE, MAG_AFFECTS,
@@ -982,12 +990,10 @@ void mag_assign_spells(void)
         TAR_CHAR_ROOM | TAR_FIGHT_VICT, TRUE, MAG_DAMAGE, NULL);
 
     spello(SPELL_SLEEP, "sleep", 40, 25, 5, POS_STANDING,
-        TAR_CHAR_ROOM, TRUE, MAG_AFFECTS,
-        "You feel less tired.");
+        TAR_CHAR_ROOM, TRUE, MAG_AFFECTS, "You feel less tired.");
 
     spello(SPELL_STRENGTH, "strength", 35, 30, 1, POS_STANDING,
-        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS,
-        "You feel weaker.");
+        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS, "You feel weaker.");
 
     spello(SPELL_SUMMON, "summon", 75, 50, 3, POS_STANDING,
         TAR_CHAR_WORLD | TAR_NOT_SELF, FALSE, MAG_MANUAL, NULL);
@@ -996,15 +1002,13 @@ void mag_assign_spells(void)
         TAR_CHAR_ROOM, FALSE, MAG_MANUAL, NULL);
 
     spello(SPELL_WATERWALK, "waterwalk", 40, 20, 2, POS_STANDING,
-        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS,
-        "Your feet seem less buoyant.");
+        TAR_CHAR_ROOM, FALSE, MAG_AFFECTS, "Your feet seem less buoyant.");
 
     spello(SPELL_WORD_OF_RECALL, "word of recall", 20, 10, 2, POS_FIGHTING,
         TAR_CHAR_ROOM, FALSE, MAG_MANUAL, NULL);
 
     spello(SPELL_IDENTIFY, "identify", 50, 25, 5, POS_STANDING,
         TAR_CHAR_ROOM | TAR_OBJ_INV | TAR_OBJ_ROOM, FALSE, MAG_MANUAL, NULL);
-
 
     // NON-castable spells should appear below here.
     spello(SPELL_IDENTIFY, "identify", 0, 0, 0, 0,
@@ -1026,4 +1030,6 @@ void mag_assign_spells(void)
     skillo(SKILL_SNEAK, "sneak");
     skillo(SKILL_STEAL, "steal");
     skillo(SKILL_TRACK, "track");
+    skillo(SKILL_WHIRLWIND, "whirlwind");
+    skillo(SKILL_BANDAGE, "bandage");
 }

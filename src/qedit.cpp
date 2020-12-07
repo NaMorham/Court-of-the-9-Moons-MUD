@@ -102,9 +102,9 @@ ACMD(do_oasis_qedit)
     if (number == NOWHERE) {
         number = atoi(buf1);
     }
-    if (number < IDXTYPE_MIN || number > IDXTYPE_MAX) {
-       send_to_char(ch, "That quest VNUM can't exist.\r\n");
-       return;
+    if ((number < IDXTYPE_MIN) || (number > IDXTYPE_MAX)) {
+        send_to_char(ch, "That quest VNUM can't exist.\r\n");
+        return;
     }
 
     /****************************************************************************
@@ -132,6 +132,7 @@ ACMD(do_oasis_qedit)
         mudlog(BRF, LVL_IMMORT, TRUE,
             "SYSERR: do_oasis_quest: Player already had olc structure.");
         free(d->olc);
+        d->olc = NULL;
     }
 
     CREATE(d->olc, struct oasis_olc_data, 1);
@@ -275,7 +276,7 @@ static void qedit_disp_menu(struct descriptor_data *d)
             snprintf(buf2, sizeof(buf2), "to an unknown mob [%d].",
                 quest->value[5]);
         }
-    }
+    }  // if (quest->type == AQ_OBJ_RETURN)
     switch (quest->type) {
     case AQ_OBJ_FIND:
     case AQ_OBJ_RETURN:
@@ -302,31 +303,31 @@ static void qedit_disp_menu(struct descriptor_data *d)
     default:
         snprintf(targetname, sizeof(targetname), "Unknown");
         break;
-    }
+    }  // switch (quest->type)
     write_to_output(d,
-       "-- Quest Number       : \tn[\tc%6d\tn]\r\n"
-       "\tg 1\tn) Quest Name        : \ty%s\r\n"
-       "\tg 2\tn) Description       : \ty%s\r\n"
-       "\tg 3\tn) Accept Message\r\n\ty%s"
-       "\tg 4\tn) Completion Message\r\n\ty%s"
-       "\tg 5\tn) Quit Message\r\n\ty%s"
-       "\tg 6\tn) Quest Flags       : \tc%s\r\n"
-       "\tg 7\tn) Quest Type        : \tc%s %s\r\n"
-       "\tg 8\tn) Quest Master    : [\tc%6d\tn] \ty%s\r\n"
-       "\tg 9\tn) Quest Target    : [\tc%6d\tn] \ty%s\r\n"
-       "\tg A\tn) Quantity           : [\tc%6d\tn]\r\n"
-       "\tn       Quest Point Rewards\r\n"
-       "\tg B\tn) Completed          : [\tc%6d\tn] \tg C\tn) Abandoned    : [\tc%6d\tn]\r\n"
-       "\tn       Other Rewards Rewards\r\n"
-       "\tg G\tn) Gold Coins        : [\tc%6d\tn] \tg T\tn) Exp Points    : [\tc%6d\tn] \tg O\tn) Object : [\tc%6d\tn]\r\n"
-       "\tn       Level Limits to Accept Quest\r\n"
-       "\tg D\tn) Lower Level       : [\tc%6d\tn] \tg E\tn) Upper Level : [\tc%6d\tn]\r\n"
-       "\tg F\tn) Prerequisite    : [\tc%6d\tn] \ty%s\r\n"
-       "\tg L\tn) Time Limit        : [\tc%6d\tn]\r\n"
-       "\tg N\tn) Next Quest        : [\tc%6d\tn] \ty%s\r\n"
-       "\tg P\tn) Previous Quest : [\tc%6d\tn] \ty%s\r\n"
-       "\tg X\tn) Delete Quest\r\n"
-       "\tg Q\tn) Quit\r\n"
+        "-- Quest Number       : \tn[\tc%6d\tn]\r\n"
+        "\tg 1\tn) Quest Name        : \ty%s\r\n"
+        "\tg 2\tn) Description       : \ty%s\r\n"
+        "\tg 3\tn) Accept Message\r\n\ty%s"
+        "\tg 4\tn) Completion Message\r\n\ty%s"
+        "\tg 5\tn) Quit Message\r\n\ty%s"
+        "\tg 6\tn) Quest Flags       : \tc%s\r\n"
+        "\tg 7\tn) Quest Type        : \tc%s %s\r\n"
+        "\tg 8\tn) Quest Master    : [\tc%6d\tn] \ty%s\r\n"
+        "\tg 9\tn) Quest Target    : [\tc%6d\tn] \ty%s\r\n"
+        "\tg A\tn) Quantity           : [\tc%6d\tn]\r\n"
+        "\tn       Quest Point Rewards\r\n"
+        "\tg B\tn) Completed          : [\tc%6d\tn] \tg C\tn) Abandoned    : [\tc%6d\tn]\r\n"
+        "\tn       Other Rewards Rewards\r\n"
+        "\tg G\tn) Gold Coins        : [\tc%6d\tn] \tg T\tn) Exp Points    : [\tc%6d\tn] \tg O\tn) Object : [\tc%6d\tn]\r\n"
+        "\tn       Level Limits to Accept Quest\r\n"
+        "\tg D\tn) Lower Level       : [\tc%6d\tn] \tg E\tn) Upper Level : [\tc%6d\tn]\r\n"
+        "\tg F\tn) Prerequisite    : [\tc%6d\tn] \ty%s\r\n"
+        "\tg L\tn) Time Limit        : [\tc%6d\tn]\r\n"
+        "\tg N\tn) Next Quest        : [\tc%6d\tn] \ty%s\r\n"
+        "\tg P\tn) Previous Quest : [\tc%6d\tn] \ty%s\r\n"
+        "\tg X\tn) Delete Quest\r\n"
+        "\tg Q\tn) Quit\r\n"
         "Enter Choice : ",
         quest->vnum,
         quest->name,
@@ -385,10 +386,10 @@ static void qedit_disp_flag_menu(struct descriptor_data *d)
         "Enter quest flags, 0 to quit : ", bits);
     OLC_MODE(d) = QEDIT_FLAGS;
 }
+
 /**************************************
  *    The GARGANTUAN event handler    *
  **************************************/
-
 void qedit_parse(struct descriptor_data *d, char *arg)
 {
     int number = atoi(arg);
@@ -422,7 +423,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
                 "Invalid choice!\r\nDo you wish to save the quest? : ");
             return;
         }
-        break;
+
         //-------------------------------------------------------------------
     case QEDIT_CONFIRM_DELETE:
         switch (*arg) {
@@ -601,7 +602,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
             break;
         }
         return;
-        /*-------------------------------------------------------------------*/
+        // -------------------------------------------------------------------
     case QEDIT_NAME:
         if (!genolc_checkstring(d, arg)) {
             break;
@@ -633,7 +634,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
         break;
     case QEDIT_TYPES:
         number--;
-        if (number < 0 || number >= NUM_AQ_TYPES) {
+        if ((number < 0) || (number >= NUM_AQ_TYPES)) {
             write_to_output(d, "Invalid choice!\r\n");
             qedit_disp_type_menu(d);
             return;
@@ -646,7 +647,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
         }
         break;
     case QEDIT_FLAGS:
-        if (number < 0 || number > NUM_AQ_FLAGS) {
+        if ((number < 0) || (number > NUM_AQ_FLAGS)) {
             write_to_output(d, "That is not a valid choice!\r\n");
             qedit_disp_flag_menu(d);
         }
@@ -754,6 +755,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
         }
         OLC_QUEST(d)->obj_reward = number;
         break;
+
     default:
         // We should never get here
         cleanup_olc(d, CLEANUP_ALL);
