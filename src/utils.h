@@ -67,13 +67,6 @@ struct time_info_data *real_time_passed(time_t t2, time_t t1);
 struct time_info_data *mud_time_passed(time_t t2, time_t t1);
 void        prune_crlf(char *txt);
 void        column_list(struct char_data *ch, int num_cols, const char **list, int list_length, bool show_nums);
-/*
-// Should this be used instead?
-void    column_list(char *out_buffer, size_t buf_left, int page_length,
-                     int skip_lines, int columns, const char **list,
-                     int list_length, int list_offset, const char *format,
-                     ...) __attribute__ ((format (printf, 9, 10)));
- */
 int     get_flag_by_name(const char *flag_list[], char *flag_name);
 int     file_head( FILE *file, char *buf, size_t bufsize, int lines_to_read );
 int     file_tail( FILE *file, char *buf, size_t bufsize, int lines_to_read );
@@ -82,6 +75,12 @@ int     file_numlines( FILE *file );
 IDXTYPE atoidx( const char *str_to_conv );
 char    *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad);
 char    *strpaste(char *str1, char *str2, char *joiner);
+void new_affect(struct affected_type *af);
+int get_class_by_name(char *classname);
+char * convert_from_tabs(char * string);
+int count_non_protocol_chars(char * str);
+char *right_trim_whitespace(const char *string);
+void remove_from_string(char *string, const char *to_remove);
 
 /*
  * Public functions made available form weather.c
@@ -155,7 +154,6 @@ int     perform_move(struct char_data *ch, int dir, int following);
 int     mana_gain(struct char_data *ch);
 int     hit_gain(struct char_data *ch);
 int     move_gain(struct char_data *ch);
-void    advance_level(struct char_data *ch);
 void    set_title(struct char_data *ch, char *title);
 void    gain_exp(struct char_data *ch, int gain);
 void    gain_exp_regardless(struct char_data *ch, int gain);
@@ -163,6 +161,15 @@ void    gain_condition(struct char_data *ch, int condition, int value);
 void    point_update(void);
 void    update_pos(struct char_data *victim);
 void    run_autowiz(void);
+int increase_gold(struct char_data *ch, int amt);
+int decrease_gold(struct char_data *ch, int amt);
+int increase_bank(struct char_data *ch, int amt);
+int decrease_bank(struct char_data *ch, int amt);
+
+/*
+ *  in class.c
+ */
+void       advance_level(struct char_data *ch);
 
 void char_from_furniture(struct char_data *ch);
 // What ch is currently sitting on.
@@ -320,7 +327,7 @@ else {                                     \
  */
 #define LINK(link, first, last, next, prev) \
 do {                                        \
-    if ( !(first) )                         \
+    if (!(first))                           \
       (first) = (link);                     \
     else                                    \
       (last)->next = (link);                \
@@ -341,14 +348,14 @@ do {                                        \
  */
 #define UNLINK(link, first, last, next, prev)   \
 do {                                            \
-    if ( !(link)->prev )                        \
-      (first)                   = (link)->next; \
+    if (!(link)->prev)                          \
+      (first) = (link)->next;                   \
     else                                        \
-      (link)->prev->next        = (link)->next; \
-    if ( !(link)->next )                        \
-      (last)                    = (link)->prev; \
+      (link)->prev->next = (link)->next;        \
+    if (!(link)->next)                          \
+      (last) = (link)->prev;                    \
     else                                        \
-      (link)->next->prev        = (link)->prev; \
+      (link)->next->prev = (link)->prev;        \
 } while(0)
 
 /**
@@ -382,17 +389,17 @@ do {                                                                      \
  * basic bitvector utils
  */
 // Return the bitarray field number x is in.
-#define Q_FIELD(x)  ((int) (x) / 32)
+#define Q_FIELD(x)              ((int) (x) / 32)
 // Return the bit to set in a bitarray field.
-#define Q_BIT(x)    (1 << ((x) % 32))
+#define Q_BIT(x)                (1 << ((x) % 32))
 // 1 if bit is set in the bitarray represented by var, 0 if not.
-#define IS_SET_AR(var, bit)       ((var)[Q_FIELD(bit)] & Q_BIT(bit))
+#define IS_SET_AR(var, bit)     ((var)[Q_FIELD(bit)] & Q_BIT(bit))
 // Set a specific bit in the bitarray represented by var to 1.
-#define SET_BIT_AR(var, bit)      ((var)[Q_FIELD(bit)] |= Q_BIT(bit))
+#define SET_BIT_AR(var, bit)    ((var)[Q_FIELD(bit)] |= Q_BIT(bit))
 // Unset a specific bit in the bitarray represented by var to 0.
-#define REMOVE_BIT_AR(var, bit)   ((var)[Q_FIELD(bit)] &= ~Q_BIT(bit))
+#define REMOVE_BIT_AR(var, bit) ((var)[Q_FIELD(bit)] &= ~Q_BIT(bit))
 // If bit is on in bitarray var, turn it off; if it is off, turn it on.
-#define TOGGLE_BIT_AR(var, bit)   ((var)[Q_FIELD(bit)] = (var)[Q_FIELD(bit)] ^ Q_BIT(bit))
+#define TOGGLE_BIT_AR(var, bit) ((var)[Q_FIELD(bit)] = (var)[Q_FIELD(bit)] ^ Q_BIT(bit))
 
 /*
  * Older, stock tbaMUD bit settings.
@@ -418,39 +425,39 @@ do {                                                                      \
  * Warn if accessing player_specials on a mob.
  * @todo Subtle bug in the var reporting, but works well for now.
  */
-#define CHECK_PLAYER_SPECIAL(ch, var) \
+# define CHECK_PLAYER_SPECIAL(ch, var) \
     (*(((ch)->player_specials == &dummy_mob) ? (WriteLogf("SYSERR: Mob using '"#var"' at %s:%d.", __FILE__, __LINE__), &(var)) : &(var)))
 #else
-#define CHECK_PLAYER_SPECIAL(ch, var)    (var)
+# define CHECK_PLAYER_SPECIAL(ch, var)    (var)
 #endif
 
 // The act flags on a mob. Synonomous with PLR_FLAGS.
-#define MOB_FLAGS(ch)    ((ch)->char_specials.saved.act)
+#define MOB_FLAGS(ch)           ((ch)->char_specials.saved.act)
 // Player flags on a PC. Synonomous with MOB_FLAGS.
-#define PLR_FLAGS(ch)    ((ch)->char_specials.saved.act)
+#define PLR_FLAGS(ch)           ((ch)->char_specials.saved.act)
 // Preference flags on a player (not to be used on mobs).
-#define PRF_FLAGS(ch) CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.pref))
+#define PRF_FLAGS(ch)           CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.pref))
 // Affect flags on the NPC or PC.
-#define AFF_FLAGS(ch)    ((ch)->char_specials.saved.affected_by)
+#define AFF_FLAGS(ch)           ((ch)->char_specials.saved.affected_by)
 /** Room flags.
  * @param loc The real room number.
  */
-#define ROOM_FLAGS(loc)    (world[(loc)].room_flags)
+#define ROOM_FLAGS(loc)         (world[(loc)].room_flags)
 /** Zone flags.
  * @param rnum The real zone number.
  */
-#define ZONE_FLAGS(rnum)       (zone_table[(rnum)].zone_flags)
+#define ZONE_FLAGS(rnum)        (zone_table[(rnum)].zone_flags)
 /** Zone minimum level restriction.
  * @param rnum The real zone number.
  */
-#define ZONE_MINLVL(rnum)      (zone_table[(rnum)].min_level)
+#define ZONE_MINLVL(rnum)       (zone_table[(rnum)].min_level)
 /** Zone maximum level restriction.
  * @param rnum The real zone number.
  */
-#define ZONE_MAXLVL(rnum)      (zone_table[(rnum)].max_level)
+#define ZONE_MAXLVL(rnum)       (zone_table[(rnum)].max_level)
 
 // References the routine element for a spell. Currently unused.
-#define SPELL_ROUTINES(spl)    (spell_info[spl].routines)
+#define SPELL_ROUTINES(spl)     (spell_info[spl].routines)
 
 /*
  * IS_MOB() acts as a VALID_MOB_RNUM()-like function.
@@ -530,25 +537,25 @@ do {                                                                      \
  * char utils
  */
 // What room is PC/NPC in?
-#define IN_ROOM(ch)         ((ch)->in_room)
+#define IN_ROOM(ch)             ((ch)->in_room)
 // What room was PC/NPC previously in?
-#define GET_WAS_IN(ch)      ((ch)->was_in_room)
+#define GET_WAS_IN(ch)          ((ch)->was_in_room)
 // How old is PC/NPC, at last recorded time?
-#define GET_AGE(ch)         (age(ch)->year)
+#define GET_AGE(ch)             (age(ch)->year)
 
 // Name of PC.
-#define GET_PC_NAME(ch)     ((ch)->player.name)
+#define GET_PC_NAME(ch)         ((ch)->player.name)
 // Name of PC or short_descr of NPC.
-#define GET_NAME(ch)        (IS_NPC(ch) ? \
+#define GET_NAME(ch)            (IS_NPC(ch) ? \
              (ch)->player.short_descr : GET_PC_NAME(ch))
 // Title of PC
-#define GET_TITLE(ch)       ((ch)->player.title)
+#define GET_TITLE(ch)           ((ch)->player.title)
 // Level of PC or NPC.
-#define GET_LEVEL(ch)       ((ch)->player.level)
+#define GET_LEVEL(ch)           ((ch)->player.level)
 // Password of PC.
-#define GET_PASSWD(ch)      ((ch)->player.passwd)
+#define GET_PASSWD(ch)          ((ch)->player.passwd)
 // The player file position of PC.
-#define GET_PFILEPOS(ch)    ((ch)->pfilepos)
+#define GET_PFILEPOS(ch)        ((ch)->pfilepos)
 
 /**
  * Gets the level of a player even if the player is switched.
@@ -613,8 +620,15 @@ do {                                                                      \
 #define GET_POS(ch)             ((ch)->char_specials.position)
 // Unique ID of ch.
 #define GET_IDNUM(ch)           ((ch)->char_specials.saved.idnum)
+
 // Returns contents of id field from x.
-#define GET_ID(x)               ((x)->id)
+/*
+ * * Warning: GET_ID is deprecated and you should use char_script_id, obj_script_id, room_script_id
+ */
+/*
+ * * #define GET_ID(x)              ((x)->id)
+ */
+
 // Weight carried by ch.
 #define IS_CARRYING_W(ch)       ((ch)->char_specials.carry_weight)
 // Number of items carried by ch.
@@ -692,25 +706,30 @@ do {                                                                      \
 #define GET_QUEST_TYPE(ch)      (real_quest(GET_QUEST((ch))) != NOTHING ? aquest_table[real_quest(GET_QUEST((ch)))].type : AQ_UNDEFINED )
 
 // The current skill level of ch for skill i.
-#define GET_SKILL(ch, i)    CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.skills[i]))
+#define GET_SKILL(ch, i)        CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->saved.skills[i]))
 // Copy the current skill level i of ch to pct.
-#define SET_SKILL(ch, i, pct)    do { CHECK_PLAYER_SPECIAL((ch), (ch)->player_specials->saved.skills[i]) = pct; } while(0)
+#define SET_SKILL(ch, i, pct)   do { CHECK_PLAYER_SPECIAL((ch), (ch)->player_specials->saved.skills[i]) = pct; } while(0)
+
+/*
+ * * The player's default sector type when buildwalking
+ */
+#define GET_BUILDWALK_SECTOR(ch) CHECK_PLAYER_SPECIAL((ch), ((ch)->player_specials->buildwalk_sector))
 
 // Get obj worn in position i on ch.
-#define GET_EQ(ch, i)        ((ch)->equipment[i])
+#define GET_EQ(ch, i)           ((ch)->equipment[i])
 
 // If ch is a mob, return the special function, else return NULL.
-#define GET_MOB_SPEC(ch)    (IS_MOB(ch) ? mob_index[(ch)->nr].func : NULL)
+#define GET_MOB_SPEC(ch)        (IS_MOB(ch) ? mob_index[(ch)->nr].func : NULL)
 // Get the real number of the mob instance.
-#define GET_MOB_RNUM(mob)    ((mob)->nr)
+#define GET_MOB_RNUM(mob)       ((mob)->nr)
 // If mob is a mob, return the virtual number of it.
-#define GET_MOB_VNUM(mob)    (IS_MOB(mob) ? \
+#define GET_MOB_VNUM(mob)       (IS_MOB(mob) ? \
                  mob_index[GET_MOB_RNUM(mob)].vnum : NOBODY)
 
 // Return the default position of ch.
-#define GET_DEFAULT_POS(ch)    ((ch)->mob_specials.default_pos)
+#define GET_DEFAULT_POS(ch)     ((ch)->mob_specials.default_pos)
 // Return the memory of ch.
-#define MEMORY(ch)        ((ch)->mob_specials.memory)
+#define MEMORY(ch)              ((ch)->mob_specials.memory)
 
 // Return the equivalent strength of ch if ch has level 18 strength.
 #define STRENGTH_APPLY_INDEX(ch) \
@@ -722,51 +741,51 @@ do {                                                                      \
         )
 
 // Return how much weight ch can carry.
-#define CAN_CARRY_W(ch) (str_app[STRENGTH_APPLY_INDEX(ch)].carry_w)
+#define CAN_CARRY_W(ch)         (str_app[STRENGTH_APPLY_INDEX(ch)].carry_w)
 // Return how many items ch can carry.
-#define CAN_CARRY_N(ch) (5 + (GET_DEX(ch) >> 1) + (GET_LEVEL(ch) >> 1))
+#define CAN_CARRY_N(ch)         (5 + (GET_DEX(ch) >> 1) + (GET_LEVEL(ch) >> 1))
 // Return whether or not ch is awake.
-#define AWAKE(ch) (GET_POS(ch) > POS_SLEEPING)
+#define AWAKE(ch)               (GET_POS(ch) > POS_SLEEPING)
 // Defines if ch can see in general in the dark.
 #define CAN_SEE_IN_DARK(ch) \
    (AFF_FLAGGED(ch, AFF_INFRAVISION) || (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)))
 
 // Defines if ch is good.
-#define IS_GOOD(ch)    (GET_ALIGNMENT(ch) >= 350)
+#define IS_GOOD(ch)             (GET_ALIGNMENT(ch) >= 350)
 // Defines if ch is evil.
-#define IS_EVIL(ch)    (GET_ALIGNMENT(ch) <= -350)
+#define IS_EVIL(ch)             (GET_ALIGNMENT(ch) <= -350)
 // Defines if ch is neither good nor evil.
-#define IS_NEUTRAL(ch) (!IS_GOOD(ch) && !IS_EVIL(ch))
+#define IS_NEUTRAL(ch)          (!IS_GOOD(ch) && !IS_EVIL(ch))
 
 /** Old wait state function.
  * @deprecated Use GET_WAIT_STATE
  */
-#define WAIT_STATE(ch, cycle) do { GET_WAIT_STATE(ch) = (cycle); } while(0)
+#define WAIT_STATE(ch, cycle)   do { GET_WAIT_STATE(ch) = (cycle); } while(0)
 /** Old check wait.
  * @deprecated Use GET_WAIT_STATE
  */
-#define CHECK_WAIT(ch)                ((ch)->wait > 0)
+#define CHECK_WAIT(ch)          ((ch)->wait > 0)
 /** Old mob wait check.
  * @deprecated Use GET_WAIT_STATE
  */
-#define GET_MOB_WAIT(ch)      GET_WAIT_STATE(ch)
+#define GET_MOB_WAIT(ch)        GET_WAIT_STATE(ch)
 // Use this macro to check the wait state of ch.
-#define GET_WAIT_STATE(ch)    ((ch)->wait)
+#define GET_WAIT_STATE(ch)      ((ch)->wait)
 
 /*
  * Descriptor-based utils.
  */
 // Connected state of d.
-#define STATE(d)    ((d)->connected)
+#define STATE(d)        ((d)->connected)
 
 // Defines whether d is using an OLC or not.
-#define IS_IN_OLC(d)   ((STATE(d) >= FIRST_OLC_STATE) && (STATE(d) <= LAST_OLC_STATE))
+#define IS_IN_OLC(d)    ((STATE(d) >= FIRST_OLC_STATE) && (STATE(d) <= LAST_OLC_STATE))
 
 // Defines whether d is playing or not.
 #define IS_PLAYING(d)   (IS_IN_OLC(d) || STATE(d) == CON_PLAYING)
 
 // Defines if it is ok to send a message to ch.
-#define SENDOK(ch)    (((ch)->desc || SCRIPT_CHECK((ch), MTRIG_ACT)) && \
+#define SENDOK(ch)      (((ch)->desc || SCRIPT_CHECK((ch), MTRIG_ACT)) && \
             (to_sleeping || AWAKE(ch)) && \
             !PLR_FLAGGED((ch), PLR_WRITING))
 
@@ -783,46 +802,44 @@ do {                                                                      \
                  GET_OBJ_RNUM(obj) != NOTHING)
 
 // Level of obj.
-#define GET_OBJ_LEVEL(obj)      ((obj)->obj_flags.level)
-// Permanent affects on obj.
-#define GET_OBJ_PERM(obj)       ((obj)->obj_flags.bitvector)
+#define GET_OBJ_LEVEL(obj)          ((obj)->obj_flags.level)
 // Type of obj.
-#define GET_OBJ_TYPE(obj)    ((obj)->obj_flags.type_flag)
+#define GET_OBJ_TYPE(obj)           ((obj)->obj_flags.type_flag)
 // Cost of obj.
-#define GET_OBJ_COST(obj)    ((obj)->obj_flags.cost)
+#define GET_OBJ_COST(obj)           ((obj)->obj_flags.cost)
 // Cost per day to rent obj, if rent is turned on.
-#define GET_OBJ_RENT(obj)    ((obj)->obj_flags.cost_per_day)
+#define GET_OBJ_RENT(obj)           ((obj)->obj_flags.cost_per_day)
 // Affect flags on obj.
-#define GET_OBJ_AFFECT(obj)    ((obj)->obj_flags.bitvector)
+#define GET_OBJ_AFFECT(obj)         ((obj)->obj_flags.bitvector)
 // Extra flags bit array on obj.
-#define GET_OBJ_EXTRA(obj)    ((obj)->obj_flags.extra_flags)
+#define GET_OBJ_EXTRA(obj)          ((obj)->obj_flags.extra_flags)
 // Extra flags field bit array field i on obj.
-#define GET_OBJ_EXTRA_AR(obj, i)   ((obj)->obj_flags.extra_flags[(i)])
+#define GET_OBJ_EXTRA_AR(obj, i)    ((obj)->obj_flags.extra_flags[(i)])
 // Wear flags on obj.
-#define GET_OBJ_WEAR(obj)    ((obj)->obj_flags.wear_flags)
+#define GET_OBJ_WEAR(obj)           ((obj)->obj_flags.wear_flags)
 // Return value val for obj.
-#define GET_OBJ_VAL(obj, val)    ((obj)->obj_flags.value[(val)])
+#define GET_OBJ_VAL(obj, val)       ((obj)->obj_flags.value[(val)])
 // Weight of obj.
-#define GET_OBJ_WEIGHT(obj)    ((obj)->obj_flags.weight)
+#define GET_OBJ_WEIGHT(obj)         ((obj)->obj_flags.weight)
 // Current timer of obj.
-#define GET_OBJ_TIMER(obj)    ((obj)->obj_flags.timer)
+#define GET_OBJ_TIMER(obj)          ((obj)->obj_flags.timer)
 // Real number of obj instance.
-#define GET_OBJ_RNUM(obj)    ((obj)->item_number)
+#define GET_OBJ_RNUM(obj)           ((obj)->item_number)
 // Virtual number of obj, or NOTHING if not a real obj.
-#define GET_OBJ_VNUM(obj)    (VALID_OBJ_RNUM(obj) ? \
+#define GET_OBJ_VNUM(obj)           (VALID_OBJ_RNUM(obj) ? \
                 obj_index[GET_OBJ_RNUM(obj)].vnum : NOTHING)
 // Special function attached to obj, or NULL if nothing attached.
-#define GET_OBJ_SPEC(obj)    (VALID_OBJ_RNUM(obj) ? \
+#define GET_OBJ_SPEC(obj)           (VALID_OBJ_RNUM(obj) ? \
                 obj_index[GET_OBJ_RNUM(obj)].func : NULL)
 
 // Defines if an obj is a corpse.
-#define IS_CORPSE(obj)        (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && \
+#define IS_CORPSE(obj)              (GET_OBJ_TYPE(obj) == ITEM_CONTAINER && \
                     GET_OBJ_VAL((obj), 3) == 1)
 
 // Can the obj be worn on body part?
-#define CAN_WEAR(obj, part)    OBJWEAR_FLAGGED((obj), (part))
+#define CAN_WEAR(obj, part)         OBJWEAR_FLAGGED((obj), (part))
 // Return short description of obj.
-#define GET_OBJ_SHORT(obj)      ((obj)->short_description)
+#define GET_OBJ_SHORT(obj)          ((obj)->short_description)
 
 /*
  * Compound utilities and other macros.
@@ -929,21 +946,28 @@ do {                                                                      \
              (EXIT(ch,door)->to_room != NOWHERE) && \
              !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
 
+/*
+ * * True total number of directions available to move in.
+ */
+#define DIR_COUNT ((CONFIG_DIAGONAL_DIRS) ? 10 : 6)
+
+/*
+ *  Returns TRUE if the direction is a diagonal one
+ */
+#define IS_DIAGONAL(dir) (((dir) == NORTHWEST) || ((dir) == NORTHEAST) || \
+       ((dir) == SOUTHEAST) || ((dir) == SOUTHWEST) )
+
 // Return the class abbreviation for ch.
 #define CLASS_ABBR(ch) (IS_NPC(ch) ? "--" : class_abbrevs[(int)GET_CLASS(ch)])
 
 // 1 if ch is magic user class, 0 if not.
-#define IS_MAGIC_USER(ch)    (!IS_NPC(ch) && \
-        (GET_CLASS(ch) == CLASS_MAGIC_USER))
+#define IS_MAGIC_USER(ch)   (!IS_NPC(ch) && (GET_CLASS(ch) == CLASS_MAGIC_USER))
 // 1 if ch is cleric class, 0 if not.
-#define IS_CLERIC(ch)        (!IS_NPC(ch) && \
-        (GET_CLASS(ch) == CLASS_CLERIC))
+#define IS_CLERIC(ch)       (!IS_NPC(ch) && (GET_CLASS(ch) == CLASS_CLERIC))
 // 1 if ch is thief class, 0 if not.
-#define IS_THIEF(ch)        (!IS_NPC(ch) && \
-        (GET_CLASS(ch) == CLASS_THIEF))
+#define IS_THIEF(ch)        (!IS_NPC(ch) && (GET_CLASS(ch) == CLASS_THIEF))
 // 1 if ch is warrior class, 0 if not.
-#define IS_WARRIOR(ch)        (!IS_NPC(ch) && \
-        (GET_CLASS(ch) == CLASS_WARRIOR))
+#define IS_WARRIOR(ch)      (!IS_NPC(ch) && (GET_CLASS(ch) == CLASS_WARRIOR))
 
 /**
  * Return the race abbreviation for ch.
@@ -958,7 +982,7 @@ inline const char *RaceAbbrev(struct char_data *ch) {
     }
 }
 /*/
-#define RaceAbbrev(ch) (GET_RACE(ch) < 0 || GET_RACE >= NUM_RACES ? "--" : race_abbrevs[(int)GET_RACE(ch)])
+#define RaceAbbrev(ch) ((GET_RACE(ch) < 0) || (GET_RACE >= NUM_RACES) ? "--" : race_abbrevs[(int)GET_RACE(ch)])
 
 //*/
 
@@ -991,13 +1015,35 @@ inline const bool isOgier(struct char_data *ch)
  */
 inline const bool isFade(struct char_data *ch)
 {
-    return (GET_RACE(ch) == RACE_HUMAN);
+    return (GET_RACE(ch) == RACE_FADE);
 }
 
 /**
  * Defines if ch is outdoors or not.
  */
 #define OUTSIDE(ch) (!ROOM_FLAGGED(IN_ROOM(ch), ROOM_INDOORS))
+
+/*
+ *  Group related defines
+ */
+#define GROUP(ch)           (ch->group)
+#define GROUP_LEADER(group) (group->leader)
+#define GROUP_FLAGS(group)  (group->group_flags)
+
+/*
+ *  Happy-hour defines
+ */
+#define IS_HAPPYQP      (happy_data.qp_rate > 0)
+#define IS_HAPPYEXP     (happy_data.exp_rate > 0)
+#define IS_HAPPYGOLD    (happy_data.gold_rate > 0)
+
+#define HAPPY_EXP       happy_data.exp_rate
+#define HAPPY_GOLD      happy_data.gold_rate
+#define HAPPY_QP        happy_data.qp_rate
+
+#define HAPPY_TIME      happy_data.ticks_left
+
+#define IS_HAPPYHOUR    ((IS_HAPPYEXP || IS_HAPPYGOLD || IS_HAPPYQP) && (HAPPY_TIME > 0))
 
 /*
  * OS compatibility
@@ -1101,24 +1147,30 @@ inline const bool isFade(struct char_data *ch)
 #define CONFIG_NO_MORT_TO_IMMORT config_info.play.no_mort_to_immort
 // Get the 'OK' message.
 #define CONFIG_OK               config_info.play.OK
+/*
+ * * Get the HUH message.
+ */
+#define CONFIG_HUH                       config_info.play.HUH
 // Get the NOPERSON message.
 #define CONFIG_NOPERSON         config_info.play.NOPERSON
 // Get the NOEFFECT message.
 #define CONFIG_NOEFFECT         config_info.play.NOEFFECT
 // Get the display closed doors setting.
 #define CONFIG_DISP_CLOSED_DOORS config_info.play.disp_closed_doors
+// Get the diagonal directions setting.
+#define CONFIG_DIAGONAL_DIRS    config_info.play.diagonal_dirs
 
 /*
  * Map/Automap options
  */
-#define CONFIG_MAP             config_info.play.map_option
-#define CONFIG_MAP_SIZE        config_info.play.map_size
-#define CONFIG_MINIMAP_SIZE    config_info.play.minimap_size
+#define CONFIG_MAP              config_info.play.map_option
+#define CONFIG_MAP_SIZE         config_info.play.map_size
+#define CONFIG_MINIMAP_SIZE     config_info.play.minimap_size
 
 /*
  * DG Script Options
  */
-#define CONFIG_SCRIPT_PLAYERS  config_info.play.script_players
+#define CONFIG_SCRIPT_PLAYERS   config_info.play.script_players
 
 /*
  * Crash Saves
@@ -1187,6 +1239,15 @@ inline const bool isFade(struct char_data *ch)
 #define CONFIG_START_MESSG      config_info.operation.START_MESSG
 // Should medit show the advnaced stats menu?
 #define CONFIG_MEDIT_ADVANCED   config_info.operation.medit_advanced
+
+// Does "bug resolve" autosave ?
+#define CONFIG_IBT_AUTOSAVE     config_info.operation.ibt_autosave
+// Use the protocol negotiation system?
+#define CONFIG_PROTOCOL_NEGOTIATION config_info.operation.protocol_negotiation
+// Use the special character in comm channels?
+#define CONFIG_SPECIAL_IN_COMM  config_info.operation.special_in_comm
+// Activate debug mode?
+#define CONFIG_DEBUG_MODE       config_info.operation.debug_mode
 
 /*
  * Autowiz
