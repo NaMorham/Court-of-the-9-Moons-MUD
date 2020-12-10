@@ -131,7 +131,7 @@ static void perform_tell(struct char_data *ch, struct char_data *vict, char *arg
 static int is_tell_ok(struct char_data *ch, struct char_data *vict)
 {
     if (!ch)
-        log("SYSERR: is_tell_ok called with no characters");
+        WriteLogf("SYSERR: is_tell_ok called with no characters");
     else if (!vict)
         send_to_char(ch, "%s", CONFIG_NOPERSON);
     else if (ch == vict) {

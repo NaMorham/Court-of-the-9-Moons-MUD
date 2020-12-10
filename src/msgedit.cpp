@@ -1,8 +1,8 @@
 /**************************************************************************
-*    File: msgedit.c                                                              Part of tbaMUD    *
-*    Usage: Handling of loading/saving messages and the olc editor.              *
-*                                                                                                                    *
-*    By Vatiken. Copyright 2012 by Joseph Arnusch                                           *
+*    File: msgedit.c                                    Part of tbaMUD    *
+*    Usage: Handling of loading/saving messages and the olc editor.       *
+*                                                                         *
+*    By Vatiken. Copyright 2012 by Joseph Arnusch                         *
 **************************************************************************/
 
 #include "conf.h"
@@ -80,7 +80,7 @@ void load_messages(void)
     char chk[128];
 
     if (!(fl = fopen(MESS_FILE, "r"))) {
-       log("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
+       WriteLogf("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
        exit(1);
     }
 
@@ -96,9 +96,9 @@ void load_messages(void)
              if (feof(fl))
                 break;
              else if(ferror(fl))
-                log("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
+                 WriteLogf("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
              else
-                log("SYSERR: Error reading combat message file %s", MESS_FILE);
+                 WriteLogf("SYSERR: Error reading combat message file %s", MESS_FILE);
              exit(1);
           }
        }
@@ -110,13 +110,13 @@ void load_messages(void)
        while (*chk == 'M') {
           if (fgets(chk, 128, fl) == NULL) {
              if(feof(fl)) {
-                log("SYSERR: Unexpected end of file reading combat message file %s", MESS_FILE);
+                 WriteLogf("SYSERR: Unexpected end of file reading combat message file %s", MESS_FILE);
                 break;
              }
              else if(ferror(fl))
-                log("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
+                 WriteLogf("SYSERR: Error reading combat message file %s: %s", MESS_FILE, strerror(errno));
              else
-                log("SYSERR: Error reading combat message file %s", MESS_FILE);
+                 WriteLogf("SYSERR: Error reading combat message file %s", MESS_FILE);
              exit(1);
           }
 
@@ -124,7 +124,7 @@ void load_messages(void)
           for (i = 0; (i < MAX_MESSAGES) && (fight_messages[i].a_type != type) &&
               (fight_messages[i].a_type); i++);
           if (i >= MAX_MESSAGES) {
-             log("SYSERR: Too many combat messages.    Increase MAX_MESSAGES and recompile.");
+              WriteLogf("SYSERR: Too many combat messages.    Increase MAX_MESSAGES and recompile.");
              exit(1);
           }
           CREATE(messages, struct message_type, 1);
@@ -148,7 +148,7 @@ void load_messages(void)
        }
     }
     fclose(fl);
-    log("Loaded %d Combat Messages...", i);
+    WriteLogf("Loaded %d Combat Messages...", i);
 }
 
 static void show_messages(struct char_data *ch)
@@ -180,7 +180,7 @@ void save_messages_to_disk(void)
     struct message_type *msg;
 
     if (!(fp = fopen(MESS_FILE, "w"))) {
-       log("SYSERR: Error writing combat message file %s: %s", MESS_FILE, strerror(errno));
+        WriteLogf("SYSERR: Error writing combat message file %s: %s", MESS_FILE, strerror(errno));
        exit(1);
     }
 

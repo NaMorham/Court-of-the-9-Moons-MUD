@@ -57,7 +57,7 @@ ACMD(do_oasis_medit)
     }
 
     // Parse any arguments
-    buf3 = two_arguments(argument, buf1, buf2);
+    two_arguments(argument, buf1, buf2);
 
     if (!*buf1) {
         send_to_char(ch, "Specify a mobile VNUM to edit.\r\n");

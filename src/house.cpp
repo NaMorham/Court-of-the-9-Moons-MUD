@@ -271,7 +271,6 @@ void House_boot(void)
     struct house_control_rec temp_house;
     room_rnum real_house, real_atrium;
     FILE *fl;
-    int i;
 
     memset((char *)house_control, 0, sizeof(struct house_control_rec)*MAX_HOUSES);
 

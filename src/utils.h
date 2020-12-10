@@ -982,7 +982,7 @@ inline const char *RaceAbbrev(struct char_data *ch) {
     }
 }
 /*/
-#define RaceAbbrev(ch) ((GET_RACE(ch) < 0) || (GET_RACE >= NUM_RACES) ? "--" : race_abbrevs[(int)GET_RACE(ch)])
+#define RaceAbbrev(ch) ((GET_RACE(ch) < 0) || (GET_RACE(ch) >= NUM_RACES) ? "--" : race_abbrevs[(int)GET_RACE(ch)])
 
 //*/
 

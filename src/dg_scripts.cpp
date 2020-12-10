@@ -3467,9 +3467,9 @@ int has_obj_by_uid_in_lookup_table(long uid)
 
 void add_to_lookup_table(long uid, void *c)
 {
-    struct lookup_table_t *lt = &lookup_table[bucket];
+    struct lookup_table_t *lt = get_bucket_head(uid);
 
-    if (lt->c == c && lt->uid == uid) {
+    if (lt && lt->uid == uid) {
         WriteLogf("add_to_lookup updating existing value for uid=%ld (%p -> %p)", uid, lt->c, c);
         lt->c = c;
         return;
@@ -3477,7 +3477,7 @@ void add_to_lookup_table(long uid, void *c)
 
     for (; lt && lt->next; lt = lt->next) {
         if (lt->next->uid == uid) {
-            log("add_to_lookup updating existing value for uid=%ld (%p -> %p)", uid, lt->next->c, c);
+            WriteLogf("add_to_lookup updating existing value for uid=%ld (%p -> %p)", uid, lt->next->c, c);
             lt->next->c = c;
             return;
         }

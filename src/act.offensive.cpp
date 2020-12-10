@@ -475,7 +475,7 @@ EVENTFUNC(event_whirlwind)
 
     // Lets grab some a random NPC from the list, and hit() them up
     for (count = dice(1, 4); count > 0; count--) {
-        tch = random_from_list(room_list);
+        tch = (char_data*)random_from_list(room_list);
         hit(ch, tch, TYPE_UNDEFINED);
     }
 

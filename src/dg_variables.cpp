@@ -265,7 +265,7 @@ void find_replacement(void *go, struct script_data *sc, trig_data *trig,
     obj_data *obj, *o = NULL;
     struct room_data *room, *r = NULL;
     char *name;
-    int num, count, i, j, doors;
+    int num, count, i, doors;
     IDXTYPE trig_vnum = -1;
 
     char *log_cmd[]             = {"mlog ",             "olog ",             "wlog "           };
@@ -1523,7 +1523,7 @@ void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_da
     case 'e':
         if (!str_cmp(field, "extra")) {
             if (subfield && *subfield) {
-                if (check_flags_by_name_ar(GET_OBJ_EXTRA(o), NUM_ITEM_FLAGS, subfield, extra_bits) > 0) {
+                if (check_flags_by_name_ar(GET_OBJ_EXTRA(o), NUM_ITEM_FLAGS, subfield, extra_bits)) {
                     snprintf(str, slen, "1");
                 }
                 else {
@@ -1600,7 +1600,7 @@ void find_replacement_obj(obj_data *o, void *go, struct script_data *sc, trig_da
         }
         else if (!str_cmp(field, "next_in_list")) {
             if (o->next_content) {
-                snprintf(str, slen, "%c%ld", UID_CHAR, GET_ID(o->next_content));
+                snprintf(str, slen, "%c%ld", UID_CHAR, obj_script_id(o->next_content));
             }
             else {
                 *str = '\0';
@@ -2069,7 +2069,7 @@ void find_replacement_room(struct room_data *r, void *go, struct script_data *sc
     }
     else if (!str_cmp(field, "northeast")) {
         room_direction_data *neDir = R_EXIT(r, NORTHEAST);
-        if (downDir) {
+        if (neDir) {
             if (subfield && *subfield) {
                 if (!str_cmp(subfield, "vnum")) {
                     snprintf(str, slen, "%d", GET_ROOM_VNUM(neDir->to_room));

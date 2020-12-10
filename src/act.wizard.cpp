@@ -54,8 +54,8 @@ static void mob_checkload(struct char_data *ch, mob_vnum mvnum);
 static void obj_checkload(struct char_data *ch, obj_vnum ovnum);
 static void trg_checkload(struct char_data *ch, trig_vnum tvnum);
 static void mod_llog_entry(struct last_entry *llast,int type);
-static int    get_max_recent(void);
-static void clear_recent(struct recent_player *this);
+static int get_max_recent(void);
+static void clear_recent(struct recent_player *this_player);
 static struct recent_player *create_recent(void);
 const char *get_spec_func_name(SPECIAL(*func));
 bool zedit_get_levels(struct descriptor_data *d, char *buf);
@@ -1002,7 +1002,7 @@ static void do_stat_character(struct char_data *ch, struct char_data *k)
     // Routine to show what spells a char is affected by
     if (k->affected) {
         for (aff = k->affected; aff; aff = aff->next) {
-            send_to_char(ch, "SPL: (%3dhr) %s%-21s%s ", aff->duration + 1, CCCYN(ch, C_NRM), skill_name(aff->type), CCNRM(ch, C_NRM));
+            send_to_char(ch, "SPL: (%3dhr) %s%-21s%s ", aff->duration + 1, CCCYN(ch, C_NRM), skill_name(aff->spell), CCNRM(ch, C_NRM));
 
             if (aff->modifier) {
                 send_to_char(ch, "%+d to %s", aff->modifier, apply_types[(int)aff->location]);
@@ -2010,7 +2010,7 @@ ACMD(do_date)
     strftime(timestr, sizeof(timestr), "%c", localtime(&mytime));
 
     if (subcmd == SCMD_DATE) {
-        send_to_char(ch, "Current machine time: %s\r\n", tmstr);
+        send_to_char(ch, "Current machine time: %s\r\n", timestr);
     }
     else {
         mytime = time(0) - boot_time;
@@ -2018,7 +2018,7 @@ ACMD(do_date)
         h = (mytime / 3600) % 24;
         m = (mytime / 60) % 60;
 
-        send_to_char(ch, "Up since %s: %d day%s, %d:%02d\r\n", tmstr, d, d == 1 ? "" : "s", h, m);
+        send_to_char(ch, "Up since %s: %d day%s, %d:%02d\r\n", timestr, d, d == 1 ? "" : "s", h, m);
     }
 }
 
@@ -2047,7 +2047,7 @@ struct last_entry *find_llog_entry(int punique, long idnum) {
     FILE *fp;
     struct last_entry mlast;
     struct last_entry *llast;
-    int size, recs, tmp, i;
+    int size, recs, tmp;
 
     if (!(fp = fopen(LAST_FILE, "r"))) {
         WriteLogf("Error opening last_file for reading, will create.");
@@ -2088,7 +2088,7 @@ struct last_entry *find_llog_entry(int punique, long idnum) {
 static void mod_llog_entry(struct last_entry *llast, int type) {
     FILE *fp;
     struct last_entry mlast;
-    int size, recs, tmp, i, j;
+    int size, recs, tmp, j;
 
     if (!(fp = fopen(LAST_FILE, "r+"))) {
         WriteLogf("Error opening last_file for reading and writing.");
@@ -2135,6 +2135,7 @@ static void mod_llog_entry(struct last_entry *llast, int type) {
 
 void add_llog_entry(struct char_data *ch, int type) {
     FILE *fp;
+    size_t i;
     struct last_entry *llast;
 
     // so if a char enteres a name, but bad password, otherwise loses link before
@@ -2179,7 +2180,7 @@ void add_llog_entry(struct char_data *ch, int type) {
 void clean_llog_entries(void) {
     FILE *ofp, *nfp;
     struct last_entry mlast;
-    int recs, i, j;
+    int recs, j;
 
     if (!(ofp = fopen(LAST_FILE, "r"))) {
         return; // no file, no gripe
@@ -2206,7 +2207,7 @@ void clean_llog_entries(void) {
     // copy the rest
     while (!feof(ofp)) {
         if (fread(&mlast, sizeof(struct last_entry), 1, ofp) != 1) {
-            log("clean_llog_entries: read error or unexpected end of file.");
+            WriteLogf("clean_llog_entries: read error or unexpected end of file.");
             return;
         }
         j = fwrite(&mlast, sizeof(struct last_entry), 1, nfp);
@@ -2241,7 +2242,7 @@ static void list_llog_entries(struct char_data *ch)
     }  // while (fread(&llast ...
 
     if (ferror(fp)) {
-        log("llist_log_entries: error reading %s.", LAST_FILE);
+        WriteLogf("llist_log_entries: error reading %s.", LAST_FILE);
         send_to_char(ch, "Error reading last_log file.");
     }
 }
@@ -2264,9 +2265,8 @@ ACMD(do_last)
     time_t delta;
     struct char_data *vict = NULL;
     struct char_data *temp;
-    int recs, i, num = 0;
+    int recs, num = 0;
     FILE *fp;
-    time_t delta;
     struct last_entry mlast;
 
     *name = '\0';
@@ -5083,7 +5083,7 @@ ACMD(do_plist)
             continue;
         }
 
-        strftime(timestr, sizeof(timestr), "%c", localtime(&player_table[i].last));
+        strftime(time_str, sizeof(time_str), "%c", localtime(&player_table[i].last));
 
         len += snprintf(buf + len, sizeof(buf) - len, "[%3ld] (%2d) %c%-15s %s\r\n",
             player_table[i].id, player_table[i].level,

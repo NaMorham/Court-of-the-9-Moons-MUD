@@ -172,13 +172,13 @@ char *fread_action(FILE *fl, int nr)
 
     if (fgets(buf, MAX_STRING_LENGTH, fl) == NULL) {
         if (feof(fl)) {
-            log("SYSERR: fread_action: unexpected EOF near action #%d", nr);
+            WriteLogf("SYSERR: fread_action: unexpected EOF near action #%d", nr);
             /* SYSERR_DESC: fread_action() will fail if it discovers an end of file
             * marker before it is able to read in the expected string.    This can be
             * caused by a truncated socials file. */
         }
         else {
-            log("SYSERR: fread_action: read error near action #%d: %s", nr, strerror(errno));
+            WriteLogf("SYSERR: fread_action: read error near action #%d: %s", nr, strerror(errno));
         }
         exit(1);
     }
@@ -211,7 +211,7 @@ static void boot_social_messages(void)
     if (CONFIG_NEW_SOCIALS == TRUE) {
         // open social file
         if (!(fl = fopen(SOCMESS_FILE_NEW, "r"))) {
-            log("SYSERR: can't open socials file '%s': %s", SOCMESS_FILE_NEW, strerror(errno));
+            WriteLogf("SYSERR: can't open socials file '%s': %s", SOCMESS_FILE_NEW, strerror(errno));
             /* SYSERR_DESC: This error, from boot_social_messages(), occurs when the
              * server fails to open the file containing the social messages.    The
              * error at the end will indicate the reason why. */
@@ -226,14 +226,14 @@ static void boot_social_messages(void)
         }
 
         if (ferror(fl)) {
-            log("SYSERR: error encountered reading socials file %s: %s", SOCMESS_FILE_NEW, strerror(errno));
+            WriteLogf("SYSERR: error encountered reading socials file %s: %s", SOCMESS_FILE_NEW, strerror(errno));
             exit(1);
         }
     }
     else { // old style
         // open social file
         if (!(fl = fopen(SOCMESS_FILE, "r"))) {
-            log("SYSERR: can't open socials file '%s': %s", SOCMESS_FILE, strerror(errno));
+            WriteLogf("SYSERR: can't open socials file '%s': %s", SOCMESS_FILE, strerror(errno));
             /* SYSERR_DESC: This error, from boot_social_messages(), occurs when the
              * server fails to open the file containing the social messages.    The
              * error at the end will indicate the reason why. */
@@ -244,7 +244,7 @@ static void boot_social_messages(void)
             if (*next_soc == '\n' || *next_soc == '\r') top_of_socialt++; // all socials are followed by a blank line
 
         if (ferror(fl)) {
-            log("SYSERR: error encountered reading socials file %s: %s", SOCMESS_FILE_NEW, strerror(errno));
+            WriteLogf("SYSERR: error encountered reading socials file %s: %s", SOCMESS_FILE_NEW, strerror(errno));
             exit(1);
         }
     }
@@ -258,13 +258,13 @@ static void boot_social_messages(void)
     for (line_number = 0;; ++line_number) {
         if (fscanf(fl, " %s ", next_soc) != 1) {
             if (feof(fl)) {
-                log("SYSERR: unexpected end of file encountered in socials file %s", SOCMESS_FILE_NEW);
+                WriteLogf("SYSERR: unexpected end of file encountered in socials file %s", SOCMESS_FILE_NEW);
             }
             else if (ferror(fl)) {
-                log("SYSERR: error reading socials file %s: %s", SOCMESS_FILE_NEW, strerror(errno));
+                WriteLogf("SYSERR: error reading socials file %s: %s", SOCMESS_FILE_NEW, strerror(errno));
             }
             else {
-                log("SYSERR: format error in social file near line %d", line_number);
+                WriteLogf("SYSERR: format error in social file near line %d", line_number);
             }
             exit(1);
         }
@@ -621,9 +621,9 @@ void destroy_db(void)
 
         if (world[cnt].events != NULL) {
             if (world[cnt].events->iSize > 0) {
-                struct event * pEvent;
+                mud_event_t* pEvent;
 
-                while ((pEvent = simple_list(world[cnt].events)) != NULL) {
+                while ((pEvent = (mud_event_t*)simple_list(world[cnt].events)) != NULL) {
                     event_cancel(pEvent);
                 }
             }
@@ -809,11 +809,11 @@ void boot_db(void)
     WriteLogf("Resetting the game time:");
     reset_time();
 
-    log("Initialize Global Lists");
+    WriteLogf("Initialize Global Lists");
     global_lists = create_list();
     group_list = create_list();
 
-    log("Initializing Events");
+    WriteLogf("Initializing Events");
     init_events();
 
     WriteLogf("Reading news, credits, help, ihelp, bground, info & motds.");
@@ -948,7 +948,6 @@ static void reset_time(void)
 {
     time_t beginning_of_time = 0;
     FILE *bgtime;
-    int i;
 
     if ((bgtime = fopen(TIME_FILE, "r")) == NULL) {
         WriteLogf("No time file '%s' starting from the beginning.", TIME_FILE);
@@ -956,10 +955,10 @@ static void reset_time(void)
     else {
         if (fscanf(bgtime, "%ld\n", (long *)&beginning_of_time) == EOF) {
             if (feof(bgtime)) {
-                log("SYSERR: reset_time: unexpected end of file encountered reading %s.", TIME_FILE);
+                WriteLogf("SYSERR: reset_time: unexpected end of file encountered reading %s.", TIME_FILE);
             }
             else if (ferror(bgtime)) {
-                log("SYSERR: reset_time: unexpected end of file encountered reading %s: %s.", TIME_FILE, strerror(errno));
+                WriteLogf("SYSERR: reset_time: unexpected end of file encountered reading %s: %s.", TIME_FILE, strerror(errno));
             }
         }
         fclose(bgtime);
@@ -1148,16 +1147,16 @@ void index_boot(int mode)
         // first, count the number of records in the file so we can malloc
         if (fscanf(db_index, "%s\n", buf1) != 1) {
             if (feof(db_index)) {
-                log("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s. "
+                WriteLogf("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s. "
                     "Ensure that the last line of the file starts with the character '$'.",
                     prefix, index_filename);
             }
             else if (ferror(db_index)) {
-                log("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s: %s",
+                WriteLogf("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s: %s",
                     prefix, index_filename, strerror(errno));
             }
             else {
-                log("SYSERR: boot error -- error parsing index file %s%s on line %d",
+                WriteLogf("SYSERR: boot error -- error parsing index file %s%s on line %d",
                     prefix, index_filename, line_number);
             }
             exit(1);
@@ -1190,7 +1189,6 @@ void index_boot(int mode)
             return;
         }
         WriteLogf("SYSERR: boot error - 0 records counted in %s/%s.", prefix, index_filename);
-        index_filename);
         exit(1);
     }
 
@@ -1240,15 +1238,15 @@ void index_boot(int mode)
     for (line_number = 1;; ++line_number) {
         if (fscanf(db_index, "%s\n", buf1) != 1) {
             if (feof(db_index)) {
-                log("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s",
+                WriteLogf("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s",
                     prefix, index_filename);
             }
             else if (ferror(db_index)) {
-                log("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s: %s",
+                WriteLogf("SYSERR: boot error -- unexpected end of file encountered in index file ./%s%s: %s",
                     prefix, index_filename, strerror(errno));
             }
             else {
-                log("SYSERR: boot error -- error parsing index file ./%s%s on line %d",
+                WriteLogf("SYSERR: boot error -- error parsing index file ./%s%s on line %d",
                     prefix, index_filename, line_number);
             }
             exit(1);
@@ -1590,7 +1588,7 @@ void setup_dir(FILE *fl, int room, int dir)
     snprintf(buf2, sizeof(buf2), "room #%d, direction D%d", GET_ROOM_VNUM(room) + 1, dir);
 
     if (!CONFIG_DIAGONAL_DIRS && IS_DIAGONAL(dir)) {
-        log("Warning: Diagonal direction disabled: %s", buf2);
+        WriteLogf("Warning: Diagonal direction disabled: %s", buf2);
         return;
     }
 
@@ -2027,7 +2025,6 @@ void parse_mobile(FILE *mob_f, int nr)
         // Make some basic checks.
         REMOVE_BIT_AR(AFF_FLAGS(mob_proto + i), AFF_CHARM);
         REMOVE_BIT_AR(AFF_FLAGS(mob_proto + i), AFF_POISON);
-        REMOVE_BIT_AR(AFF_FLAGS(mob_proto + i), AFF_GROUP);
         REMOVE_BIT_AR(AFF_FLAGS(mob_proto + i), AFF_SLEEP);
         if (MOB_FLAGGED(mob_proto + i, MOB_AGGRESSIVE) && MOB_FLAGGED(mob_proto + i, MOB_AGGR_GOOD)) {
             REMOVE_BIT_AR(MOB_FLAGS(mob_proto + i), MOB_AGGR_GOOD);
@@ -2397,7 +2394,7 @@ static void load_zones(FILE *fl, char *zonename)
         *ptr = '\0';
     }
     ZTBLE.name = strdup(buf);
-    parse_at(Z.name);
+    parse_at(ZTBLE.name);
 
     // Clear all the zone flags
     for (i = 0; i < ZN_ARRAY_MAX; i++) {
@@ -3256,7 +3253,7 @@ char *fread_clean_string(FILE *fl, const char *error)
     {
         if (feof(fl))
         {
-            log("%s", "fread_clean_string: EOF encountered on read.");
+            WriteLogf("%s", "fread_clean_string: EOF encountered on read.");
             return 0;
         }
         c = getc(fl);
@@ -3265,7 +3262,7 @@ char *fread_clean_string(FILE *fl, const char *error)
 
     do {
         if (!fgets(tmp, 512, fl)) {
-            log("SYSERR: fread_clean_string: format error at or near %s", error);
+            WriteLogf("SYSERR: fread_clean_string: format error at or near %s", error);
             exit(1);
         }
         // If there is a '~', end the string; else put an "\r\n" over the '\n'.
@@ -3285,8 +3282,8 @@ char *fread_clean_string(FILE *fl, const char *error)
         templength = point - tmp;
 
         if (length + templength >= MAX_STRING_LENGTH) {
-            log("SYSERR: fread_clean_string: string too large (db.c)");
-            log("%s", error);
+            WriteLogf("SYSERR: fread_clean_string: string too large (db.c)");
+            WriteLogf("%s", error);
             exit(1);
         }
         else {
@@ -3676,9 +3673,9 @@ void free_char(struct char_data *ch)
     // Mud Events
     if (ch->events != NULL) {
         if (ch->events->iSize > 0) {
-            struct event * pEvent;
+            mud_event_t* pEvent;
 
-            while ((pEvent = simple_list(ch->events)) != NULL) {
+            while ((pEvent = (mud_event_t*)simple_list(ch->events)) != NULL) {
                 event_cancel(pEvent);
             }
         }
@@ -3727,7 +3724,7 @@ void free_obj(struct obj_data *obj)
 
     // find_obj helper
     if (obj->script_id != 0) {
-        remove_from_lookup_table(GET_ID(obj));
+       remove_from_lookup_table(obj->script_id);
     }
 
     free(obj);

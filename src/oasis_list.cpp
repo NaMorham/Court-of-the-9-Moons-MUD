@@ -538,13 +538,13 @@ ACMD(do_oasis_list)
         list_quests(ch, rzone, vmin, vmax); break;
     case SCMD_OASIS_ZLIST:
         if (!*smin) {           // No args - list all zones
-            list_zones(ch, NOWHERE, 0, zone_table[top_of_zone_table].number);
+            list_zones(ch, NOWHERE, 0, zone_table[top_of_zone_table].number, NULL);
         }
         else if (use_name) {  // Builder name as arg
             list_zones(ch, NOWHERE, 0, zone_table[top_of_zone_table].number, smin);
         }
         else {                      // Numerical args
-            list_zones(ch, rzone, vmin, vmax);
+            list_zones(ch, rzone, vmin, vmax, NULL);
         }
         break;
     default:

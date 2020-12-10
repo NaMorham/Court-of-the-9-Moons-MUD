@@ -243,7 +243,7 @@ char *read_delete(long recipient)
             "\r\n"
             "%s",
 
-            tmstr,
+            timestr,
             to ? to : "Unknown",
             from ? from : "Unknown",
             record_to_keep->body ? record_to_keep->body : "No message");

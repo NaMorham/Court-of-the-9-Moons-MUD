@@ -2492,9 +2492,9 @@ void close_socket(struct descriptor_data *d)
 
     // Mud Events
     if (d->events->iSize > 0) {
-        struct mud_event_t * pEvent;
+        mud_event_t *pEvent;
 
-        while ((pEvent = simple_list(d->events)) != NULL) {
+        while ((pEvent = (mud_event_t*)simple_list(d->events)) != NULL) {
             event_cancel(pEvent);
         }
     }
@@ -2848,7 +2848,7 @@ void send_to_group(struct char_data *ch, struct group_data *group, const char * 
         return;
     }
 
-    while ((tch = simple_list(group->members)) != NULL) {
+    while ((tch = (char_data*)simple_list(group->members)) != NULL) {
         if ((tch != ch) && !IS_NPC(tch) && tch->desc && (STATE(tch->desc) == CON_PLAYING)) {
             write_to_output(tch->desc, "%s[%sGroup%s]%s ",
                 CCGRN(tch, C_NRM), CBGRN(tch, C_NRM), CCGRN(tch, C_NRM), CCNRM(tch, C_NRM));
@@ -2903,7 +2903,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
     const char *i = NULL;
     char lbuf[MAX_STRING_LENGTH], *buf, *j;
     bool uppercasenext = FALSE;
-    struct char_data *dg_victim = (to == vict_obj) ? vict_obj : NULL;
+    struct char_data *dg_victim = (char_data *)((to == vict_obj) ? vict_obj : NULL);
     struct obj_data *dg_target = NULL;
     char *dg_arg = NULL;
 

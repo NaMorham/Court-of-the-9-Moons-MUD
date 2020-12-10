@@ -183,9 +183,9 @@ int delete_room(room_rnum rnum)
 
     if (room->events != NULL) {
         if (room->events->iSize > 0) {
-            struct event * pEvent;
+            mud_event_t *pEvent;
 
-            while ((pEvent = simple_list(room->events)) != NULL)
+            while ((pEvent = (mud_event_t *)simple_list(room->events)) != NULL)
                 event_cancel(pEvent);
         }
         free_list(room->events);

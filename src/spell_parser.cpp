@@ -71,7 +71,7 @@ static int mag_manacost(struct char_data *ch, int spellnum)
 static char *obfuscate_spell(const char *unobfuscated)
 {
     static char obfuscated[200];
-    int maxlen = 200;
+    size_t maxlen = 200;
 
     int j, ofs = 0;
 
@@ -85,7 +85,7 @@ static char *obfuscate_spell(const char *unobfuscated)
                     maxlen -= strlen(syls[j].news);
                 }
                 else {
-                    log("No room in obfuscated version of '%s' (currently obfuscated to '%s') to add syllable '%s'.",
+                    WriteLogf("No room in obfuscated version of '%s' (currently obfuscated to '%s') to add syllable '%s'.",
                         unobfuscated, obfuscated, syls[j].news);
                 }
                 ofs += strlen(syls[j].org);
@@ -95,7 +95,7 @@ static char *obfuscate_spell(const char *unobfuscated)
 
         // i.e., we didn't find a match in syls[]
         if (!*syls[j].org) {
-            log("No entry in syllable table for substring of '%s' starting at '%s'.", unobfuscated, unobfuscated + ofs);
+            WriteLogf("No entry in syllable table for substring of '%s' starting at '%s'.", unobfuscated, unobfuscated + ofs);
             ofs++;
         }
     }  // while (unobfuscated[ofs])

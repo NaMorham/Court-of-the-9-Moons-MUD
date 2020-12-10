@@ -389,7 +389,7 @@ void death_cry(struct char_data *ch)
 
     act("Your blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
 
-    for (door = 0; door < DIR_COUNT; door++)
+    for (door = 0; door < DIR_COUNT; door++) {
         if (CAN_GO(ch, door)) {
             send_to_room(world[IN_ROOM(ch)].dir_option[door]->to_room, "Your blood freezes as you hear someone's death cry.\r\n");
         }
@@ -1177,7 +1177,7 @@ void perform_violence(void)
             struct iterator_data Iterator;
 
             tch = (struct char_data *) merge_iterator(&Iterator, GROUP(ch)->members);
-            for (; tch; tch = next_in_list(&Iterator)) {
+            for (; tch; tch = (char_data *)next_in_list(&Iterator)) {
                 if (tch == ch) {
                     continue;
                 }

@@ -11,6 +11,7 @@
 #include <arpa/telnet.h>
 #endif
 #include <sys/types.h>
+#include "telnet.h"
 #include "protocol.h"
 
 /******************************************************************************
@@ -51,7 +52,7 @@ static void Write(descriptor_t *apDescriptor, const char *apData)
 
 static void ReportBug(const char *apText)
 {
-    log("%s", apText);
+    WriteLogf("%s", apText);
 }
 
 static void InfoMessage(descriptor_t *apDescriptor, const char *apData)
@@ -1325,9 +1326,14 @@ void SoundSend(descriptor_t *apDescriptor, const char *apTrigger)
             }
             else if (strlen(apTrigger) <= MaxTriggerLength) {
                 // Use an old MSP-style trigger
-                char *pBuffer = alloca(MaxTriggerLength + 10);
-                sprintf(pBuffer, "\t!SOUND(%s)", apTrigger);
-                Write(apDescriptor, pBuffer);
+
+                // alloca allocates an array on the stack
+                //char *pBuffer = alloca(MaxTriggerLength + 10);
+                //sprintf(pBuffer, "\t!SOUND(%s)", apTrigger);
+                //Write(apDescriptor, pBuffer);
+                char buffer[MaxTriggerLength + 10];
+                sprintf(buffer, "\t!SOUND(%s)", apTrigger);
+                Write(apDescriptor, buffer);
             }
         }
     }
@@ -1611,7 +1617,9 @@ static void PerformSubnegotiation(descriptor_t *apDescriptor, char aCmd, char *a
         if (pProtocol->bTTYPE) {
             // Store the client name.
             const int MaxClientLength = 64;
-            char *pClientName = alloca(MaxClientLength + 1);
+            // more alloca bullshit
+            char buffer[MaxClientLength + 1];
+            char *pClientName = buffer;//alloca(MaxClientLength + 1);
             int i = 0, j = 1;
             bool_t bStopCyclicTTYPE = false;
 
@@ -1949,7 +1957,9 @@ static void ExecuteMSDPPair(descriptor_t *apDescriptor, const char *apVariable, 
                                 !strcmp(apDescriptor->pProtocol->pVariables[i]->pValueString, "Unknown"))
                             {
                                 // Store the new value if it's valid
-                                char *pBuffer = alloca(VariableNameTable[i].Max + 1);
+                                // alloca allocates an array on the stack so you do not have to free :( --- NO
+                                //char *pBuffer = alloca(VariableNameTable[i].Max + 1);
+                                char *pBuffer = (char*)malloc(sizeof(char)*(VariableNameTable[i].Max + 1));
                                 int j; // Loop counter
 
                                 for (j = 0; j < VariableNameTable[i].Max && *apValue != '\0'; ++apValue) {
@@ -1963,6 +1973,10 @@ static void ExecuteMSDPPair(descriptor_t *apDescriptor, const char *apVariable, 
                                     free(apDescriptor->pProtocol->pVariables[i]->pValueString);
                                     apDescriptor->pProtocol->pVariables[i]->pValueString = AllocString(pBuffer);
                                 }
+
+                                // we are not using alloca, so free our stuff
+                                free(pBuffer);
+                                pBuffer = NULL;
                             }
                         }  // if (VariableNameTable[i].bString)  - variable is text
                         else // This variable only accepts numeric values
@@ -2309,6 +2323,7 @@ static const char *GetAnsiColour(bool_t abBackground, int aRed, int aGreen, int 
     }
     else {  // aBlue is the highest
         return abBackground ? s_BackBlue : aBlue >= 3 ? s_BoldBlue : s_DarkBlue;
+    }
 }
 
 static const char *GetRGBColour(bool_t abBackground, int aRed, int aGreen, int aBlue)

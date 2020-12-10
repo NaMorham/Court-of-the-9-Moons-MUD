@@ -39,6 +39,7 @@
 #include "prefedit.h"
 #include "ibt.h"
 #include "mud_event.h"
+#include "structs.h"
 
 
 /*
@@ -1832,7 +1833,7 @@ void nanny(struct descriptor_data *d, char *arg)
 
     case CON_RMOTD:        // read CR after printing motd
         write_to_output(d, "%s", CONFIG_MENU);
-        if (IS_HAPPYHOUR > 0){
+        if (IS_HAPPYHOUR) {
             write_to_output(d, "\r\n");
             write_to_output(d, "\tyThere is currently a Happyhour!\tn\r\n");
             write_to_output(d, "\r\n");

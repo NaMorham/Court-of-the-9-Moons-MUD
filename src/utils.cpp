@@ -1164,7 +1164,7 @@ void column_list(struct char_data *ch, int num_cols, const char **list, int list
         col_width -= 4;
     }
 
-    if (col_width < max_len) {
+    if ((size_t)col_width < max_len) {
         WriteLogf("Warning: columns too narrow for correct output to %s in simple_column_list (utils.c)", GET_NAME(ch));
     }
 

@@ -309,7 +309,7 @@ static char *str_replace(const char *string, const char *substr, const char *rep
     head = newstr;
     while ((tok = strstr(head, substr))) {
         oldstr = newstr;
-        newstr = malloc(strlen(oldstr) - strlen(substr) + strlen(replacement) + 1);
+        newstr = (char*)malloc(strlen(oldstr) - strlen(substr) + strlen(replacement) + 1);
         // Failed to alloc mem, free old string and return NULL
         if (newstr == NULL) {
             free(oldstr);
@@ -1157,7 +1157,8 @@ int format_script(struct descriptor_data *d)
     char nsc[MAX_CMD_LENGTH], *t, line[READ_SIZE];
     char *sc;
     size_t len = 0, nlen = 0, llen = 0;
-    int indent = 0, indent_next = FALSE, found_case = FALSE, i, line_num = 0;
+    int i, ret;
+    int indent = 0, indent_next = FALSE, found_case = FALSE, line_num = 0;
 
     if (!d->str || !*d->str) {
         return FALSE;

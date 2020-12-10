@@ -641,7 +641,6 @@ static int export_save_shops(zone_rnum zrnum)
 
             // Save open/closing times.
             fprintf(shop_file, "%d\n%d\n%d\n%d\n", S_OPEN1(shop), S_CLOSE1(shop), S_OPEN2(shop), S_CLOSE2(shop));
-            S_OPEN2(shop), S_CLOSE2(shop));
         }
     }  // for (i ...
     fprintf(shop_file, "$~\n");

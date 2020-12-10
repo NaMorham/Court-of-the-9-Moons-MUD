@@ -115,9 +115,10 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
 {
     int indent = 0, rep_all = 0, flags = 0, replaced, i, line_low, line_high, j = 0;
     unsigned int total_len;
-    char *s, *t, temp;
+    char *c, *s, *t, temp;
     char buf[MAX_STRING_LENGTH];
     char buf2[MAX_STRING_LENGTH];
+    bool has_at = FALSE;
 
     switch (command) {
     case PARSE_HELP:
@@ -145,7 +146,7 @@ void parse_edit_action(int command, char *string, struct descriptor_data *d)
             write_to_output(d, "No string.\r\n");
             break;
         }
-        bool has_at = FALSE;
+        has_at = FALSE;
         for (c = *d->str; *c; ++c) {
             if (*c == '@') {
                 if (*(++c) != '@') {
@@ -733,7 +734,8 @@ int replace_str(char **string, char *pattern, char *replacement, int rep_all, un
 {
     char *replace_buffer = NULL;
     char *flow, *jetsam, temp;
-    int len, i;
+    int i;
+    size_t len;
 
     if ((strlen(*string) - strlen(pattern)) + strlen(replacement) > max_size) {
         return -1;

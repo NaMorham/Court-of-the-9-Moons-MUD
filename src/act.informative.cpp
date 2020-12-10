@@ -24,9 +24,11 @@
 #include "mail.h"         ///< For the has_mail function
 #include "act.h"
 #include "class.h"
+#include "race.h"
 #include "fight.h"
 #include "modify.h"
 #include "asciimap.h"
+#include "quest.h"
 
 
 /*
@@ -1407,7 +1409,7 @@ ACMD(do_who)
             if (showgroup && !GROUP(tch)) {
                 continue;
             }
-            if (showleader && (!GROUP(tch) || GROUP_LEADER(GROUP(tch)) != tch))
+            if (showleader && (!GROUP(tch) || GROUP_LEADER(GROUP(tch)) != tch)) {
                 continue;
             }
 
@@ -1415,9 +1417,9 @@ ACMD(do_who)
                 if ((GET_LEVEL(tch) >= rank[i].min_level) && (GET_LEVEL(tch) <= rank[i].max_level)) {
                     rank[i].count++;
                 }
-            }
-        }  // for (d ...
-    }
+            }  // for (i ...
+        }  // can see?
+    }  // for (d ...
 
     for (i = 0; *rank[i].disp != '\n'; i++) {
         if (!rank[i].count && !short_list) {
@@ -1466,24 +1468,24 @@ ACMD(do_who)
             if (showclass && !(showclass & (1 << GET_CLASS(tch)))) {
                 continue;
             }
-            if (showgroup && !GROUP(tch))
+            if (showgroup && !GROUP(tch)) {
                 continue;
             }
-            if (showleader && (!GROUP(tch) || GROUP_LEADER(GROUP(tch)) != tch))
+            if (showleader && (!GROUP(tch) || GROUP_LEADER(GROUP(tch)) != tch)) {
                 continue;
             }
 
             if (short_list) {
                 send_to_char(ch, "%s[%2d %s] %-12.12s%s%s",
                     (GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
-                    GET_LEVEL(tch), CLASS_ABBR(tch), RACE_ABBR(tch), GET_NAME(tch),
+                    GET_LEVEL(tch), CLASS_ABBR(tch), RaceAbbrev(tch), GET_NAME(tch),
                     CCNRM(ch, C_SPR), ((!(++num_can_see % 4)) ? "\r\n" : ""));
             }
             else {
                 num_can_see++;
                 send_to_char(ch, "%s[%2d %s %s] %s%s%s%s",
                     (GET_LEVEL(tch) >= LVL_IMMORT ? CCYEL(ch, C_SPR) : ""),
-                    GET_LEVEL(tch), CLASS_ABBR(tch), RACE_ABBR(tch),
+                    GET_LEVEL(tch), CLASS_ABBR(tch), RaceAbbrev(tch),
                     GET_NAME(tch), (*GET_TITLE(tch) ? " " : ""), GET_TITLE(tch),
                     CCNRM(ch, C_SPR));
 
@@ -1587,7 +1589,7 @@ ACMD(do_who)
         send_to_char(ch, "%d characters displayed.\r\n", num_can_see);
     }
 
-    if (IS_HAPPYHOUR > 0){
+    if (IS_HAPPYHOUR){
        send_to_char(ch, "It's a Happy Hour! Type \tRhappyhour\tW to see the current bonuses.\r\n");
     }
 }
@@ -1731,7 +1733,7 @@ ACMD(do_users)
             d->original && d->original->player.name ? d->original->player.name :
             d->character && d->character->player.name ? d->character->player.name :
             "UNDEFINED",
-            state, idletime, timeptr);
+            state, idletime, timestr);
 
         if (d->host && *d->host) {
             sprintf(line + strlen(line), "[%s]\r\n", d->host);
@@ -2128,7 +2130,7 @@ ACMD(do_diagnose)
 ACMD(do_toggle)
 {
     char buf2[4], arg[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
-    int toggle, tp, wimp_lev, result = 0;
+    int i, toggle, tp, wimp_lev, result = 0;
     size_t len = 0;
     const char *types[] = { "off", "brief", "normal", "on", "\n" };
 
@@ -2284,7 +2286,7 @@ ACMD(do_toggle)
                 ONOFF(PRF_FLAGGED(ch, PRF_NOHASSLE)),
                 ONOFF(PRF_FLAGGED(ch, PRF_HOLYLIGHT)),
                 ONOFF(PRF_FLAGGED(ch, PRF_SHOWVNUMS)),
-                types[(PRF_FLAGGED(ch, PRF_LOG1) ? 1 : 0) + (PRF_FLAGGED(ch, PRF_LOG2) ? 2 : 0)]),
+                types[(PRF_FLAGGED(ch, PRF_LOG1) ? 1 : 0) + (PRF_FLAGGED(ch, PRF_LOG2) ? 2 : 0)],
                 GET_LEVEL(ch) == LVL_IMPL ? "" : "\r\n");
         }
         if (GET_LEVEL(ch) >= LVL_IMPL) {
@@ -2576,7 +2578,6 @@ ACMD(do_commands)
     int no, i, cmd_num;
     int wizhelp = 0, socials = 0;
     struct char_data *vict;
-    char arg[MAX_INPUT_LENGTH];
     char buf[MAX_STRING_LENGTH];
     const char *commands[1000];
     int overflow = sizeof(commands) / sizeof(commands[0]);
@@ -2585,29 +2586,11 @@ ACMD(do_commands)
         return;
     }
 
-    /*one_argument(argument, arg);
-
-    if (*arg) {
-    if (!(vict = get_char_vis(ch, arg, NULL, FIND_CHAR_WORLD)) || IS_NPC(vict)) {
-    send_to_char(ch, "Who is that?\r\n");
-    return;
-    }
-    }
-    else {
-    vict = ch;
-    }*/
-
     if (subcmd == SCMD_SOCIALS) {
         socials = 1;
     }
-    else if (subcmd == SCMD_WIZHELP) {
-        wizhelp = 1;
-    }
 
-    sprintf(buf, "The following %s%s are available to %s:\r\n",
-        wizhelp ? "privileged " : "",
-        socials ? "socials" : "commands",
-        vict == ch ? "you" : GET_NAME(vict));
+    send_to_char(ch, "The following %s are available to you:\r\n", socials ? "socials" : "commands");
 
     // cmd_num starts at 1, not 0, to remove 'RESERVED'
     for (no = 0, cmd_num = 1;

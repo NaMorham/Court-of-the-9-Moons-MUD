@@ -310,19 +310,20 @@ void save_ibt_file(int mode)
     char filename[256];
 
     switch (mode) {
-    case SCMD_BUG: sprintf(filename, "%s", BUGS_FILE);
+    case SCMD_BUG:
+        sprintf(filename, "%s", BUGS_FILE);
         first_ibt = first_bug;
-        last_ibt = last_bug;
         break;
-    case SCMD_IDEA: sprintf(filename, "%s", IDEAS_FILE);
+    case SCMD_IDEA:
+        sprintf(filename, "%s", IDEAS_FILE);
         first_ibt = first_idea;
-        last_ibt = last_idea;
         break;
-    case SCMD_TYPO: sprintf(filename, "%s", TYPOS_FILE);
+    case SCMD_TYPO:
+        sprintf(filename, "%s", TYPOS_FILE);
         first_ibt = first_typo;
-        last_ibt = last_typo;
         break;
-    default: WriteLogf("SYSERR: Invalid mode (%d) in save_ibt_file", mode);
+    default:
+        WriteLogf("SYSERR: Invalid mode (%d) in save_ibt_file", mode);
         return;
     }
 
@@ -560,7 +561,8 @@ ACMD(do_ibt)
             else {
                 send_to_char(ch, "%s%s by %s%s\r\n", QCYN, ibt_types[subcmd], QYEL, ibtData->name);
                 if (ibtData->dated != 0) {
-                    strftime(timestr, sizeof(timestr), "%c", localtime(&(ibtData->dated)));
+                    const time_t tmval = (ibtData->dated);
+                    strftime(timestr, sizeof(timestr), "%c", localtime(&tmval));
                 }
                 else {
                     strcpy(timestr, "Unknown");
@@ -701,13 +703,17 @@ ACMD(do_ibt)
             return;
         }
         switch (subcmd) {
-        case SCMD_IDEA: SET_BIT_AR(PLR_FLAGS(ch), PLR_IDEA);
+        case SCMD_IDEA:
+            SET_BIT_AR(PLR_FLAGS(ch), PLR_IDEA);
             break;
-        case SCMD_BUG: SET_BIT_AR(PLR_FLAGS(ch), PLR_BUG);
+        case SCMD_BUG:
+            SET_BIT_AR(PLR_FLAGS(ch), PLR_BUG);
             break;
-        case SCMD_TYPO: SET_BIT_AR(PLR_FLAGS(ch), PLR_TYPO);
+        case SCMD_TYPO:
+            SET_BIT_AR(PLR_FLAGS(ch), PLR_TYPO);
             break;
-        default: log("Invalid subcmd (%d) in do_ibt", subcmd);
+        default:
+            WriteLogf("Invalid subcmd (%d) in do_ibt", subcmd);
             return;
         }
         SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);

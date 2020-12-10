@@ -572,6 +572,7 @@ void redit_parse(struct descriptor_data *d, char *arg)
 {
     int number;
     char *oldtext = NULL;
+    sh_int value;
 
     switch (OLC_MODE(d)) {
     case REDIT_CONFIRM_SAVESTRING:

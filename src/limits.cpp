@@ -227,7 +227,6 @@ void run_autowiz(void)
     if (CONFIG_USE_AUTOWIZ) {
         size_t res;
         char buf[256];
-        int i;
 
 #if defined(CIRCLE_UNIX)
         res = snprintf(buf, sizeof(buf), "nice ../bin/autowiz %d %s %d %s %d &",

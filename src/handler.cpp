@@ -294,7 +294,7 @@ void affect_total(struct char_data *ch)
     }  // for (i ...
 
     for (af = ch->affected; af; af = af->next) {
-        affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE);
+        affect_modify_ar(ch, af->location, af->modifier, af->bitvector, TRUE);
     }  // for (af
 
     // Make certain values are between 0..25, not < 0 and not > 25!
@@ -962,9 +962,9 @@ void extract_obj(struct obj_data *obj)
 
     if (obj->events != NULL) {
         if (obj->events->iSize > 0) {
-            struct event * pEvent;
+            mud_event_t* pEvent;
 
-            while ((pEvent = simple_list(obj->events)) != NULL) {
+            while ((pEvent = (mud_event_t *)(simple_list(obj->events))) != NULL) {
                 event_cancel(pEvent);
             }
         }
@@ -1697,7 +1697,7 @@ void free_group(struct group_data * group)
     if (group->members->iSize) {
         for (tch = (struct char_data *) merge_iterator(&Iterator, group->members);
             tch;
-            tch = next_in_list(&Iterator)) {
+            tch = (char_data *)next_in_list(&Iterator)) {
             leave_group(tch);
         }
 
@@ -1728,7 +1728,7 @@ void leave_group(struct char_data *ch)
 
     if (group->members->iSize) {
         for (tch = (struct char_data *) merge_iterator(&Iterator, group->members);
-            tch; tch = next_in_list(&Iterator)) {
+            tch; tch = (char_data *)next_in_list(&Iterator)) {
             if (!IS_NPC(tch)) {
                 found_pc = TRUE;
             }

@@ -750,7 +750,7 @@ void save_char(struct char_data * ch)
 {
     FILE *fl;
     char filename[40], buf[MAX_STRING_LENGTH], bits[127], bits2[127], bits3[127], bits4[127];
-    int i, id, save_index = FALSE;
+    int i, j, id, save_index = FALSE;
     struct affected_type *aff, tmp_aff[MAX_AFFECT];
     struct obj_data *char_eq[NUM_WEARS];
     trig_data *t;
@@ -1239,7 +1239,7 @@ static void load_affects(FILE *fl, struct char_data *ch)
                 }
             }
             else {
-                log("SYSERR: Invalid affects in pfile (%s), expecting 5 or 8 values", GET_NAME(ch));
+                WriteLogf("SYSERR: Invalid affects in pfile (%s), expecting 5 or 8 values", GET_NAME(ch));
             }
             affect_to_char(ch, &af);
             i++;

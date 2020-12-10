@@ -502,7 +502,8 @@ void board_save_board(int board_type)
 void board_load_board(int board_type)
 {
     FILE *fl;
-    size_t i, j, len1, len2;
+    int i;
+    size_t j, len1, len2;
     char *tmp1, *tmp2;
 
     if (!(fl = fopen(FILENAME(board_type), "rb"))) {
@@ -521,13 +522,13 @@ void board_load_board(int board_type)
     {
         if (fread(&(msg_index[board_type][i]), sizeof(struct board_msginfo), 1, fl) != 1) {
             if (feof(fl)) {
-                log("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
+                WriteLogf("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
             }
             else if (ferror(fl)) {
-                log("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
+                WriteLogf("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
             }
             else {
-                log("SYSERR: Error reading board file %d. Resetting.", board_type);
+                WriteLogf("SYSERR: Error reading board file %d. Resetting.", board_type);
             }
             board_reset_board(board_type);
         }
@@ -541,13 +542,13 @@ void board_load_board(int board_type)
 
         if (fread(tmp1, sizeof(char), len1, fl) != len1) {
             if (feof(fl)) {
-                log("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
+                WriteLogf("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
             }
             else if (ferror(fl)) {
-                log("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
+                WriteLogf("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
             }
             else {
-                log("SYSERR: Error reading board file %d. Resetting.", board_type);
+                WriteLogf("SYSERR: Error reading board file %d. Resetting.", board_type);
             }
             board_reset_board(board_type);
         }
@@ -563,13 +564,13 @@ void board_load_board(int board_type)
             CREATE(tmp2, char, len2);
             if (fread(tmp2, sizeof(char), len2, fl) != sizeof(char) * len2) {
                 if (feof(fl)) {
-                    log("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
+                    WriteLogf("SYSERR: Unexpected EOF encountered in board file %d! Resetting.", board_type);
                 }
                 else if (ferror(fl)) {
-                    log("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
+                    WriteLogf("SYSERR: Error reading board file %d: %s. Resetting.", board_type, strerror(errno));
                 }
                 else {
-                    log("SYSERR: Error reading board file %d. Resetting.", board_type);
+                    WriteLogf("SYSERR: Error reading board file %d. Resetting.", board_type);
                 }
                 board_reset_board(board_type);
             }

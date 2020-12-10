@@ -71,11 +71,15 @@ typedef struct descriptor_data descriptor_t;
  Types.
  ******************************************************************************/
 
+#if !defined(__cplusplus)
 typedef enum
 {
     false,
     true
 } bool_t;
+#else
+typedef bool bool_t;
+#endif
 
 typedef enum
 {

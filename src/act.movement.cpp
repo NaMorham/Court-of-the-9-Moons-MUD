@@ -460,7 +460,7 @@ static int find_door(struct char_data *ch, const char *type, char *dir, const ch
             send_to_char(ch, "What is it you want to %s?\r\n", cmdname);
             return (-1);
         }
-        for (door = 0; door < DIR_COUNT; door++)
+        for (door = 0; door < DIR_COUNT; door++) {
             if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->keyword) {
                     if (isname(type, EXIT(ch, door)->keyword)) {
@@ -791,7 +791,7 @@ ACMD(do_enter)
     }
     else {
        // try to locate an entrance
-       for (door = 0; door < DIR_COUNT; door++)
+       for (door = 0; door < DIR_COUNT; door++) {
            // @todo: use a var here to simplify debugging?
            if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->to_room != NOWHERE) {
@@ -815,7 +815,7 @@ ACMD(do_leave)
         send_to_char(ch, "You are outside.. where do you want to go?\r\n");
     }
     else {
-        for (door = 0; door < DIR_COUNT; door++)
+        for (door = 0; door < DIR_COUNT; door++) {
             // @todo: use a var here to simplify debugging?
             if (EXIT(ch, door)) {
                 if (EXIT(ch, door)->to_room != NOWHERE) {

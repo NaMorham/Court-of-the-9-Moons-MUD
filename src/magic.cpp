@@ -341,7 +341,7 @@ void mag_affects(int level, struct char_data *ch, struct char_data *victim,
     struct affected_type af[MAX_SPELL_AFFECTS];
     bool accum_affect = FALSE, accum_duration = FALSE;
     const char *to_vict = NULL, *to_room = NULL;
-    int i;
+    int i, j;
 
 
     if (victim == NULL || ch == NULL) {
@@ -659,9 +659,11 @@ void mag_masses(int level, struct char_data *ch, int spellnum, int savetype)
             continue;
         }
 
+        // Uncomment/populate if a spell is implemented
+        /*
         switch (spellnum) {
-            // Uncomment/populate if a spell is implemented
         }
+        */
     }  // for (tch ...
 }
 

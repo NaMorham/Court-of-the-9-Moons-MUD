@@ -433,6 +433,7 @@ enum eConnectionState
     // 30
     CON_IBTEDIT,        //!< OLC mode - idea/bug/typo edit
     CON_MSGEDIT,        //!< OLC mode - message editor
+    CON_GET_PROTOCOL,   //!< Used at log-in while attempting to get protocols
 
     // Must be last
     NUM_CON_STATES      //!< Number of connection states

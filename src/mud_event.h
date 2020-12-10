@@ -36,10 +36,10 @@ struct mud_event_list {
 };
 
 struct mud_event_data {
-    struct    event * pEvent;          //**< Pointer reference to the event
-    event_id             iId;              //**< General ID reference
-    void                * pStruct;        //**< Pointer to NULL, Descriptor, Character ....
-    char                * sVariables;    //**< String variable
+    struct mud_event_t *pEvent;         //!< Pointer reference to the event
+    event_id           iId;             //!< General ID reference
+    void               *pStruct;        //!< Pointer to NULL, Descriptor, Character ....
+    char               *sVariables;     //!< String variable
 };
 
 /*

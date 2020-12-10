@@ -705,7 +705,7 @@ static void oedit_disp_menu(struct descriptor_data *d)
         );
     // Send first half then build second half of menu.
     sprintbitarray(GET_OBJ_WEAR(OLC_OBJ(d)), wear_bits, EF_ARRAY_MAX, buf1);
-    sprintbitarray(GET_OBJ_PERM(OLC_OBJ(d)), affected_bits, EF_ARRAY_MAX, buf2);
+    sprintbitarray(GET_OBJ_AFFECT(OLC_OBJ(d)), affected_bits, EF_ARRAY_MAX, buf2);
 
     write_to_output(d,
         "%s7%s) Wear flags  : %s%s\r\n"

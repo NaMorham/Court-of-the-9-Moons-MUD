@@ -94,7 +94,7 @@ EVENTFUNC(event_countdown)
  * library was, and should be available in a future release. - Vat */
 void attach_mud_event(struct mud_event_data *pMudEvent, long time)
 {
-    struct event * pEvent;
+    struct mud_event_t * pEvent;
     struct descriptor_data * d;
     struct char_data * ch;
     struct room_data * room;
@@ -189,8 +189,8 @@ void free_mud_event(struct mud_event_data *pMudEvent)
 
 struct mud_event_data * char_has_mud_event(struct char_data * ch, event_id iId)
 {
-    struct event * pEvent;
-    struct mud_event_data * pMudEvent = NULL;
+    struct mud_event_t *pEvent;
+    struct mud_event_data *pMudEvent = NULL;
     bool found = FALSE;
 
     if (ch->events == NULL)
@@ -201,7 +201,7 @@ struct mud_event_data * char_has_mud_event(struct char_data * ch, event_id iId)
 
     clear_simple_list();
 
-    while ((pEvent = (struct event *) simple_list(ch->events)) != NULL) {
+    while ((pEvent = (struct mud_event_t *) simple_list(ch->events)) != NULL) {
        if (!pEvent->isMudEvent)
           continue;
         pMudEvent = (struct mud_event_data * ) pEvent->event_obj;
@@ -219,7 +219,7 @@ struct mud_event_data * char_has_mud_event(struct char_data * ch, event_id iId)
 
 void clear_char_event_list(struct char_data * ch)
 {
-    struct event * pEvent;
+    struct mud_event_t * pEvent;
 
     if (ch->events == NULL)
        return;
@@ -229,7 +229,7 @@ void clear_char_event_list(struct char_data * ch)
 
     clear_simple_list();
 
-    while ((pEvent = (struct event *) simple_list(ch->events)) != NULL) {
+    while ((pEvent = (struct mud_event_t *) simple_list(ch->events)) != NULL) {
        event_cancel(pEvent);
     }
 }
