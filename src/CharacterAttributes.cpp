@@ -23,5 +23,13 @@ Attributes::~Attributes()
 
 const Attributes &Attributes::operator=(const Attributes &rhs)
 {
+    m_str = rhs.getStr();
+    m_str_add = rhs.getStrAdd();
+    m_dex = rhs.getDex();
+    m_con = rhs.getCon();
+    m_intel = rhs.getIntel();
+    m_wis = rhs.getWis();
+    m_cha = rhs.getCha();
+
     return *this;
 }
