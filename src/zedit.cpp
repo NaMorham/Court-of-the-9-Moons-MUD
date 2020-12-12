@@ -194,7 +194,7 @@ ACMD(do_oasis_zedit)
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
-    mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s starts editing zone %d allowed zone %d",
+    mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "OLC: %s starts editing zone %d allowed zone %d",
         GET_NAME(ch), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(ch));
 }
 
@@ -393,7 +393,7 @@ static int start_change_command(struct descriptor_data *d, int pos)
 }
 
 /*------------------------------------------------------------------*/
-void zedit_disp_flag_menu(struct descriptor_data *d)
+static void zedit_disp_flag_menu(struct descriptor_data *d)
 {
     char bits[MAX_STRING_LENGTH];
 
@@ -401,13 +401,13 @@ void zedit_disp_flag_menu(struct descriptor_data *d)
     column_list(d->character, 0, zone_bits, NUM_ZONE_FLAGS, TRUE);
 
     sprintbitarray(OLC_ZONE(d)->zone_flags, zone_bits, ZN_ARRAY_MAX, bits);
-    write_to_output(d, "\r\nZone flags: @c%s@n\r\n"
+    write_to_output(d, "\r\nZone flags: \tc%s\tn\r\n"
         "Enter Zone flags, 0 to quit : ", bits);
     OLC_MODE(d) = ZEDIT_ZONE_FLAGS;
 }
 
 /*------------------------------------------------------------------*/
-bool zedit_get_levels(struct descriptor_data *d, char *buf)
+static bool zedit_get_levels(struct descriptor_data *d, char *buf)
 {
     // Create a string for the recommended levels for this zone.
     if ((OLC_ZONE(d)->min_level == -1) && (OLC_ZONE(d)->max_level == -1)) {
@@ -722,7 +722,7 @@ static void zedit_disp_arg3(struct descriptor_data *d)
 /*
  * Print the recommended levels menu and setup response catch.
  */
-void zedit_disp_levels(struct descriptor_data *d)
+static void zedit_disp_levels(struct descriptor_data *d)
 {
     char lev_string[50];
     bool levels_set = FALSE;
@@ -732,13 +732,13 @@ void zedit_disp_levels(struct descriptor_data *d)
     clear_screen(d);
     write_to_output(d,
         "\r\n"
-        "@y1@n) Set minimum level recommendation\r\n"
-        "@y2@n) Set maximum level recommendation\r\n"
-        "@y3@n) Clear level recommendations\r\n\r\n"
-        "@y0@n) Quit to main menu\r\n"
-        "@gCurrent Setting: %s%s\r\n"
+    "\ty1\tn) Set minimum level recommendation\r\n"
+    "\ty2\tn) Set maximum level recommendation\r\n"
+    "\ty3\tn) Clear level recommendations\r\n\r\n"
+    "\ty0\tn) Quit to main menu\r\n"
+             "\tgCurrent Setting: %s%s%s\r\n"
         "\r\n"
-        "Enter choice (0 to quit): ", levels_set ? "@c" : "@y", lev_string
+    "Enter choice (0 to quit): ", levels_set ? "\tc" : "\ty", lev_string, "\tn"
         );
     OLC_MODE(d) = ZEDIT_LEVELS;
 }
@@ -1108,7 +1108,7 @@ void zedit_parse(struct descriptor_data *d, char *arg)
         case 'D':
             pos = atoi(arg);
             // Count directions.
-            if ((pos < 0) || (pos > NUM_OF_DIRS)) {
+            if ((pos < 0) || (pos > DIR_COUNT)) {
                 write_to_output(d, "Try again : ");
             }
             else {

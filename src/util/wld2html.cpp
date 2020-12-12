@@ -1,11 +1,11 @@
-/* ************************************************************************
-*  File: wld2html.c                                        Part of tbaMUD *
-*  Usage: Convert a DikuMUD .wld file into a series of .html files        *
-*                                                                         *
-*  This program is in the public domain.                                  *
-*  Written (QUICKLY AND DIRTILY) by Jeremy Elson                          *
-*  Based on the Circle 3.0 syntax checker program                         *
-************************************************************************ */
+/****************************************************************************
+ *  File: wld2html.c                                        Part of tbaMUD  *
+ *  Usage: Convert a DikuMUD .wld file into a series of .html files         *
+ *                                                                          *
+ *  This program is in the public domain.                                   *
+ *  Written (QUICKLY AND DIRTILY) by Jeremy Elson                           *
+ *  Based on the Circle 3.0 syntax checker program                          *
+ ****************************************************************************/
 
 #define log(msg) fprintf(stderr, "%s\n", msg)
 
@@ -15,7 +15,9 @@
 
 #define NOWHERE    -1   // nil reference for room-database
 
-/* The cardinal directions: used as index to room_data.dir_option[] */
+/*
+ * The cardinal directions: used as index to room_data.dir_option[]
+ */
 #define NORTH          0
 #define EAST           1
 #define SOUTH          2
@@ -30,11 +32,13 @@
         { perror("malloc failure"); abort(); } } while(0)
 
 
-/* Exit info: used in room_data.dir_option.exit_info */
+/*
+ * Exit info: used in room_data.dir_option.exit_info
+ */
 #define EX_ISDOOR        (1 << 0)    // Exit is a door
 #define EX_CLOSED        (1 << 1)    // The door is closed
 #define EX_LOCKED        (1 << 2)    // The door is locked
-#define EX_PICKPROOF        (1 << 3)    // Lock can't be picked
+#define EX_PICKPROOF     (1 << 3)    // Lock can't be picked
 
 #define MAX_STRING_LENGTH    8192
 
@@ -57,55 +61,51 @@ char arg[MAX_STRING_LENGTH];
 int get_line(FILE * fl, char *buf);
 int real_room(int virtual, int reference);
 
-/* room-related structures *********************************************** */
+/*****************************************
+ *        room-related structures        *
+ *****************************************/
 struct room_direction_data {
-    char *general_description;    // When look DIR.
+    char *general_description;  // When look DIR.
 
-    char *keyword;        // for open/close
+    char *keyword;              // for open/close
 
-    sh_int exit_info;        // Exit info
-    obj_num key;            // Key's number (-1 for no key)
-    room_num to_room;        // Where direction leads (NOWHERE)
+    sh_int exit_info;           // Exit info
+    obj_num key;                // Key's number (-1 for no key)
+    room_num to_room;           // Where direction leads (NOWHERE)
 };
 
 struct extra_descr_data {
-    char *keyword;        // Keyword in look/examine
-    char *description;        // What to see
-    struct extra_descr_data *next;    // Next in list
+    char *keyword;                  // Keyword in look/examine
+    char *description;              // What to see
+    struct extra_descr_data *next;  // Next in list
 };
 
 struct reset_com {
-    char command;            // current command
+    char command;           // current command
 
-    bool if_flag;            // if TRUE: exe only if preceding exe'd
-    int arg1;            /* */
-    int arg2;            // Arguments to the command
-    int arg3;            /* */
+    bool if_flag;           // if TRUE: exe only if preceding exe'd
+    int arg1;               //
+    int arg2;               // Arguments to the command
+    int arg3;               //
 
-    /*
-     * Commands:              * 'M': Read a mobile     * 'O': Read an object    *
-     * 'G': Give obj to mob   * 'P': Put obj in obj    * 'G': Obj to char       *
-     * 'E': Obj to char equip * 'D': Set state of door *
-     */
+    // Commands:              * 'M': Read a mobile     * 'O': Read an object    *
+    // 'G': Give obj to mob   * 'P': Put obj in obj    * 'G': Obj to char       *
+    // 'E': Obj to char equip * 'D': Set state of door *
 };
 
-
-
 struct zone_data {
-    char *name;            // name of this zone
-    int lifespan;            // how long between resets (minutes)
-    int age;            // current age of this zone (minutes)
-    int top;            // upper limit for rooms in this zone
+    char *name;             // name of this zone
+    int lifespan;           // how long between resets (minutes)
+    int age;                // current age of this zone (minutes)
+    int top;                // upper limit for rooms in this zone
 
-    int reset_mode;        // conditions for reset (see below)
-    int number;            // virtual number of this zone
-    struct reset_com *cmd;    // command table for reset
+    int reset_mode;         // conditions for reset (see below)
+    int number;             // virtual number of this zone
+    struct reset_com *cmd;  // command table for reset
 
-    /*
-     * Reset mode:                              * 0: Don't reset, and don't
-     * update age.    * 1: Reset if no PC's are located in zone. * 2: Just
-     * reset.                           *
-     */
+    // Reset mode:    * 0: Don't reset, and don't update age.
+    //                * 1: Reset if no PC's are located in zone.
+    //                * 2: Just reset.
 };
 
 /* ================== Memory Structure for room ======================= */
@@ -219,7 +219,6 @@ void write_output(void)
     }
 }
 
-
 /*
  * Function to count how many hash-mark delimited records exist in a file
  */
@@ -237,7 +236,6 @@ int count_hash_records(FILE * fl)
     return (count);
 }
 
-
 void index_boot(char *name)
 {
     FILE *db_file;
@@ -252,7 +250,6 @@ void index_boot(char *name)
     rewind(db_file);
     discrete_load(db_file);
 }
-
 
 void discrete_load(FILE * fl)
 {
@@ -289,7 +286,6 @@ void discrete_load(FILE * fl)
     }
 }
 
-
 long asciiflag_conv(char *flag)
 {
     long flags = 0;
@@ -315,7 +311,6 @@ long asciiflag_conv(char *flag)
 
     return (flags);
 }
-
 
 /*
  * Load the rooms
@@ -377,9 +372,8 @@ void parse_room(FILE * fl, int virtual_nr)
             exit(1);
             break;
         }
-    }
+    }  // for (;;)
 }
-
 
 /*
  * Read direction data
@@ -417,7 +411,6 @@ void setup_dir(FILE * fl, int room, int dir)
     world[room].dir_option[dir]->to_room = t[2];
 }
 
-
 /*
  * Resolve all vnums into rnums in the world
  */
@@ -434,10 +427,9 @@ void renum_world(void)
                         world[room].number);
                 }
             }
-        }
-    }
+        }  // for (door = 0; ...
+    }  // for (room = 0; ...
 }
-
 
 /***********************************************************
 *  procedures for resetting, both play-time and boot-time  *
@@ -456,8 +448,7 @@ char *fread_string(FILE * fl, char *error)
 
     do {
         if (!fgets(tmp, 512, fl)) {
-            fprintf(stderr, "SYSERR: fread_string: format error at or near %s\n",
-                error);
+            fprintf(stderr, "SYSERR: fread_string: format error at or near %s\n", error);
             exit(1);
         }
         // If there is a '~', end the string; else put an "\r\n" over the '\n'.
@@ -497,7 +488,6 @@ char *fread_string(FILE * fl, char *error)
     return (rslt);
 }
 
-
 /*
  * Returns the real number of the room with given virtual number
  */
@@ -525,9 +515,8 @@ int real_room(int virtual, int reference)
         else {
             bot = mid + 1;
         }
-    }
+    }  // for (;;)
 }
-
 
 /*
  * get_line reads the next non-blank line off of the input stream.

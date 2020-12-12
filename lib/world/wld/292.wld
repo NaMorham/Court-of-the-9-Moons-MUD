@@ -19,16 +19,16 @@ credits info~
    Kerofk by Amanda Eterniale & Builder_5
 Copyright 1993 by Curious Areas Workshop
 *
-Kerofk is 153 rooms big. Replace all instances of 'XXXX' with some 
+Kerofk is 153 rooms big. Replace all instances of 'XXXX' with some
 deity, god or imp's name.  Whatever.
-Edit room 2#46 to connect with somewhere mountainous in your mud.  
-Exits can be joined to this room from the west, or from the south.  
+Edit room 2#46 to connect with somewhere mountainous in your mud.
+Exits can be joined to this room from the west, or from the south.
 Finish the last line in the room description to reflect this exit.
 Check the following items to make sure the value used
 for spells conforms to the same spell on your mud.
 *#00 -- Identify (53)
 *#02 -- Fireball (26)
-*#08 -- Armor (1)
+*#08 -- Armour (1)
 *#09 -- Teleport (2)
 *#18 -- Bless (3)
 *#19 -- Invisibility (29)
@@ -38,33 +38,33 @@ for spells conforms to the same spell on your mud.
 Add specials, if desired, for the mobs listed in the 'notes' section.
 Add these two rooms to your 'reception' special: #45 & #64.
 *
-Edit Room 2#29 to look like your login screen. (you'll understand 
+Edit Room 2#29 to look like your login screen. (you'll understand
 once you look at it...)
 *
 Here are some recommended specials for the mobs:
 *
 Guildmasters: Mage (#02), Thief (#04), Cleric (#27) and Warrior (#29).
 Spellcasters: #02, #34, #41, #44.
-#38 & #39 were 'boss'-mobs of the quest, and should be given tough 
+#38 & #39 were 'boss'-mobs of the quest, and should be given tough
 spellcasting routines, such as healing themselves, removing sanct's...
-whatever you can think of which seems unnecessary.  The power of the 
-items in that section make it more than worth the risk. Mob #00 had a 
-nice speaking routine, and basically commented about the weather, made 
+whatever you can think of which seems unnecessary.  The power of the
+items in that section make it more than worth the risk. Mob #00 had a
+nice speaking routine, and basically commented about the weather, made
 vague remarks about the future, and the following quest based remarks:
-'Great power will go to the destroyer of the orb!' 'The Blue Temple 
-houses an orb of utter evil!' and other such tripe.  A sign can do 
+'Great power will go to the destroyer of the orb!' 'The Blue Temple
+houses an orb of utter evil!' and other such tripe.  A sign can do
 just as well, if desired.
 *
 Credits
-Big thankee's to Tarkin of VieMud (viemud.org 4000) who codes 
-everything I could ever want. This area was overhauled with the aid 
-of George Essl's Dikued program. Even more thanks to the brothers of 
-FORCE and all the players at VieMud, for some of the most painful 
+Big thankee's to Tarkin of VieMud (viemud.org 4000) who codes
+everything I could ever want. This area was overhauled with the aid
+of George Essl's Dikued program. Even more thanks to the brothers of
+FORCE and all the players at VieMud, for some of the most painful
 playtesting ever seen.
 ~
 E
 throne~
-   Its nice, for a chair, but drab, for a throne.    
+   Its nice, for a chair, but drab, for a throne.
 ~
 S
 #29201
@@ -83,7 +83,7 @@ D2
 0 -1 29200
 E
 door west~
-   This door seems welded shut.  You'll never open it!  
+   This door seems welded shut.  You'll never open it!
 ~
 S
 #29202
@@ -94,7 +94,7 @@ white temple to your north.  To the south is a smaller blue temple,
 its doors locked by great bands of magic.  Several people glare at
 you, wondering if you're going to cut through the line.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -141,7 +141,7 @@ citizens of Kerofk are here, bustling and jostling each other in an
 attempt to get all they have to do done as fast as possible.  Bump Oof
 Excuse Me!  There is a Mage's Guild to the north.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -163,7 +163,7 @@ clue how to get across...  Wait, there's an opening!  Sprint, Turn,
 Jab!  Run, Run, Run...  you're across! You look up at the never-ending
 twilight and wonder how so many people could bear to live here.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -188,7 +188,7 @@ Road, and for a moment you forget what kind of strange place you're
 in.  A flowerbox filled with wilted flowers brings you back to
 reality; this city hasn't seen the sun for decades...
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -215,7 +215,7 @@ D0
 S
 #29208
 Intersection at the Cliff's Edge~
-   This is the intersection of Cliffside Road, and Center Road.  
+   This is the intersection of Cliffside Road, and Center Road.
    Cliffside?
    About fifteen feet ahead of you there is a sheer precipice that
 drops down about a thousand feet into the dark ocean.  You don't think
@@ -223,7 +223,7 @@ it would be a good idea to step off, but you've already guessed that,
 haven't you?
    Cliffside Road runs north and south from here.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -251,7 +251,7 @@ the citzenry of Kerofk walk up and down the street, almost oblivious to
 the incredible drop mere feet away.
    Cliffside Road continues North and South.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -278,7 +278,7 @@ further east.  Northwards is Cliffside Road, to the west is Moon Gate
 Road, and to the east a vast expanse of stars shine over the dark
 ocean below.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -300,7 +300,7 @@ picture of a trout in full plate hanging out front.  'Bob's Armoury
 and Tackle' it proclaims.  Armoury? Tackle Shop?!?  How curious!
    Moon Gate Road continues to the east and west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -321,7 +321,7 @@ walk about under the starlight here, in a hurry to get to shops, their
 homes, to work, et cetera.  Citizen's Road is to the north, Moon Gate
 Road continues east and west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -342,7 +342,7 @@ district. It suddenly strikes you how orderly this city is planned...
 done that way on purpose?  Well, it doesn't look like there's anything
 interesting here, but the road continues north and south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -360,7 +360,7 @@ the cliff's edge.  That cliff looks kind of dangerous actually.  The
 Cliffhanger looks good, though.
    Cliff Side Road continues to the north and south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -386,7 +386,7 @@ foot drop off just to your east with the ocean below.  Hmm...something
 tells you not to go east...must be that brain thing, eh?
    Cliffside road leads south, Star Gate Road leads west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -407,7 +407,7 @@ shine down as you look around for the source of the silence.  Ah,
 there's a bookstore/library to your north!  Moon Gate Road continues
 to the east and west as well.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -428,7 +428,7 @@ around and do their business.  Looks like there's some private homes
 on Citizen's Road to your south, and Star Gate Road continues to the
 east and west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -450,7 +450,7 @@ sagging demeanor seem to eminate an air of death and decay and
 cliche's.  Could anyone possibly live in there?
    Citizen's Road continues north and south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -472,7 +472,7 @@ Card'.  The smell wafting out its doors is enough to make a dead man
 turn away in disgust...how about you?
    Star Gate Road continues to the east and west
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -492,7 +492,7 @@ Star Gate Road~
 but not by much.  To the north is a large farmer's stand where a lot
 of the citizenry seem to be going in and out of.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -515,7 +515,7 @@ laughing inside; it's obviously a tavern or an inn, and popular to
 boot.
    Star Gate Road continues east and west
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -536,7 +536,7 @@ street to your south while Star Gate Road continues on its way east
 and west.
    There is an odd feeling of power to your north.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -562,7 +562,7 @@ arrayed outside its doors under heavy lamplight, and a sign proclaims
 assorted types of herbs on special today.
    Business Road continues north and south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -585,7 +585,7 @@ over.  Your reflexes save you, but you feel you better get out of this
 intersection soon.
    Center Road is east-west, Business road is north-south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -612,7 +612,7 @@ chambers, not to mention Mayor Kell's office.  To the east you see a
 huge white temple with a line outside, and a smaller blue temple.
    Center Road continues east and west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -634,7 +634,7 @@ front.  The keep looks like it was built to withstand floods,
 earthquakes, and even acts of God!
    Moon Gate Road continues east and west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -655,7 +655,7 @@ vacant lot to your south.  Also, Moon Gate Road continues east-west.
 The air seems to crackle with energy here, but you can find no source
 for such power.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -677,7 +677,7 @@ on.  There's a few shops along this road, but they don't look terribly
 interesting under this aspect.  Looking around, you notice the
 entrance to the city graveyard to the south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -698,7 +698,7 @@ area as people go about their business.  Along Business Road to the
 north you see many types of different shops lining the street, and
 Moon Gate Road continues east-west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -719,7 +719,7 @@ see the intersection of of Center Road and Business Road, and
 southwards is another intersection--Business Road and Moon Gate Road.
    There is a shop to the west, a dirty sign proclaiming it 'OPEN'.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -741,7 +741,7 @@ be some sort of 'catch-all' general store.  Also, Moon Gate Road
 continues east towards the cliff, and west towards the actual Moon
 Gate.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -763,7 +763,7 @@ has some bustle to it...must be all that night life!  Feeling pleased
 at your prospects, you look around for something to do...
    Wall Side Road leads north, Moon Gate Road leads east.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -784,7 +784,7 @@ raid or war it seems.  There are some signs of construction about, but
 it seems that there is no great need for more buildings right now.
    Wall Side Road continues north and south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -804,7 +804,7 @@ architecture, and the majesty of the starry skies above, you know this
 is a sight you'll never forget.
    Center Road leads east, Wall Side Road continues north-south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -824,7 +824,7 @@ Wall Side Road, North~
 city's wall.  To your east is a recruiting office for the city militia
 of Kerofk.  Wall Side Road continues north and south.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D0
 ~
 ~
@@ -847,7 +847,7 @@ in a world of eternal twilight.  A street sign informs you that this
 is Wall Side Road running south from here, and Star Gate Road leads
 away to the east.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -868,7 +868,7 @@ this busy street between and through them.  It seems that they're used
 to adventurers, or just don't care. Star Gate Road continues east and
 west, intersecting Business Road and Wall Side Road respectively.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -886,7 +886,7 @@ for a temple, this building is big!  Perhaps it would be worth a look
 around?
    Center Road continues to the east and west.
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 D1
 ~
 ~
@@ -916,7 +916,7 @@ D0
 ~
 0 -1 29231
 D1
-This is a big metal door with a sign hung on it saying, 'KEEP OUT!'  
+This is a big metal door with a sign hung on it saying, 'KEEP OUT!'
 ~
 door~
 1 29226 29240
@@ -969,12 +969,12 @@ D1
 0 -1 29241
 E
 weapons~
-   A closer examinations reveal the weapons are all junk.  
+   A closer examinations reveal the weapons are all junk.
 ~
 E
 pictures~
-   With a closer look, you realize the pictures are all of someone else's
-family.  
+   With a closer look, you realise the pictures are all of someone else's
+family.
 ~
 S
 #29243
@@ -1134,7 +1134,7 @@ S
 Leonna's Office~
    This is Guildmistress Leonna's office.  It is bright and cheery,
 with a roaring fire in a fireplace and several songbirds in cages
-providing color.  Her desk is spotless but for some work she was just
+providing colour.  Her desk is spotless but for some work she was just
 at a moment ago.  Black satin-covered chairs are arranged for comfort
 of her guests, and you have a sudden urge to just sit and rest snd
 perhaps talk a bit.
@@ -1193,11 +1193,11 @@ Town Hall--Entrance~
    Organized Madness.  There are people going every which way here, up
 across, over, under, through!  Deliveries, messages, visits,
 appointments, WHEW!  You're suddenly glad you don't work here!
-	   There's a directory sign:
-		Up-Mayor Kell
-		Down-Jails
-		North-Courtroom
-		West-Council Chambers
+           There's a directory sign:
+                Up-Mayor Kell
+                Down-Jails
+                North-Courtroom
+                West-Council Chambers
 ~
 292 8 0 0 0 0
 D0
@@ -1319,7 +1319,7 @@ chair~
 ~
 E
 newspaper~
-   Seems all it is is war news.  How boring!  
+   Seems all it is is war news.  How boring!
 ~
 S
 #29262
@@ -1386,8 +1386,8 @@ Uh-Oh!~
    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA(breathe)AAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHH!!!!
-			THUD! CRACK!  KerPLOOMP!
-   	   (that wasn't a good idea, but now you know that, eh?)
+                        THUD! CRACK!  KerPLOOMP!
+           (that wasn't a good idea, but now you know that, eh?)
 ~
 292 4 0 0 0 0
 S
@@ -1502,7 +1502,7 @@ S
 Vacant Lot~
    There's a large flattened area in the middle of this lot.  You get the eerie
 feeling that something SHOULD be here, but isn't.  How Odd!  Moon Gate Road is
-to the north.    
+to the north.
 ~
 292 8 0 0 0 0
 D0
@@ -1531,9 +1531,9 @@ gave them to Builder_5, smiled, and said,
 these files into a version more suitable for a public release.  This
 is what you have now.
    Both of us hope you enjoy this area, over a year in the making...
-	Amanda Eterniale			Builder_5
+        Amanda Eterniale                        Builder_5
 ~
-292 8 0 0 0 0
+292 8 0 0 0 1
 S
 #29275
 Shrine to the Emperor~
@@ -1578,7 +1578,7 @@ sign~
    ADVENTURERS!!!!  I need a party of brave souls to enter the blue temple and
 destroy the evil orb inside.  I shall pay well for the deed!!!  Please stop by
 my temple and get the magic scroll used for entering the foul area if you are
-powerful enough to withstand the trials!!!  --MouseRider, sage of Kerofk.  
+powerful enough to withstand the trials!!!  --MouseRider, sage of Kerofk.
 ~
 S
 #29277
@@ -1602,7 +1602,7 @@ sign~
    ADVENTURERS!!!  I need a party of brave souls to enter the blue temple and
 destroy the evil orb within.  I shall pay thee well for the deed!  Please stop
 by my temple and get the magic scroll used for entering the foul area, if you
-are powerful enough to withstand its trials!!!  --MouseRider, sage of Kerofk.  
+are powerful enough to withstand its trials!!!  --MouseRider, sage of Kerofk.
 ~
 S
 #29278
@@ -1772,7 +1772,7 @@ D1
 S
 #29286
 Hallway~
-   This hallway was once tapestried in beautiful colors, and well-
+   This hallway was once tapestried in beautiful colours, and well-
 illuminated by the lamps on the walls.  Now the tapestries are
 thread-worn and moth-eaten and most the lamps have disappeared,
 leaving dark holes in the walls.  There is a door to your left and one
@@ -1865,7 +1865,7 @@ Second Floor Hallway~
 north-south.  Doors line the hallway in both directions, and you can
 go down to the main room.  A big, ten foot tall window on the west
 wall of the stairwell seemed to have been a stained-glass window once,
-but has been worn and cracked by time to just be shards of colored
+but has been worn and cracked by time to just be shards of coloured
 glass that doesn't even keep the wind out.
 ~
 292 8 0 0 0 0

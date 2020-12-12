@@ -20,15 +20,16 @@
 #include "act.h"
 
 
-/* local utility functions */
+/*
+ *  local utility functions
+ */
 static int aedit_find_command(const char *txt);
 static void aedit_disp_menu(struct descriptor_data * d);
 static void aedit_save_to_disk(struct descriptor_data *d);
-/* used in aedit parse */
+// used in aedit parse
 static void aedit_setup_new(struct descriptor_data *d);
 static void aedit_setup_existing(struct descriptor_data *d, int real_num);
 static void aedit_save_internally(struct descriptor_data *d);
-
 
 
 /*
@@ -60,7 +61,7 @@ ACMD(do_oasis_aedit)
             send_to_char(ch, "Sorry, only one can edit socials at a time.\r\n");
             return;
         }
-    }
+    }  // for (d ...
 
     one_argument(argument, arg);
 
@@ -93,7 +94,7 @@ ACMD(do_oasis_aedit)
         if (is_abbrev(OLC_STORAGE(d), soc_mess_list[OLC_ZNUM(d)].command)) {
             break;
         }
-    }
+    }  // for (OLC_NUM ...
 
     if (OLC_ZNUM(d) > top_of_socialt)  {
         if ((i = aedit_find_command(OLC_STORAGE(d))) != -1)  {
@@ -111,7 +112,7 @@ ACMD(do_oasis_aedit)
     STATE(d) = CON_AEDIT;
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
-    mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s starts editing actions.", GET_NAME(ch));
+    mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "OLC: %s starts editing actions.", GET_NAME(ch));
 }
 
 static void aedit_setup_new(struct descriptor_data *d) {
@@ -225,6 +226,7 @@ static void aedit_save_internally(struct descriptor_data *d) {
 static void aedit_save_to_disk(struct descriptor_data *d) {
     FILE *fp;
     int i;
+    char buf[MAX_STRING_LENGTH];
     if (!(fp = fopen(SOCMESS_FILE_NEW, "w+")))  {
         char error[MAX_STRING_LENGTH];
         snprintf(error, sizeof(error), "Can't open socials file '%s'", SOCMESS_FILE);
@@ -240,24 +242,32 @@ static void aedit_save_to_disk(struct descriptor_data *d) {
             soc_mess_list[i].min_char_position,
             soc_mess_list[i].min_victim_position,
             soc_mess_list[i].min_level_char);
-        fprintf(fp, "%s\n%s\n%s\n%s\n",
+
+        sprintf(buf, "%s\n%s\n%s\n%s\n",
             ((soc_mess_list[i].char_no_arg) ? soc_mess_list[i].char_no_arg : "#"),
             ((soc_mess_list[i].others_no_arg) ? soc_mess_list[i].others_no_arg : "#"),
             ((soc_mess_list[i].char_found) ? soc_mess_list[i].char_found : "#"),
             ((soc_mess_list[i].others_found) ? soc_mess_list[i].others_found : "#"));
-        fprintf(fp, "%s\n%s\n%s\n%s\n",
+        fprintf(fp, "%s", convert_from_tabs(buf));
+
+        sprintf(buf, "%s\n%s\n%s\n%s\n",
             ((soc_mess_list[i].vict_found) ? soc_mess_list[i].vict_found : "#"),
             ((soc_mess_list[i].not_found) ? soc_mess_list[i].not_found : "#"),
             ((soc_mess_list[i].char_auto) ? soc_mess_list[i].char_auto : "#"),
             ((soc_mess_list[i].others_auto) ? soc_mess_list[i].others_auto : "#"));
-        fprintf(fp, "%s\n%s\n%s\n",
+        fprintf(fp, "%s", convert_from_tabs(buf));
+
+        sprintf(buf, "%s\n%s\n%s\n",
             ((soc_mess_list[i].char_body_found) ? soc_mess_list[i].char_body_found : "#"),
             ((soc_mess_list[i].others_body_found) ? soc_mess_list[i].others_body_found : "#"),
             ((soc_mess_list[i].vict_body_found) ? soc_mess_list[i].vict_body_found : "#"));
-        fprintf(fp, "%s\n%s\n\n",
+        fprintf(fp, "%s", convert_from_tabs(buf));
+
+        sprintf(buf, "%s\n%s\n\n",
             ((soc_mess_list[i].char_obj_found) ? soc_mess_list[i].char_obj_found : "#"),
             ((soc_mess_list[i].others_obj_found) ? soc_mess_list[i].others_obj_found : "#"));
-    }
+        fprintf(fp, "%s", convert_from_tabs(buf));
+    }  // for (i ...
 
     fprintf(fp, "$\n");
     fclose(fp);
@@ -347,7 +357,7 @@ void aedit_parse(struct descriptor_data * d, char *arg) {
         switch (*arg) {
         case 'y': case 'Y':
             aedit_save_internally(d);
-            mudlog(CMP, LVL_IMPL, TRUE, "OLC: %s edits action %s",
+            mudlog(CMP, MAX(LVL_GOD, GET_INVIS_LEV(d->character)), TRUE, "OLC: %s edits action %s",
                 GET_NAME(d->character), OLC_ACTION(d)->command);
 
             // do not free the strings.. just the structure
@@ -386,13 +396,11 @@ void aedit_parse(struct descriptor_data * d, char *arg) {
                     cleanup_olc(d, CLEANUP_ALL);
                     break;
                 }
-                write_to_output(d, "Do you wish to add the '%s' action? ",
-                    OLC_STORAGE(d));
+                write_to_output(d, "Do you wish to add the '%s' action? ", OLC_STORAGE(d));
                 OLC_MODE(d) = AEDIT_CONFIRM_ADD;
             }
             else  {
-                write_to_output(d, "Do you wish to edit the '%s' action? ",
-                    soc_mess_list[OLC_ZNUM(d)].command);
+                write_to_output(d, "Do you wish to edit the '%s' action? ", soc_mess_list[OLC_ZNUM(d)].command);
                 OLC_MODE(d) = AEDIT_CONFIRM_EDIT;
             }
             break;
@@ -423,11 +431,13 @@ void aedit_parse(struct descriptor_data * d, char *arg) {
     case AEDIT_MAIN_MENU:
         switch (*arg) {
         case 'q': case 'Q':
-            if (OLC_VAL(d))  { /* Something was modified */
+            if (OLC_VAL(d)) {  // Something was modified
                 write_to_output(d, "Do you wish to save your changes? : ");
                 OLC_MODE(d) = AEDIT_CONFIRM_SAVESTRING;
             }
-            else cleanup_olc(d, CLEANUP_ALL);
+            else {
+                cleanup_olc(d, CLEANUP_ALL);
+            }
             break;
         case 'n':
             write_to_output(d, "Enter action name: ");
@@ -447,9 +457,9 @@ void aedit_parse(struct descriptor_data * d, char *arg) {
             return;
         case '3':
             write_to_output(d, "Enter the minimum position the Victim has to be in to activate social:\r\n");
-            for (i = POS_DEAD; i <= POS_STANDING; i++)
+            for (i = POS_DEAD; i <= POS_STANDING; i++) {
                 write_to_output(d, "   %d) %s\r\n", i, position_types[i]);
-
+            }
             write_to_output(d, "Enter choice: ");
             OLC_MODE(d) = AEDIT_MIN_VICT_POS;
             return;
@@ -564,6 +574,10 @@ void aedit_parse(struct descriptor_data * d, char *arg) {
 
             OLC_MODE(d) = AEDIT_OBJ_OTHERS_FOUND;
             return;
+
+        case '?':
+            write_to_output(d, "Help display not implemented yet");
+            // fall through for now
         default:
             aedit_disp_menu(d);
             break;
@@ -789,14 +803,16 @@ void aedit_parse(struct descriptor_data * d, char *arg) {
             delete_doubledollar(arg);
             OLC_ACTION(d)->others_obj_found = strdup(arg);
         }
-        else
+        else {
             OLC_ACTION(d)->others_obj_found = NULL;
+        }
         break;
 
     default:
         // we should never get here
         break;
     }
+
     OLC_VAL(d) = 1;
     aedit_disp_menu(d);
 }
@@ -822,7 +838,7 @@ ACMD(do_astat)
             real = TRUE;
             break;
         }
-    }
+    }  // for (i ...
 
     if (!real) {
         send_to_char(ch, "No such social.\r\n");
@@ -879,7 +895,7 @@ static int aedit_find_command(const char *txt)
             !strcmp(complete_cmd_info[cmd].command, txt)) {
             return (cmd);
         }
-    }
+    }  // for (cmd ...
     return (-1);
 }
 

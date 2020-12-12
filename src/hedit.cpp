@@ -26,18 +26,20 @@
 #include "modify.h"
 
 
-// local functions
+/*
+ *  local functions
+ */
 static void hedit_disp_menu(struct descriptor_data *);
 static void hedit_setup_new(struct descriptor_data *);
 static void hedit_setup_existing(struct descriptor_data *, int);
 static void hedit_save_to_disk(struct descriptor_data *);
 static void hedit_save_internally(struct descriptor_data *);
 
-
 ACMD(do_oasis_hedit)
 {
     char arg[MAX_INPUT_LENGTH];
     struct descriptor_data *d;
+    int i;
 
     // No building as a mob or while being forced.
     if (IS_NPC(ch) || !ch->desc || STATE(ch->desc) != CON_PLAYING) {
@@ -82,7 +84,17 @@ ACMD(do_oasis_hedit)
     CREATE(d->olc, struct oasis_olc_data, 1);
     OLC_NUM(d) = 0;
     OLC_STORAGE(d) = strdup(arg);
+
     OLC_ZNUM(d) = search_help(OLC_STORAGE(d), LVL_IMPL);
+
+    if (help_table[OLC_ZNUM(d)].duplicate) {
+        for (i = 0; i < top_of_helpt; i++) {
+            if (help_table[i].duplicate == 0 && help_table[i].entry == help_table[OLC_ZNUM(d)].entry) {
+                OLC_ZNUM(d) = i;
+                break;
+            }
+        }  // for (i ...
+    }
 
     if (OLC_ZNUM(d) == NOWHERE) {
         send_to_char(ch, "Do you wish to add the '%s' help file? ", OLC_STORAGE(d));
@@ -96,7 +108,8 @@ ACMD(do_oasis_hedit)
     STATE(d) = CON_HEDIT;
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
-    mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s starts editing help files.", GET_NAME(d->character));
+    mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)),
+        TRUE, "OLC: %s starts editing help files.", GET_NAME(d->character));
 }
 
 static void hedit_setup_new(struct descriptor_data *d)
@@ -168,7 +181,7 @@ static void hedit_save_to_disk(struct descriptor_data *d)
         strip_cr(buf1);
 
         // Forget making a buffer, lets just write the thing now.
-        fprintf(fp, "%s#%d\n", buf1, help_table[i].min_level);
+        fprintf(fp, "%s#%d\n", convert_from_tabs(buf1), help_table[i].min_level);
     }  // for (i ...
 
     // Write final line and close.
@@ -206,7 +219,7 @@ static void hedit_disp_menu(struct descriptor_data *d)
 void hedit_parse(struct descriptor_data *d, char *arg)
 {
     char buf[MAX_STRING_LENGTH];
-    char *oldtext = '\0';
+    char *oldtext = "";
     int number;
 
     switch (OLC_MODE(d)) {
@@ -378,8 +391,6 @@ ACMD(do_helpcheck)
     int i, count = 0;
     size_t len = 0, nlen;
 
-    send_to_char(ch, "Commands without help entries:\r\n");
-
     for (i = 1; *(complete_cmd_info[i].command) != '\n'; i++) {
         if (complete_cmd_info[i].command_pointer != do_action && complete_cmd_info[i].minimum_level >= 0) {
             if (search_help(complete_cmd_info[i].command, LVL_IMPL) == NOWHERE) {
@@ -397,10 +408,13 @@ ACMD(do_helpcheck)
     }
 
     if (ch->desc) {
-        page_string(ch->desc, buf, TRUE);
+        if (len == 0)
+            send_to_char(ch, "All commands have help entries.\r\n");
+        else {
+            send_to_char(ch, "Commands without help entries:\r\n");
+            page_string(ch->desc, buf, TRUE);
+        }
     }
-
-    *buf = '\0';
 }
 
 ACMD(do_hindex)
@@ -415,8 +429,8 @@ ACMD(do_hindex)
         return;
     }
 
-    len = sprintf(buf, "Help index entries beginning with '%s':\r\n", argument);
-    len2 = sprintf(buf2, "Help index entries containing '%s':\r\n", argument);
+    len = sprintf(buf, "\t1Help index entries beginning with '%s':\t2\r\n", argument);
+    len2 = sprintf(buf2, "\t1Help index entries containing '%s':\t2\r\n", argument);
     for (i = 0; i < top_of_helpt; i++) {
         if (is_abbrev(argument, help_table[i].keywords)
             && (GET_LEVEL(ch) >= help_table[i].min_level)) {
@@ -448,5 +462,7 @@ ACMD(do_hindex)
     // Join the two strings
     len += snprintf(buf + len, sizeof(buf) - len, "%s", buf2);
 
+    snprintf(buf + len, sizeof(buf) - len, "\t1Applicable Index Entries: \t3%d\r\n"
+        "\t1Total Index Entries: \t3%d\tn\r\n", count + count2, top_of_helpt);
     page_string(ch->desc, buf, TRUE);
 }

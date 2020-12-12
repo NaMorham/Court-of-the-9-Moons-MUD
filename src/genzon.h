@@ -22,4 +22,4 @@ void        delete_zone_command(struct zone_data *zone, int pos);
 zone_rnum   real_zone_by_thing(room_vnum vznum);
 void        create_world_index(int znum, const char *type);
 
-#endif /* _GENZON_H_ */
+#endif  // _GENZON_H_

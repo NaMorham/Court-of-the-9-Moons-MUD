@@ -24,37 +24,41 @@
 #include "quest.h"
 
 
-/* local function prototypes */
-/* do_get utility functions */
+/*
+ * local function prototypes
+ */
+// do_get utility functions
 static int can_take_obj(struct char_data *ch, struct obj_data *obj);
 static void get_check_money(struct char_data *ch, struct obj_data *obj);
 static void get_from_container(struct char_data *ch, struct obj_data *cont, char *arg, int mode, int amount);
 static void get_from_room(struct char_data *ch, char *arg, int amount);
 static void perform_get_from_container(struct char_data *ch, struct obj_data *obj, struct obj_data *cont, int mode);
 static int perform_get_from_room(struct char_data *ch, struct obj_data *obj);
-/* do_give utility functions */
+// do_give utility functions
 static struct char_data *give_find_vict(struct char_data *ch, char *arg);
 static void perform_give(struct char_data *ch, struct char_data *vict, struct obj_data *obj);
 static void perform_give_gold(struct char_data *ch, struct char_data *vict, int amount);
-/* do_drop utility functions */
+// do_drop utility functions
 static int perform_drop(struct char_data *ch, struct obj_data *obj, byte mode, const char *sname, room_rnum RDR);
 static void perform_drop_gold(struct char_data *ch, int amount, byte mode, room_rnum RDR);
-/* do_put utility functions */
+// do_put utility functions
 static void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont);
-/* do_remove utility functions */
+// do_remove utility functions
 static void perform_remove(struct char_data *ch, int pos);
-/* do_wear utility functions */
+// do_wear utility functions
 static void perform_wear(struct char_data *ch, struct obj_data *obj, int where);
 static void wear_message(struct char_data *ch, struct obj_data *obj, int where);
 
 
 static void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
+    long object_id = obj_script_id(obj);
+
     if (!drop_otrigger(obj, ch)) {
         return;
     }
 
-    if (!obj) {  // object might be extracted by drop_otrigger
+    if (!has_obj_by_uid_in_lookup_table(object_id)) { // object might be extracted by drop_otrigger
         return;
     }
 
@@ -126,6 +130,7 @@ ACMD(do_put)
     }
     else {
         generic_find(thecont, FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
+        // find the container?
         if (!cont) {
             send_to_char(ch, "You don't see %s %s here.\r\n", AN(thecont), thecont);
         }
@@ -136,7 +141,7 @@ ACMD(do_put)
             send_to_char(ch, "You'd better open it first!\r\n");
         }
         else {
-            if (obj_dotmode == FIND_INDIV) {    /* put <obj> <container> */
+            if (obj_dotmode == FIND_INDIV) {    // put <obj> <container>
                 if (!(obj = get_obj_in_list_vis(ch, theobj, NULL, ch->carrying))) {
                     send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(theobj), theobj);
                 }
@@ -151,7 +156,7 @@ ACMD(do_put)
                             perform_put(ch, obj, cont);
                         }
                         obj = get_obj_in_list_vis(ch, theobj, NULL, next_obj);
-                    }
+                    }  // while (obj && howmany)
                 }
             }
             else {
@@ -162,7 +167,7 @@ ACMD(do_put)
                         found = 1;
                         perform_put(ch, obj, cont);
                     }
-                }
+                }  // for (obj ...
                 if (!found) {
                     if (obj_dotmode == FIND_ALL) {
                         send_to_char(ch, "You don't seem to have anything to put in it.\r\n");
@@ -172,28 +177,37 @@ ACMD(do_put)
                     }
                 }
             }
-        }
+        }  // end else   // we have a container that is open
     }
 }
 
 static int can_take_obj(struct char_data *ch, struct obj_data *obj)
 {
-    if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
-        act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
-        return (0);
-    }
-    else if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
-        act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
-        return (0);
-    }
-    else if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE))) {
+    if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE))) {
         act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
         return (0);
     }
-    else if (OBJ_SAT_IN_BY(obj)) {
+
+    if (!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_NOHASSLE)) {
+        if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
+            act("$p: you can't carry that many items.", FALSE, ch, obj, 0, TO_CHAR);
+            return (0);
+        }
+        else if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
+            act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
+            return (0);
+        }
+        else if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE))) {
+            act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
+            return (0);
+        }
+    }
+
+    if (OBJ_SAT_IN_BY(obj)){
         act("It appears someone is sitting on $p..", FALSE, ch, obj, 0, TO_CHAR);
         return (0);
     }
+
     return (1);
 }
 
@@ -207,7 +221,7 @@ static void get_check_money(struct char_data *ch, struct obj_data *obj)
 
     extract_obj(obj);
 
-    GET_GOLD(ch) += value;
+    increase_gold(ch, value);
 
     if (value == 1) {
         send_to_char(ch, "There was 1 coin.\r\n");
@@ -218,7 +232,7 @@ static void get_check_money(struct char_data *ch, struct obj_data *obj)
 }
 
 static void perform_get_from_container(struct char_data *ch, struct obj_data *obj,
-    struct obj_data *cont, int mode)
+        struct obj_data *cont, int mode)
 {
     if (mode == FIND_OBJ_INV || can_take_obj(ch, obj)) {
         if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
@@ -234,7 +248,8 @@ static void perform_get_from_container(struct char_data *ch, struct obj_data *ob
     }
 }
 
-void get_from_container(struct char_data *ch, struct obj_data *cont, char *arg, int mode, int howmany)
+void get_from_container(struct char_data *ch, struct obj_data *cont,
+                 char *arg, int mode, int howmany)
 {
     struct obj_data *obj, *next_obj;
     int obj_dotmode, found = 0;
@@ -272,7 +287,7 @@ void get_from_container(struct char_data *ch, struct obj_data *cont, char *arg, 
                 found = 1;
                 perform_get_from_container(ch, obj, cont, mode);
             }
-        }
+        }  // for (obj ...
         if (!found) {
             if (obj_dotmode == FIND_ALL) {
                 act("$p seems to be empty.", FALSE, ch, cont, 0, TO_CHAR);
@@ -309,6 +324,11 @@ static void get_from_room(struct char_data *ch, char *arg, int howmany)
 
     if (dotmode == FIND_INDIV) {
         if (!(obj = get_obj_in_list_vis(ch, arg, NULL, world[IN_ROOM(ch)].contents))) {
+            // Are they trying to take something in a room extra description?
+            if (find_exdesc(arg, world[IN_ROOM(ch)].ex_description) != NULL) {
+                send_to_char(ch, "You can't take %s %s.\r\n", AN(arg), arg);
+                return;
+            }
             send_to_char(ch, "You don't see %s %s here.\r\n", AN(arg), arg);
         }
         else {
@@ -331,7 +351,7 @@ static void get_from_room(struct char_data *ch, char *arg, int howmany)
                 found = 1;
                 perform_get_from_room(ch, obj);
             }
-        }
+        }  // for (obj ...
         if (!found) {
             if (dotmode == FIND_ALL) {
                 send_to_char(ch, "There doesn't seem to be anything here.\r\n");
@@ -401,7 +421,7 @@ ACMD(do_get)
                         act("$p is not a container.", FALSE, ch, cont, 0, TO_CHAR);
                     }
                 }
-            }
+            }  // for (cont ...
             for (cont = world[IN_ROOM(ch)].contents; cont; cont = cont->next_content) {
                 if (CAN_SEE_OBJ(ch, cont) &&
                     (cont_dotmode == FIND_ALL || isname(arg2, cont->name))) {
@@ -414,7 +434,7 @@ ACMD(do_get)
                         found = 1;
                     }
                 }
-            }
+            }  // for (cont ..
             if (!found) {
                 if (cont_dotmode == FIND_ALL) {
                     send_to_char(ch, "You can't seem to find any containers.\r\n");
@@ -450,9 +470,12 @@ static void perform_drop_gold(struct char_data *ch, int amount, byte mode, room_
             }
             else {
                 char buf[MAX_STRING_LENGTH];
+                long object_id = obj_script_id(obj);
 
                 if (!drop_wtrigger(obj, ch)) {
-                    extract_obj(obj);
+                    if (has_obj_by_uid_in_lookup_table(object_id)) {
+                        extract_obj(obj);
+                    }
                     return;
                 }
 
@@ -471,7 +494,7 @@ static void perform_drop_gold(struct char_data *ch, int amount, byte mode, room_
 
             send_to_char(ch, "You drop some gold which disappears in a puff of smoke!\r\n");
         }
-        GET_GOLD(ch) -= amount;
+        decrease_gold(ch, amount);
     }
 }
 
@@ -482,13 +505,22 @@ static int perform_drop(struct char_data *ch, struct obj_data *obj,
 {
     char buf[MAX_STRING_LENGTH];
     int value;
+    long object_id = obj_script_id(obj);
 
     if (!drop_otrigger(obj, ch)) {
         return 0;
     }
 
+    if (!has_obj_by_uid_in_lookup_table(object_id)) {
+        return 0; // item was extracted by script
+    }
+
     if ((mode == SCMD_DROP) && !drop_wtrigger(obj, ch)) {
         return 0;
+    }
+
+    if (!has_obj_by_uid_in_lookup_table(object_id)) {
+        return 0; // item was extracted by script
     }
 
     if (OBJ_FLAGGED(obj, ITEM_NODROP) && !PRF_FLAGGED(ch, PRF_NOHASSLE)) {
@@ -548,7 +580,7 @@ ACMD(do_drop)
     case SCMD_DONATE:
         sname = "donate";
         mode = SCMD_DONATE;
-        /* fail + double chance for room 1   */
+        // fail + double chance for room 1
         num_don_rooms = (CONFIG_DON_ROOM_1 != NOWHERE) * 2 +
             (CONFIG_DON_ROOM_2 != NOWHERE) +
             (CONFIG_DON_ROOM_3 != NOWHERE) + 1;
@@ -734,9 +766,9 @@ static void perform_give_gold(struct char_data *ch, struct char_data *vict, int 
     act(buf, TRUE, ch, 0, vict, TO_NOTVICT);
 
     if (IS_NPC(ch) || (GET_LEVEL(ch) < LVL_GOD)) {
-        GET_GOLD(ch) -= amount;
+        decrease_gold(ch, amount);
     }
-    GET_GOLD(vict) += amount;
+    increase_gold(vict, amount);
 
     bribe_mtrigger(vict, ch, amount);
 }
@@ -804,14 +836,15 @@ ACMD(do_give)
             if (!ch->carrying) {
                 send_to_char(ch, "You don't seem to be holding anything.\r\n");
             }
-            else
+            else {
                 for (obj = ch->carrying; obj; obj = next_obj) {
                     next_obj = obj->next_content;
                     if (CAN_SEE_OBJ(ch, obj) &&
                         ((dotmode == FIND_ALL || isname(arg, obj->name)))) {
                         perform_give(ch, vict, obj);
                     }
-                }
+                }  // for (obj ...
+            }
         }
     }
 }
@@ -844,51 +877,18 @@ void weight_change_object(struct obj_data *obj, int weight)
 
 void name_from_drinkcon(struct obj_data *obj)
 {
-    char *new_name, *cur_name, *next;
     const char *liqname;
-    size_t liqlen, cpylen;
+    char *new_name;
 
-    if (!obj || ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) && (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN))) {
+    if (!obj || (GET_OBJ_TYPE(obj) != ITEM_DRINKCON && GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN)) {
         return;
     }
 
     liqname = drinknames[GET_OBJ_VAL(obj, 2)];
-    if (!isname(liqname, obj->name)) {
-        WriteLogf("SYSERR: Can't remove liquid '%s' from '%s' (%d) item.", liqname, obj->name, obj->item_number);
-        // SYSERR_DESC: From name_from_drinkcon(), this error comes about if the
-        // object noted (by keywords and item vnum) does not contain the liquid
-        // string being searched for.
-        return;
-    }
 
-    liqlen = strlen(liqname);
-    CREATE(new_name, char, strlen(obj->name) - strlen(liqname)); // +1 for NUL, -1 for space
-
-    for (cur_name = obj->name; cur_name; cur_name = next) {
-        if (*cur_name == ' ') {
-            cur_name++;
-        }
-
-        if ((next = strchr(cur_name, ' '))) {
-            cpylen = next - cur_name;
-        }
-        else {
-            cpylen = strlen(cur_name);
-        }
-
-        if (!strn_cmp(cur_name, liqname, liqlen)) {
-            continue;
-        }
-
-        if (*new_name) {
-            strcat(new_name, " "); // strcat: OK (size precalculated)
-        }
-        strncat(new_name, cur_name, cpylen); // strncat: OK (size precalculated)
-    }
-
-    if ((GET_OBJ_RNUM(obj) == NOTHING) || (obj->name != obj_proto[GET_OBJ_RNUM(obj)].name)) {
-        free(obj->name);
-    }
+    remove_from_string(obj->name, liqname);
+    new_name = right_trim_whitespace(obj->name);
+    free(obj->name);
     obj->name = new_name;
 }
 
@@ -975,7 +975,7 @@ ACMD(do_drink)
         send_to_char(ch, "Your stomach can't contain anymore!\r\n");
         return;
     }
-    if ((GET_OBJ_VAL(temp, 1) == 0) || (!GET_OBJ_VAL(temp, 0) == 1)) {
+    if (GET_OBJ_VAL(temp, 1) < 1) {
         send_to_char(ch, "It is empty.\r\n");
         return;
     }
@@ -1029,15 +1029,14 @@ ACMD(do_drink)
         send_to_char(ch, "You are full.\r\n");
     }
 
-    if (GET_OBJ_VAL(temp, 3)) {  // The crap was poisoned !
+    if (GET_OBJ_VAL(temp, 3) && GET_LEVEL(ch) < LVL_IMMORT) {  // The crap was poisoned !
         send_to_char(ch, "Oops, it tasted rather strange!\r\n");
         act("$n chokes and utters some strange sounds.", TRUE, ch, 0, 0, TO_ROOM);
 
-        af.type = SPELL_POISON;
+        new_affect(&af);
+        af.spell = SPELL_POISON;
         af.duration = amount * 3;
-        af.modifier = 0;
-        af.location = APPLY_NONE;
-        af.bitvector = AFF_POISON;
+        SET_BIT_AR(af.bitvector, AFF_POISON);
         affect_join(ch, &af, FALSE, FALSE, FALSE, FALSE);
     }
     // Empty the container (unless unlimited), and no longer poison.
@@ -1113,11 +1112,10 @@ ACMD(do_eat)
         send_to_char(ch, "Oops, that tasted rather strange!\r\n");
         act("$n coughs and utters some strange sounds.", FALSE, ch, 0, 0, TO_ROOM);
 
-        af.type = SPELL_POISON;
+        new_affect(&af);
+        af.spell = SPELL_POISON;
         af.duration = amount * 2;
-        af.modifier = 0;
-        af.location = APPLY_NONE;
-        af.bitvector = AFF_POISON;
+        SET_BIT_AR(af.bitvector, AFF_POISON);
         affect_join(ch, &af, FALSE, FALSE, FALSE, FALSE);
     }
     if (subcmd == SCMD_EAT) {
@@ -1153,7 +1151,7 @@ ACMD(do_pour)
             return;
         }
     }
-    if (subcmd == SCMD_FILL) {
+    else if (subcmd == SCMD_FILL) {
         if (!*arg1) { // no arguments
             send_to_char(ch, "What do you want to fill?  And what are you filling it from?\r\n");
             return;
@@ -1215,7 +1213,7 @@ ACMD(do_pour)
             send_to_char(ch, "You can't pour anything into that.\r\n");
             return;
         }
-    }
+    }  // SCMD_POUR
     if (to_obj == from_obj) {
         send_to_char(ch, "A most unproductive effort.\r\n");
         return;
@@ -1483,7 +1481,7 @@ ACMD(do_wear)
                     perform_wear(ch, obj, where);
                 }
             }
-        }
+        }  // for (obj ...
         if (!items_worn) {
             send_to_char(ch, "You don't seem to have anything wearable.\r\n");
         }
@@ -1509,7 +1507,7 @@ ACMD(do_wear)
                     act("You can't wear $p.", FALSE, ch, obj, 0, TO_CHAR);
                 }
                 obj = next_obj;
-            }
+            }  // while (obj)
         }
     }
     else {
@@ -1638,7 +1636,7 @@ ACMD(do_remove)
                 perform_remove(ch, i);
                 found = 1;
             }
-        }
+        }  // for (i ...
         if (!found) {
             send_to_char(ch, "You're not using anything.\r\n");
         }
@@ -1655,7 +1653,7 @@ ACMD(do_remove)
                     perform_remove(ch, i);
                     found = 1;
                 }
-            }
+            }  // for (i ...
             if (!found) {
                 send_to_char(ch, "You don't seem to be using any %ss.\r\n", arg);
             }
@@ -1683,7 +1681,8 @@ ACMD(do_sac)
         return;
     }
 
-    if (!(j = get_obj_in_list_vis(ch, arg, NULL, world[IN_ROOM(ch)].contents)) && (!(j = get_obj_in_list_vis(ch, arg, NULL, ch->carrying)))) {
+    if (!(j = get_obj_in_list_vis(ch, arg, NULL, world[IN_ROOM(ch)].contents)) &&
+        (!(j = get_obj_in_list_vis(ch, arg, NULL, ch->carrying)))) {
         send_to_char(ch, "It doesn't seem to be here.\n\r");
         return;
     }
@@ -1698,30 +1697,30 @@ ACMD(do_sac)
     switch (rand_number(0, 5)) {
     case 0:
         send_to_char(ch, "You sacrifice %s to the Gods.\r\nYou receive one gold coin for your humility.\r\n", GET_OBJ_SHORT(j));
-        GET_GOLD(ch) += 1;
+        increase_gold(ch, 1);
         break;
     case 1:
         send_to_char(ch, "You sacrifice %s to the Gods.\r\nThe Gods ignore your sacrifice.\r\n", GET_OBJ_SHORT(j));
         break;
     case 2:
         send_to_char(ch, "You sacrifice %s to the Gods.\r\nThe gods give you %d experience points.\r\n", GET_OBJ_SHORT(j), (2 * GET_OBJ_COST(j)));
-        GET_EXP(ch) += (2 * GET_OBJ_COST(j));
+        GET_EXP(ch) += (1 + 2 * GET_OBJ_LEVEL(j));
         break;
     case 3:
         send_to_char(ch, "You sacrifice %s to the Gods.\r\nYou receive %d experience points.\r\n", GET_OBJ_SHORT(j), GET_OBJ_COST(j));
-        GET_EXP(ch) += GET_OBJ_COST(j);
+        GET_EXP(ch) += (1 + GET_OBJ_LEVEL(j));
         break;
     case 4:
-        send_to_char(ch, "Your sacrifice to the Gods is rewarded with %d gold coins.\r\n", GET_OBJ_COST(j));
-        GET_GOLD(ch) += GET_OBJ_COST(j);
+        send_to_char(ch, "Your sacrifice to the Gods is rewarded with %d gold coins.\r\n", 1 + GET_OBJ_LEVEL(j));
+        increase_gold(ch, (1 + GET_OBJ_LEVEL(j)));
         break;
     case 5:
-        send_to_char(ch, "Your sacrifice to the Gods is rewarded with %d gold coins\r\n", (2 * GET_OBJ_COST(j)));
-        GET_GOLD(ch) += (2 * GET_OBJ_COST(j));
+        send_to_char(ch, "Your sacrifice to the Gods is rewarded with %d gold coins\r\n", (1 + 2 * GET_OBJ_LEVEL(j)));
+        increase_gold(ch, (1 + 2 * GET_OBJ_LEVEL(j)));
         break;
     default:
         send_to_char(ch, "You sacrifice %s to the Gods.\r\nYou receive one gold coin for your humility.\r\n", GET_OBJ_SHORT(j));
-        GET_GOLD(ch) += 1;
+        increase_gold(ch, 1);
         break;
     }
     for (jj = j->contains; jj; jj = next_thing2) {
@@ -1737,6 +1736,6 @@ ACMD(do_sac)
         else {
             assert(FALSE);
         }
-    }
+    }  // for (jj ...
     extract_obj(j);
 }

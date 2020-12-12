@@ -23,7 +23,9 @@
 #include "fight.h"
 
 
-// local file scope only function prototypes
+/*
+ *  local file scope only function prototypes
+ */
 static bool aggressive_mob_on_a_leash(struct char_data *slave, struct char_data *master, struct char_data *attack);
 
 void mobile_activity(void)
@@ -85,7 +87,7 @@ void mobile_activity(void)
 
         // Mob Movement
         if (!MOB_FLAGGED(ch, MOB_SENTINEL) && (GET_POS(ch) == POS_STANDING) &&
-            ((door = rand_number(0, 18)) < NUM_OF_DIRS) && CAN_GO(ch, door) &&
+            ((door = rand_number(0, 18)) < DIR_COUNT) && CAN_GO(ch, door) &&
             !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_NOMOB) &&
             !ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_DEATH) &&
             (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
@@ -169,6 +171,8 @@ void mobile_activity(void)
                 if (ch == vict || !IS_NPC(vict) || !FIGHTING(vict)) {
                     continue;
                 }
+                if (GROUP(vict) && GROUP(vict) == GROUP(ch))
+                    continue;
                 if (IS_NPC(FIGHTING(vict)) || ch == FIGHTING(vict)) {
                     continue;
                 }
@@ -176,7 +180,7 @@ void mobile_activity(void)
                 act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
                 hit(ch, FIGHTING(vict), TYPE_UNDEFINED);
                 found = TRUE;
-            }
+            }  // for (vict ...
         }
 
         // Add new mobile actions here
@@ -222,7 +226,7 @@ void forget(struct char_data *ch, struct char_data *victim)
         return;
     }
 
-    while (curr && curr->id != GET_IDNUM(victim)) {
+    while (curr && (curr->id != GET_IDNUM(victim))) {
         prev = curr;
         curr = curr->next;
     }

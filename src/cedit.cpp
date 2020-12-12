@@ -22,7 +22,9 @@
 #define CHECK_VAR(var)  ((var == YES) ? "Yes" : "No")
 #define TOGGLE_VAR(var)    if (var == YES) { var = NO; } else { var = YES; }
 
-// local scope functions, not used externally
+/*
+ *  local scope functions, not used externally
+ */
 static void cedit_disp_menu(struct descriptor_data *d);
 static void cedit_save_internally(struct descriptor_data *d);
 static void cedit_disp_game_play_options(struct descriptor_data *d);
@@ -40,7 +42,7 @@ ACMD(do_oasis_cedit)
     char buf1[MAX_STRING_LENGTH];
 
     // No building as a mob or while being forced.
-    if (IS_NPC(ch) || !ch->desc || STATE(ch->desc) != CON_PLAYING) {
+    if (IS_NPC(ch) || !ch->desc || (STATE(ch->desc) != CON_PLAYING)) {
         return;
     }
 
@@ -62,7 +64,7 @@ ACMD(do_oasis_cedit)
         act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
         SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
-        mudlog(BRF, LVL_IMMORT, TRUE,
+        mudlog(BRF, MAX(LVL_BUILDER, GET_INVIS_LEV(ch)), TRUE,
             "OLC: %s starts editing the game configuration.", GET_NAME(ch));
         return;
     }
@@ -102,6 +104,7 @@ static void cedit_setup(struct descriptor_data *d)
     OLC_CONFIG(d)->play.track_through_doors = CONFIG_TRACK_T_DOORS;
     OLC_CONFIG(d)->play.no_mort_to_immort = CONFIG_NO_MORT_TO_IMMORT;
     OLC_CONFIG(d)->play.disp_closed_doors = CONFIG_DISP_CLOSED_DOORS;
+    OLC_CONFIG(d)->play.diagonal_dirs = CONFIG_DIAGONAL_DIRS;
     OLC_CONFIG(d)->play.map_option = CONFIG_MAP;
     OLC_CONFIG(d)->play.map_size = CONFIG_MAP_SIZE;
     OLC_CONFIG(d)->play.minimap_size = CONFIG_MINIMAP_SIZE;
@@ -134,14 +137,18 @@ static void cedit_setup(struct descriptor_data *d)
     OLC_CONFIG(d)->operation.auto_save_olc = CONFIG_OLC_SAVE;
     OLC_CONFIG(d)->operation.nameserver_is_slow = CONFIG_NS_IS_SLOW;
     OLC_CONFIG(d)->operation.medit_advanced = CONFIG_MEDIT_ADVANCED;
+    OLC_CONFIG(d)->operation.ibt_autosave = CONFIG_IBT_AUTOSAVE;
+    OLC_CONFIG(d)->operation.protocol_negotiation = CONFIG_PROTOCOL_NEGOTIATION;
+    OLC_CONFIG(d)->operation.special_in_comm = CONFIG_SPECIAL_IN_COMM;
+    OLC_CONFIG(d)->operation.debug_mode = CONFIG_DEBUG_MODE;
 
     // Autowiz
     OLC_CONFIG(d)->autowiz.use_autowiz = CONFIG_USE_AUTOWIZ;
     OLC_CONFIG(d)->autowiz.min_wizlist_lev = CONFIG_MIN_WIZLIST_LEV;
 
-
     // Allocate space for the strings.
     OLC_CONFIG(d)->play.OK = str_udup(CONFIG_OK);
+    OLC_CONFIG(d)->play.HUH = str_udup(CONFIG_HUH);
     OLC_CONFIG(d)->play.NOPERSON = str_udup(CONFIG_NOPERSON);
     OLC_CONFIG(d)->play.NOEFFECT = str_udup(CONFIG_NOEFFECT);
 
@@ -213,6 +220,7 @@ static void cedit_save_internally(struct descriptor_data *d)
     CONFIG_TRACK_T_DOORS = OLC_CONFIG(d)->play.track_through_doors;
     CONFIG_NO_MORT_TO_IMMORT = OLC_CONFIG(d)->play.no_mort_to_immort;
     CONFIG_DISP_CLOSED_DOORS = OLC_CONFIG(d)->play.disp_closed_doors;
+    CONFIG_DIAGONAL_DIRS = OLC_CONFIG(d)->play.diagonal_dirs;
     CONFIG_MAP = OLC_CONFIG(d)->play.map_option;
     CONFIG_MAP_SIZE = OLC_CONFIG(d)->play.map_size;
     CONFIG_MINIMAP_SIZE = OLC_CONFIG(d)->play.minimap_size;
@@ -245,6 +253,10 @@ static void cedit_save_internally(struct descriptor_data *d)
     CONFIG_NS_IS_SLOW = OLC_CONFIG(d)->operation.nameserver_is_slow;
     CONFIG_OLC_SAVE = OLC_CONFIG(d)->operation.auto_save_olc;
     CONFIG_MEDIT_ADVANCED = OLC_CONFIG(d)->operation.medit_advanced;
+    CONFIG_IBT_AUTOSAVE = OLC_CONFIG(d)->operation.ibt_autosave;
+    CONFIG_PROTOCOL_NEGOTIATION = OLC_CONFIG(d)->operation.protocol_negotiation;
+    CONFIG_SPECIAL_IN_COMM = OLC_CONFIG(d)->operation.special_in_comm;
+    CONFIG_DEBUG_MODE = OLC_CONFIG(d)->operation.debug_mode;
 
     // Autowiz
     CONFIG_USE_AUTOWIZ = OLC_CONFIG(d)->autowiz.use_autowiz;
@@ -255,6 +267,10 @@ static void cedit_save_internally(struct descriptor_data *d)
         free(CONFIG_OK);
     }
     CONFIG_OK = str_udup(OLC_CONFIG(d)->play.OK);
+
+    if (CONFIG_HUH)
+        free(CONFIG_HUH);
+    CONFIG_HUH = str_udup(OLC_CONFIG(d)->play.HUH);
 
     if (CONFIG_NOPERSON) {
         free(CONFIG_NOPERSON);
@@ -394,10 +410,12 @@ int save_config(IDXTYPE nowhere)
         "load_into_inventory = %d\n\n", CONFIG_LOAD_INVENTORY);
     fprintf(fl, "* Should PC's be able to track through hidden or closed doors?\n"
         "track_through_doors = %d\n\n", CONFIG_TRACK_T_DOORS);
-    fprintf(fl, "* Should players who reach enough exp automatically level to immortal?\n"
+    fprintf(fl, "* Should players who reach enough exp be prevented from automatically levelling to immortal?\n"
         "no_mort_to_immort = %d\n\n", CONFIG_NO_MORT_TO_IMMORT);
     fprintf(fl, "* Should closed doors be shown on autoexit / exit?\n"
         "disp_closed_doors = %d\n\n", CONFIG_DISP_CLOSED_DOORS);
+    fprintf(fl, "* Are diagonal directions enabled?\n"
+        "diagonal_dirs = %d\n\n", CONFIG_DIAGONAL_DIRS);
     fprintf(fl, "* Who can use the map functions? 0=off, 1=on, 2=imm_only\n"
         "map_option = %d\n\n", CONFIG_MAP);
     fprintf(fl, "* Default size of map shown by 'map' command\n"
@@ -412,6 +430,12 @@ int save_config(IDXTYPE nowhere)
 
     fprintf(fl, "* Text sent to players when OK is all that is needed.\n"
         "ok = %s\n\n", buf);
+
+    strcpy(buf, CONFIG_HUH);
+    strip_cr(buf);
+
+    fprintf(fl, "* Text sent to players for an unrecognized command.\n"
+        "huh = %s\n\n", buf);
 
     strcpy(buf, CONFIG_NOPERSON);
     strip_cr(buf);
@@ -537,14 +561,14 @@ int save_config(IDXTYPE nowhere)
         strip_cr(buf);
 
         fprintf(fl, "* The entrance/exit menu.\n"
-            "MENU = \n%s~\n\n", buf);
+            "MENU = \n%s~\n\n", convert_from_tabs(buf));
     }
 
     if (CONFIG_WELC_MESSG) {
         strcpy(buf, CONFIG_WELC_MESSG);
         strip_cr(buf);
 
-        fprintf(fl, "* The welcome message.\nWELC_MESSG = \n%s~\n\n", buf);
+        fprintf(fl, "* The welcome message.\nWELC_MESSG = \n%s~\n\n", convert_from_tabs(buf));
     }
 
     if (CONFIG_START_MESSG) {
@@ -552,12 +576,16 @@ int save_config(IDXTYPE nowhere)
         strip_cr(buf);
 
         fprintf(fl, "* NEWBIE start message.\n"
-            "START_MESSG = \n%s~\n\n", buf);
+            "START_MESSG = \n%s~\n\n", convert_from_tabs(buf));
     }
 
     fprintf(fl, "* Should the medit OLC show the advanced stats menu (1) or not (0).\n"
         "medit_advanced_stats = %d\n\n",
         CONFIG_MEDIT_ADVANCED);
+
+    fprintf(fl, "* Should the idea, bug and typo commands autosave (1) or not (0).\n"
+        "ibt_autosave = %d\n\n",
+        CONFIG_IBT_AUTOSAVE);
 
     fprintf(fl, "\n\n\n* [ Autowiz Options ]\n");
 
@@ -570,6 +598,17 @@ int save_config(IDXTYPE nowhere)
         "min_wizlist_lev = %d\n\n",
         CONFIG_MIN_WIZLIST_LEV);
 
+    fprintf(fl, "* If yes, enable the protocol negotiation system.\n"
+        "protocol_negotiation = %d\n\n",
+        CONFIG_PROTOCOL_NEGOTIATION);
+
+    fprintf(fl, "* If yes, enable the special character in comm channels.\n"
+        "special_in_comm = %d\n\n",
+        CONFIG_SPECIAL_IN_COMM);
+
+    fprintf(fl, "* If 0 then off, otherwise 1: Brief, 2: Normal, 3: Complete.\n"
+        "debug_mode = %d\n\n",
+        CONFIG_DEBUG_MODE);
 
     fclose(fl);
 
@@ -599,7 +638,6 @@ static void cedit_disp_menu(struct descriptor_data *d)
         "%sA%s) Autowiz Options\r\n"
         "%sQ%s) Quit\r\n"
         "Enter your choice : ",
-
         grn, nrm,
         grn, nrm,
         grn, nrm,
@@ -635,14 +673,16 @@ static void cedit_disp_game_play_options(struct descriptor_data *d)
         "%sN%s) Objects Load Into Inventory : %s%s\r\n"
         "%sO%s) Track Through Doors         : %s%s\r\n"
         "%sP%s) Display Closed Doors        : %s%s\r\n"
-        "%sR%s) Mortals Level To Immortal   : %s%s\r\n"
+        "%sR%s) Diagonal Directions         : %s%s\r\n"
+        "%sS%s) Prevent Mortal Level To Immortal : %s%s\r\n"
         "%s1%s) OK Message Text             : %s%s"
-        "%s2%s) NOPERSON Message Text       : %s%s"
-        "%s3%s) NOEFFECT Message Text       : %s%s"
-        "%s4%s) Map/Automap Option          : %s%s\r\n"
-        "%s5%s) Default map size            : %s%d\r\n"
-        "%s6%s) Default minimap size        : %s%d\r\n"
-        "%s7%s) Scripts on PC's             : %s%s\r\n"
+        "%s2%s) HUH Message Text            : %s%s"
+        "%s3%s) NOPERSON Message Text       : %s%s"
+        "%s4%s) NOEFFECT Message Text       : %s%s"
+        "%s5%s) Map/Automap Option          : %s%s\r\n"
+        "%s6%s) Default map size            : %s%d\r\n"
+        "%s7%s) Default minimap size        : %s%d\r\n"
+        "%s8%s) Scripts on PC's             : %s%s\r\n"
         "%sQ%s) Exit To The Main Menu\r\n"
         "Enter your choice : ",
         grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->play.pk_allowed),
@@ -662,9 +702,11 @@ static void cedit_disp_game_play_options(struct descriptor_data *d)
         grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->play.load_into_inventory),
         grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->play.track_through_doors),
         grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->play.disp_closed_doors),
+        grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->play.diagonal_dirs),
         grn, nrm, cyn, CHECK_VAR(OLC_CONFIG(d)->play.no_mort_to_immort),
 
         grn, nrm, cyn, OLC_CONFIG(d)->play.OK,
+        grn, nrm, cyn, OLC_CONFIG(d)->play.HUH,
         grn, nrm, cyn, OLC_CONFIG(d)->play.NOPERSON,
         grn, nrm, cyn, OLC_CONFIG(d)->play.NOEFFECT,
         grn, nrm, cyn, m_opt == 0 ? "Off" : (m_opt == 1 ? "On" : (m_opt == 2 ? "Imm-Only" : "Invalid!")),
@@ -738,14 +780,14 @@ static void cedit_disp_operation_options(struct descriptor_data *d)
     clear_screen(d);
 
     write_to_output(d, "\r\n\r\n"
-        "%sA%s) Default Port : %s%d\r\n"
-        "%sB%s) Default IP   : %s%s\r\n"
+        "%sA%s) Default Port        : %s%d\r\n"
+        "%sB%s) Default IP          : %s%s\r\n"
         "%sC%s) Default Directory   : %s%s\r\n"
-        "%sD%s) Logfile Name : %s%s\r\n"
-        "%sE%s) Max Players  : %s%d\r\n"
-        "%sF%s) Max Filesize : %s%d\r\n"
-        "%sG%s) Max Bad Pws  : %s%d\r\n"
-        "%sH%s) Site Ok Everyone : %s%s\r\n"
+        "%sD%s) Logfile Name        : %s%s\r\n"
+        "%sE%s) Max Players         : %s%d\r\n"
+        "%sF%s) Max Filesize        : %s%d\r\n"
+        "%sG%s) Max Bad Pws         : %s%d\r\n"
+        "%sH%s) Site Ok Everyone    : %s%s\r\n"
         "%sI%s) Name Server Is Slow : %s%s\r\n"
         "%sJ%s) Use new socials file: %s%s\r\n"
         "%sK%s) OLC autosave to disk: %s%s\r\n"
@@ -753,6 +795,10 @@ static void cedit_disp_operation_options(struct descriptor_data *d)
         "%sM%s) Welcome Message     : \r\n%s%s\r\n"
         "%sN%s) Start Message       : \r\n%s%s\r\n"
         "%sO%s) Medit Stats Menu    : %s%s\r\n"
+        "%sP%s) Autosave bugs when resolved from commandline : %s%s\r\n"
+        "%sR%s) Enable Protocol Negotiation : %s%s\r\n"
+        "%sS%s) Enable Special Char in Comm : %s%s\r\n"
+        "%sT%s) Current Debug Mode  : %s%s\r\n"
         "%sQ%s) Exit To The Main Menu\r\n"
         "Enter your choice : ",
         grn, nrm, cyn, OLC_CONFIG(d)->operation.DFLT_PORT,
@@ -770,6 +816,10 @@ static void cedit_disp_operation_options(struct descriptor_data *d)
         grn, nrm, cyn, OLC_CONFIG(d)->operation.WELC_MESSG ? OLC_CONFIG(d)->operation.WELC_MESSG : "<None>",
         grn, nrm, cyn, OLC_CONFIG(d)->operation.START_MESSG ? OLC_CONFIG(d)->operation.START_MESSG : "<None>",
         grn, nrm, cyn, OLC_CONFIG(d)->operation.medit_advanced ? "Advanced" : "Standard",
+        grn, nrm, cyn, OLC_CONFIG(d)->operation.ibt_autosave ? "Yes" : "No",
+        grn, nrm, cyn, OLC_CONFIG(d)->operation.protocol_negotiation ? "Yes" : "No",
+        grn, nrm, cyn, OLC_CONFIG(d)->operation.special_in_comm ? "Yes" : "No",
+        grn, nrm, cyn, OLC_CONFIG(d)->operation.debug_mode == 0 ? "OFF" : (OLC_CONFIG(d)->operation.debug_mode == 1 ? "BRIEF" : (OLC_CONFIG(d)->operation.debug_mode == 2 ? "NORMAL" : "COMPLETE")),
         grn, nrm
         );
 
@@ -814,8 +864,9 @@ void cedit_parse(struct descriptor_data *d, char *arg)
                 cedit_save_to_disk();
                 write_to_output(d, "Game configuration saved to disk.\r\n");
             }
-            else
+            else {
                 write_to_output(d, "Game configuration saved to memory.\r\n");
+            }
             return;
         case 'n':
         case 'N':
@@ -967,6 +1018,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
         case 'r':
         case 'R':
+            TOGGLE_VAR(OLC_CONFIG(d)->play.diagonal_dirs);
+            break;
+
+        case 's':
+        case 'S':
             TOGGLE_VAR(OLC_CONFIG(d)->play.no_mort_to_immort);
             break;
 
@@ -976,16 +1032,21 @@ void cedit_parse(struct descriptor_data *d, char *arg)
             return;
 
         case '2':
+            write_to_output(d, "Enter the HUH message : ");
+            OLC_MODE(d) = CEDIT_HUH;
+            return;
+
+        case '3':
             write_to_output(d, "Enter the NOPERSON message : ");
             OLC_MODE(d) = CEDIT_NOPERSON;
             return;
 
-        case '3':
+        case '4':
             write_to_output(d, "Enter the NOEFFECT message : ");
             OLC_MODE(d) = CEDIT_NOEFFECT;
             return;
 
-        case '4':
+        case '5':
             write_to_output(d, "1) Disable maps\r\n");
             write_to_output(d, "2) Enable Maps\r\n");
             write_to_output(d, "3) Maps for Immortals only\r\n");
@@ -993,16 +1054,17 @@ void cedit_parse(struct descriptor_data *d, char *arg)
             OLC_MODE(d) = CEDIT_MAP_OPTION;
             return;
 
-        case '5':
+        case '6':
             write_to_output(d, "Enter default map size (1-12) : ");
             OLC_MODE(d) = CEDIT_MAP_SIZE;
             return;
 
-        case '6':
+        case '7':
             write_to_output(d, "Enter default mini-map size (1-12) : ");
             OLC_MODE(d) = CEDIT_MINIMAP_SIZE;
             return;
-        case '7':
+
+        case '8':
             TOGGLE_VAR(OLC_CONFIG(d)->play.script_players);
             break;
 
@@ -1177,8 +1239,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         case 'j':
         case 'J':
             TOGGLE_VAR(OLC_CONFIG(d)->operation.use_new_socials);
-            send_to_char(d->character,
-                "Please note that using the stock social file will disable AEDIT.\r\n");
+            send_to_char(d->character, "Please note that using the stock social file will disable AEDIT.\r\n");
             break;
 
         case 'k':
@@ -1236,6 +1297,27 @@ void cedit_parse(struct descriptor_data *d, char *arg)
             TOGGLE_VAR(OLC_CONFIG(d)->operation.medit_advanced);
             break;
 
+        case 'p':
+        case 'P':
+            TOGGLE_VAR(OLC_CONFIG(d)->operation.ibt_autosave);
+            break;
+
+        case 'r':
+        case 'R':
+            TOGGLE_VAR(OLC_CONFIG(d)->operation.protocol_negotiation);
+            break;
+
+        case 's':
+        case 'S':
+            TOGGLE_VAR(OLC_CONFIG(d)->operation.special_in_comm);
+            break;
+
+        case 't':
+        case 'T':
+            write_to_output(d, "Enter the current debug level (0: Off, 1: Brief, 2: Normal, 3: Complete) : ");
+            OLC_MODE(d) = CEDIT_DEBUG_MODE;
+            return;
+
         case 'q':
         case 'Q':
             cedit_disp_menu(d);
@@ -1275,8 +1357,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_LEVEL_CAN_SHOUT:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the minimum level a player must be to shout, gossip, etc : ");
         }
         else {
@@ -1287,8 +1368,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_HOLLER_MOVE_COST:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the amount it costs (in move points) to holler : ");
         }
         else {
@@ -1299,8 +1379,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_TUNNEL_SIZE:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the maximum number of people allowed in a tunnel : ");
         }
         else {
@@ -1327,8 +1406,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_MAX_NPC_CORPSE_TIME:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the number of tics before NPC corpses decompose : ");
         }
         else {
@@ -1339,8 +1417,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_MAX_PC_CORPSE_TIME:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the number of tics before PC corpses decompose : ");
         }
         else {
@@ -1351,8 +1428,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_IDLE_VOID:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the number of tics before PC's are sent to the void (idle) : ");
         }
         else {
@@ -1363,8 +1439,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_IDLE_RENT_TIME:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the number of tics before PC's are automatically rented and forced to quit : ");
         }
         else {
@@ -1375,8 +1450,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_IDLE_MAX_LEVEL:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the level a player must be to become immune to IDLE : ");
         }
         else {
@@ -1393,8 +1467,20 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         if (OLC_CONFIG(d)->play.OK) {
             free(OLC_CONFIG(d)->play.OK);
         }
-
         OLC_CONFIG(d)->play.OK = str_udupnl(arg);
+
+        cedit_disp_game_play_options(d);
+        break;
+
+    case CEDIT_HUH:
+        if (!genolc_checkstring(d, arg)) {
+            break;
+        }
+
+        if (OLC_CONFIG(d)->play.HUH) {
+            free(OLC_CONFIG(d)->play.HUH);
+        }
+        OLC_CONFIG(d)->play.HUH = str_udupnl(arg);
 
         cedit_disp_game_play_options(d);
         break;
@@ -1407,7 +1493,6 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         if (OLC_CONFIG(d)->play.NOPERSON) {
             free(OLC_CONFIG(d)->play.NOPERSON);
         }
-
         OLC_CONFIG(d)->play.NOPERSON = str_udupnl(arg);
 
         cedit_disp_game_play_options(d);
@@ -1421,7 +1506,6 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         if (OLC_CONFIG(d)->play.NOEFFECT) {
             free(OLC_CONFIG(d)->play.NOEFFECT);
         }
-
         OLC_CONFIG(d)->play.NOEFFECT = str_udupnl(arg);
 
         cedit_disp_game_play_options(d);
@@ -1429,8 +1513,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_MAX_OBJ_SAVE:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the maximum objects a player can save : ");
         }
         else {
@@ -1441,8 +1524,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_MIN_RENT_COST:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the minimum amount it costs to rent : ");
         }
         else {
@@ -1453,8 +1535,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_AUTOSAVE_TIME:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the interval for player's being autosaved : ");
         }
         else {
@@ -1465,8 +1546,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_CRASH_FILE_TIMEOUT:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the lifetime of crash and idlesave files (days) : ");
         }
         else {
@@ -1477,8 +1557,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_RENT_FILE_TIMEOUT:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the lifetime of rent files (days) : ");
         }
         else {
@@ -1489,13 +1568,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_MORTAL_START_ROOM:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the room's vnum where mortals should load into : ");
         }
         else if (real_room(atoi(arg)) == NOWHERE) {
-            write_to_output(d,
-                "That room doesn't exist!\r\n"
+            write_to_output(d, "That room doesn't exist!\r\n"
                 "Enter the room's vnum where mortals should load into : ");
         }
         else {
@@ -1506,13 +1583,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_IMMORT_START_ROOM:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the room's vnum where immortals should load into : ");
         }
         else if (real_room(atoi(arg)) == NOWHERE) {
-            write_to_output(d,
-                "That room doesn't exist!\r\n"
+            write_to_output(d, "That room doesn't exist!\r\n"
                 "Enter the room's vnum where immortals should load into : ");
         }
         else {
@@ -1523,13 +1598,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_FROZEN_START_ROOM:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the room's vnum where frozen people should load into : ");
         }
         else if (real_room(atoi(arg)) == NOWHERE) {
-            write_to_output(d,
-                "That room doesn't exist!\r\n"
+            write_to_output(d, "That room doesn't exist!\r\n"
                 "Enter the room's vnum where frozen people should load into : ");
         }
         else {
@@ -1540,13 +1613,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_DONATION_ROOM_1:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the vnum for donation room #1 : ");
         }
         else if (real_room(atoi(arg)) == NOWHERE) {
-            write_to_output(d,
-                "That room doesn't exist!\r\n"
+            write_to_output(d, "That room doesn't exist!\r\n"
                 "Enter the vnum for donation room #1 : ");
         }
         else {
@@ -1557,13 +1628,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_DONATION_ROOM_2:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the vnum for donation room #2 : ");
         }
         else if (real_room(atoi(arg)) == NOWHERE) {
-            write_to_output(d,
-                "That room doesn't exist!\r\n"
+            write_to_output(d, "That room doesn't exist!\r\n"
                 "Enter the vnum for donation room #2 : ");
         }
         else {
@@ -1574,13 +1643,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_DONATION_ROOM_3:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the vnum for donation room #3 : ");
         }
         else if (real_room(atoi(arg)) == NOWHERE) {
-            write_to_output(d,
-                "That room doesn't exist!\r\n"
+            write_to_output(d, "That room doesn't exist!\r\n"
                 "Enter the vnum for donation room #3 : ");
         }
         else {
@@ -1596,8 +1663,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_DFLT_IP:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the default ip address : ");
         }
         else {
@@ -1608,8 +1674,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_DFLT_DIR:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the default directory : ");
         }
         else {
@@ -1620,8 +1685,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_LOGNAME:
         if (!*arg) {
-            write_to_output(d,
-                "That is an invalid choice!\r\n"
+            write_to_output(d, "That is an invalid choice!\r\n"
                 "Enter the name of the logfile : ");
         }
         else {
@@ -1642,6 +1706,11 @@ void cedit_parse(struct descriptor_data *d, char *arg)
 
     case CEDIT_MAX_BAD_PWS:
         OLC_CONFIG(d)->operation.max_bad_pws = atoi(arg);
+        cedit_disp_operation_options(d);
+        break;
+
+    case CEDIT_DEBUG_MODE:
+        OLC_CONFIG(d)->operation.debug_mode = LIMIT(atoi(arg), 0, 3);
         cedit_disp_operation_options(d);
         break;
 

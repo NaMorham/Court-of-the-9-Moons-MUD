@@ -21,6 +21,7 @@
 #include "spells.h"
 #include "handler.h"
 #include "interpreter.h"
+#include "class.h"
 
 #include <string>
 #include <sstream>
@@ -121,8 +122,8 @@ char *CAP(char *txt)
     char *p = txt;
 
     // Skip all preceeding color codes and ANSI codes
-    while ((*p == '@' && *(p + 1)) || (*p == '\x1B' && *(p + 1) == '[')) {
-        if (*p == '@') {                  // Skip @ sign and color letter/number
+    while ((*p == '\t' && *(p + 1)) || (*p == '\x1B' && *(p + 1) == '[')) {
+        if (*p == '\t') {                  // Skip @ sign and color letter/number
             p += 2;
         }
         else {
@@ -183,7 +184,7 @@ void prune_crlf(char *txt)
 {
     size_t i = strlen(txt) - 1;
 
-    while (txt[i] == '\n' || txt[i] == '\r') {
+    while ((txt[i] == '\n') || (txt[i] == '\r')) {
         txt[i--] = '\0';
     }
 }
@@ -224,7 +225,7 @@ int strn_cmp(const char *arg1, const char *arg2, int n)
     int chk, i;
 
     if ((arg1 == NULL) || (arg2 == NULL)) {
-        WriteLogf("SYSERR: strn_cmp() passed a NULL pointer, %p or %p.", arg1, arg2);
+        WriteLogf("SYSERR: strn_cmp() passed a NULL pointer, %p or %p.", (void *)arg1, (void *)arg2);
         return (0);
     }
 
@@ -249,11 +250,9 @@ int strn_cmp(const char *arg1, const char *arg2, int n)
  */
 void basic_mud_vlog(const char *format, va_list args)
 {
-#ifdef CIRCLE_WINDOWS
-    static const size_t MAX_BUF = 1024;
-    size_t timeSize(0);
     time_t ct = time(0);
-    char *time_s = asctime(localtime(&ct));
+    char timestr[21];
+    int i;
 
     if (logfile == NULL) {
         puts("SYSERR: Using log() before stream was initialized!");
@@ -263,46 +262,14 @@ void basic_mud_vlog(const char *format, va_list args)
     if (format == NULL) {
         format = "SYSERR: log() received a NULL format.";
     }
+    for (i = 0; i < 21; i++) {
+        timestr[i] = 0;
+    }  // for (i ...
+    strftime(timestr, sizeof(timestr), "%b %d %H:%M:%S %Y", localtime(&ct));
 
-    time_s[strlen(time_s) - 1] = '\0';
-
-    char buf[MAX_BUF];
-    memset(buf, 0, sizeof(char)*MAX_BUF);
-
-    timeSize = snprintf(buf, MAX_BUF - 1, "%-15.15s :: ", time_s + 4);
-    timeSize = vsnprintf(buf + timeSize, MAX_BUF - (timeSize + 1), format, args);
-    strcat_s(buf, "\n");
-
-    //    fprintf(logfile, "%-15.15s :: ", time_s + 4);
-    //    vfprintf(logfile, format, args);
-    //    fputc('\n', logfile);
-    fprintf(logfile, buf);
-
-#  if defined(_DEBUG)
-#    if defined(_WIN32)
-    OutputDebugStringA(buf);
-#    endif
-    std::cerr << buf;
-#  endif
-#else
-    time_t ct = time(0);
-    char *time_s = asctime(localtime(&ct));
-
-    if (logfile == NULL) {
-        puts("SYSERR: Using log() before stream was initialized!");
-        return;
-    }
-
-    if (format == NULL) {
-        format = "SYSERR: log() received a NULL format.";
-    }
-
-    time_s[strlen(time_s) - 1] = '\0';
-
-    fprintf(logfile, "%-15.15s :: ", time_s + 4);
+    fprintf(logfile, "%-20.20s :: ", timestr);
     vfprintf(logfile, format, args);
     fputc('\n', logfile);
-#endif    // CIRCLE_WINDOWS
 
     fflush(logfile);
 }
@@ -679,7 +646,9 @@ void stop_follower(struct char_data *ch)
     else {
         act("You stop following $N.", FALSE, ch, 0, ch->master, TO_CHAR);
         act("$n stops following $N.", TRUE, ch, 0, ch->master, TO_NOTVICT);
-        act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
+        if (CAN_SEE(ch->master, ch)) {
+            act("$n stops following you.", TRUE, ch, 0, ch->master, TO_VICT);
+        }
     }
 
     if (ch->master->followers->follower == ch) {  // Head of follower-list?
@@ -708,7 +677,6 @@ void stop_follower(struct char_data *ch)
     // now we have no master, so we are not part of a group
     ch->master = NULL;
     REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_CHARM);
-    REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
 }
 
 /**
@@ -726,7 +694,7 @@ int num_followers_charmed(struct char_data *ch)
         if (AFF_FLAGGED(lackey->follower, AFF_CHARM) && lackey->follower->master == ch) {
             total++;
         }
-    }
+    }  // for (lackey ...
     return (total);
 }
 
@@ -807,11 +775,11 @@ int get_line(FILE *fl, char *buf)
             return (0);
         }
         lines++;
-    } while (*temp == '*' || *temp == '\n' || *temp == '\r');
+    } while ((*temp == '*') || (*temp == '\n') || (*temp == '\r'));
 
     // Last line of file doesn't always have a \n, but it should.
     sl = strlen(temp);
-    while (sl > 0 && (temp[sl - 1] == '\n' || temp[sl - 1] == '\r')) {
+    while ((sl > 0) && ((temp[sl - 1] == '\n') || (temp[sl - 1] == '\r'))) {
         temp[--sl] = '\0';
     }
 
@@ -940,8 +908,8 @@ void core_dump_real(const char *who, int line)
     // Everything, just in case, for the systems that support it.
     fflush(NULL);
 
-    /* Kill the child so the debugger or script doesn't think the MUD crashed.
-     * The 'autorun' script would otherwise run it again. */
+    // Kill the child so the debugger or script doesn't think the MUD crashed.
+    // The 'autorun' script would otherwise run it again.
     if (fork() == 0) {
         abort();
     }
@@ -966,8 +934,8 @@ int count_color_chars(char *string)
 
     len = strlen(string);
     for (i = 0; i < len; i++) {
-        while (string[i] == '@') {
-            if (string[i + 1] == '@') {
+        while (string[i] == '\t') {
+            if (string[i + 1] == '\t') {
                 num++;
             }
             else {
@@ -977,6 +945,42 @@ int count_color_chars(char *string)
         }
     }  // for (i ...
     return num;
+}
+
+/* Not the prettiest thing I've ever written but it does the task which
+ * is counting all characters in a string which are not part of the
+ * protocol system. This is with the exception of detailed MXP codes. */
+int count_non_protocol_chars(char * str)
+{
+    int count = 0;
+    char *string = str;
+
+    while (*string) {
+        if (*string == '\r' || *string == '\n') {
+            string++;
+            continue;
+        }
+        if (*string == '@' || *string == '\t') {
+            string++;
+            if (*string != '[' && *string != '<' && *string != '>' && *string != '(' && *string != ')') {
+                string++;
+            }
+            else if (*string == '[') {
+                while (*string && *string != ']') {
+                    string++;
+                }
+                string++;
+            }
+            else {
+                string++;
+            }
+            continue;
+        }
+        count++;
+        string++;
+    }  // while (*string)
+
+    return count;
 }
 
 /**
@@ -1128,9 +1132,11 @@ void char_from_furniture(struct char_data *ch)
  */
 void column_list(struct char_data *ch, int num_cols, const char **list, int list_length, bool show_nums)
 {
-    int num_per_col, col_width, r, c, i, offset = 0, len = 0, temp_len, max_len = 0;
+    size_t max_len = 0, len = 0, temp_len;
+    int num_per_col, col_width, r, c, i, offset = 0;
     char buf[MAX_STRING_LENGTH];
 
+    *buf = '\0';
     // Work out the longest list item
     for (i = 0; i < list_length; i++) {
         if (max_len < strlen(list[i])) {
@@ -1146,13 +1152,6 @@ void column_list(struct char_data *ch, int num_cols, const char **list, int list
     // Ensure that the number of columns is in the range 1-10
     num_cols = MIN(MAX(num_cols, 1), 10);
 
-    // Work out the longest list item
-    for (i = 0; i < list_length; i++) {
-        if (max_len < strlen(list[i])) {
-            max_len = strlen(list[i]);
-        }
-    }  // for (i ...
-
     // Calculate the width of each column
     if (IS_NPC(ch)) {
         col_width = 80 / num_cols;
@@ -1165,7 +1164,7 @@ void column_list(struct char_data *ch, int num_cols, const char **list, int list
         col_width -= 4;
     }
 
-    if (col_width < max_len) {
+    if ((size_t)col_width < max_len) {
         WriteLogf("Warning: columns too narrow for correct output to %s in simple_column_list (utils.c)", GET_NAME(ch));
     }
 
@@ -1467,6 +1466,8 @@ IDXTYPE atoidx(const char *str_to_conv)
     }
 }
 
+#define isspace_ignoretabs(c) ((c)!='\t' && isspace(c))
+
 /*
  * strfrmt (String Format) function
  * Used by automap/map system
@@ -1492,14 +1493,14 @@ char *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad)
     // Split into lines, including convert \\ into \r\n
     while (*sp) {
         // eat leading space
-        while (*sp && isspace(*sp)) {
+        while (*sp && isspace_ignoretabs(*sp)) {
             sp++;
         }
         // word begins
         wp = sp;
         wlen = 0;
         while (*sp) {   // Find the end of the word
-            if (isspace(*sp)) {
+            if (isspace_ignoretabs(*sp)) {
                 break;
             }
             if (*sp == '\\' && sp[1] && sp[1] == '\\') {
@@ -1507,7 +1508,7 @@ char *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad)
                     break; // Finish dealing with the current word
                 }
                 sp += 2; // Eat the marker and any trailing space
-                while (*sp && isspace(*sp)) sp++;
+                while (*sp && isspace_ignoretabs(*sp)) sp++;
                 wp = sp;
                 // Start a new line
                 if (hpad) {
@@ -1523,14 +1524,23 @@ char *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad)
                 lcount++;
                 lp = line;
             }
-            else if (*sp == '`' || *sp == '$' || *sp == '#' || *sp == '@') {
-                if (sp[1] && (sp[1] == *sp)) {
+            else if (*sp == '`' || *sp == '$' || *sp == '#') {
+                if (sp[1] && (sp[1] == *sp))
                     wlen++; // One printable char here
-                }
-                if (*sp == '@' && (sp[1] != *sp)) {  // Color code, not @@
-                    last_color = sp[1];
-                }
                 sp += 2; // Eat the whole code regardless
+            }
+            else if (*sp == '\t'&&sp[1]) {
+                char MXPcode = sp[1] == '[' ? ']' : sp[1] == '<' ? '>' : '\0';
+
+                if (!MXPcode)
+                    last_color = sp[1];
+
+                sp += 2; // Eat the code
+                if (MXPcode)
+                {
+                    while (*sp != '\0'&&*sp != MXPcode)
+                        ++sp; // Eat the rest of the code
+                }
             }
             else {
                 wlen++;
@@ -1544,7 +1554,7 @@ char *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad)
                     *lp++ = ' ';
                 }  // for (; llen ...
             }
-            *lp++ = '@';    // 'normal' color
+            *lp++ = '\t';    // 'normal' color
             *lp++ = 'n';
             *lp++ = '\r';   // New line
             *lp++ = '\n';
@@ -1555,7 +1565,7 @@ char *strfrmt(char *str, int w, int h, int justify, int hpad, int vpad)
             lcount++;
             lp = line;
             if (last_color != 'n') {
-                *lp++ = '@';  // restore previous color
+                *lp++ = '\t';    // restore previous color
                 *lp++ = last_color;
                 new_line_started = TRUE;
             }
@@ -1656,4 +1666,99 @@ char *strpaste(char *str1, char *str2, char *joiner)
     // Close off the string
     *rp = '\0';
     return ret;
+}
+
+/*
+ *  Create a blank affect struct
+ */
+void new_affect(struct affected_type *af)
+{
+    int i;
+    af->spell = 0;
+    af->duration = 0;
+    af->modifier = 0;
+    af->location = APPLY_NONE;
+    for (i = 0; i < AF_ARRAY_MAX; i++) {
+        af->bitvector[i] = 0;
+    }  // for (i ...
+}
+
+/*
+ *  Handy function to get class ID number by name (abbreviations allowed)
+ */
+int get_class_by_name(char *classname)
+{
+    int i;
+    for (i = 0; i < NUM_CLASSES; i++) {
+        if (is_abbrev(classname, pc_class_types[i])) {
+            return(i);
+        }
+    }  // for (i ...
+
+    return (-1);
+}
+
+char * convert_from_tabs(char * string)
+{
+    static char buf[MAX_STRING_LENGTH * 8];
+
+    strcpy(buf, string);
+    parse_tab(buf);
+    return(buf);
+}
+
+/*
+ *  This removes all trailing whitespace from the end of a string
+ */
+char *right_trim_whitespace(const char *string)
+{
+    char *r = strdup(string);
+    if (r != NULL) {
+        char *fr = r + strlen(string) - 1;
+        while ((isspace(*fr) || !isprint(*fr) || *fr == 0) && fr >= r) --fr;
+        *++fr = 0;
+    }
+
+    return r;
+}
+
+/**
+ * Remove all occurrences of a given word in string.
+ */
+void remove_from_string(char *string, const char *to_remove)
+{
+    int i, j, string_len, to_remove_len;
+    int found;
+
+    string_len = strlen(string);          // Length of string
+    to_remove_len = strlen(to_remove); // Length of word to remove
+
+    for (i = 0; i <= string_len - to_remove_len; i++) {
+        // Match word with string
+        found = 1;
+        for (j = 0; j < to_remove_len; j++) {
+            if (string[i + j] != to_remove[j]) {
+                found = 0;
+                break;
+            }
+        }  // for (j ...
+
+        // If it is not a word
+        if (string[i + j] != ' ' && string[i + j] != '\t' && string[i + j] != '\n' && string[i + j] != '\0') {
+            found = 0;
+        }
+
+        // If word is found then shift all characters to left
+        // and decrement the string length
+        if (found == 1) {
+            for (j = i; j <= string_len - to_remove_len; j++) {
+                string[j] = string[j + to_remove_len];
+            }  // for (j ...
+
+            string_len = string_len - to_remove_len;
+
+            // We will match next occurrence of word from current index.
+            i--;
+        }
+    }  // for (i ...
 }

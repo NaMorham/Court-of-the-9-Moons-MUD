@@ -52,6 +52,11 @@ ACMD(do_oasis_trigedit)
 
     number = atoi(argument);
 
+    if (number < IDXTYPE_MIN || number > IDXTYPE_MAX) {
+        send_to_char(ch, "That trigger VNUM can't exist.\r\n");
+        return;
+    }
+
     // Check that it isn't already being edited.
     for (d = descriptor_list; d; d = d->next) {
         if (STATE(d) == CON_TRIGEDIT) {
@@ -66,7 +71,7 @@ ACMD(do_oasis_trigedit)
     d = ch->desc;
     // Give descriptor an OLC structure.
     if (d->olc) {
-        mudlog(BRF, LVL_IMMORT, TRUE,
+        mudlog(BRF, LVL_BUILDER, TRUE,
             "SYSERR: do_oasis_trigedit: Player already had olc structure.");
         free(d->olc);
     }
@@ -105,7 +110,7 @@ ACMD(do_oasis_trigedit)
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
-    mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s starts editing zone %d [trigger](allowed zone %d)",
+    mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "OLC: %s starts editing zone %d [trigger](allowed zone %d)",
         GET_NAME(ch), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(ch));
 }
 
@@ -259,12 +264,242 @@ static void trigedit_disp_types(struct descriptor_data *d)
     for (i = 0; i < NUM_TRIG_TYPE_FLAGS; i++) {
         write_to_output(d, "%s%2d%s) %-20.20s  %s", grn, i + 1, nrm, types[i],
             !(++columns % 2) ? "\r\n" : "");
-    }
+    }  // for (i ...
     sprintbit(GET_TRIG_TYPE(OLC_TRIG(d)), types, bitbuf, sizeof(bitbuf));
     write_to_output(d, "\r\nCurrent types : %s%s%s\r\nEnter type (0 to quit) : ",
         cyn, bitbuf, nrm);
 
 }
+
+/****************************************************************************************
+ DG Scripts Code Syntax Highlighting
+ Created by Victor Almeida (aka Stoneheart) in Brazil
+ from BrMUD:Tormenta www.tormenta.com.br
+
+ License: Attribution 4.0 International (CC BY 4.0)
+ http://creativecommons.org/licenses/by/4.0/
+
+ You are free to:
+ Share — copy and redistribute the material in any medium or format
+ Adapt — remix, transform, and build upon the material for any purpose, even commercially.
+
+ The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+ Under the following terms:
+ Attribution — You must give appropriate credit, provide a link to the license, and indicate
+ if changes were made. You may do so in any reasonable manner, but not in any way that
+ suggests the licensor endorses you or your use.
+ *****************************************************************************************/
+
+/*
+ *  Change a string for another without memory bugs
+ */
+static char *str_replace(const char *string, const char *substr, const char *replacement) {
+    char *tok = NULL;
+    char *newstr = NULL;
+    char *oldstr = NULL;
+    char *head = NULL;
+
+    // if either substr or replacement is NULL, duplicate string a let caller handle it
+    if (substr == NULL || replacement == NULL) {
+        return strdup(string);
+    }
+
+    newstr = strdup(string);
+    head = newstr;
+    while ((tok = strstr(head, substr))) {
+        oldstr = newstr;
+        newstr = (char*)malloc(strlen(oldstr) - strlen(substr) + strlen(replacement) + 1);
+        // Failed to alloc mem, free old string and return NULL
+        if (newstr == NULL) {
+            free(oldstr);
+            return NULL;
+        }
+        memcpy(newstr, oldstr, tok - oldstr);
+        memcpy(newstr + (tok - oldstr), replacement, strlen(replacement));
+        memcpy(newstr + (tok - oldstr) + strlen(replacement), tok + strlen(substr), strlen(oldstr) - strlen(substr) - (tok - oldstr));
+        memset(newstr + strlen(oldstr) - strlen(substr) + strlen(replacement), 0, 1);
+
+        // move back head right after the last replacement
+        head = newstr + (tok - oldstr) + strlen(replacement);
+        free(oldstr);
+    }  // while ((tok ...
+
+    return newstr;
+}
+
+/*
+ *  You can easily change the color code (\tn) to the old one (@n or &n)
+ */
+#define SYNTAX_TERMS             49
+static const char *syntax_color_replacement[SYNTAX_TERMS][2] =
+{
+    // script logic (10)
+    { "if",             "\tcif\tn" },           // 0
+    { "elseif",         "\tcelseif\tn" },
+    { "else",           "\tcelse\tn" },
+    { "end",            "\tcend\tn" },
+    { "switch",         "\tcswitch\tn" },
+    { "case",           "\tccase\tY" },
+    { "default",        "\tcdefault\tn" },
+    { "break",          "\tcbreak\tn" },
+    { "while",          "\tcwhile\tn" },
+    { "done",           "\tcdone\tn" },
+    // commands (15)
+    { "eval ",          "\tceval\tY " },        //10
+    { "nop ",           "\tcnop\tY " },
+    { "extract ",       "\tcextract\tY " },
+    { "dg_letter ",     "\tcdg_letter\tY " },
+    { "makeuid ",       "\tcmakeuid\tY " },
+    { "dg_cast ",       "\tcdg_cast\tY " },
+    { "dg_affect ",     "\tcdg_affect\tY " },
+    { "global ",        "\tcglobal\tY " },
+    { "context ",       "\tccontext\tY " },
+    { "remote ",        "\tcremot\tce\tY " },
+    { "rdelete ",       "\tcrdelete\tY " },     // 20
+    { "set ",           "\tcset\tY " },
+    { "unset ",         "\tcunset\tY " },
+    { "attach ",        "\tcattach\tY " },
+    { "detach ",        "\tcdetach\tY " },
+    // stopping (3)
+    { "wait",           "\trwait" },
+    { "return",         "\trreturn" },
+    { "halt",           "\trhalt" },
+    // operands (12)
+    { "||",             "\tc||\tY" },
+    { "&&",             "\tc&&\tY" },
+    { "==",             "\tc==\tY" },           // 30
+    { "!=",             "\tc!=\tY" },
+    { "<=",             "\tc<=\tY" },
+    { ">=",             "\tc>=\tY" },
+    { "< ",             "\tc< \tY" },
+    { "> ",             "\tc> \tY" },
+    { "/=",             "\tc/=\tY" },
+    { "!",              "\tc!\tn" },
+    { "(",              "\tc(\tY" },
+    { ")",              "\tc)\tn" },
+    // corrective (4)
+    { "\tc!\tn=",       "\tc!=\tY" },           // 40
+    { "%s\tcend\tn%",   "\tm%\tosend%\tn" },
+    { "%\tc)",          "\tm%\tc)" },
+    { ")\tn%",          ")\tm%"},
+    // variables (5)
+    { "% ",             "\tm%\tn " },
+    { "%,",             "\tm%\tn," },
+    { "%.",             "\tm%\tn." },
+    { "%:",             "\tm%\tn:" },
+    { "%",              "\tm%\to" }             // 48
+};
+
+/*
+ *  Here you can include more commands usually used in your triggers
+ */
+#define COMMAND_TERMS    36
+static const char *command_color_replacement[COMMAND_TERMS][2] =
+{
+    // Mob specific commands (25)
+    { "mlog",           "\tcmlog\tn" },     // 0
+    { "masound",        "\tcmasound\tn" },
+    { "mkill",          "\tcmkill\tn" },
+    { "mjunk",          "\tcmjunk\tn" },
+    { "mdamage",        "\tcmdamage\tn" },
+    { "mdoor",          "\tcmdoor\tn" },
+    { "mecho",          "\tcmecho\tn" },
+    { "mrecho",         "\tcmrecho\tn" },
+    { "mechoaround",    "\tcmechoaround\tn" },
+    { "msend",          "\tcmsend\tn" },
+    { "mload",          "\tcmload\tn" },    // 10
+    { "mpurge",         "\tcmpurge\tn" },
+    { "mgoto",          "\tcmgoto\tn" },
+    { "mteleport",      "\tcmteleport\tn" },
+    { "mforce",         "\tcmforce\tn" },
+    { "mhunt",          "\tcmhunt\tn" },
+    { "mremember",      "\tcmremember\tn" },
+    { "mforget",        "\tcmforget\tn" },
+    { "mtransform",     "\tcmtransform\tn" },
+    { "mzoneecho",      "\tcmzoneecho\tn" },
+    { "mfollow",        "\tcmfollow\tn" },  // 20
+    { "mquest",         "\tcmquest\tn" },
+    { "malign",         "\tcmalign\tn" },
+    { "mcast",          "\tcmcast\tn" },
+    { "mdismiss",       "\tcmdismiss\tn" },
+    // common commands (10)
+    { "drop ",          "\tcdrop \tn" },
+    { "emote ",         "\tcemote \tn" },
+    { "give ",          "\tcgive \tn" },
+    { "say ",           "\tcsay \tn" },
+    { "tell ",          "\tctell \tn" },
+    { "unlock ",        "\tcunlock \tn" },  // 30
+    { "lock ",          "\tclock \tn" },
+    { "open ",          "\tcopen \tn" },
+    { "close ",         "\tcclose \tn" },
+    { "junk ",          "\tcjunk \tn" }     // 34
+};
+
+
+static void script_syntax_highlighting(struct descriptor_data *d, char *string)
+{
+    ACMD(do_action);
+    char buffer[MAX_STRING_LENGTH] = "";
+    char *newlist, *curtok;
+
+    size_t i;
+
+    // Parse script text line by line
+    newlist = strdup(string);
+    for (curtok = strtok(newlist, "\r\n"); curtok; curtok = strtok(NULL, "\r\n")) {
+        char *line = strdup(curtok);
+        bool comment = FALSE;
+
+        // Find if is a comment
+        for (i = 0; i <= strlen(line); i++) {
+            // skip initial spaces
+            if (strncmp(&line[i], " ", 1) == 0) {
+                continue;
+            }
+            // is a comment, highlight
+            if (strncmp(&line[i], "*", 1) == 0) {
+                line = str_replace(line, "*", "\tg*");
+                comment = TRUE;
+                break;
+            }
+            // not a comment
+            else {
+                comment = FALSE;
+                break;
+            }
+        }  // for (i ...
+
+        // Highlight lines
+        if (!comment) {
+            // Syntax replacement
+            for (i = 0; i < SYNTAX_TERMS; i++) {
+                line = str_replace(line, syntax_color_replacement[i][0], syntax_color_replacement[i][1]);
+            }
+
+            // Commands replacement
+            for (i = 0; i < COMMAND_TERMS; i++) {
+                line = str_replace(line, command_color_replacement[i][0], command_color_replacement[i][1]);
+            }
+
+            // Socials replacement (experimental)
+            int cmd;
+            for (cmd = 0; *complete_cmd_info[cmd].command != '\n'; cmd++) {
+                if (complete_cmd_info[cmd].command_pointer == do_action) {
+                    char replace_social[MAX_INPUT_LENGTH];
+                    snprintf(replace_social, MAX_INPUT_LENGTH, "\tc%s\tn", complete_cmd_info[cmd].command);
+                    line = str_replace(line, complete_cmd_info[cmd].command, replace_social);
+                }
+            }  // for (cmd ...
+        }
+
+        strncat(buffer, line, sizeof(buffer) - strlen(buffer) - 1);
+        strncat(buffer, "\tn\r\n", sizeof(buffer) - strlen(buffer) - 1);
+    }
+
+    page_string(d, buffer, TRUE);
+}
+/****************************************************************************************/
 
 void trigedit_parse(struct descriptor_data *d, char *arg)
 {
@@ -310,7 +545,8 @@ void trigedit_parse(struct descriptor_data *d, char *arg)
             write_to_output(d, "Enter trigger commands: (/s saves /h for help)\r\n\r\n");
             d->backstr = NULL;
             if (OLC_STORAGE(d)) {
-                write_to_output(d, "%s", OLC_STORAGE(d));
+                clear_screen(d);
+                script_syntax_highlighting(d, OLC_STORAGE(d));
                 d->backstr = strdup(OLC_STORAGE(d));
             }
             d->str = &OLC_STORAGE(d);
@@ -436,7 +672,7 @@ void trigedit_save(struct descriptor_data *d)
             }
             free(cmd);
             cmd = NULL;
-        }
+        }  // for (cmd ...
 
 
         free(proto->arglist);
@@ -473,8 +709,7 @@ void trigedit_save(struct descriptor_data *d)
 
         // go through the mud and replace existing triggers
         live_trig = trigger_list;
-        while (live_trig)
-        {
+        while (live_trig) {
             if (GET_TRIG_RNUM(live_trig) == rnum) {
                 if (live_trig->arglist) {
                     free(live_trig->arglist);
@@ -512,7 +747,7 @@ void trigedit_save(struct descriptor_data *d)
             }
 
             live_trig = live_trig->next_in_world;
-        }
+        }  // while (live_trig)
     }
     else {
         // this is a new trigger
@@ -600,7 +835,6 @@ void trigedit_save(struct descriptor_data *d)
                 }
             }
         }  // for (dsc ...
-
     }
 
     /* now write the trigger out to disk, along with the rest of the triggers for
@@ -656,7 +890,7 @@ void trigedit_save(struct descriptor_data *d)
             fprintf(trig_file, "%s%c\n", buf, STRING_TERMINATOR);
             *buf = '\0';
         }
-    }
+    }  // for (i ...
 
     fprintf(trig_file, "$%c\n", STRING_TERMINATOR);
     fclose(trig_file);
@@ -782,7 +1016,7 @@ void dg_script_menu(struct descriptor_data *d)
         }
 
         editscript = editscript->next;
-    }
+    }  // while (editscript)
     if (i == 0) {
         write_to_output(d, "     <none>\r\n");
     }
@@ -887,6 +1121,7 @@ int dg_script_edit_parse(struct descriptor_data *d, char *arg)
             currtrig = OLC_SCRIPT(d);
             OLC_SCRIPT(d) = currtrig->next;
             free(currtrig);
+            currtrig = NULL;
             break;
         }
 
@@ -922,7 +1157,8 @@ int format_script(struct descriptor_data *d)
     char nsc[MAX_CMD_LENGTH], *t, line[READ_SIZE];
     char *sc;
     size_t len = 0, nlen = 0, llen = 0;
-    int indent = 0, indent_next = FALSE, found_case = FALSE, i, line_num = 0;
+    int i, ret;
+    int indent = 0, indent_next = FALSE, found_case = FALSE, line_num = 0;
 
     if (!d->str || !*d->str) {
         return FALSE;
@@ -989,10 +1225,12 @@ int format_script(struct descriptor_data *d)
             strncat(line, "  ", sizeof(line) - 1);
             nlen += 2;
         }
-        llen = snprintf(line + nlen, sizeof(line) - nlen, "%s\r\n", t);
-        if (llen < 0 || llen + nlen + len > d->max_str - 1) {
+        ret = snprintf(line + nlen, sizeof(line) - nlen, "%s\r\n", t);
+        llen = (size_t)ret;
+        if ((ret < 0) || ((llen + nlen + len) > (d->max_str - 1))) {
             write_to_output(d, "String too long, formatting aborted\r\n");
             free(sc);
+            sc = NULL;
             return FALSE;
         }
         len = len + nlen + llen;
@@ -1012,6 +1250,7 @@ int format_script(struct descriptor_data *d)
     free(*d->str);
     *d->str = strdup(nsc);
     free(sc);
+    sc = NULL;
 
     return TRUE;
 }

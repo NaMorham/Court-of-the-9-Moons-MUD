@@ -44,6 +44,7 @@ static OCMD(do_odoor);
 static OCMD(do_osetval);
 static OCMD(do_oat);
 static OCMD(do_omove);
+static OCMD(do_olog);
 
 struct obj_command_info {
     char    *command;
@@ -171,6 +172,14 @@ static OCMD(do_oecho)
     }
 }
 
+static OCMD(do_olog)
+{
+    skip_spaces(&argument);
+
+    if (*argument)
+        obj_log(obj, argument);
+}
+
 static OCMD(do_oforce)
 {
     char_data *ch, *next_ch;
@@ -205,7 +214,7 @@ static OCMD(do_oforce)
             }
         }
         else {
-                obj_log(obj, "oforce: no target found");
+            obj_log(obj, "oforce: no target found");
         }
     }
 }
@@ -342,7 +351,7 @@ static OCMD(do_otransform)
         tmpobj.worn_on = obj->worn_on;
         tmpobj.in_obj = obj->in_obj;
         tmpobj.contains = obj->contains;
-        tmpobj.id = obj->id;
+        tmpobj.script_id = obj->script_id;
         tmpobj.proto_script = obj->proto_script;
         tmpobj.script = obj->script;
         tmpobj.next_content = obj->next_content;
@@ -431,7 +440,6 @@ static OCMD(do_oteleport)
     if (target == NOWHERE) {
         obj_log(obj, "oteleport target is an invalid room");
     }
-
     else if (!str_cmp(arg1, "all")) {
         rm = obj_room(obj);
         if (target == rm) {
@@ -446,7 +454,7 @@ static OCMD(do_oteleport)
             char_from_room(ch);
             char_to_room(ch, target);
             enter_wtrigger(&world[IN_ROOM(ch)], ch, -1);
-        }
+        }  // for (ch ...
     }
     else {
         if ((ch = get_char_by_obj(obj, arg1))) {
@@ -506,7 +514,7 @@ static OCMD(do_dgoload)
 
         if (SCRIPT(obj)) {  // It _should_ have, but it might be detached.
             char buf[MAX_INPUT_LENGTH];
-            sprintf(buf, "%c%ld", UID_CHAR, GET_ID(mob));
+            sprintf(buf, "%c%ld", UID_CHAR, char_script_id(mob));
             add_var(&(SCRIPT(obj)->global_vars), "lastloaded", buf, 0);
         }
 
@@ -520,7 +528,7 @@ static OCMD(do_dgoload)
 
         if (SCRIPT(obj)) {  // It _should_ have, but it might be detached.
             char buf[MAX_INPUT_LENGTH];
-            sprintf(buf, "%c%ld", UID_CHAR, GET_ID(object));
+            sprintf(buf, "%c%ld", UID_CHAR, obj_script_id(object));
             add_var(&(SCRIPT(obj)->global_vars), "lastloaded", buf, 0);
         }
 
@@ -533,7 +541,7 @@ static OCMD(do_dgoload)
         two_arguments(target, arg1, arg2);  // recycling ...
         tch = get_char_near_obj(obj, arg1);
         if (tch) {
-            if (arg2 != NULL && *arg2 && (pos = find_eq_pos_script(arg2)) >= 0 &&
+            if (arg2 && *arg2 && ((pos = find_eq_pos_script(arg2)) >= 0) &&
                 !GET_EQ(tch, pos) && can_wear_on_pos(object, pos)) {
                 equip_char(tch, object, pos);
                 load_otrigger(object);
@@ -544,7 +552,7 @@ static OCMD(do_dgoload)
             return;
         }
         cnt = get_obj_near_obj(obj, arg1);
-        if (cnt && GET_OBJ_TYPE(cnt) == ITEM_CONTAINER) {
+        if (cnt && (GET_OBJ_TYPE(cnt) == ITEM_CONTAINER)) {
             obj_to_obj(object, cnt);
             load_otrigger(object);
             return;
@@ -595,11 +603,11 @@ static OCMD(do_oasound)
     }
 
     if ((room = obj_room(obj)) == NOWHERE) {
-        obj_log(obj, "oecho called by object in NOWHERE");
+        obj_log(obj, "oasound called by object in NOWHERE");
         return;
     }
 
-    for (door = 0; door < NUM_OF_DIRS; door++) {
+    for (door = 0; door < DIR_COUNT; door++) {
         if (world[room].dir_option[door] != NULL &&
             (world[room].dir_option[door])->to_room != NOWHERE &&
             (world[room].dir_option[door])->to_room != room &&
@@ -607,7 +615,7 @@ static OCMD(do_oasound)
             sub_write(argument, world[(world[room].dir_option[door])->to_room].people, TRUE, TO_ROOM);
             sub_write(argument, world[(world[room].dir_option[door])->to_room].people, TRUE, TO_CHAR);
         }
-    }
+    }  // for (door ...
 }
 
 static OCMD(do_odoor)
@@ -717,7 +725,7 @@ static OCMD(do_osetval)
     struct char_data *worn_by = NULL;
 
     two_arguments(argument, arg1, arg2);
-    if (arg1 == NULL || !*arg1 || arg2 == NULL || !*arg2 || !is_number(arg1) || !is_number(arg2)) {
+    if (!arg1 || !*arg1 || !arg2 || !*arg2 || !is_number(arg1) || !is_number(arg2)) {
         obj_log(obj, "osetval: bad syntax");
         return;
     }
@@ -828,27 +836,29 @@ static OCMD(do_omove)
     obj_to_room(obj, target);
 }
 
-const struct obj_command_info obj_cmd_info[] = {
-    { "RESERVED",     0,             0 },   // this must be first -- for specprocs
+static const struct obj_command_info obj_cmd_info[] = {
+    { "RESERVED",       0,             0 },   // this must be first -- for specprocs
 
-    { "oasound ",     do_oasound,    0 },
-    { "oat ",         do_oat,        0 },
-    { "odoor ",       do_odoor,      0 },
-    { "odamage ",     do_odamage,    0 },
-    { "oecho ",       do_oecho,      0 },
-    { "oechoaround ", do_osend,      SCMD_OECHOAROUND },
-    { "oforce ",      do_oforce,     0 },
-    { "oload ",       do_dgoload,    0 },
-    { "opurge ",      do_opurge,     0 },
-    { "orecho ",      do_orecho,     0 },
-    { "osend ",       do_osend,      SCMD_OSEND },
-    { "osetval ",     do_osetval,    0 },
-    { "oteleport ",   do_oteleport,  0 },
-    { "otimer ",      do_otimer,     0 },
-    { "otransform ",  do_otransform, 0 },
-    { "ozoneecho ",   do_ozoneecho,  0 },   // fix by Rumble
-    { "omove ",       do_omove,      0 },
-    { "\n",           0,             0 }    // this must be last
+    { "oasound ",       do_oasound,    0 },
+    { "oat ",           do_oat,        0 },
+    { "odoor ",         do_odoor,      0 },
+    { "odamage ",       do_odamage,    0 },
+    { "oecho ",         do_oecho,      0 },
+    { "oechoaround ",   do_osend,      SCMD_OECHOAROUND },
+    { "oforce ",        do_oforce,     0 },
+    { "oload ",         do_dgoload,    0 },
+    { "opurge ",        do_opurge,     0 },
+    { "orecho ",        do_orecho,     0 },
+    { "osend ",         do_osend,      SCMD_OSEND },
+    { "osetval ",       do_osetval,    0 },
+    { "oteleport ",     do_oteleport,  0 },
+    { "otimer ",        do_otimer,     0 },
+    { "otransform ",    do_otransform, 0 },
+    { "ozoneecho ",     do_ozoneecho,  0 },   // fix by Rumble
+    { "omove ",         do_omove,      0 },
+    { "olog ",          do_olog,       0 },
+
+    { "\n",             0,             0 }    // this must be last
 };
 
 /*
@@ -879,7 +889,7 @@ void obj_command_interpreter(obj_data *obj, char *argument)
         if (!strncmp(obj_cmd_info[cmd].command, arg, length)) {
             break;
         }
-    }
+    }  // for (length ...
 
     if (*obj_cmd_info[cmd].command == '\n') {
         obj_log(obj, "Unknown object cmd: '%s'", argument);

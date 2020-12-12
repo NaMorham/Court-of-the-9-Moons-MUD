@@ -4,7 +4,7 @@ Near Death Trap Lions - 12017~
 ~
 * Near Death Trap stuns actor
 wait 1 sec
-set stunned %actor.hitp% 
+set stunned %actor.hitp%
 %damage% %actor% %stunned%
 wait 5 sec
 %send% %actor% The lions grow bored once you stop struggling and leave you to die.
@@ -37,7 +37,7 @@ switch %actor.level%
     dg_cast 'lightning bolt' %actor%
   break
   case 12
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 13
     dg_cast 'energy drain' %actor%
@@ -101,24 +101,24 @@ end
 Room Zone Number~
 2 bg 100
 ~
-set room %room.vnum% 
-eval number %room.strlen% 
-switch %number% 
-  case 3 
-    set zone %room.charat(1)% 
-  break 
-  case 4 
-    set 1st %room.charat(1)% 
-    set 2nd %room.charat(2)% 
-    set zone %1st%%2nd% 
-  break 
-  case 5 
-    set 1st %room.charat(1)% 
-    set 2nd %room.charat(2)% 
-    set 3rd %room.charat(3)% 
-    set zone %1st%%2nd%%3rd% 
-  break 
-done 
-%echo% Room #%room.vnum% is part of zone: %zone% 
+set room %room.vnum%
+eval number %room.strlen%
+switch %number%
+  case 3
+    set zone %room.charat(1)%
+  break
+  case 4
+    set 1st %room.charat(1)%
+    set 2nd %room.charat(2)%
+    set zone %1st%%2nd%
+  break
+  case 5
+    set 1st %room.charat(1)%
+    set 2nd %room.charat(2)%
+    set 3rd %room.charat(3)%
+    set zone %1st%%2nd%%3rd%
+  break
+done
+%echo% Room #%room.vnum% is part of zone: %zone%
 ~
 $~

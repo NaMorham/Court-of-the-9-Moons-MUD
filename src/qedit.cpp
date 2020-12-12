@@ -56,14 +56,13 @@ ACMD(do_oasis_qedit)
     qst_rnum real_num;
     qst_vnum number = NOWHERE;
     struct descriptor_data *d;
-    char *buf3;
     char buf1[MAX_INPUT_LENGTH];
     char buf2[MAX_INPUT_LENGTH];
 
     /****************************************************************************
      ** Parse any arguments.                                                   **
      ****************************************************************************/
-    buf3 = two_arguments(argument, buf1, buf2);
+    two_arguments(argument, buf1, buf2);
 
     if (!*buf1) {
         send_to_char(ch, "Specify a quest VNUM to edit.\r\n");
@@ -103,6 +102,10 @@ ACMD(do_oasis_qedit)
     if (number == NOWHERE) {
         number = atoi(buf1);
     }
+    if ((number < IDXTYPE_MIN) || (number > IDXTYPE_MAX)) {
+        send_to_char(ch, "That quest VNUM can't exist.\r\n");
+        return;
+    }
 
     /****************************************************************************
      ** Check that the quest isn't already being edited.                       **
@@ -129,6 +132,7 @@ ACMD(do_oasis_qedit)
         mudlog(BRF, LVL_IMMORT, TRUE,
             "SYSERR: do_oasis_quest: Player already had olc structure.");
         free(d->olc);
+        d->olc = NULL;
     }
 
     CREATE(d->olc, struct oasis_olc_data, 1);
@@ -191,7 +195,7 @@ ACMD(do_oasis_qedit)
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
-    mudlog(BRF, LVL_IMMORT, TRUE,
+    mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE,
         "OLC: %s starts editing zone %d allowed zone %d",
         GET_NAME(ch), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(ch));
 }
@@ -272,7 +276,7 @@ static void qedit_disp_menu(struct descriptor_data *d)
             snprintf(buf2, sizeof(buf2), "to an unknown mob [%d].",
                 quest->value[5]);
         }
-    }
+    }  // if (quest->type == AQ_OBJ_RETURN)
     switch (quest->type) {
     case AQ_OBJ_FIND:
     case AQ_OBJ_RETURN:
@@ -299,31 +303,31 @@ static void qedit_disp_menu(struct descriptor_data *d)
     default:
         snprintf(targetname, sizeof(targetname), "Unknown");
         break;
-    }
+    }  // switch (quest->type)
     write_to_output(d,
-        "-- Quest Number    : @n[@c%6d@n]\r\n"
-        "@g 1@n) Quest Name     : @y%s\r\n"
-        "@g 2@n) Description    : @y%s\r\n"
-        "@g 3@n) Accept Message\r\n@y%s"
-        "@g 4@n) Completion Message\r\n@y%s"
-        "@g 5@n) Quit Message\r\n@y%s"
-        "@g 6@n) Quest Flags    : @c%s\r\n"
-        "@g 7@n) Quest Type     : @c%s %s\r\n"
-        "@g 8@n) Quest Master   : [@c%6d@n] @y%s\r\n"
-        "@g 9@n) Quest Target   : [@c%6d@n] @y%s\r\n"
-        "@g A@n) Quantity       : [@c%6d@n]\r\n"
-        "@n    Quest Point Rewards\r\n"
-        "@g B@n) Completed      : [@c%6d@n] @g C@n) Abandoned   : [@c%6d@n]\r\n"
-        "@n    Other Rewards Rewards\r\n"
-        "@g G@n) Gold Coins     : [@c%6d@n] @g T@n) Exp Points  : [@c%6d@n] @g O@n) Object : [@c%6d@n]\r\n"
-        "@n    Level Limits to Accept Quest\r\n"
-        "@g D@n) Lower Level    : [@c%6d@n] @g E@n) Upper Level : [@c%6d@n]\r\n"
-        "@g F@n) Prerequisite   : [@c%6d@n] @y%s\r\n"
-        "@g L@n) Time Limit     : [@c%6d@n]\r\n"
-        "@g N@n) Next Quest     : [@c%6d@n] @y%s\r\n"
-        "@g P@n) Previous Quest : [@c%6d@n] @y%s\r\n"
-        "@g X@n) Delete Quest\r\n"
-        "@g Q@n) Quit\r\n"
+        "-- Quest Number       : \tn[\tc%6d\tn]\r\n"
+        "\tg 1\tn) Quest Name        : \ty%s\r\n"
+        "\tg 2\tn) Description       : \ty%s\r\n"
+        "\tg 3\tn) Accept Message\r\n\ty%s"
+        "\tg 4\tn) Completion Message\r\n\ty%s"
+        "\tg 5\tn) Quit Message\r\n\ty%s"
+        "\tg 6\tn) Quest Flags       : \tc%s\r\n"
+        "\tg 7\tn) Quest Type        : \tc%s %s\r\n"
+        "\tg 8\tn) Quest Master    : [\tc%6d\tn] \ty%s\r\n"
+        "\tg 9\tn) Quest Target    : [\tc%6d\tn] \ty%s\r\n"
+        "\tg A\tn) Quantity           : [\tc%6d\tn]\r\n"
+        "\tn       Quest Point Rewards\r\n"
+        "\tg B\tn) Completed          : [\tc%6d\tn] \tg C\tn) Abandoned    : [\tc%6d\tn]\r\n"
+        "\tn       Other Rewards Rewards\r\n"
+        "\tg G\tn) Gold Coins        : [\tc%6d\tn] \tg T\tn) Exp Points    : [\tc%6d\tn] \tg O\tn) Object : [\tc%6d\tn]\r\n"
+        "\tn       Level Limits to Accept Quest\r\n"
+        "\tg D\tn) Lower Level       : [\tc%6d\tn] \tg E\tn) Upper Level : [\tc%6d\tn]\r\n"
+        "\tg F\tn) Prerequisite    : [\tc%6d\tn] \ty%s\r\n"
+        "\tg L\tn) Time Limit        : [\tc%6d\tn]\r\n"
+        "\tg N\tn) Next Quest        : [\tc%6d\tn] \ty%s\r\n"
+        "\tg P\tn) Previous Quest : [\tc%6d\tn] \ty%s\r\n"
+        "\tg X\tn) Delete Quest\r\n"
+        "\tg Q\tn) Quit\r\n"
         "Enter Choice : ",
         quest->vnum,
         quest->name,
@@ -359,7 +363,7 @@ static void qedit_disp_menu(struct descriptor_data *d)
 /*
  * For quest type.
  */
-void qedit_disp_type_menu(struct descriptor_data *d)
+static void qedit_disp_type_menu(struct descriptor_data *d)
 {
     clear_screen(d);
     column_list(d->character, 0, quest_types, NUM_AQ_TYPES, TRUE);
@@ -370,7 +374,7 @@ void qedit_disp_type_menu(struct descriptor_data *d)
 /*
  * For quest flags.
  */
-void qedit_disp_flag_menu(struct descriptor_data *d)
+static void qedit_disp_flag_menu(struct descriptor_data *d)
 {
     char bits[MAX_STRING_LENGTH];
 
@@ -378,14 +382,14 @@ void qedit_disp_flag_menu(struct descriptor_data *d)
     clear_screen(d);
     column_list(d->character, 0, aq_flags, NUM_AQ_FLAGS, TRUE);
     sprintbit(OLC_QUEST(d)->flags, aq_flags, bits, sizeof(bits));
-    write_to_output(d, "\r\nQuest flags: @c%s@n\r\n"
+    write_to_output(d, "\r\nQuest flags: \tc%s\tn\r\n"
         "Enter quest flags, 0 to quit : ", bits);
     OLC_MODE(d) = QEDIT_FLAGS;
 }
+
 /**************************************
  *    The GARGANTUAN event handler    *
  **************************************/
-
 void qedit_parse(struct descriptor_data *d, char *arg)
 {
     int number = atoi(arg);
@@ -419,7 +423,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
                 "Invalid choice!\r\nDo you wish to save the quest? : ");
             return;
         }
-        break;
+
         //-------------------------------------------------------------------
     case QEDIT_CONFIRM_DELETE:
         switch (*arg) {
@@ -449,7 +453,6 @@ void qedit_parse(struct descriptor_data *d, char *arg)
                 "Invalid choice!\r\nDo you wish to delete the quest? : ");
             return;
         }
-        break;
 
         //-------------------------------------------------------------------
     case QEDIT_MAIN_MENU:
@@ -599,7 +602,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
             break;
         }
         return;
-        /*-------------------------------------------------------------------*/
+        // -------------------------------------------------------------------
     case QEDIT_NAME:
         if (!genolc_checkstring(d, arg)) {
             break;
@@ -631,7 +634,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
         break;
     case QEDIT_TYPES:
         number--;
-        if (number < 0 || number >= NUM_AQ_TYPES) {
+        if ((number < 0) || (number >= NUM_AQ_TYPES)) {
             write_to_output(d, "Invalid choice!\r\n");
             qedit_disp_type_menu(d);
             return;
@@ -644,7 +647,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
         }
         break;
     case QEDIT_FLAGS:
-        if (number < 0 || number > NUM_AQ_FLAGS) {
+        if ((number < 0) || (number > NUM_AQ_FLAGS)) {
             write_to_output(d, "That is not a valid choice!\r\n");
             qedit_disp_flag_menu(d);
         }
@@ -752,6 +755,7 @@ void qedit_parse(struct descriptor_data *d, char *arg)
         }
         OLC_QUEST(d)->obj_reward = number;
         break;
+
     default:
         // We should never get here
         cleanup_olc(d, CLEANUP_ALL);

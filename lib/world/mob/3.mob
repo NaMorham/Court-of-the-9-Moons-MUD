@@ -5,7 +5,7 @@ Camille the chemist stands over a cauldron mixing ingredients.
 ~
    Camille wears a thick brown robe that covers most of her features. Only her
 hands and head stick out of her robe. Stains and burns cover her body and
-clothing. She works dilligently over her cauldron. Camille has been known to
+clothing. She works diligently over her cauldron. Camille has been known to
 concoct many different potions and is most famous for her liquid fire.
 ~
 253962 0 0 0 0 0 0 0 0 E
@@ -29,4 +29,16 @@ face with slanted blue eyes.  She is striking in her beauty and grace.
 8 8 2
 E
 T 305
+#302
+mob unfinished~
+the unfinished mob~
+An unfinished mob stands here.
+~
+It looks unfinished.
+~
+8 0 0 0 0 0 0 0 0 E
+1 20 9 0d0+10 1d2+0
+10 100
+8 8 0
+E
 $

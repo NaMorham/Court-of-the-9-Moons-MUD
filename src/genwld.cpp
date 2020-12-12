@@ -17,6 +17,7 @@
 #include "genzon.h"
 #include "shop.h"
 #include "dg_olc.h"
+#include "mud_event.h"
 
 
 /*
@@ -102,7 +103,7 @@ room_rnum add_room(struct room_data *room)
                 // Known zone entries we don't care about.
                 break;
             default:
-                mudlog(BRF, LVL_GOD, TRUE, "SYSERR: GenOLC: add_room: Unknown zone entry found!");
+                mudlog(BRF, LVL_GOD, TRUE, "SYSERR: GenOLC: add_room: Unknown zone entry found! [%s]", ZCMD(i, j).command);
             }
         }  // for (j ...
     }  // for (i  ...
@@ -116,7 +117,7 @@ room_rnum add_room(struct room_data *room)
     i = top_of_world + 1;
     do {
         i--;
-        for (j = 0; j < NUM_OF_DIRS; j++) {
+        for (j = 0; j < DIR_COUNT; j++) {
             if (W_EXIT(i, j) && (W_EXIT(i, j)->to_room != NOWHERE)) {
                 W_EXIT(i, j)->to_room += (W_EXIT(i, j)->to_room >= found);
             }
@@ -180,12 +181,23 @@ int delete_room(room_rnum rnum)
     }
     free_proto_script(room, WLD_TRIGGER);
 
+    if (room->events != NULL) {
+        if (room->events->iSize > 0) {
+            mud_event_t *pEvent;
+
+            while ((pEvent = (mud_event_t *)simple_list(room->events)) != NULL)
+                event_cancel(pEvent);
+        }
+        free_list(room->events);
+        room->events = NULL;
+    }
+
     // Change any exit going to this room to go the void. Also fix all the exits
     // pointing to rooms above this.
     i = top_of_world + 1;
     do {
         i--;
-        for (j = 0; j < NUM_OF_DIRS; j++) {
+        for (j = 0; j < DIR_COUNT; j++) {
             struct room_direction_data *exit_data = W_EXIT(i, j);
             if (exit_data == NULL) {
                 continue;
@@ -246,7 +258,7 @@ int delete_room(room_rnum rnum)
                 // Known zone entries we don't care about.
                 break;
             default:
-                mudlog(BRF, LVL_GOD, TRUE, "SYSERR: GenOLC: delete_room: Unknown zone entry found!");
+                mudlog(BRF, LVL_GOD, TRUE, "SYSERR: GenOLC: delete_room: Unknown zone entry found! [%s]", ZCMD(i, j).command);
             }
         }  // for (j ...
     }  // for (i ...
@@ -270,7 +282,7 @@ int delete_room(room_rnum rnum)
         for (obj = world[i].contents; obj; obj = obj->next_content) {
             IN_ROOM(obj) -= (IN_ROOM(obj) != NOWHERE);    // Redundant check?
         }
-    }
+    }  // for (i ...
 
     top_of_world--;
     RECREATE(world, struct room_data, top_of_world + 1);
@@ -286,6 +298,7 @@ int save_rooms(zone_rnum rzone)
     char filename[128];
     char buf[MAX_STRING_LENGTH];
     char buf1[MAX_STRING_LENGTH];
+    char buf2[MAX_STRING_LENGTH];
 
 #if CIRCLE_UNSIGNED_INDEX
     if (rzone == NOWHERE || rzone > top_of_zone_table) {
@@ -318,7 +331,7 @@ int save_rooms(zone_rnum rzone)
             strip_cr(buf);
 
             // Save the numeric and string section of the file.
-            fprintf(sf, "#%d\n"
+            int n = snprintf(buf2, MAX_STRING_LENGTH, "#%d\n"
                 "%s%c\n"
                 "%s%c\n"
                 "%d %d %d %d %d %d\n",
@@ -329,8 +342,17 @@ int save_rooms(zone_rnum rzone)
                 room->room_flags[3], room->sector_type
                 );
 
+            if (n >= MAX_STRING_LENGTH) {
+                mudlog(BRF, LVL_BUILDER, TRUE,
+                    "SYSERR: Could not save room #%d due to size (%d > maximum of %d).",
+                    room->number, n, MAX_STRING_LENGTH);
+                continue;
+            }
+
+            fprintf(sf, "%s", convert_from_tabs(buf2));
+
             // Now you write out the exits for the room.
-            for (j = 0; j < NUM_OF_DIRS; j++) {
+            for (j = 0; j < DIR_COUNT; j++) {
                 if (R_EXIT(room, j)) {
                     int dflag;
                     if (R_EXIT(room, j)->general_description) {
@@ -349,6 +371,8 @@ int save_rooms(zone_rnum rzone)
                         else {
                             dflag = 1;
                         }
+                        if (IS_SET(R_EXIT(room, j)->exit_info, EX_HIDDEN))
+                            dflag += 2;
                     }
                     else {
                         dflag = 0;
@@ -370,13 +394,14 @@ int save_rooms(zone_rnum rzone)
                         R_EXIT(room, j)->to_room != NOWHERE ? world[R_EXIT(room, j)->to_room].number : -1);
 
                 }
-            }
+            }  // for (j ...
 
             if (room->ex_description) {
                 struct extra_descr_data *xdesc;
 
                 for (xdesc = room->ex_description; xdesc; xdesc = xdesc->next) {
                     strncpy(buf, xdesc->description, sizeof(buf));
+                    buf[sizeof(buf) - 1] = '\0';
                     strip_cr(buf);
                     fprintf(sf, "E\n"
                         "%s~\n"
@@ -386,7 +411,7 @@ int save_rooms(zone_rnum rzone)
             fprintf(sf, "S\n");
             script_save_to_disk(sf, room, WLD_TRIGGER);
         }
-    }
+    }  // for (i = genolc_zone_bottom ...
 
     // Write the final line and close it.
     fprintf(sf, "$~\n");
@@ -409,10 +434,12 @@ int copy_room(struct room_data *to, struct room_data *from)
     free_room_strings(to);
     *to = *from;
     copy_room_strings(to, from);
+    to->events = from->events;
 
     // Don't put people and objects in two locations. Should this be done here?
     from->people = NULL;
     from->contents = NULL;
+    from->events = NULL;
 
     return TRUE;
 }
@@ -435,7 +462,7 @@ int copy_room_strings(struct room_data *dest, struct room_data *source)
     dest->description = str_udup(source->description);
     dest->name = str_udup(source->name);
 
-    for (i = 0; i < NUM_OF_DIRS; i++) {
+    for (i = 0; i < DIR_COUNT; i++) {
         if (!R_EXIT(source, i)) {
             continue;
         }
@@ -475,7 +502,7 @@ int free_room_strings(struct room_data *room)
     }
 
     // Free exits.
-    for (i = 0; i < NUM_OF_DIRS; i++) {
+    for (i = 0; i < DIR_COUNT; i++) {
         if (room->dir_option[i]) {
             if (room->dir_option[i]->general_description) {
                 free(room->dir_option[i]->general_description);
@@ -490,7 +517,7 @@ int free_room_strings(struct room_data *room)
             free(room->dir_option[i]);
             room->dir_option[i] = NULL;
         }
-    }
+    }  // for (i ...
 
     return TRUE;
 }

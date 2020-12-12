@@ -23,6 +23,22 @@
 #include "modify.h"
 
 
+static bool legal_communication(char * arg);
+
+static bool legal_communication(char * arg)
+{
+    while (*arg) {
+        if (*arg == '@') {
+            arg++;
+            if (*arg == '(' || *arg == ')' || *arg == '<' || *arg == '>') {
+                return FALSE;
+            }
+        }
+        arg++;
+    }  // while (*arg)
+    return TRUE;
+}
+
 ACMD(do_say)
 {
     skip_spaces(&argument);
@@ -34,6 +50,10 @@ ACMD(do_say)
         char buf[MAX_INPUT_LENGTH + 14], *msg;
         struct char_data *vict;
 
+        if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+            parse_at(argument);
+        }
+
         snprintf(buf, sizeof(buf), "$n@n says, '%s@n'", argument);
         msg = act(buf, FALSE, ch, 0, 0, TO_ROOM | DG_NO_TRIG);
 
@@ -41,7 +61,7 @@ ACMD(do_say)
             if (vict != ch && GET_POS(vict) > POS_SLEEPING) {
                 add_history(vict, msg, HIST_SAY);
             }
-        }
+        }  // for (vict ...
 
         if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOREPEAT)) {
             send_to_char(ch, "%s", CONFIG_OK);
@@ -60,12 +80,9 @@ ACMD(do_say)
 
 ACMD(do_gsay)
 {
-    struct char_data *k;
-    struct follow_type *f;
-
     skip_spaces(&argument);
 
-    if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+    if (!GROUP(ch)) {
         send_to_char(ch, "But you are not the member of a group!\r\n");
         return;
     }
@@ -73,31 +90,18 @@ ACMD(do_gsay)
         send_to_char(ch, "Yes, but WHAT do you want to group-say?\r\n");
     }
     else {
-        char buf[MAX_STRING_LENGTH];
 
-        if (ch->master) {
-            k = ch->master;
-        }
-        else {
-            k = ch;
+        if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+            parse_at(argument);
         }
 
-        snprintf(buf, sizeof(buf), "$n tells the group, '%s@n'", argument);
-
-        if (AFF_FLAGGED(k, AFF_GROUP) && (k != ch)) {
-            act(buf, FALSE, ch, 0, k, TO_VICT | TO_SLEEP);
-        }
-        for (f = k->followers; f; f = f->next) {
-            if (AFF_FLAGGED(f->follower, AFF_GROUP) && (f->follower != ch)) {
-                act(buf, FALSE, ch, 0, f->follower, TO_VICT | TO_SLEEP);
-            }
-        }
+        send_to_group(ch, ch->group, "%s%s%s says, '%s'%s\r\n", CCGRN(ch, C_NRM), CCGRN(ch, C_NRM), GET_NAME(ch), argument, CCNRM(ch, C_NRM));
 
         if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOREPEAT)) {
             send_to_char(ch, "%s", CONFIG_OK);
         }
         else {
-            send_to_char(ch, "You tell the group, '%s@n'\r\n", argument);
+            send_to_char(ch, "%sYou group-say, '%s'%s\r\n", CCGRN(ch, C_NRM), argument, CCNRM(ch, C_NRM));
         }
     }
 }
@@ -126,7 +130,11 @@ static void perform_tell(struct char_data *ch, struct char_data *vict, char *arg
 
 static int is_tell_ok(struct char_data *ch, struct char_data *vict)
 {
-    if (ch == vict) {
+    if (!ch)
+        WriteLogf("SYSERR: is_tell_ok called with no characters");
+    else if (!vict)
+        send_to_char(ch, "%s", CONFIG_NOPERSON);
+    else if (ch == vict) {
         send_to_char(ch, "You try to tell yourself something.\r\n");
     }
     else if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOTELL)) {
@@ -158,7 +166,7 @@ static int is_tell_ok(struct char_data *ch, struct char_data *vict)
 ACMD(do_tell)
 {
     struct char_data *vict = NULL;
-    char buf[MAX_INPUT_LENGTH], buf2[MAX_INPUT_LENGTH];
+    char buf[MAX_INPUT_LENGTH + 25], buf2[MAX_INPUT_LENGTH];    // +25 to make room for constants
 
     half_chop(argument, buf, buf2);
 
@@ -171,7 +179,6 @@ ACMD(do_tell)
         // getpid() is not portable
         send_to_char(ch, "Sorry, that is not available in the windows port.\r\n");
 #else   // all other configurations
-        int i;
         char word[MAX_INPUT_LENGTH], *p, *q;
 
         if (last_webster_teller != -1L) {
@@ -190,7 +197,7 @@ ACMD(do_tell)
             if ((LOWER(*p) <= 'z' && LOWER(*p) >= 'a') || (*p == '+') || (*p == '-')) {
                 *q++ = *p;
             }
-        }
+        }  // for (p ...
 
         *q = '\0';
 
@@ -212,6 +219,9 @@ ACMD(do_tell)
         send_to_char(ch, "%s", CONFIG_NOPERSON);
     }
     else if (is_tell_ok(ch, vict)) {
+        if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+            parse_at(buf2);
+        }
         perform_tell(ch, vict, buf2);
     }
 }
@@ -244,9 +254,12 @@ ACMD(do_reply)
         }
 
         if (!tch) {
-            send_to_char(ch, "They are no longer playing.\r\n");
+            send_to_char(ch, "That player is no longer here.\r\n");
         }
         else if (is_tell_ok(ch, tch)) {
+            if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+                parse_at(argument);
+            }
             perform_tell(ch, tch, argument);
         }
     }
@@ -292,6 +305,10 @@ ACMD(do_spec_comm)
     }
     else {
         char buf1[MAX_STRING_LENGTH];
+
+        if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+            parse_at(buf2);
+        }
 
         snprintf(buf1, sizeof(buf1), "$n %s you, '%s'", action_plur, buf2);
         act(buf1, FALSE, ch, 0, vict, TO_VICT);
@@ -419,7 +436,7 @@ ACMD(do_page)
                     if (STATE(d) == CON_PLAYING && d->character) {
                         act(buf, FALSE, ch, 0, d->character, TO_VICT);
                     }
-                }
+                }  // for (d ...
             }
             else {
                 send_to_char(ch, "You will never be godly enough to do that!\r\n");
@@ -452,8 +469,7 @@ ACMD(do_gen_comm)
     bool emoting = FALSE;
 
     // Array of flags which must _not_ be set in order for comm to be heard.
-    int channels[] =
-    {
+    int channels[] = {
         0,
         PRF_NOSHOUT,
         PRF_NOGOSS,
@@ -463,8 +479,7 @@ ACMD(do_gen_comm)
         0
     };
 
-    int hist_type[] =
-    {
+    int hist_type[] = {
         HIST_HOLLER,
         HIST_SHOUT,
         HIST_GOSSIP,
@@ -564,6 +579,10 @@ ACMD(do_gen_comm)
         send_to_char(ch, "%s", CONFIG_OK);
     }
     else {
+        if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+            parse_at(argument);
+        }
+
         snprintf(buf1, sizeof(buf1), "%sYou %s, '%s%s'%s", COLOR_LEV(ch) >= C_CMP ? color_on : "",
             com_msgs[subcmd][1], argument, COLOR_LEV(ch) >= C_CMP ? color_on : "", CCNRM(ch, C_CMP));
 
@@ -595,7 +614,7 @@ ACMD(do_gen_comm)
         snprintf(buf2, sizeof(buf2), "%s%s%s", (COLOR_LEV(i->character) >= C_NRM) ? color_on : "", buf1, KNRM);
         msg = act(buf2, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP);
         add_history(i->character, msg, hist_type[subcmd]);
-    }
+    }  // for (i ...
 }
 
 ACMD(do_qcomm)
@@ -612,6 +631,10 @@ ACMD(do_qcomm)
     else {
         char buf[MAX_STRING_LENGTH];
         struct descriptor_data *i;
+
+        if (CONFIG_SPECIAL_IN_COMM && legal_communication(argument)) {
+            parse_at(argument);
+        }
 
         if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_NOREPEAT)) {
             send_to_char(ch, "%s", CONFIG_OK);
@@ -635,6 +658,6 @@ ACMD(do_qcomm)
             if (STATE(i) == CON_PLAYING && i != ch->desc && PRF_FLAGGED(i->character, PRF_QUEST)) {
                 act(buf, 0, ch, 0, i->character, TO_VICT | TO_SLEEP);
             }
-        }
+        }  // for (i ...
     }
 }

@@ -53,17 +53,16 @@ ACMD(do_oasis_sedit)
     int number = NOWHERE, save = 0;
     shop_rnum real_num;
     struct descriptor_data *d;
-    char *buf3;
     char buf1[MAX_INPUT_LENGTH];
     char buf2[MAX_INPUT_LENGTH];
 
     // No building as a mob or while being forced.
-    if (IS_NPC(ch) || !ch->desc || STATE(ch->desc) != CON_PLAYING) {
+    if (IS_NPC(ch) || !ch->desc || (STATE(ch->desc) != CON_PLAYING)) {
         return;
     }
 
     // Parse any arguments.
-    buf3 = two_arguments(argument, buf1, buf2);
+    two_arguments(argument, buf1, buf2);
 
     if (!*buf1) {
         send_to_char(ch, "Specify a shop VNUM to edit.\r\n");
@@ -101,6 +100,10 @@ ACMD(do_oasis_sedit)
     if (number == NOWHERE) {
         number = atoi(buf1);
     }
+    if (number < IDXTYPE_MIN || number > IDXTYPE_MAX) {
+        send_to_char(ch, "That shop VNUM can't exist.\r\n");
+        return;
+    }
 
     // Check that the shop isn't already being edited.
     for (d = descriptor_list; d; d = d->next) {
@@ -121,6 +124,7 @@ ACMD(do_oasis_sedit)
         mudlog(BRF, LVL_IMMORT, TRUE,
             "SYSERR: do_oasis_sedit: Player already had olc structure.");
         free(d->olc);
+        d->olc = NULL;
     }
 
     CREATE(d->olc, struct oasis_olc_data, 1);
@@ -174,7 +178,7 @@ ACMD(do_oasis_sedit)
     act("$n starts using OLC.", TRUE, d->character, 0, 0, TO_ROOM);
     SET_BIT_AR(PLR_FLAGS(ch), PLR_WRITING);
 
-    mudlog(CMP, LVL_IMMORT, TRUE, "OLC: %s starts editing zone %d allowed zone %d",
+    mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "OLC: %s starts editing zone %d allowed zone %d",
         GET_NAME(ch), zone_table[OLC_ZNUM(d)].number, GET_OLC_ZONE(ch));
 }
 
@@ -261,10 +265,10 @@ static void sedit_compact_rooms_menu(struct descriptor_data *d)
     clear_screen(d);
     for (i = 0; S_ROOM(shop, i) != NOWHERE; i++) {
         if (real_room(S_ROOM(shop, i)) != NOWHERE) {
-            write_to_output(d, "%2d - [@c%5d@n] - @y%s@n\r\n", i, S_ROOM(shop, i), world[real_room(S_ROOM(shop, i))].name);
+            write_to_output(d, "%2d - [@\t%5d\tn] - \ty%s\tn\r\n", i, S_ROOM(shop, i), world[real_room(S_ROOM(shop, i))].name);
         }
         else {
-            write_to_output(d, "%2d - [@R!Removed Room!@n]\r\n", i);
+            write_to_output(d, "%2d - [\tR!Removed Room!\tn]\r\n", i);
         }
     }  // for (i ...
     write_to_output(d, "\r\n"
@@ -323,7 +327,7 @@ static void sedit_namelist_menu(struct descriptor_data *d)
         write_to_output(d, "%2d - %s%15s%s - %s%s%s\r\n", i, cyn,
             item_types[S_BUYTYPE(shop, i)], nrm, yel,
             S_BUYWORD(shop, i) ? S_BUYWORD(shop, i) : "<None>", nrm);
-    }
+    }  // for (i ...
     write_to_output(d, "\r\n"
         "%sA%s) Add a new entry.\r\n"
         "%sD%s) Delete an entry.\r\n"
@@ -343,7 +347,7 @@ static void sedit_shop_flags_menu(struct descriptor_data *d)
     for (i = 0; i < NUM_SHOP_FLAGS; i++) {
         write_to_output(d, "%s%2d%s) %-20.20s   %s", grn, i + 1, nrm, shop_bits[i],
             !(++count % 2) ? "\r\n" : "");
-    }
+    }  // for (i ...
     sprintbit(S_BITVECTOR(OLC_SHOP(d)), shop_bits, bits, sizeof(bits));
     write_to_output(d, "\r\nCurrent Shop Flags : %s%s%s\r\nEnter choice : ",
         cyn, bits, nrm);
@@ -360,7 +364,7 @@ static void sedit_no_trade_menu(struct descriptor_data *d)
     for (i = 0; i < NUM_TRADERS; i++) {
         write_to_output(d, "%s%2d%s) %-20.20s   %s", grn, i + 1, nrm, trade_letters[i],
             !(++count % 2) ? "\r\n" : "");
-    }
+    }  // for (i ...
     sprintbit(S_NOTRADE(OLC_SHOP(d)), trade_letters, bits, sizeof(bits));
     write_to_output(d, "\r\nCurrently won't trade with: %s%s%s\r\n"
         "Enter choice : ", cyn, bits, nrm);
@@ -379,7 +383,7 @@ static void sedit_types_menu(struct descriptor_data *d)
     for (i = 0; i < NUM_ITEM_TYPES; i++) {
         write_to_output(d, "%s%2d%s) %s%-20s%s  %s", grn, i, nrm, cyn, item_types[i],
             nrm, !(++count % 3) ? "\r\n" : "");
-    }
+    }  // for (i ...
     write_to_output(d, "%sEnter choice : ", nrm);
     OLC_MODE(d) = SEDIT_TYPE_MENU;
 }
@@ -400,11 +404,11 @@ static void sedit_disp_menu(struct descriptor_data *d)
     sprintbit(S_NOTRADE(shop), trade_letters, buf1, sizeof(buf1));
     sprintbit(S_BITVECTOR(shop), shop_bits, buf2, sizeof(buf2));
     write_to_output(d,
-        "-- Shop Number : [%s%d%s]\r\n"
-        "%s0%s) Keeper      : [%s%d%s] %s%s\r\n"
-        "%s1%s) Open 1      : %s%4d%s          %s2%s) Close 1     : %s%4d\r\n"
-        "%s3%s) Open 2      : %s%4d%s          %s4%s) Close 2     : %s%4d\r\n"
-        "%s5%s) Sell rate   : %s%1.2f%s          %s6%s) Buy rate    : %s%1.2f\r\n"
+        "-- Shop Number        : [%s%d%s]\r\n"
+        "%s0%s) Keeper         : [%s%d%s] %s%s\r\n"
+        "%s1%s) Open 1         : %s%4d%s          %s2%s) Close 1     : %s%4d\r\n"
+        "%s3%s) Open 2         : %s%4d%s          %s4%s) Close 2     : %s%4d\r\n"
+        "%s5%s) Sell rate      : %s%1.2f%s        %s6%s) Buy rate    : %s%1.2f\r\n"
         "%s7%s) Keeper no item : %s%s\r\n"
         "%s8%s) Player no item : %s%s\r\n"
         "%s9%s) Keeper no cash : %s%s\r\n"
@@ -471,8 +475,9 @@ void sedit_parse(struct descriptor_data *d, char *arg)
                 sedit_save_to_disk(real_zone_by_thing(OLC_NUM(d)));
                 write_to_output(d, "Shop saved to disk.\r\n");
             }
-            else
+            else {
                 write_to_output(d, "Shop saved to memory.\r\n");
+            }
 
             cleanup_olc(d, CLEANUP_STRUCTS);
             return;
@@ -712,7 +717,6 @@ void sedit_parse(struct descriptor_data *d, char *arg)
 
         // Numerical responses.
     case SEDIT_KEEPER:
-        i = atoi(arg);
         if ((i = atoi(arg)) != -1) {
             if ((i = real_mobile(i)) == NOBODY) {
                 write_to_output(d, "That mobile does not exist, try again : ");

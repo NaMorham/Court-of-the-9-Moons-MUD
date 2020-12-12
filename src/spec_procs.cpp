@@ -8,8 +8,10 @@
 *  CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
 **************************************************************************/
 
-/* For more examples:
- * ftp://ftp.circlemud.org/pub/CircleMUD/contrib/snippets/specials */
+/*
+ * For more examples:
+ * ftp://ftp.circlemud.org/pub/CircleMUD/contrib/snippets/specials
+ */
 
 #include "conf.h"
 #include "sysdep.h"
@@ -108,16 +110,16 @@ const char *prac_types[] = {
 #define MIN_PER_PRAC    2    // min percent gain in skill per practice
 #define PRAC_TYPE       3    // should it say 'spell' or 'skill'?
 
-#define LEARNED(ch) (prac_params[LEARNED_LEVEL][(int)GET_CLASS(ch)])
-#define MINGAIN(ch) (prac_params[MIN_PER_PRAC][(int)GET_CLASS(ch)])
-#define MAXGAIN(ch) (prac_params[MAX_PER_PRAC][(int)GET_CLASS(ch)])
-#define SPLSKL(ch) (prac_types[prac_params[PRAC_TYPE][(int)GET_CLASS(ch)]])
+#define LEARNED(ch)     (prac_params[LEARNED_LEVEL][(int)GET_CLASS(ch)])
+#define MINGAIN(ch)     (prac_params[MIN_PER_PRAC][(int)GET_CLASS(ch)])
+#define MAXGAIN(ch)     (prac_params[MAX_PER_PRAC][(int)GET_CLASS(ch)])
+#define SPLSKL(ch)      (prac_types[prac_params[PRAC_TYPE][(int)GET_CLASS(ch)]])
 
 void list_skills(struct char_data *ch)
 {
     const char *overflow = "\r\n**OVERFLOW**\r\n";
-    int i, sortpos;
-    size_t len = 0, nlen;
+    int i, sortpos, ret;
+    size_t len = 0;
     char buf2[MAX_STRING_LENGTH];
 
     len = snprintf(buf2, sizeof(buf2), "You have %d practice session%s remaining.\r\n"
@@ -127,11 +129,11 @@ void list_skills(struct char_data *ch)
     for (sortpos = 1; sortpos <= MAX_SKILLS; sortpos++) {
         i = spell_sort_info[sortpos];
         if (GET_LEVEL(ch) >= spell_info[i].min_level[(int)GET_CLASS(ch)]) {
-            nlen = snprintf(buf2 + len, sizeof(buf2) - len, "%-20s %s\r\n", spell_info[i].name, how_good(GET_SKILL(ch, i)));
-            if (((len + nlen) >= sizeof(buf2)) || (nlen < 0)) {
+            ret = snprintf(buf2 + len, sizeof(buf2) - len, "%-20s %s\r\n", spell_info[i].name, how_good(GET_SKILL(ch, i)));
+            if ((ret < 0) || ((len + ret) >= sizeof(buf2))) {
                 break;
             }
-            len += nlen;
+            len += ret;
         }
     }  // for (sortpos ...
     if (len >= sizeof(buf2)) {
@@ -162,8 +164,8 @@ SPECIAL(guild)
 
     skill_num = find_skill_num(argument);
 
-    if (skill_num < 1 ||
-        GET_LEVEL(ch) < spell_info[skill_num].min_level[(int)GET_CLASS(ch)]) {
+    if ((skill_num < 1) ||
+        (GET_LEVEL(ch) < spell_info[skill_num].min_level[(int)GET_CLASS(ch)])) {
         send_to_char(ch, "You do not know of that %s.\r\n", SPLSKL(ch));
         return (TRUE);
     }
@@ -216,7 +218,7 @@ SPECIAL(dump)
             gain_exp(ch, value);
         }
         else {
-            GET_GOLD(ch) += value;
+            increase_gold(ch, value);
         }
     }
     return (TRUE);
@@ -228,18 +230,18 @@ SPECIAL(mayor)
 
     const char open_path[] =
         "W3a3003b33000c111d0d111Oe333333Oe22c222112212111a1S.";
-        // "W3a3003333400500c111d000d111Oe333333Oe222c224225111Bw2212111a1S";
-        // "W3a30033333b333400500c111d000d1111Oe3333333Oe222c224225111Bw112212111a1S";
+    // "W3a3003333400500c111d000d111Oe333333Oe222c224225111Bw2212111a1S";
+    // "W3a30033333b333400500c111d000d1111Oe3333333Oe222c224225111Bw112212111a1S";
 
     const char close_path[] =
         "W3a3003b33000c111d0d111CE333333CE22c222112212111a1S.";
-        // "W3a3003333400500c111d000d111CE333333CE222c224225111Bw2212111a1S";
-        // "W3a30033333b333400500c111d000d1111CE3333333CE222c224225111Bw112212111a1S";
+    // "W3a3003333400500c111d000d111CE333333CE222c224225111Bw2212111a1S";
+    // "W3a30033333b333400500c111d000d1111CE3333333CE222c224225111Bw112212111a1S";
 
     static const char *path = NULL;
     static int path_index;
     static bool move = FALSE;
-    char c;
+    char c = 0;
 
     if (!move) {
         if (time_info.hours == 6) {
@@ -253,7 +255,8 @@ SPECIAL(mayor)
             path_index = 0;
         }
     }
-    if (cmd || !move || (GET_POS(ch) < POS_SLEEPING) || (GET_POS(ch) == POS_FIGHTING)) {
+    if (cmd || !move || (GET_POS(ch) < POS_SLEEPING) ||
+        (GET_POS(ch) == POS_FIGHTING)) {
         return (FALSE);
     }
 
@@ -361,8 +364,8 @@ static void npc_steal(struct char_data *ch, struct char_data *victim)
         // Steal some gold coins
         gold = (GET_GOLD(victim) * rand_number(1, 10)) / 100;
         if (gold > 0) {
-            GET_GOLD(ch) += gold;
-            GET_GOLD(victim) -= gold;
+            increase_gold(ch, gold);
+            decrease_gold(victim, gold);
         }
     }
 }
@@ -372,11 +375,11 @@ static void npc_steal(struct char_data *ch, struct char_data *victim)
  */
 SPECIAL(snake)
 {
-    if (cmd || GET_POS(ch) != POS_FIGHTING || !FIGHTING(ch)) {
+    if (cmd || (GET_POS(ch) != POS_FIGHTING) || !FIGHTING(ch)) {
         return (FALSE);
     }
 
-    if (IN_ROOM(FIGHTING(ch)) != IN_ROOM(ch) || rand_number(0, GET_LEVEL(ch)) != 0) {
+    if ((IN_ROOM(FIGHTING(ch)) != IN_ROOM(ch)) || (rand_number(0, GET_LEVEL(ch)) != 0)) {
         return (FALSE);
     }
 
@@ -390,12 +393,12 @@ SPECIAL(thief)
 {
     struct char_data *cons;
 
-    if (cmd || GET_POS(ch) != POS_STANDING) {
+    if (cmd || (GET_POS(ch) != POS_STANDING)) {
         return (FALSE);
     }
 
     for (cons = world[IN_ROOM(ch)].people; cons; cons = cons->next_in_room) {
-        if (!IS_NPC(cons) && GET_LEVEL(cons) < LVL_IMMORT && !rand_number(0, 4)) {
+        if (!IS_NPC(cons) && (GET_LEVEL(cons) < LVL_IMMORT) && !rand_number(0, 4)) {
             npc_steal(ch, cons);
             return (TRUE);
         }
@@ -414,13 +417,13 @@ SPECIAL(magic_user)
 
     // pseudo-randomly choose someone in the room who is fighting me
     for (vict = world[IN_ROOM(ch)].people; vict; vict = vict->next_in_room) {
-        if (FIGHTING(vict) == ch && !rand_number(0, 4)) {
+        if ((FIGHTING(vict) == ch) && !rand_number(0, 4)) {
             break;
         }
     }  // for (vict ...
 
     // if I didn't pick any of those, then just slam the guy I'm fighting
-    if (vict == NULL && IN_ROOM(FIGHTING(ch)) == IN_ROOM(ch)) {
+    if ((vict == NULL) && (IN_ROOM(FIGHTING(ch)) == IN_ROOM(ch))) {
         vict = FIGHTING(ch);
     }
 
@@ -429,15 +432,15 @@ SPECIAL(magic_user)
         return (TRUE);
     }
 
-    if (GET_LEVEL(ch) > 13 && rand_number(0, 10) == 0) {
+    if ((GET_LEVEL(ch) > 13) && (rand_number(0, 10) == 0)) {
         cast_spell(ch, vict, NULL, SPELL_POISON);
     }
 
-    if (GET_LEVEL(ch) > 7 && rand_number(0, 8) == 0) {
+    if ((GET_LEVEL(ch) > 7) && (rand_number(0, 8) == 0)) {
         cast_spell(ch, vict, NULL, SPELL_BLINDNESS);
     }
 
-    if (GET_LEVEL(ch) > 12 && rand_number(0, 12) == 0) {
+    if ((GET_LEVEL(ch) > 12) && (rand_number(0, 12) == 0)) {
         if (IS_EVIL(ch)) {
             cast_spell(ch, vict, NULL, SPELL_ENERGY_DRAIN);
         }
@@ -505,7 +508,12 @@ SPECIAL(guild_guard)
     // find out what direction they are trying to go
     for (direction = 0; direction < NUM_OF_DIRS; direction++) {
         if (!strcmp(cmd_info[cmd].command, dirs[direction])) {
-            break;
+            for (direction = 0; direction < DIR_COUNT; direction++) {
+                if (!strcmp(cmd_info[cmd].command, dirs[direction]) ||
+                    !strcmp(cmd_info[cmd].command, autoexits[direction])) {
+                    break;
+                }
+            }  // for (direction ...
         }
     }  // for (direction ...
 
@@ -521,14 +529,14 @@ SPECIAL(guild_guard)
         }
 
         // Allow the people of the guild through.
-        if (!IS_NPC(ch) && GET_CLASS(ch) == guild_info[i].pc_class) {
+        if (!IS_NPC(ch) && (GET_CLASS(ch) == guild_info[i].pc_class)) {
             continue;
         }
 
         send_to_char(ch, "%s", buf);
         act(buf2, FALSE, ch, 0, 0, TO_ROOM);
         return (TRUE);
-    }
+    }  // for (i ...
     return (FALSE);
 }
 
@@ -552,6 +560,9 @@ SPECIAL(puff)
         return (TRUE);
     case 3:
         do_say(ch, strcpy(actbuf, "I've got a peaceful, easy feeling."), 0, 0); // strcpy: OK
+        return (TRUE);
+    case 4:
+        do_say(ch, strcpy(actbuf, "I miss the sea."), 0, 0); // strcpy: OK
         return (TRUE);
     default:
         return (FALSE);
@@ -580,6 +591,7 @@ SPECIAL(fido)
         extract_obj(i);
         return (TRUE);
     }  // for (i ...
+
     return (FALSE);
 }
 
@@ -595,7 +607,7 @@ SPECIAL(janitor)
         if (!CAN_WEAR(i, ITEM_WEAR_TAKE)) {
             continue;
         }
-        if (GET_OBJ_TYPE(i) != ITEM_DRINKCON && GET_OBJ_COST(i) >= 15) {
+        if ((GET_OBJ_TYPE(i) != ITEM_DRINKCON) && (GET_OBJ_COST(i) >= 15)) {
             continue;
         }
         act("$n picks up some trash.", FALSE, ch, 0, 0, TO_ROOM);
@@ -636,7 +648,7 @@ SPECIAL(cityguard)
             return (TRUE);
         }
 
-        if (FIGHTING(tch) && GET_ALIGNMENT(tch) < max_evil && (IS_NPC(tch) || IS_NPC(FIGHTING(tch)))) {
+        if (FIGHTING(tch) && (GET_ALIGNMENT(tch) < max_evil) && (IS_NPC(tch) || IS_NPC(FIGHTING(tch)))) {
             max_evil = GET_ALIGNMENT(tch);
             evil = tch;
         }
@@ -645,7 +657,7 @@ SPECIAL(cityguard)
             spittle = tch;
             min_cha = GET_CHA(tch);
         }
-    }
+    }  // for (tch ...
 
     if (evil && GET_ALIGNMENT(FIGHTING(evil)) >= 0) {
         act("$n screams 'PROTECT THE INNOCENT!  BANZAI!  CHARGE!  ARARARAGGGHH!'", FALSE, ch, 0, 0, TO_ROOM);
@@ -657,8 +669,9 @@ SPECIAL(cityguard)
     if (spittle && !rand_number(0, 9)) {
         static int spit_social;
 
-        if (!spit_social)
+        if (!spit_social) {
             spit_social = find_command("spit");
+        }
 
         if (spit_social > 0) {
             char spitbuf[MAX_NAME_LENGTH + 1];
@@ -703,7 +716,7 @@ SPECIAL(pet_shops)
             send_to_char(ch, "You don't have enough gold!\r\n");
             return (TRUE);
         }
-        GET_GOLD(ch) -= PET_PRICE(pet);
+        decrease_gold(ch, PET_PRICE(pet));
 
         pet = read_mobile(GET_MOB_RNUM(pet), REAL);
         GET_EXP(pet) = 0;
@@ -762,8 +775,8 @@ SPECIAL(bank)
             send_to_char(ch, "You don't have that many coins!\r\n");
             return (TRUE);
         }
-        GET_GOLD(ch) -= amount;
-        GET_BANK_GOLD(ch) += amount;
+        decrease_gold(ch, amount);
+        increase_bank(ch, amount);
         send_to_char(ch, "You deposit %d coins.\r\n", amount);
         act("$n makes a bank transaction.", TRUE, ch, 0, FALSE, TO_ROOM);
         return (TRUE);
@@ -777,8 +790,8 @@ SPECIAL(bank)
             send_to_char(ch, "You don't have that many coins deposited!\r\n");
             return (TRUE);
         }
-        GET_GOLD(ch) += amount;
-        GET_BANK_GOLD(ch) -= amount;
+        increase_gold(ch, amount);
+        decrease_bank(ch, amount);
         send_to_char(ch, "You withdraw %d coins.\r\n", amount);
         act("$n makes a bank transaction.", TRUE, ch, 0, FALSE, TO_ROOM);
         return (TRUE);

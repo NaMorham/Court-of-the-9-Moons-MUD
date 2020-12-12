@@ -1,40 +1,137 @@
 TbaMUD is currently being developed by The Builder Academy. If you need any
 help, find any bugs, or have ideas for improvement please stop by TBA at 
 telnet://tbamud.com:9091 or email rumble@tbamud.com --Rumble
-Major Additions:
-OasisOLC 2.0.6
-trigedit (DG Scripts) 1.0.14
-hedit (help editor)
-cedit (config editor)
-tedit (text file editor)
-aedit (socials editor)
-qedit (quest editor)
-ANSI Color
-ASCII Player Files 3.0.1
-128bit Support
-Copyover
-automap (ASCII map generator)
-buildwalk (walk a new zone to link rooms)
-tell m-w (an in game dictionary lookup)
-gemote (emotes over gossip)
-history (of all communications, tells, gossip, etc.)
-file (allows imms to view syslog, errors, etc.)
-pagelength (custom pagelength setting)
-showvnums (roomflags that includes mobs, objs, triggers)
-zpurge (purge an entire zone)
-zcheck (head builder tool to check balancing)
-mob autoroll (standard values set on mob level entry)
-checkload (list where a mob/obj/trg is loaded)
-Auto Toggles (loot, gold, split, sac, assist, map, door, key)
-Hidden mob/obj
-mob/obj stacking
-hindex
-helpcheck
-OLC copy and delete options.
-export (QQ's a zone into a tarball)
-Xlist (mlist, olist, rlist, zlist, slist, tlist, qlist)
-(lots of major bugfixes too)
 @
+Development moved to Github in 2013, this document is no longer updated:
+https://github.com/tbamud/tbamud
+Changelog also available on Github:
+https://github.com/tbamud/tbamud/commits/master
+Changes prior to Github transition:
+[Jun 21 2013] - Vatiken
+  Added 'toupper' as a dg_script command to capitalize the first letter
+  of a string.
+[Apr 11 2013] - Rumble
+  Added color parsing to wiznet.
+[Apr 10 2013] - Rumble
+  Another wiznet fix to add returns for add_history.
+[Apr 10 2013] - Fizban
+  Fixed wiznet so it is viewable in OLC again.
+[Apr 09 2013] - Rumble
+  Fixed warning in genzon.c checking bottom_of_zone. (Thanks Fizban)
+[Apr 08 2013] - Rumble
+  Fixed color bleeding in level range menu. (Thanks Silvaria)
+  Fixed typos, updated help.
+[Apr 03 2013] - Rumble
+  Fixed typo in Whirlwind
+  Added color to poofs.
+[Mar 02 2013] - Rumble
+  Updated World and files for 3.64 release.
+[Feb 12 2013] - Vatiken
+  feature: New group system.
+  feature: Room events.
+  bug: Many small bug fixes.
+[Sep 08 2012] - Rumble
+  added another example to doc/syserr.txt
+  Added a !NPC check to can_take_object. It was spamming a "mob using player data SYSERR". 
+This means mobs do not have a max weight carrying capacity anymore. I think this is a good 
+thing because I've seen people stumped when mob triggers fail due to weight limitations. 
+But it could be unbalancing on some MUDs since pets could then carry unlimited gear.
+[Aug 22 2012] - Rumble
+  bug: moved cedit load_config of no_mort_to_immort to its proper place. (thanks Liko)
+[Aug 12 2012] - Vatiken
+  bug: fixed typo in dg_variables.c (Thanks Zusuk)
+[Aug 08 2012] - Vatiken
+  bug: fixed another copyover issue that resulted in dying character respawning at corpse.
+  bug: fixed an issue where a PC could be remembered after dying. (Thanks Zusuk)
+  improve: cleaned up some code and did some colour adjustments.
+  feature: new debug toggle with 4 settings.
+  bug: fixed an issue with hedit that prevented editing of certain helpfiles.
+  feature: added message editor for combat messages.
+  bug: fixed a small bug with colour codes in interpreter.c.
+  bug: fixed crash bug in oasis_lists.c caused by buffer overflows.
+  bug: fixed issue with certain clients that were adding extra new-lines.
+  bug: fixed crash bug in improved editor.
+  improve: cedit toggle for colour codes in comm channels.
+  typo: Fixed typo in do_scan.
+[May 28 2012] - Vatiken
+  bug: Fixed a MAJOR duping issue.
+[May 24 2012] - Vatiken
+  improve: prefedit now allows toggling of "this" session protocols
+tbaMUD 3.63
+[Apr 04 2012] - Rumble
+  Updated World and files for 3.63 release.
+[Mar 31 2012] - Vatiken
+  improve: updated some of the documents.
+  feature: added the 'whirlwind' skill as a event/list template
+  feature: protocol system now can be deactivated thru cedit
+  improve: 256 to ANSI conversions changed to reflect the new colouring scheme
+  feature: added blink, underline, bold, reverse and '@' to the protocol system
+[Mar 25 2012] - Vatiken
+  feature: whois now lists protocol informations when used by an immortal
+  improve: proc_colors() has been removed, and tbaMUD has been made backwards compatible for
+    systems still using '@' symbols for colour.
+  feature: added underline, bold, reverse, and flashing text to the protocol system.
+  bug: Fixed a glitch within protocol.h that had defines differing from similar tbaMUD defines.
+  feature: added oset() to allow modification of individual objects through commands or dg_scripts.
+  improve: Adjusted protocolinput() and processinput() to be more efficient.
+  bug: Fixed major leak in the history system
+[Feb 12 2012] - Vatiken
+  bug: do_score, changed level 30 to LVL_IMMORT
+  bug: the NOHASSLE flag allows imms to carry unlimited weight
+  idea: dexterity now affects whether a character gets the first hit
+  idea: advance to immortal now sets hunger/thirst to -1
+  feature: color is now an option on do_show, which shows all 256 color options
+  feature: active lists has now been added to do_show, under 'stats'
+  feature: added KaVir's protocol snippet
+  bug: protocol snippet should now properly detect xterm color
+  bug: protocol settings should now be preserved after copyover
+  idea: ibt now time stamps when something is submitted
+  feature: added a new MUD event system (mud_event.c)
+  feature: added a display_usage() event, which is basically an event/list tester.
+  feature: added two new parsing commands to modify.c for converting tabs to @ and back
+  feature: added a new MUD list system (lists.c)
+  improve: qedit now uses '\t' instead of '@' to show color
+  improve: sedit now uses '\t' instead of '@' to show color
+  issues: may be bugs with strfrmt() while converting '@' to '\t'
+[Feb 04 2012] - Vatiken
+  Feature: Added 'Experience' and 'Thaco' to the do_show() command.
+  Bug Fix: Nipped a bug where shopkeepers weren't sending tells.
+  Visuals: Fixed a small glitch in redit where things weren't lining up right with extra dirs activated.
+  Made olist, mlist, and rlist, page_string() compatible.
+  Bug Fix: Editing extra directions is now doable from redit.
+  MAJOR: Reverted back to 3.62 Revision 241, followed up by backporting bug fixes and some of the positive changes implemented by Jamdog. Not coming along for the ride currently are the new mail system, housing system and the admin level system.
+[Nov 06 2010] - Jamdog
+  Added HappyHour feature
+  Added game_info function for sending global messages to all players
+  Added ability to change player/mob level or class in scripts 
+  The medit mob flags menu now only shows valid flags (thanks Kyle)
+  Skillset now warns imms when the player shouldn't have a skill (thanks Rumble)
+  Fly spell added!
+  Added recent command
+  Bug Fix: Now imms show on who list when editing IBT notes.
+[Nov 04 2010] - Jamdog
+  Bug-Fix: Converted affect flags in struct affected_type from 32-bit to 128-bit
+  Bug Fix: Players with too much gold now don't lose eq when renting
+  Bug Fix: Cured SYSERR when selecting an unimplemented obj type in oedit (thanks Rumble)
+  Bug Fix: Scan no longer shows the content of dark rooms (thanks Mirad)
+  Removed conf.h fron the SVN, as this is created by the configure script
+  Minor IBT system change for accurately finding who logged an IBT
+  Minor IBT change to list 'in-progress' IBT's in yellow
+  Bug Fix: Webster added to the util makefile for make all (wasn't compiling)
+  Update to webster code to hopefully fix 'tell m-w' bug
+  IBT's no longer read preceding spaces (body and notes), which inserts spaces every copyover
+[Nov 01 2010] - Rumble
+  Fixed do_scan crash due to exits to NOWHERE. (thanks Rhade)
+  Changed do_score experience tnl to list only mortals since LVL_IMMORT showed negative EXP.
+[Oct 30 2010] - Jamdog
+  Added ability for players to list/show their own ideas, bugs and typos (thanks Frenze)
+  Added more details to header for idea/bug/typo show command (thanks Parna)
+[Oct 20 2010] - Rumble
+  Fixed freeing of null pointers in ibt.c (thanks Stoneheart)
+[Sep 28 2010] - Rumble
+  Fixed a couple NPC accessing player data errors.
+  Fixed oedit extra desc's from always showing "Set" even if they weren't. (thanks Mirad)
+tbaMUD 3.62
 [Sep 19 2010] - Rumble
   Updated World and files for 3.62 release.
 [Sep 11 2010] - Rumble
@@ -1041,8 +1138,49 @@ CircleMUD 3.5
 - Added vnum and TRIG tags to everything, showvnums toggles it on/off.
 - Added keyword seperation when statting extra desc. [desk] [notes papers]
 - Added buildwalk and dig.
+Major Additions:
+OasisOLC 2.0.6
+trigedit (DG Scripts) 1.0.14
+hedit (help editor)
+cedit (config editor)
+tedit (text file editor)
+aedit (socials editor)
+qedit (quest editor)
+ANSI Color
+ASCII Player Files 3.0.1
+128bit Support
+Copyover
+automap (ASCII map generator)
+buildwalk (walk a new zone to link rooms)
+tell m-w (an in game dictionary lookup)
+gemote (emotes over gossip)
+history (of all communications, tells, gossip, etc.)
+file (allows imms to view syslog, errors, etc.)
+pagelength (custom pagelength setting)
+showvnums (roomflags that includes mobs, objs, triggers)
+zpurge (purge an entire zone)
+zcheck (head builder tool to check balancing)
+mob autoroll (standard values set on mob level entry)
+checkload (list where a mob/obj/trg is loaded)
+Auto Toggles (loot, gold, split, sac, assist, map, door, key)
+Hidden mob/obj
+mob/obj stacking
+hindex
+helpcheck
+OLC copy and delete options.
+export (QQ's a zone into a tarball)
+Xlist (mlist, olist, rlist, zlist, slist, tlist, qlist)
+(lots of major bugfixes too)
  
-Release history:
+tbaMUD Release history:
+tbaMUD 2019, January 2019
+tbaMUD 2018, January 2018
+Version 3.68 release: February, 2017
+Version 3.67 release: January, 2016
+Version 3.66 release: January, 2015
+Version 3.65 release: January, 2014
+Version 3.64 release: March, 2013
+Version 3.63 release: April, 2012
 Version 3.62 release: September, 2010
 Version 3.61 release: January, 2010
 Version 3.60 release: September, 2009

@@ -54,4 +54,4 @@ void    hcontrol_list_houses(struct char_data *ch, char *arg);
 ACMD(do_hcontrol);
 ACMD(do_house);
 
-#endif /* _HOUSE_H_ */
+#endif  // _HOUSE_H_

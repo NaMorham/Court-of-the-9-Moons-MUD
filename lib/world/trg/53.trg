@@ -4,7 +4,7 @@ Near Death Trap Fall - 5307~
 ~
 * Near Death Trap stuns actor
 wait 2 sec
-set stunned %actor.hitp% 
+set stunned %actor.hitp%
 %damage% %actor% %stunned%
 wait 2 sec
 %send% %actor% You somehow survive the fall.
@@ -45,7 +45,7 @@ switch %actor.level%
     dg_cast 'lightning bolt' %actor%
   break
   case 12
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 13
     dg_cast 'energy drain' %actor%
@@ -111,7 +111,7 @@ set actor %random.char%
 * only continue if an actor is defined.
 if %actor%
   * if they have lost more than half their hitpoints heal em
-  if %actor.hitp% < %actor.maxhitp% / 2 
+  if %actor.hitp% < %actor.maxhitp% / 2
     wait 1 sec
     say You are injured, let me help.
     wait 2 sec

@@ -30,24 +30,28 @@
 
 #define Z_KINGS_C 150
 
-// local, file scope restricted functions
-static mob_vnum castle_virtual(mob_vnum offset);
+/*
+ *  local, file scope restricted functions
+ */
+static mob_vnum  castle_virtual(mob_vnum offset);
 static room_rnum castle_real_room(room_vnum roomoffset);
 static struct char_data *find_npc_by_name(struct char_data *chAtChar, const char *pszName, int iLen);
-static int block_way(struct char_data *ch, int cmd, char *arg, room_vnum iIn_room, int iProhibited_direction);
-static int member_of_staff(struct char_data *chChar);
-static int member_of_royal_guard(struct char_data *chChar);
+static int      block_way(struct char_data *ch, int cmd, char *arg, room_vnum iIn_room, int iProhibited_direction);
+static int      member_of_staff(struct char_data *chChar);
+static int      member_of_royal_guard(struct char_data *chChar);
 static struct char_data *find_guard(struct char_data *chAtChar);
 static struct char_data *get_victim(struct char_data *chAtChar);
-static int banzaii(struct char_data *ch);
-static int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim);
-static int is_trash(struct obj_data *i);
-static void fry_victim(struct char_data *ch);
-static int castle_cleaner(struct char_data *ch, int cmd, int gripe);
-static int castle_twin_proc(struct char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname);
-static void castle_mob_spec(mob_vnum mobnum, SPECIAL(*specproc));
+static int      banzaii(struct char_data *ch);
+static int      do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim);
+static int      is_trash(struct obj_data *i);
+static void     fry_victim(struct char_data *ch);
+static int      castle_cleaner(struct char_data *ch, int cmd, int gripe);
+static int      castle_twin_proc(struct char_data *ch, int cmd, char *arg, int ctlnum, const char *twinname);
+static void     castle_mob_spec(mob_vnum mobnum, SPECIAL(*specproc));
 
-// Special procedures for Kings Castle by Pjotr. Coded by Sapowox.
+/*
+ *  Special procedures for Kings Castle by Pjotr. Coded by Sapowox.
+ */
 SPECIAL(CastleGuard);
 SPECIAL(James);
 SPECIAL(cleaning);
@@ -157,15 +161,15 @@ static int member_of_staff(struct char_data *chChar)
         return (TRUE);
     }
 
-    if (ch_num > castle_virtual(2) && ch_num < castle_virtual(15)) {
+    if ((ch_num > castle_virtual(2)) && (ch_num < castle_virtual(15))) {
         return (TRUE);
     }
 
-    if (ch_num > castle_virtual(15) && ch_num < castle_virtual(18)) {
+    if ((ch_num > castle_virtual(15)) && (ch_num < castle_virtual(18))) {
         return (TRUE);
     }
 
-    if (ch_num > castle_virtual(18) && ch_num < castle_virtual(30)) {
+    if ((ch_num > castle_virtual(18)) && (ch_num < castle_virtual(30))) {
         return (TRUE);
     }
 
@@ -186,15 +190,15 @@ static int member_of_royal_guard(struct char_data *chChar)
 
     ch_num = GET_MOB_VNUM(chChar);
 
-    if (ch_num == castle_virtual(3) || ch_num == castle_virtual(6)) {
+    if ((ch_num == castle_virtual(3)) || (ch_num == castle_virtual(6))) {
         return (TRUE);
     }
 
-    if (ch_num > castle_virtual(7) && ch_num < castle_virtual(12)) {
+    if ((ch_num > castle_virtual(7)) && (ch_num < castle_virtual(12))) {
         return (TRUE);
     }
 
-    if (ch_num > castle_virtual(23) && ch_num < castle_virtual(26)) {
+    if ((ch_num > castle_virtual(23)) && (ch_num < castle_virtual(26))) {
         return (TRUE);
     }
 
@@ -213,7 +217,7 @@ static struct char_data *find_npc_by_name(struct char_data *chAtChar, const char
         if (IS_NPC(ch) && !strncmp(pszName, ch->player.short_descr, iLen)) {
             return (ch);
         }
-    }
+    }  // for (ch ...
 
     return (NULL);
 }
@@ -230,7 +234,7 @@ static struct char_data *find_guard(struct char_data *chAtChar)
         if (!FIGHTING(ch) && member_of_royal_guard(ch)) {
             return (ch);
         }
-    }
+    }  // for (ch ...
 
     return (NULL);
 }
@@ -249,7 +253,7 @@ static struct char_data *get_victim(struct char_data *chAtChar)
         if (FIGHTING(ch) && member_of_staff(FIGHTING(ch))) {
             iNum_bad_guys++;
         }
-    }
+    }  // for (ch ...
 
     if (!iNum_bad_guys) {
         return (NULL);
@@ -276,7 +280,7 @@ static struct char_data *get_victim(struct char_data *chAtChar)
         }
 
         return (ch);
-    }
+    }  // for (ch ...
 
     return (NULL);
 }
@@ -289,7 +293,7 @@ static int banzaii(struct char_data *ch)
 {
     struct char_data *chOpponent;
 
-    if (!AWAKE(ch) || GET_POS(ch) == POS_FIGHTING || !(chOpponent = get_victim(ch))) {
+    if (!AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING) || !(chOpponent = get_victim(ch))) {
         return (FALSE);
     }
 
@@ -308,16 +312,16 @@ static int do_npc_rescue(struct char_data *ch_hero, struct char_data *ch_victim)
 
     for (ch_bad_guy = world[IN_ROOM(ch_hero)].people;
         ch_bad_guy && (FIGHTING(ch_bad_guy) != ch_victim);
-        ch_bad_guy = ch_bad_guy->next_in_room) { } // find our rescuee
+        ch_bad_guy = ch_bad_guy->next_in_room) {
+    } // find our rescuee
 
     // NO WAY I'll rescue the one I'm fighting!
-    if (!ch_bad_guy || ch_bad_guy == ch_hero) {
+    if (!ch_bad_guy || (ch_bad_guy == ch_hero)) {
         return (FALSE);
     }
 
     act("You bravely rescue $N.\r\n", FALSE, ch_hero, 0, ch_victim, TO_CHAR);
-    act("You are rescued by $N, your loyal friend!\r\n",
-        FALSE, ch_victim, 0, ch_hero, TO_CHAR);
+    act("You are rescued by $N, your loyal friend!\r\n", FALSE, ch_victim, 0, ch_hero, TO_CHAR);
     act("$n heroically rescues $N.", FALSE, ch_hero, 0, ch_victim, TO_NOTVICT);
 
     if (FIGHTING(ch_bad_guy)) {
@@ -369,7 +373,7 @@ static int is_trash(struct obj_data *i)
         return (FALSE);
     }
 
-    if (GET_OBJ_TYPE(i) == ITEM_DRINKCON || GET_OBJ_COST(i) <= 10) {
+    if ((GET_OBJ_TYPE(i) == ITEM_DRINKCON) || (GET_OBJ_COST(i) <= 10)) {
         return (TRUE);
     }
 
@@ -441,7 +445,7 @@ SPECIAL(king_welmar)
     };
 
     const char bedroom_path[] = "s33004o1c1S.";
-    const char throne_path[] = "W3o3cG52211rg.";
+    const char throne_path[]  = "W3o3cG52211rg.";
     const char monolog_path[] = "ABCDPPPP.";
 
     static const char *path;
@@ -682,7 +686,7 @@ static int castle_twin_proc(struct char_data *ch, int cmd, char *arg, int ctlnum
     }
 
     if ((twin = find_npc_by_name(ch, twinname, strlen(twinname))) != NULL) {
-        if (FIGHTING(twin) && 2 * GET_HIT(twin) < GET_HIT(ch)) {
+        if (FIGHTING(twin) && ((2 * GET_HIT(twin)) < GET_HIT(ch))) {
             do_npc_rescue(ch, twin);
         }
     }
@@ -711,7 +715,7 @@ static int castle_cleaner(struct char_data *ch, int cmd, int gripe)
 {
     struct obj_data *i;
 
-    if (cmd || !AWAKE(ch) || GET_POS(ch) == POS_FIGHTING) {
+    if (cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING)) {
         return (FALSE);
     }
 
@@ -728,7 +732,7 @@ static int castle_cleaner(struct char_data *ch, int cmd, int gripe)
         obj_from_room(i);
         obj_to_char(i, ch);
         return (TRUE);
-    }
+    }  // for (i ...
 
     return (FALSE);
 }
@@ -776,7 +780,7 @@ SPECIAL(peter)
 {
     struct char_data *ch_guard = NULL;
 
-    if (cmd || !AWAKE(ch) || GET_POS(ch) == POS_FIGHTING) {
+    if (cmd || !AWAKE(ch) || (GET_POS(ch) == POS_FIGHTING)) {
         return (FALSE);
     }
 

@@ -19,8 +19,7 @@ Small Fish (8301) Schooling~
 0 h 100
 ~
 if %actor.vnum% == 8301
-* use actor.name here since it will resolve to a UID if we do not
-  follow %actor.name%
+  follow small
   detach all %self.id%
 end
 ~
@@ -253,7 +252,7 @@ Near Death Trap Davy Jones' Locker - 8386~
 ~
 * Near Death Trap stuns actor
 wait 1 sec
-set stunned %actor.hitp% 
+set stunned %actor.hitp%
 %damage% %actor% %stunned%
 wait 5 sec
 %send% %actor% The Gods pity you enough to allow you to survive.
@@ -442,7 +441,7 @@ emote clears his throat.
 wait 3s
 while %beers%
   eval beertens %beers% / 10
-  eval beerones %beers% - ( %beertens% * 10 )
+  eval beerones %beers% - (%beertens% * 10)
   switch %beerones%
     case 0
       unset alphabeers

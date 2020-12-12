@@ -27,15 +27,14 @@
  * Char's abilities.  Used in char_file_u *DO*NOT*CHANGE*
  */
 struct char_ability_data_plrtoascii {
-   sbyte str;
-   sbyte str_add;   // 000 - 100 if strength 18
-   sbyte intel;
-   sbyte wis;
-   sbyte dex;
-   sbyte con;
-   sbyte cha;
+    sbyte str;
+    sbyte str_add;   // 000 - 100 if strength 18
+    sbyte intel;
+    sbyte wis;
+    sbyte dex;
+    sbyte con;
+    sbyte cha;
 };
-
 
 /*
  * Char's points.  Used in char_file_u *DO*NOT*CHANGE*
@@ -57,7 +56,6 @@ struct char_point_data_plrtoascii {
     sbyte damroll;      // Any bonus or penalty to the damage roll
 };
 
-
 /*
  * char_special_data_saved: specials which both a PC and an NPC have in
  * common, but which must be saved to the playerfile for PC's.
@@ -77,16 +75,16 @@ struct char_special_data_saved_plrtoascii {
 };
 
 struct player_special_data_saved_plrtoascii {
-    byte skills[MAX_SKILLS + 1];    // array of skills plus skill 0
-    byte PADDING0;                  // used to be spells_to_learn
-    bool talks[MAX_TONGUE];         // PC s Tongues 0 for NPC
-    int    wimp_level;              // Below this # of hit points, flee!
-    byte freeze_level;              // Level of god who froze char, if any
-    sh_int invis_level;             // level of invisibility
-    room_vnum load_room;            // Which room to place char in
-    long /*bitvector_t*/    pref;   // preference flags for PC's.
-    ubyte bad_pws;                  // number of bad password attemps
-    sbyte conditions[3];            // Drunk, full, thirsty
+    byte        skills[MAX_SKILLS + 1]; // array of skills plus skill 0
+    byte        PADDING0;               // used to be spells_to_learn
+    bool        talks[MAX_TONGUE];      // PC s Tongues 0 for NPC
+    int         wimp_level;             // Below this # of hit points, flee!
+    byte        freeze_level;           // Level of god who froze char, if any
+    sh_int      invis_level;            // level of invisibility
+    room_vnum   load_room;              // Which room to place char in
+    long /*bitvector_t*/    pref;       // preference flags for PC's.
+    ubyte       bad_pws;                // number of bad password attemps
+    sbyte       conditions[3];          // Drunk, full, thirsty
 
     // spares below for future expansion.  You can change the names from
     // 'sparen' to something meaningful, but don't change the order.
@@ -116,13 +114,13 @@ struct player_special_data_saved_plrtoascii {
 };
 
 struct affected_type_plrtoascii {
-   sh_int type;          // The type of spell that caused this
-   sh_int duration;      // For how long its effects will last
-   sbyte modifier;       // This is added to apropriate ability
-   byte location;        // Tells which ability to change(APPLY_XXX)
-   long /*bitvector_t*/    bitvector; // Tells which bits to set (AFF_XXX)
+    sh_int type;          // The type of spell that caused this
+    sh_int duration;      // For how long its effects will last
+    sbyte modifier;       // This is added to apropriate ability
+    byte location;        // Tells which ability to change(APPLY_XXX)
+    long /*bitvector_t*/    bitvector; // Tells which bits to set (AFF_XXX)
 
-   struct affected_type_plrtoascii *next;
+    struct affected_type_plrtoascii *next;
 };
 
 /* ==================== File Structure for Player ======================= *
@@ -133,14 +131,14 @@ struct char_file_u_plrtoascii {
     char    name[MAX_NAME_LENGTH + 1];
     char    description[PLR_DESC_LENGTH];
     char    title[MAX_TITLE_LENGTH + 1];
-    byte sex;
-    byte chclass;
-    byte level;
-    sh_int hometown;
-    time_t birth;   // Time of birth of character
-    int    played;  // Number of secs played in total
-    ubyte weight;
-    ubyte height;
+    byte    sex;
+    byte    chclass;
+    byte    level;
+    sh_int  hometown;
+    time_t  birth;   // Time of birth of character
+    int     played;  // Number of secs played in total
+    ubyte   weight;
+    ubyte   height;
 
     char    pwd[MAX_PWD_LENGTH + 1];    // character's password
 
@@ -271,7 +269,7 @@ void convert(char *filename)
                 if (psds->skills[i]) {
                     fprintf(outfile, "%d %d\n", i, (int)psds->skills[i]);
                 }
-            }
+            }  // for (i ...
             fprintf(outfile, "0 0\n");
         }
         if (psds->wimp_level != PFDEF_WIMPLEV) {
@@ -365,13 +363,12 @@ void convert(char *filename)
                 fprintf(outfile, "%d %d %d %d %d\n", aff->type, aff->duration,
                     aff->modifier, aff->location, (int)aff->bitvector);
             }
-        }
+        }  // for (i ...
         fprintf(outfile, "0 0 0 0 0\n");
 
         fclose(outfile);
-    }
+    }  // for (;;)
 }
-
 
 int main(int argc, char **argv)
 {
@@ -384,7 +381,6 @@ int main(int argc, char **argv)
 
     return 0;
 }
-
 
 int sprintascii(char *out, bitvector_t bits)
 {
@@ -407,7 +403,6 @@ int sprintascii(char *out, bitvector_t bits)
     return j;
 }
 
-
 int plr_filename(char *orig_name, char *filename)
 {
     const char *middle;
@@ -421,7 +416,7 @@ int plr_filename(char *orig_name, char *filename)
     strcpy(name, orig_name);
     for (ptr = name; *ptr; ptr++) {
         *ptr = LOWER(*ptr);
-    }
+    }  // for (ptr ...
 
     switch (LOWER(*name)) {
     case 'a':  case 'b':  case 'c':  case 'd':  case 'e':

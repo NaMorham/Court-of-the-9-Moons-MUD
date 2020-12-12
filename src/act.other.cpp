@@ -31,12 +31,15 @@
 #include "mail.h"   // for has_mail()
 #include "shop.h"
 #include "quest.h"
+#include "modify.h"
 
-/* Local defined utility functions */
-/* do_group utility functions */
-static int perform_group(struct char_data *ch, struct char_data *vict);
+
+/*
+ *  Local defined utility functions
+ */
+// do_group utility functions
 static void print_group(struct char_data *ch);
-
+static void display_group_list(struct char_data * ch);
 
 ACMD(do_quit)
 {
@@ -127,12 +130,10 @@ ACMD(do_sneak)
     if (percent > GET_SKILL(ch, SKILL_SNEAK) + dex_app_skill[GET_DEX(ch)].sneak) {
         return;
     }
-
-    af.type = SKILL_SNEAK;
+    new_affect(&af);
+    af.spell = SKILL_SNEAK;
     af.duration = GET_LEVEL(ch);
-    af.modifier = 0;
-    af.location = APPLY_NONE;
-    af.bitvector = AFF_SNEAK;
+    SET_BIT_AR(af.bitvector, AFF_SNEAK);
     affect_to_char(ch, &af);
 }
 
@@ -209,7 +210,6 @@ ACMD(do_steal)
 
     if (str_cmp(obj_name, "coins") && str_cmp(obj_name, "gold")) {
         if (!(obj = get_obj_in_list_vis(ch, obj_name, NULL, vict->carrying))) {
-
             for (eq_pos = 0; eq_pos < NUM_WEARS; eq_pos++) {
                 if (GET_EQ(vict, eq_pos) &&
                     (isname(obj_name, GET_EQ(vict, eq_pos)->name)) &&
@@ -217,7 +217,7 @@ ACMD(do_steal)
                     obj = GET_EQ(vict, eq_pos);
                     break;
                 }
-            }
+            }  // for (eq_pos ...
             if (!obj) {
                 act("$E hasn't got that item.", FALSE, ch, 0, vict, TO_CHAR);
                 return;
@@ -266,7 +266,7 @@ ACMD(do_steal)
                 }
             }
         }
-    }
+    }  // if (str_cmp(obj_name, "coins") && str_cmp(obj_name, "gold"))
     else {    // Steal some coins
         if (AWAKE(vict) && (percent > GET_SKILL(ch, SKILL_STEAL))) {
             ohoh = TRUE;
@@ -279,8 +279,8 @@ ACMD(do_steal)
             gold = (GET_GOLD(vict) * rand_number(1, 10)) / 100;
             gold = MIN(1782, gold);
             if (gold > 0) {
-                GET_GOLD(ch) += gold;
-                GET_GOLD(vict) -= gold;
+                increase_gold(ch, gold);
+                decrease_gold(vict, gold);
                 if (gold > 1) {
                     send_to_char(ch, "Bingo!  You got %d gold coins.\r\n", gold);
                 }
@@ -337,6 +337,7 @@ ACMD(do_title)
 {
     skip_spaces(&argument);
     delete_doubledollar(argument);
+    parse_at(argument);
 
     if (IS_NPC(ch)) {
         send_to_char(ch, "Your title is fine... go away.\r\n");
@@ -356,198 +357,213 @@ ACMD(do_title)
     }
 }
 
-static int perform_group(struct char_data *ch, struct char_data *vict)
-{
-    if (AFF_FLAGGED(vict, AFF_GROUP) || !CAN_SEE(ch, vict)) {
-        return (0);
-    }
-
-    SET_BIT_AR(AFF_FLAGS(vict), AFF_GROUP);
-    if (ch != vict) {
-        act("$N is now a member of your group.", FALSE, ch, 0, vict, TO_CHAR);
-    }
-    act("You are now a member of $n's group.", FALSE, ch, 0, vict, TO_VICT);
-    act("$N is now a member of $n's group.", FALSE, ch, 0, vict, TO_NOTVICT);
-    return (1);
-}
-
 static void print_group(struct char_data *ch)
 {
     struct char_data *k;
-    struct follow_type *f;
 
-    if (!AFF_FLAGGED(ch, AFF_GROUP)) {
-        send_to_char(ch, "But you are not the member of a group!\r\n");
-    }
-    else {
-        char buf[MAX_STRING_LENGTH];
+    send_to_char(ch, "Your group consists of:\r\n");
 
-        send_to_char(ch, "Your group consists of:\r\n");
-
-        k = (ch->master ? ch->master : ch);
-
-        if (AFF_FLAGGED(k, AFF_GROUP)) {
-            snprintf(buf, sizeof(buf), "     [%3dH %3dM %3dV] [%2d %s] $N (Head of group)",
-                GET_HIT(k), GET_MANA(k), GET_MOVE(k), GET_LEVEL(k), CLASS_ABBR(k));
-            act(buf, FALSE, ch, 0, k, TO_CHAR);
-        }
-
-        for (f = k->followers; f; f = f->next) {
-            if (!AFF_FLAGGED(f->follower, AFF_GROUP)) {
-                continue;
-            }
-
-            snprintf(buf, sizeof(buf), "     [%3dH %3dM %3dV] [%2d %s] $N", GET_HIT(f->follower),
-                GET_MANA(f->follower), GET_MOVE(f->follower),
-                GET_LEVEL(f->follower), CLASS_ABBR(f->follower));
-            act(buf, FALSE, ch, 0, f->follower, TO_CHAR);
-        }
+    while ((k = (struct char_data *) simple_list(ch->group->members)) != NULL) {
+        send_to_char(ch, "%-*s: %s[%4d/%-4d]H [%4d/%-4d]M [%4d/%-4d]V%s\r\n",
+            count_color_chars(GET_NAME(k)) + 22, GET_NAME(k),
+            GROUP_LEADER(GROUP(ch)) == k ? CBGRN(ch, C_NRM) : CCGRN(ch, C_NRM),
+            GET_HIT(k), GET_MAX_HIT(k),
+            GET_MANA(k), GET_MAX_MANA(k),
+            GET_MOVE(k), GET_MAX_MOVE(k),
+            CCNRM(ch, C_NRM));
     }
 }
 
+static void display_group_list(struct char_data * ch)
+{
+    struct group_data * group;
+    int count = 0;
+
+    if (group_list->iSize) {
+        send_to_char(ch, "#    Group Leader        # of Members       In Zone\r\n"
+            "---------------------------------------------------\r\n");
+
+        while ((group = (struct group_data *) simple_list(group_list)) != NULL) {
+            if (IS_SET(GROUP_FLAGS(group), GROUP_NPC)) {
+                continue;
+            }
+            if (GROUP_LEADER(group) && !IS_SET(GROUP_FLAGS(group), GROUP_ANON)) {
+                send_to_char(ch, "%-2d) %s%-12s        %-2d                       %s%s\r\n",
+                    ++count,
+                    IS_SET(GROUP_FLAGS(group), GROUP_OPEN) ? CCGRN(ch, C_NRM) : CCRED(ch, C_NRM),
+                    GET_NAME(GROUP_LEADER(group)), group->members->iSize, zone_table[world[IN_ROOM(GROUP_LEADER(group))].zone].name,
+                    CCNRM(ch, C_NRM));
+            }
+            else {
+                send_to_char(ch, "%-2d) Hidden\r\n", ++count);
+            }
+        }  // while ((group ...
+    }
+    if (count) {
+        send_to_char(ch, "\r\n"
+            "%sSeeking Members%s\r\n"
+            "%sClosed%s\r\n",
+            CCGRN(ch, C_NRM), CCNRM(ch, C_NRM),
+            CCRED(ch, C_NRM), CCNRM(ch, C_NRM));
+    }
+    else {
+        send_to_char(ch, "\r\n"
+            "Currently no groups formed.\r\n");
+    }
+}
+
+/*
+ *  Vatiken's Group System: Version 1.1
+ */
 ACMD(do_group)
 {
     char buf[MAX_STRING_LENGTH];
     struct char_data *vict;
-    struct follow_type *f;
-    int found;
 
-    one_argument(argument, buf);
+    argument = one_argument(argument, buf);
 
     if (!*buf) {
-        print_group(ch);
-        return;
-    }
-
-    if (ch->master) {
-        act("You cannot enroll group members without being head of a group.", FALSE, ch, 0, 0, TO_CHAR);
-        return;
-    }
-
-    if (!str_cmp(buf, "all")) {
-        perform_group(ch, ch);
-        for (found = 0, f = ch->followers; f; f = f->next) {
-            found += perform_group(ch, f->follower);
-        }
-        if (!found) {
-            send_to_char(ch, "Everyone following you is already in your group.\r\n");
-        }
-        return;
-    }
-
-    if (!(vict = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-        send_to_char(ch, "%s", CONFIG_NOPERSON);
-    }
-    else if ((vict->master != ch) && (vict != ch)) {
-        act("$N must follow you to enter your group.", FALSE, ch, 0, vict, TO_CHAR);
-    }
-    else {
-        if (!AFF_FLAGGED(vict, AFF_GROUP)) {
-            perform_group(ch, vict);
+        if (GROUP(ch)) {
+            print_group(ch);
         }
         else {
-            if (ch != vict) {
-                act("$N is no longer a member of your group.", FALSE, ch, 0, vict, TO_CHAR);
-            }
-            act("You have been kicked out of $n's group!", FALSE, ch, 0, vict, TO_VICT);
-            act("$N has been kicked out of $n's group!", FALSE, ch, 0, vict, TO_NOTVICT);
-            REMOVE_BIT_AR(AFF_FLAGS(vict), AFF_GROUP);
+            send_to_char(ch, "You must specify a group option, or type HELP GROUP for more info.\r\n");
+        }
+        return;
+    }
+
+    if (is_abbrev(buf, "new")) {
+        if (GROUP(ch)) {
+            send_to_char(ch, "You are already in a group.\r\n");
+        }
+        else {
+            create_group(ch);
         }
     }
-}
-
-ACMD(do_ungroup)
-{
-    char buf[MAX_INPUT_LENGTH];
-    struct follow_type *f, *next_fol;
-    struct char_data *tch;
-
-    one_argument(argument, buf);
-
-    if (!*buf) {
-        if (ch->master || !(AFF_FLAGGED(ch, AFF_GROUP))) {
-            send_to_char(ch, "But you lead no group!\r\n");
+    else if (is_abbrev(buf, "list")) {
+        display_group_list(ch);
+    }
+    else if (is_abbrev(buf, "join")) {
+        skip_spaces(&argument);
+        if (!(vict = get_char_vis(ch, argument, NULL, FIND_CHAR_ROOM))) {
+            send_to_char(ch, "Join who?\r\n");
+            return;
+        }
+        else if (vict == ch) {
+            send_to_char(ch, "That would be one lonely grouping.\r\n");
+            return;
+        }
+        else if (GROUP(ch)) {
+            send_to_char(ch, "But you are already part of a group.\r\n");
+            return;
+        }
+        else if (!GROUP(vict)) {
+            act("$E$u is not part of a group!", FALSE, ch, 0, vict, TO_CHAR);
+            return;
+        }
+        else if (!IS_SET(GROUP_FLAGS(GROUP(vict)), GROUP_OPEN)) {
+            send_to_char(ch, "That group isn't accepting members.\r\n");
+            return;
+        }
+        join_group(ch, GROUP(vict));
+    }
+    else if (is_abbrev(buf, "kick")) {
+        skip_spaces(&argument);
+        if (!(vict = get_char_vis(ch, argument, NULL, FIND_CHAR_ROOM))) {
+            send_to_char(ch, "Kick out who?\r\n");
+            return;
+        }
+        else if (vict == ch) {
+            send_to_char(ch, "There are easier ways to leave the group.\r\n");
+            return;
+        }
+        else if (!GROUP(ch)) {
+            send_to_char(ch, "But you are not part of a group.\r\n");
+            return;
+        }
+        else if (GROUP_LEADER(GROUP(ch)) != ch) {
+            send_to_char(ch, "Only the group's leader can kick members out.\r\n");
+            return;
+        }
+        else if (GROUP(vict) != GROUP(ch)) {
+            act("$E$u is not a member of your group!", FALSE, ch, 0, vict, TO_CHAR);
+            return;
+        }
+        send_to_char(ch, "You have kicked %s out of the group.\r\n", GET_NAME(vict));
+        send_to_char(vict, "You have been kicked out of the group.\r\n");
+        leave_group(vict);
+    }
+    else if (is_abbrev(buf, "regroup")) {
+        if (!GROUP(ch)) {
+            send_to_char(ch, "But you aren't part of a group!\r\n");
+            return;
+        }
+        vict = GROUP_LEADER(GROUP(ch));
+        if (ch == vict) {
+            send_to_char(ch, "You are the group leader and cannot re-group.\r\n");
+        }
+        else {
+            leave_group(ch);
+            join_group(ch, GROUP(vict));
+        }
+    }
+    else if (is_abbrev(buf, "leave")) {
+        if (!GROUP(ch)) {
+            send_to_char(ch, "But you aren't part of a group!\r\n");
             return;
         }
 
-        for (f = ch->followers; f; f = next_fol) {
-            next_fol = f->next;
-            if (AFF_FLAGGED(f->follower, AFF_GROUP)) {
-                REMOVE_BIT_AR(AFF_FLAGS(f->follower), AFF_GROUP);
-                act("$N has disbanded the group.", TRUE, f->follower, NULL, ch, TO_CHAR);
-                if (!AFF_FLAGGED(f->follower, AFF_CHARM)) {
-                    stop_follower(f->follower);
-                }
-            }
+        leave_group(ch);
+    }
+    else if (is_abbrev(buf, "option")) {
+        skip_spaces(&argument);
+        if (!GROUP(ch)) {
+            send_to_char(ch, "But you aren't part of a group!\r\n");
+            return;
         }
-
-        REMOVE_BIT_AR(AFF_FLAGS(ch), AFF_GROUP);
-        send_to_char(ch, "You disband the group.\r\n");
-        return;
+        else if (GROUP_LEADER(GROUP(ch)) != ch) {
+            send_to_char(ch, "Only the group leader can adjust the group flags.\r\n");
+            return;
+        }
+        if (is_abbrev(argument, "open")) {
+            TOGGLE_BIT(GROUP_FLAGS(GROUP(ch)), GROUP_OPEN);
+            send_to_char(ch, "The group is now %s to new members.\r\n", IS_SET(GROUP_FLAGS(GROUP(ch)), GROUP_OPEN) ? "open" : "closed");
+        }
+        else if (is_abbrev(argument, "anonymous")) {
+            TOGGLE_BIT(GROUP_FLAGS(GROUP(ch)), GROUP_ANON);
+            send_to_char(ch, "The group location is now %s to other players.\r\n", IS_SET(GROUP_FLAGS(GROUP(ch)), GROUP_ANON) ? "invisible" : "visible");
+        }
+        else {
+            send_to_char(ch, "The flag options are: Open, Anonymous\r\n");
+        }
     }
-    if (!(tch = get_char_vis(ch, buf, NULL, FIND_CHAR_ROOM))) {
-        send_to_char(ch, "There is no such person!\r\n");
-        return;
-    }
-    if (tch->master != ch) {
-        send_to_char(ch, "That person is not following you!\r\n");
-        return;
-    }
-
-    if (!AFF_FLAGGED(tch, AFF_GROUP)) {
-        send_to_char(ch, "That person isn't in your group.\r\n");
-        return;
-    }
-
-    REMOVE_BIT_AR(AFF_FLAGS(tch), AFF_GROUP);
-
-    act("$N is no longer a member of your group.", FALSE, ch, 0, tch, TO_CHAR);
-    act("You have been kicked out of $n's group!", FALSE, ch, 0, tch, TO_VICT);
-    act("$N has been kicked out of $n's group!", FALSE, ch, 0, tch, TO_NOTVICT);
-
-    if (!AFF_FLAGGED(tch, AFF_CHARM)) {
-        stop_follower(tch);
+    else {
+        send_to_char(ch, "You must specify a group option, or type HELP GROUP for more info.\r\n");
     }
 }
 
 ACMD(do_report)
 {
-    char buf[MAX_STRING_LENGTH];
-    struct char_data *k;
-    struct follow_type *f;
+    struct group_data *group;
 
-    if (!AFF_FLAGGED(ch, AFF_GROUP)) {
+    if ((group = GROUP(ch)) == NULL) {
         send_to_char(ch, "But you are not a member of any group!\r\n");
         return;
     }
 
-    snprintf(buf, sizeof(buf), "$n reports: %d/%dH, %d/%dM, %d/%dV\r\n",
+    send_to_group(NULL, group, "%s reports: %d/%dH, %d/%dM, %d/%dV\r\n",
+        GET_NAME(ch),
         GET_HIT(ch), GET_MAX_HIT(ch),
         GET_MANA(ch), GET_MAX_MANA(ch),
         GET_MOVE(ch), GET_MAX_MOVE(ch));
-
-    k = (ch->master ? ch->master : ch);
-
-    for (f = k->followers; f; f = f->next) {
-        if (AFF_FLAGGED(f->follower, AFF_GROUP) && f->follower != ch) {
-            act(buf, TRUE, ch, NULL, f->follower, TO_VICT);
-        }
-    }
-
-    if (k != ch) {
-        act(buf, TRUE, ch, NULL, k, TO_VICT);
-    }
-
-    send_to_char(ch, "You report to the group.\r\n");
 }
 
 ACMD(do_split)
 {
     char buf[MAX_INPUT_LENGTH];
-    int amount, num, share, rest;
+    int amount, num = 0, share, rest;
     size_t len;
     struct char_data *k;
-    struct follow_type *f;
 
     if (IS_NPC(ch)) {
         return;
@@ -565,24 +581,16 @@ ACMD(do_split)
             send_to_char(ch, "You don't seem to have that much gold to split.\r\n");
             return;
         }
-        k = (ch->master ? ch->master : ch);
 
-        if (AFF_FLAGGED(k, AFF_GROUP) && (IN_ROOM(k) == IN_ROOM(ch))) {
-            num = 1;
-        }
-        else {
-            num = 0;
-        }
-
-        for (f = k->followers; f; f = f->next) {
-            if (AFF_FLAGGED(f->follower, AFF_GROUP) &&
-                (!IS_NPC(f->follower)) &&
-                (IN_ROOM(f->follower) == IN_ROOM(ch))) {
-                num++;
+        if (GROUP(ch)) {
+            while ((k = (struct char_data *) simple_list(GROUP(ch)->members)) != NULL) {
+                if (IN_ROOM(ch) == IN_ROOM(k) && !IS_NPC(k)) {
+                    num++;
+                }
             }
         }
 
-        if (num && AFF_FLAGGED(ch, AFF_GROUP)) {
+        if (num && GROUP(ch)) {
             share = amount / num;
             rest = amount % num;
         }
@@ -591,7 +599,7 @@ ACMD(do_split)
             return;
         }
 
-        GET_GOLD(ch) -= share * (num - 1);
+        decrease_gold(ch, share * (num - 1));
 
         // Abusing signed/unsigned to make sizeof work.
         len = snprintf(buf, sizeof(buf), "%s splits %d coins; you receive %d.\r\n", GET_NAME(ch), amount, share);
@@ -600,26 +608,21 @@ ACMD(do_split)
                 "%d coin%s %s not splitable, so %s keeps the money.\r\n", rest,
                 (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were", GET_NAME(ch));
         }
-        if (AFF_FLAGGED(k, AFF_GROUP) && IN_ROOM(k) == IN_ROOM(ch) &&
-            !IS_NPC(k) && k != ch) {
-            GET_GOLD(k) += share;
-            send_to_char(k, "%s", buf);
-        }
 
-        for (f = k->followers; f; f = f->next) {
-            if (AFF_FLAGGED(f->follower, AFF_GROUP) && (!IS_NPC(f->follower)) &&
-                (IN_ROOM(f->follower) == IN_ROOM(ch)) && f->follower != ch) {
-                GET_GOLD(f->follower) += share;
-                send_to_char(f->follower, "%s", buf);
+        while ((k = (struct char_data *) simple_list(GROUP(ch)->members)) != NULL) {
+            if (k != ch && IN_ROOM(ch) == IN_ROOM(k) && !IS_NPC(k)) {
+                increase_gold(k, share);
+                send_to_char(k, "%s", buf);
             }
         }
+
         send_to_char(ch, "You split %d coins among %d members -- %d coins each.\r\n",
             amount, num, share);
 
         if (rest) {
             send_to_char(ch, "%d coin%s %s not splitable, so you keep the money.\r\n",
                 rest, (rest == 1) ? "" : "s", (rest == 1) ? "was" : "were");
-            GET_GOLD(ch) += rest;
+            increase_gold(ch, rest);
         }
     }
     else {
@@ -735,7 +738,7 @@ ACMD(do_display)
                 send_to_char(ch, "Usage: prompt { { H | M | V } | all | auto | none }\r\n");
                 return;
             }
-        }
+        }  // for (i ...
     }
 
     send_to_char(ch, "%s", CONFIG_OK);
@@ -746,6 +749,8 @@ ACMD(do_display)
 ACMD(do_gen_tog)
 {
     long result;
+    int i;
+    char arg[MAX_INPUT_LENGTH];
 
     const char *tog_messages[][2] = {
         { "You are now safe from summoning by other players.\r\n",
@@ -803,7 +808,9 @@ ACMD(do_gen_tog)
         { "Autokey disabled.\r\n",
           "Autokey enabled.\r\n" },
         { "Autodoor disabled.\r\n",
-          "Autodoor enabled.\r\n" }
+          "Autodoor enabled.\r\n" },
+        { "ZoneResets disabled.\r\n",
+          "ZoneResets enabled.\r\n" }
     };
 
     if (IS_NPC(ch)) {
@@ -866,6 +873,18 @@ ACMD(do_gen_tog)
         }
         result = PRF_TOG_CHK(ch, PRF_BUILDWALK);
         if (PRF_FLAGGED(ch, PRF_BUILDWALK)) {
+            one_argument(argument, arg);
+            for (i = 0; *arg && *(sector_types[i]) != '\n'; i++) {
+                if (is_abbrev(arg, sector_types[i])) {
+                    break;
+                }
+            }  // for (i ...
+            if (*(sector_types[i]) == '\n') {
+                i = 0;
+            }
+            GET_BUILDWALK_SECTOR(ch) = i;
+            send_to_char(ch, "Default sector type is %s\r\n", sector_types[i]);
+
             mudlog(CMP, GET_LEVEL(ch), TRUE,
                 "OLC: %s turned buildwalk on. Allowed zone %d", GET_NAME(ch), GET_OLC_ZONE(ch));
         }
@@ -910,6 +929,9 @@ ACMD(do_gen_tog)
     case SCMD_AUTODOOR:
         result = PRF_TOG_CHK(ch, PRF_AUTODOOR);
         break;
+    case SCMD_ZONERESETS:
+        result = PRF_TOG_CHK(ch, PRF_ZONERESETS);
+        break;
     default:
         WriteLogf("SYSERR: Unknown subcmd %d in do_gen_toggle.", subcmd);
         return;
@@ -923,4 +945,111 @@ ACMD(do_gen_tog)
     }
 
     return;
+}
+
+static void show_happyhour(struct char_data *ch)
+{
+    char happyexp[80], happygold[80], happyqp[80];
+    int secs_left;
+
+    if ((IS_HAPPYHOUR) || (GET_LEVEL(ch) >= LVL_GRGOD)) {
+        if (HAPPY_TIME) {
+            secs_left = ((HAPPY_TIME - 1) * SECS_PER_MUD_HOUR) + next_tick;
+        }
+        else {
+            secs_left = 0;
+        }
+
+        sprintf(happyqp, "%s+%d%%%s to Questpoints per quest\r\n", CCYEL(ch, C_NRM), HAPPY_QP, CCNRM(ch, C_NRM));
+        sprintf(happygold, "%s+%d%%%s to Gold gained per kill\r\n", CCYEL(ch, C_NRM), HAPPY_GOLD, CCNRM(ch, C_NRM));
+        sprintf(happyexp, "%s+%d%%%s to Experience per kill\r\n", CCYEL(ch, C_NRM), HAPPY_EXP, CCNRM(ch, C_NRM));
+
+        send_to_char(ch, "tbaMUD Happy Hour!\r\n"
+            "------------------\r\n"
+            "%s%s%sTime Remaining: %s%d%s hours %s%d%s mins %s%d%s secs\r\n",
+            (IS_HAPPYEXP || (GET_LEVEL(ch) >= LVL_GOD)) ? happyexp : "",
+            (IS_HAPPYGOLD || (GET_LEVEL(ch) >= LVL_GOD)) ? happygold : "",
+            (IS_HAPPYQP || (GET_LEVEL(ch) >= LVL_GOD)) ? happyqp : "",
+            CCYEL(ch, C_NRM), (secs_left / 3600), CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), (secs_left % 3600) / 60, CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), (secs_left % 60), CCNRM(ch, C_NRM));
+    }
+    else {
+        send_to_char(ch, "Sorry, there is currently no happy hour!\r\n");
+    }
+}
+
+ACMD(do_happyhour)
+{
+    char arg[MAX_INPUT_LENGTH], val[MAX_INPUT_LENGTH];
+    int num;
+
+    if (GET_LEVEL(ch) < LVL_GOD) {
+        show_happyhour(ch);
+        return;
+    }
+
+    // Only Imms get here, so check args
+    two_arguments(argument, arg, val);
+
+    if (is_abbrev(arg, "experience")) {
+        num = MIN(MAX((atoi(val)), 0), 1000);
+        HAPPY_EXP = num;
+        send_to_char(ch, "Happy Hour Exp rate set to +%d%%\r\n", HAPPY_EXP);
+    }
+    else if ((is_abbrev(arg, "gold")) || (is_abbrev(arg, "coins"))) {
+        num = MIN(MAX((atoi(val)), 0), 1000);
+        HAPPY_GOLD = num;
+        send_to_char(ch, "Happy Hour Gold rate set to +%d%%\r\n", HAPPY_GOLD);
+    }
+    else if ((is_abbrev(arg, "time")) || (is_abbrev(arg, "ticks"))) {
+        num = MIN(MAX((atoi(val)), 0), 1000);
+        if (HAPPY_TIME && !num) {
+            game_info("Happyhour has been stopped!");
+        }
+        else if (!HAPPY_TIME && num) {
+            game_info("A Happyhour has started!");
+        }
+
+        HAPPY_TIME = num;
+        send_to_char(ch, "Happy Hour Time set to %d ticks (%d hours %d mins and %d secs)\r\n",
+            HAPPY_TIME,
+            (HAPPY_TIME*SECS_PER_MUD_HOUR) / 3600,
+            ((HAPPY_TIME*SECS_PER_MUD_HOUR) % 3600) / 60,
+            (HAPPY_TIME*SECS_PER_MUD_HOUR) % 60);
+    }
+    else if ((is_abbrev(arg, "qp")) || (is_abbrev(arg, "questpoints"))) {
+        num = MIN(MAX((atoi(val)), 0), 1000);
+        HAPPY_QP = num;
+        send_to_char(ch, "Happy Hour Questpoints rate set to +%d%%\r\n", HAPPY_QP);
+    }
+    else if (is_abbrev(arg, "show")) {
+        show_happyhour(ch);
+    }
+    else if (is_abbrev(arg, "default")) {
+        HAPPY_EXP = 100;
+        HAPPY_GOLD = 50;
+        HAPPY_QP = 50;
+        HAPPY_TIME = 48;
+        game_info("A Happyhour has started!");
+    }
+    else {
+        send_to_char(ch, "Usage: %shappyhour                       %s- show usage (this info)\r\n"
+            "           %shappyhour show              %s- display current settings (what mortals see)\r\n"
+            "           %shappyhour time <ticks> %s- set happyhour time and start timer\r\n"
+            "           %shappyhour qp <num>        %s- set qp percentage gain\r\n"
+            "           %shappyhour exp <num>       %s- set exp percentage gain\r\n"
+            "           %shappyhour gold <num>    %s- set gold percentage gain\r\n"
+            "           \tyhappyhour default          \tw- sets a default setting for happyhour\r\n\r\n"
+            "Configure the happyhour settings and start a happyhour.\r\n"
+            "Currently 1 hour IRL = %d ticks\r\n"
+            "If no number is specified, 0 (off) is assumed.\r\nThe command \tyhappyhour time\tn will therefore stop the happyhour timer.\r\n",
+            CCYEL(ch, C_NRM), CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), CCNRM(ch, C_NRM),
+            CCYEL(ch, C_NRM), CCNRM(ch, C_NRM),
+            (3600 / SECS_PER_MUD_HOUR));
+    }
 }

@@ -33,17 +33,21 @@
 /***************************************************
  *  Global variables defined here, used elsewhere  *
  ***************************************************/
-// List of zones to be saved.
+/*
+ *  List of zones to be saved.
+ */
 struct save_list_data *save_list;
 
 /**********************************
  *  Local (file scope) variables  *
  **********************************/
-// Structure defining all known save types.
+/*
+ *  Structure defining all known save types.
+ */
 static struct {
-  int save_type;
-  int (*func)(IDXTYPE rnum);
-  const char *message;
+    int save_type;
+    int (*func)(IDXTYPE rnum);
+    const char *message;
 } save_types[] = {
     { SL_MOB, save_mobiles , "mobile" },
     { SL_OBJ, save_objects,  "object" },
@@ -56,27 +60,32 @@ static struct {
     { SL_HLP, NULL,          "help" },
     { -1,     NULL,          NULL },
 };
-// for Zone Export
+/*
+ *  for Zone Export
+ */
 static int zone_exits = 0;
 
 /**********************************
  *  Local (file scope) functions  *
  **********************************/
-// Zone export functions
-static int export_save_shops(zone_rnum zrnum);
-static int export_save_mobiles(zone_rnum rznum);
-static int export_save_zone(zone_rnum zrnum);
-static int export_save_objects(zone_rnum zrnum);
-static int export_save_rooms(zone_rnum zrnum);
-static int export_save_triggers(zone_rnum zrnum);
-static int export_mobile_record(mob_vnum mvnum, struct char_data *mob, FILE *fd);
+/*
+ *  Zone export functions
+ */
+static int  export_save_shops(zone_rnum zrnum);
+static int  export_save_mobiles(zone_rnum rznum);
+static int  export_save_zone(zone_rnum zrnum);
+static int  export_save_objects(zone_rnum zrnum);
+static int  export_save_rooms(zone_rnum zrnum);
+static int  export_save_triggers(zone_rnum zrnum);
+static int  export_mobile_record(mob_vnum mvnum, struct char_data *mob, FILE *fd);
 static void export_script_save_to_disk(FILE *fp, void *item, int type);
-static int export_info_file(zone_rnum zrnum);
+static int  export_info_file(zone_rnum zrnum);
 
 
 int genolc_checkstring(struct descriptor_data *d, char *arg)
 {
     smash_tilde(arg);
+    parse_at(arg);
     return TRUE;
 }
 
@@ -89,11 +98,13 @@ char *str_udupnl(const char *txt)
 {
     char *str = NULL, undef[] = "undefined";
     const char *ptr = NULL;
+    size_t n;
 
     ptr = (txt && *txt) ? txt : undef;
-    CREATE(str, char, strlen(ptr) + 3);
+    n = strlen(ptr) + 3;
 
-    strlcpy(str, ptr, strlen(ptr));
+    CREATE(str, char, n);
+    strlcpy(str, ptr, n);
     strcat(str, "\r\n");
 
     return str;
@@ -123,7 +134,7 @@ int save_all(void)
         else if ((*save_types[save_list->type].func) (real_zone(save_list->zone)) < 0) {
             save_list = save_list->next;        // Fatal error, skip this one.
         }
-    }
+    }  // while (save_list)
     return TRUE;
 }
 
@@ -316,29 +327,46 @@ int sprintascii(char *out, bitvector_t bits)
 /*
  * Converts illegal filename chars into appropriate equivalents
  */
-char *fix_filename(char *str)
+static void fix_filename(const char *str, char *outbuf, size_t maxlen)
 {
-    static char good_file_name[MAX_STRING_LENGTH];
-    char *cindex = good_file_name;
+    const char *in = str;
+    char *out = outbuf;
+    int count = 0;
 
-    while (*str) {
-        switch (*str) {
-        case ' ': *cindex = '_'; cindex++; break;
-        case '(': *cindex = '{'; cindex++; break;
-        case ')': *cindex = '}'; cindex++; break;
+    while (*in) {
+        switch (*in) {
+        case ' ':
+            *out = '_';
+            out++;
+            break;
+        case '(':
+            *out = '{';
+            out++;
+            break;
+        case ')':
+            *out = '}';
+            out++;
+            break;
 
             // skip the following
-        case '\'':             break;
-        case '"':              break;
+        case '\'':
+            break;
+        case '"':
+            break;
 
             // Legal character
-        default: *cindex = *str;  cindex++; break;
+        default:
+            *out = *in;
+            out++;
+            break;
         }
-        str++;
+        in++;
+        count++;
+        if (count == maxlen - 1) {
+            break;
+        }
     }
-    *cindex = '\0';
-
-    return good_file_name;
+    *out = '\0';
 }
 
 /*
@@ -346,16 +374,18 @@ char *fix_filename(char *str)
  */
 ACMD(do_export_zone)
 {
+#ifdef CIRCLE_WINDOWS
+    // tar and gzip are usually not available
+    send_to_char(ch, "Sorry, that is not available in the windows port.\r\n");
+#else // all other configurations
     zone_rnum zrnum;
     zone_vnum zvnum;
     char sysbuf[MAX_INPUT_LENGTH];
-    char zone_name[MAX_INPUT_LENGTH], *f;
-    int success, i;
+    char zone_name[READ_SIZE], fixed_file_name[READ_SIZE];
+    int success, errorcode = 0;
 
-    // system command locations are relative to
-    // where the binary IS, not where it was run
-    // from, thus we act like we are in the bin
-    // folder, because we are
+    // system command locations are relative to where the binary IS, not where it
+    // was run from, thus we act like we are in the bin folder, because we are
     char *path = "../lib/world/export/";
 
     if (IS_NPC(ch) || GET_LEVEL(ch) < LVL_IMPL) {
@@ -363,7 +393,7 @@ ACMD(do_export_zone)
     }
 
     skip_spaces(&argument);
-    if (!*argument){
+    if (!*argument) {
         send_to_char(ch, "Syntax: export <zone vnum>");
         return;
     }
@@ -381,7 +411,11 @@ ACMD(do_export_zone)
     //     again. Do it silently though ( no logs ).
     if (!export_info_file(zrnum)) {
         sprintf(sysbuf, "mkdir %s", path);
-        i = system(sysbuf);
+        errorcode = system(sysbuf);
+    }
+    if (errorcode) {
+        send_to_char(ch, "Failed to create export directory.\r\n");
+        return;
     }
 
     if (!(success = export_info_file(zrnum))) {
@@ -416,21 +450,33 @@ ACMD(do_export_zone)
         return;
     }
     // Make sure the name of the zone doesn't make the filename illegal.
-    f = fix_filename(zone_name);
+    fix_filename(zone_name, fixed_file_name, sizeof(fixed_file_name));
 
     // Remove the old copy.
-    sprintf(sysbuf, "rm %s%s.tar.gz", path, f);
-    i = system(sysbuf);
+    snprintf(sysbuf, sizeof(sysbuf), "rm %s%s.tar.gz", path, fixed_file_name);
+    errorcode = system(sysbuf);
+    if (errorcode) {
+        send_to_char(ch, "Failed to delete previous zip file. This is usually benign.\r\n");
+    }
 
     // Tar the new copy.
-    sprintf(sysbuf, "tar -cf %s%s.tar %sqq.info %sqq.wld %sqq.zon %sqq.mob %sqq.obj %sqq.trg %sqq.shp", path, f, path, path, path, path, path, path, path);
-    i = system(sysbuf);
+    snprintf(sysbuf, sizeof(sysbuf), "tar -cf %s%s.tar %sqq.info %sqq.wld %sqq.zon %sqq.mob %sqq.obj %sqq.trg %sqq.shp", path, fixed_file_name, path, path, path, path, path, path, path);
+    errorcode = system(sysbuf);
+    if (errorcode) {
+        send_to_char(ch, "Failed to tar files.\r\n");
+        return;
+    }
 
     // Gzip it.
-    sprintf(sysbuf, "gzip %s%s.tar", path, f);
-    i = system(sysbuf);
+    snprintf(sysbuf, sizeof(sysbuf), "gzip %s%s.tar", path, fixed_file_name);
+    errorcode = system(sysbuf);
+    if (errorcode) {
+        send_to_char(ch, "Failed to gzip tar file.\r\n");
+        return;
+    }
 
-    send_to_char(ch, "Files tar'ed to \"%s%s.tar.gz\"\r\n", path, f);
+    send_to_char(ch, "Files tar'ed to \"%s%s.tar.gz\"\r\n", path, fixed_file_name);
+#endif // platform specific part
 }
 
 static int export_info_file(zone_rnum zrnum)
@@ -474,7 +520,7 @@ static int export_info_file(zone_rnum zrnum)
 
             room = &world[rnum];
 
-            for (j = 0; j < NUM_OF_DIRS; j++) {
+            for (j = 0; j < DIR_COUNT; j++) {
                 if (!R_EXIT(room, j)) {
                     continue;
                 }
@@ -796,7 +842,7 @@ static int export_save_zone(zone_rnum zrnum)
             mudlog(BRF, LVL_BUILDER, TRUE, "SYSERR: export_save_zone(): Unknown cmd '%c' - NOT saving", ZCMD(zrnum, subcmd).command);
             continue;
         }
-    }
+    }  // for (subcmd ...
     fputs("S\n$\n", zone_file);
     fclose(zone_file);
 
@@ -852,10 +898,10 @@ static int export_save_objects(zone_rnum zrnum)
             sprintascii(wbuf2, GET_OBJ_WEAR(obj)[1]);
             sprintascii(wbuf3, GET_OBJ_WEAR(obj)[2]);
             sprintascii(wbuf4, GET_OBJ_WEAR(obj)[3]);
-            sprintascii(pbuf1, GET_OBJ_PERM(obj)[0]);
-            sprintascii(pbuf2, GET_OBJ_PERM(obj)[1]);
-            sprintascii(pbuf3, GET_OBJ_PERM(obj)[2]);
-            sprintascii(pbuf4, GET_OBJ_PERM(obj)[3]);
+            sprintascii(pbuf1, GET_OBJ_AFFECT(obj)[0]);
+            sprintascii(pbuf2, GET_OBJ_AFFECT(obj)[1]);
+            sprintascii(pbuf3, GET_OBJ_AFFECT(obj)[2]);
+            sprintascii(pbuf4, GET_OBJ_AFFECT(obj)[3]);
 
             fprintf(obj_file,
                 "%d %s %s %s %s %s %s %s %s %s %s %s %s\n",
@@ -958,7 +1004,7 @@ static int export_save_rooms(zone_rnum zrnum)
                 );
 
             // Now you write out the exits for the room.
-            for (j = 0; j < NUM_OF_DIRS; j++) {
+            for (j = 0; j < DIR_COUNT; j++) {
                 if (R_EXIT(room, j)) {
                     int dflag;
                     if (R_EXIT(room, j)->general_description) {
@@ -1018,13 +1064,14 @@ static int export_save_rooms(zone_rnum zrnum)
                         zone_exits++;
                     }
                 }
-            }  // for (j ...
+            }  // for (j ...   - each direction
 
             if (room->ex_description) {
                 struct extra_descr_data *xdesc;
 
                 for (xdesc = room->ex_description; xdesc; xdesc = xdesc->next) {
                     strncpy(buf, xdesc->description, sizeof(buf));
+                    buf[sizeof(buf) - 1] = '\0';
                     strip_cr(buf);
                     fprintf(room_file, "E\n"
                         "%s~\n"

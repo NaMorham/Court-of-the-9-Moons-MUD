@@ -4,7 +4,7 @@ Near Death Trap Spiders - 6131~
 ~
 * Near Death Trap stuns actor, then poison will almost kill them.
 wait 3 sec
-set stunned %actor.hitp% 
+set stunned %actor.hitp%
 %damage% %actor% %stunned%
 wait 3 sec
 dg_affect %actor% poison on 1
@@ -38,7 +38,7 @@ switch %actor.level%
     dg_cast 'lightning bolt' %actor%
   break
   case 12
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 13
     dg_cast 'energy drain' %actor%

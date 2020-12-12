@@ -12,12 +12,12 @@ Calculator By Mordecai~
 *~
 * By Mordecai
 if %actor.is_pc%
-  Return 0
-  Eval sum %speech%
-  Eval test1 "%speech%"
-  Eval test %test1.strlen%
-  Eval che %sum%/1
-  If %che% == %sum%
+  return 0
+  eval sum %speech%
+  eval test1 "%speech%"
+  eval test %test1.strlen%
+  eval che %sum%/1
+  if %che% == %sum%
     %echo% @WComputing results...@n
     if (%speech%/===)
       if (%sum%==1)
@@ -26,19 +26,19 @@ if %actor.is_pc%
         set sum No
       end
     end
-    Eval st 2+%test%
-    Eval o .
-    Eval sumslen "%sum%
-    Eval len %st% - (%sumslen.strlen%-2)
-    If %len% > 0
-      Eval dif (%len%/2)
-      While %y.strlen% < %st%
-        Eval o .%o%
-        Eval y %o%
-        Eval m ?%m%
-        Eval p %m%
-        If %dif% == %y.strlen%
-          Eval wid1 %p%
+    eval st 2+%test%
+    eval o .
+    eval sumslen "%sum%
+    eval len %st% - (%sumslen.strlen%-2)
+    if %len% > 0
+      eval dif (%len%/2)
+      while %y.strlen% < %st%
+        eval o .%o%
+        eval y %o%
+        eval m ?%m%
+        eval p %m%
+        if %dif% == %y.strlen%
+          eval wid1 %p%
         end
       done
     end
@@ -132,7 +132,7 @@ en~
 if %cmd.mudcommand% == enter && portal /= %arg%
   wait 1
   %send% %actor% A whirl of white light falls into your eyes, you fall into a huge water fall.
-  %echoaround% %actor% A whirl of white light falls into %actor.name% eyes, and %actor.heshe% falls into a huge water fall that appears under %actor.hisher% feet. 
+  %echoaround% %actor% A whirl of white light falls into %actor.name% eyes, and %actor.heshe% falls into a huge water fall that appears under %actor.hisher% feet.
   %teleport% %actor% 3001
   wait 1
   %force% %actor% look
@@ -143,72 +143,72 @@ Object Affects Example~
 1 n 100
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
-if %self.affects(BLIND)% 
+if %self.affects(BLIND)%
   %echo% This object is affected with blind.
-end 
-if %self.affects(INVIS)% 
+end
+if %self.affects(INVIS)%
   %echo% This object is affected with invisibility.
-end 
-if %self.affects(DET-ALIGN)% 
+end
+if %self.affects(DET-ALIGN)%
   %echo% This object is affected with detect alignment.
-end 
-if %self.affects(DET-INVIS)% 
+end
+if %self.affects(DET-INVIS)%
   %echo% This object is affected with detect invisibility.
-end 
-if %self.affects(DET-MAGIC)% 
+end
+if %self.affects(DET-MAGIC)%
   %echo% This object is affected with detect magic.
-end 
-if %self.affects(SENSE-LIFE)% 
+end
+if %self.affects(SENSE-LIFE)%
   %echo% This object is affected with sense life.
-end 
-if %self.affects(WATWALK)% 
+end
+if %self.affects(WATWALK)%
   %echo% This object is affected with water walk.
-end 
-if %self.affects(SANCT)% 
+end
+if %self.affects(SANCT)%
   %echo% This object is affected with sanctuary.
-end 
-if %self.affects(GROUP)% 
+end
+if %self.affects(GROUP)%
   %echo% This object is affected with group.
-end 
-if %self.affects(CURSE)% 
+end
+if %self.affects(CURSE)%
   %echo% This object is affected with curse.
-end 
-if %self.affects(INFRA)% 
+end
+if %self.affects(INFRA)%
   %echo% This object is affected with infravision.
-end 
-if %self.affects(POISON)% 
+end
+if %self.affects(POISON)%
   %echo% This object is affected with poison.
-end 
-if %self.affects(PROT-EVIL)% 
+end
+if %self.affects(PROT-EVIL)%
   %echo% This object is affected with protection from evil.
-end 
-if %self.affects(PROT-GOOD)% 
+end
+if %self.affects(PROT-GOOD)%
   %echo% This object is affected with protection from good.
-end 
-if %self.affects(SLEEP)% 
+end
+if %self.affects(SLEEP)%
   %echo% This object is affected with sleep.
-end 
-if %self.affects(NO_TRACK)% 
+end
+if %self.affects(NO_TRACK)%
   %echo% This object is affected with no track.
-end 
-if %self.affects(FLYING)% 
+end
+if %self.affects(FLYING)%
   %echo% This object is affected with flying.
-end 
-if %self.affects(SCUBA)% 
+end
+if %self.affects(SCUBA)%
   %echo% This object is affected with scuba.
-end 
-if %self.affects(SNEAK)% 
+end
+if %self.affects(SNEAK)%
   %echo% This object is affected with sneak.
-end 
-if %self.affects(HIDE)% 
+end
+if %self.affects(HIDE)%
   %echo% This object is affected with hide.
-end 
-if %self.affects(UNUSED)% 
+end
+if %self.affects(UNUSED)%
   %echo% This object is affected with unused.
-end 
-if %self.affects(CHARM)% 
+end
+if %self.affects(CHARM)%
   %echo% This object is affected with charm.
-end 
+end
 ~
 #1206
 (1207) Capturing~
@@ -229,7 +229,7 @@ switch %forest_sounds%
     %echo% @gThe gently chirping of crickets peacefully resonate across the forest.@n
   break
   case 2
-    %echo% A haze of @yfir@Wefl@yies@n dart inbetween some ancient cedars.
+    %echo% A haze of @yfir@Wefl@yies@n dart in between some ancient cedars.
   break
   case 3
     %echo% @DA thick fog drifts in, dampening the moss.@n
@@ -238,7 +238,7 @@ switch %forest_sounds%
     %echo% @DThe area is surrounded by a visually impeneratable mist.@n
   break
   case 5
-    %echo% @DThe grey haze starts to glow a dim silvery shade as the moonlight strikes it.@n
+    %echo% @DThe gray haze starts to glow a dim silvery shade as the moonlight strikes it.@n
   break
   case 6
     %echo% @DThe damp fallen clouds swirl slightly in an eddying wind.@n
@@ -289,13 +289,13 @@ switch %forest_sounds%
     %echo% @gA relaxed nattering can be heard in the top of a tree to the south.@n
   break
   case 22
-    %echo% A hedgehog slowly wanders inbetween some trees and out of view.
+    %echo% A hedgehog slowly wanders in between some trees and out of view.
   break
   case 23
     %echo% A faint wind breathes in from all directions, steeping the mists.
   break
   case 24
-    %echo% A @rr@ya@bi@gn@cb@mo@rw@n-colored butterfly floats across the clearing.
+    %echo% A @rr@ya@bi@gn@cb@mo@rw@n-coloured butterfly floats across the clearing.
   break
   case 25
     %echo% A strange @Yglowing @wluminescence@n drifts off to the north, fading into the damp fog.
@@ -339,61 +339,61 @@ end
 Actor Pref Checking~
 2 q 100
 ~
-if %actor.pref(BRIEF)% 
+if %actor.pref(BRIEF)%
   %send% %actor% You have BRIEF on.
 end
 if %actor.pref(COMPACT)%
   %send% %actor% You have COMPACT on.
 end
-if %actor.pref(NO_SHOUT)% 
+if %actor.pref(NO_SHOUT)%
   %send% %actor% You have NO_SHOUT on.
 end
 if %actor.pref(NO_TELL)%
   %send% %actor% You have NO_TELL on.
 end
-if %actor.pref(D_HP)% 
+if %actor.pref(D_HP)%
   %send% %actor% You have D_HP on.
 end
 if %actor.pref(D_MANA)%
   %send% %actor% You have D_MANA on.
 end
-if %actor.pref(D_MOVE)% 
+if %actor.pref(D_MOVE)%
   %send% %actor% You have D_MOVE on.
 end
 if %actor.pref(AUTOEX)%
   %send% %actor% You have AUTOEX on.
 end
-if %actor.pref(NO_HASS)% 
+if %actor.pref(NO_HASS)%
   %send% %actor% You have NO_HASS on.
 end
 if %actor.pref(QUEST)%
   %send% %actor% You have QUEST on.
 end
-if %actor.pref(SUMN)% 
+if %actor.pref(SUMN)%
   %send% %actor% You have SUMN on.
 end
 if %actor.pref(NO_REP)%
   %send% %actor% You have NO_REP on.
 end
-if %actor.pref(LIGHT)% 
+if %actor.pref(LIGHT)%
   %send% %actor% You have LIGHT on.
 end
 if %actor.pref(C1)%
   %send% %actor% You have C1 on.
 end
-if %actor.pref(NO_WIZ)% 
+if %actor.pref(NO_WIZ)%
   %send% %actor% You have NO_WIZ on.
 end
 if %actor.pref(L1)%
   %send% %actor% You have L1 on.
 end
-if %actor.pref(L2)% 
+if %actor.pref(L2)%
   %send% %actor% You have L2 on.
 end
 if %actor.pref(NO_AUC)%
   %send% %actor% You have NO_AUC on.
 end
-if %actor.pref(NO_GOS)% 
+if %actor.pref(NO_GOS)%
   %send% %actor% You have NO_GOS on.
 end
 if %actor.pref(RMFLG)%
@@ -402,13 +402,13 @@ end
 if %actor.pref(D_AUTO)%
   %send% %actor% You have D_AUTO on.
 end
-if %actor.pref(CLS)% 
+if %actor.pref(CLS)%
   %send% %actor% You have CLS on.
 end
 if %actor.pref(BLDWLK)%
   %send% %actor% You have BLDWLK on.
 end
-if %actor.pref(AFK)% 
+if %actor.pref(AFK)%
   %send% %actor% You have AFK on.
 end
 if %actor.pref(AUTOLOOT)%
@@ -417,13 +417,13 @@ end
 if %actor.pref(AUTOGOLD)%
   %send% %actor% You have AUTOGOLD on.
 end
-if %actor.pref(AUTOSPLIT)% 
+if %actor.pref(AUTOSPLIT)%
   %send% %actor% You have AUTOSPLIT on.
 end
 if %actor.pref(AUTOSAC)%
   %send% %actor% You have AUTOSAC on.
 end
-if %actor.pref(AUTOASSIST)% 
+if %actor.pref(AUTOASSIST)%
   %send% %actor% You have AUTOASSIST on.
 end
 ~
@@ -899,7 +899,7 @@ wait 1
 %echo% O=#==NAME============\|=Level=\|=Points==\|=EXP=========O
 set i 1
 set j 1
-while %self.varexists(%j%)% 
+while %self.varexists(%j%)%
   eval r %%self.%j%%%
   eval nam %r.car%
   extract ll 2 %r%
@@ -988,7 +988,7 @@ Multiple Command Example Trig~
 2 c 100
 t~
 if %cmd% == test
-  * Careful not to use Arguments * or this trig will freeze you. 
+  * Careful not to use Arguments * or this trig will freeze you.
   * set the first arg
   set command %arg.car%
   * set the rest of the arg string
@@ -1006,45 +1006,45 @@ end
 Roomflag Test Trigger~
 2 g 100
 ~
-if %self.roomflag(DARK)% 
-  %echo% This is a dark room. 
-end 
-if %self.roomflag(DEATH)% 
-  %echo% This is a death trap - goodbye! 
-end 
-if %self.roomflag(NO_MOB)% 
-  %echo% Mobiles cannot enter this room. 
-end 
-if %self.roomflag(INDOORS)% 
-  %echo% This room is indoors. 
-end 
-if %self.roomflag(PEACEFUL)% 
-  %echo% You can't kill anything in this room. 
-end 
-if %self.roomflag(NO_TRACK)% 
-  %echo% You cannot track anything through this room. 
-end 
-if %self.roomflag(NO_MAGIC)% 
-  %echo% You cannot cast spells in here! 
-end 
-if %self.roomflag(TUNNEL)% 
-  %echo% This room is a narrow tunnel. 
-end 
-if %self.roomflag(PRIVATE)% 
-  %echo% This is a private room. 
-end 
-if %self.roomflag(GODROOM)% 
-  %echo% Only Gods can enter this room. 
-end 
-if %self.roomflag(HOUSE)% 
-  %echo% This is a house. 
-end 
-if %self.roomflag(HCRSH)% 
-  %echo% This is a house which will crash-save. 
-end 
-if %self.roomflag(ATRIUM)% 
-  %echo% This is an atrium for a house. 
-end 
+if %self.roomflag(DARK)%
+  %echo% This is a dark room.
+end
+if %self.roomflag(DEATH)%
+  %echo% This is a death trap - goodbye!
+end
+if %self.roomflag(NO_MOB)%
+  %echo% Mobiles cannot enter this room.
+end
+if %self.roomflag(INDOORS)%
+  %echo% This room is indoors.
+end
+if %self.roomflag(PEACEFUL)%
+  %echo% You can't kill anything in this room.
+end
+if %self.roomflag(NO_TRACK)%
+  %echo% You cannot track anything through this room.
+end
+if %self.roomflag(NO_MAGIC)%
+  %echo% You cannot cast spells in here!
+end
+if %self.roomflag(TUNNEL)%
+  %echo% This room is a narrow tunnel.
+end
+if %self.roomflag(PRIVATE)%
+  %echo% This is a private room.
+end
+if %self.roomflag(GODROOM)%
+  %echo% Only Gods can enter this room.
+end
+if %self.roomflag(HOUSE)%
+  %echo% This is a house.
+end
+if %self.roomflag(HCRSH)%
+  %echo% This is a house which will crash-save.
+end
+if %self.roomflag(ATRIUM)%
+  %echo% This is an atrium for a house.
+end
 ~
 #1221
 Test Trigger~
@@ -1105,7 +1105,7 @@ if %arg% == drawer
   %load% obj 7711
   %echo% The small drawer appears to be nothing more than a mere crack underneath the
   %echo% desk.  The only thing that gives it away is the small keyhole that winks at you
-  %echo% upon closer inspection.    
+  %echo% upon closer inspection.
 else
   return 0
 end
@@ -1136,6 +1136,16 @@ if (%actor.name% != windwillow)
 else
   %send% %actor% The switch says, 'Fine... fine.'
 end
+~
+#1271
+crash test~
+0 g 100
+~
+Trigger Intended Assignment: Mobiles
+Trigger Type: Random , Numeric Arg: 100, Arg list: None
+Commands:
+%echo% %self.name% transforms into a new mob!
+%transform% -1
 ~
 #1280
 Mob Raid~
@@ -1235,19 +1245,19 @@ Deal a single card from a deck~
 deal~
 switch %random.4%
   case 1
-    set col 
+    set col
     set suit Diamond
   break
   case 2
-    set col 
+    set col
     set suit Heart
   break
   case 3
-    set col 
+    set col
     set suit Club
   break
   case 4
-    set col 
+    set col
     set suit Spade
   break
   default
@@ -1288,117 +1298,117 @@ Shuffle Deck~
 1 c 7
 *~
 if %cmd% == shuffle
-  %echo% %deck% card's in the deck.
+  %echo% %deck% cards in the deck.
   set deck 52
   global deck
   *
-  set Ace_Spade's 1
-  global Ace_Spade's
-  set 2_Spade's 1
-  global 2_Spade's
-  set 3_Spade's 1
-  global 3_Spade's
-  set 4_Spade's 1
-  global 4_Spade's
-  set 5_Spade's 1
-  global 5_Spade's
-  set 6_Spade's 1
-  global 6_Spade's
-  set 7_Spade's 1
-  global 7_Spade's
-  set 8_Spade's 1
-  global 8_Spade's
-  set 9_Spade's 1
-  global 9_Spade's
-  set 10_Spade's 1
-  global 10_spade's
-  set Jack_Spade's 1
-  global Jack_Spade's
-  set Queen_Spade's 1
-  global Queen_Spade's
-  set King_Spade's 1
-  global King_Spade's
+  set Ace_Spades 1
+  global Ace_Spades
+  set 2_Spades 1
+  global 2_Spades
+  set 3_Spades 1
+  global 3_Spades
+  set 4_Spades 1
+  global 4_Spades
+  set 5_Spades 1
+  global 5_Spades
+  set 6_Spades 1
+  global 6_Spades
+  set 7_Spades 1
+  global 7_Spades
+  set 8_Spades 1
+  global 8_Spades
+  set 9_Spades 1
+  global 9_Spades
+  set 10_Spades 1
+  global 10_spades
+  set Jack_Spades 1
+  global Jack_Spades
+  set Queen_Spades 1
+  global Queen_Spades
+  set King_Spades 1
+  global King_Spades
   *
-  set Ace_Heart's 1
-  global Ace_Heart's
-  set 2_Heart's 1
-  global 2_Heart's
-  set 3_Heart's 1
-  global 3_Heart's
-  set 4_Heart's 1
-  global 4_Heart's
-  set 5_Heart's 1
-  global 5_Heart's
-  set 6_Heart's 1
-  global 6_Heart's
-  set 7_Heart's 1
-  global 7_Heart's
-  set 8_Heart's 1
-  global 8_Heart's
-  set 9_Heart's 1
-  global 9_Heart's
-  set 10_Heart's 1
-  global 10_Heart's
-  set Jack_Heart's 1
-  global Jack_Heart's
-  set Queen_Heart's 1
-  global Queen_Heart's
-  set King_Heart's 1
-  global King_Heart's
+  set Ace_Hearts 1
+  global Ace_Hearts
+  set 2_Hearts 1
+  global 2_Hearts
+  set 3_Hearts 1
+  global 3_Hearts
+  set 4_Hearts 1
+  global 4_Hearts
+  set 5_Hearts 1
+  global 5_Hearts
+  set 6_Hearts 1
+  global 6_Hearts
+  set 7_Hearts 1
+  global 7_Hearts
+  set 8_Hearts 1
+  global 8_Hearts
+  set 9_Hearts 1
+  global 9_Hearts
+  set 10_Hearts 1
+  global 10_Hearts
+  set Jack_Hearts 1
+  global Jack_Hearts
+  set Queen_Hearts 1
+  global Queen_Hearts
+  set King_Hearts 1
+  global King_Hearts
   *
-  set Ace_Club's 1
-  global Ace_Club's
-  set 2_Club's 1
-  global 2_Club's
-  set 3_Club's 1
-  global 3_Club's
-  set 4_Club's 1
-  global 4_Club's
-  set 5_Club's 1
-  global 5_Club's
-  set 6_Club's 1
-  global 6_Club's
-  set 7_Club's 1
-  global 7_Club's
-  set 8_Club's 1
-  global 8_Club's
-  set 9_Club's 1
-  global 9_Club's
-  set 10_Club's 1
-  global 10_Club's
-  set Jack_Club's 1
-  global Jack_Club's
-  set Queen_Club's 1
-  global Queen_Club's
-  set King_Club's 1
-  global King_Club's
+  set Ace_Clubs 1
+  global Ace_Clubs
+  set 2_Clubs 1
+  global 2_Clubs
+  set 3_Clubs 1
+  global 3_Clubs
+  set 4_Clubs 1
+  global 4_Clubs
+  set 5_Clubs 1
+  global 5_Clubs
+  set 6_Clubs 1
+  global 6_Clubs
+  set 7_Clubs 1
+  global 7_Clubs
+  set 8_Clubs 1
+  global 8_Clubs
+  set 9_Clubs 1
+  global 9_Clubs
+  set 10_Clubs 1
+  global 10_Clubs
+  set Jack_Clubs 1
+  global Jack_Clubs
+  set Queen_Clubs 1
+  global Queen_Clubs
+  set King_Clubs 1
+  global King_Clubs
   *
-  set Ace_Diamond's 1
-  global Ace_Diamond's
-  set 2_Diamond's 1
-  global 2_Diamond's
-  set 3_Diamond's 1
-  global 3_Diamond's
-  set 4_Diamond's 1
-  global 4_Diamond's
-  set 5_Diamond's 1
-  global 5_Diamond's
-  set 6_Diamond's 1
-  global 6_Diamond's
-  set 7_Diamond's 1
-  global 7_Diamond's
-  set 8_Diamond's 1
-  global 8_Diamond's
-  set 9_Diamond's 1
-  global 9_Diamond's
-  set 10_Diamond's 1
-  global 10_Diamond's
-  set Jack_Diamond's 1
-  global Jack_Diamond's
-  set Queen_Diamond's 1
-  global Queen_Diamond's
-  set King_Diamond's 1
-  global King_Diamond's
+  set Ace_Diamonds 1
+  global Ace_Diamonds
+  set 2_Diamonds 1
+  global 2_Diamonds
+  set 3_Diamonds 1
+  global 3_Diamonds
+  set 4_Diamonds 1
+  global 4_Diamonds
+  set 5_Diamonds 1
+  global 5_Diamonds
+  set 6_Diamonds 1
+  global 6_Diamonds
+  set 7_Diamonds 1
+  global 7_Diamonds
+  set 8_Diamonds 1
+  global 8_Diamonds
+  set 9_Diamonds 1
+  global 9_Diamonds
+  set 10_Diamonds 1
+  global 10_Diamonds
+  set Jack_Diamonds 1
+  global Jack_Diamonds
+  set Queen_Diamonds 1
+  global Queen_Diamonds
+  set King_Diamonds 1
+  global King_Diamonds
   *
   %echo% %actor.name% shuffles %actor.hisher% deck.
   %echo% %deck% cards in the deck.
@@ -1408,20 +1418,20 @@ elseif %cmd% == deal
   %echo% while begins.
   switch %random.4%
     case 1
-      set col 
-      set suit Diamond's
+      set col
+      set suit Diamonds
     break
     case 2
-      set col 
-      set suit Heart's
+      set col
+      set suit Hearts
     break
     case 3
-      set col 
-      set suit Club's
+      set col
+      set suit Clubs
     break
     case 4
-      set col 
-      set suit Spade's
+      set col
+      set suit Spades
     break
     default
       set suit JOKER!
@@ -1470,7 +1480,7 @@ Damage trigger~
 eval num_hitp %actor.hitp%/2
 %echo% half hitp = %num_hitp%
 eval rx %%random.%num_hitp%%%
-%echo% rx %rx% 
+%echo% rx %rx%
 %damage% %actor% %rx%
 ~
 #1286
@@ -1535,7 +1545,7 @@ actor.eq(*) test~
 0 g 100
 ~
 if !%actor.eq(*)%
-  Say you are wearing nothing!
+  say you are wearing nothing!
 else
   say you are wearing something.
 end
@@ -1608,52 +1618,14 @@ if %actor.inventory(14911)%
 end
 ~
 #1295
-free~
-0 d 100
+Login Christmas~
+2 s 100
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
-if %actor.level% > 31
-  switch %speech.car%
-    case christmas
-      %at% 1204 %load% obj 1299
-      %at% 1204 %load% obj 1318
-      %at% 1204 %load% obj 1319
-      %at% 1204 %load% obj 1236
-      %at% 1204 %load% obj 1237
-      %at% 1204 %load% obj 1238
-      %at% 1204 %load% obj 1239
-      %at% 1204 %load% obj 1240
-      %at% 1204 %load% obj 1241
-      %at% 1204 %load% obj 1397
-      %at% 1204 %load% mob 1308
-      %at% 2 %load% obj 1299
-      %at% 2 %load% obj 1318
-      %at% 2 %load% obj 1319
-      %at% 2 %load% obj 1236
-      %at% 2 %load% obj 1237
-      %at% 2 %load% obj 1238
-      %at% 2 %load% obj 1239
-      %at% 2 %load% obj 1240
-      %at% 2 %load% obj 1241
-      %at% 2 %load% obj 1397
-      %at% 1204 %load% mob 1308
-    break
-    case new years
-    break
-    case valentines
-    break
-    case Easter
-    break
-    case 4th
-    break
-    case Halloween
-    break
-    case thanksgiving
-    break
-    default
-      * nothing is going to happen
-    break
-  done
+if !%actor.has_item(222)%
+  wait 1 s
+  %echo% Santa bellows, 'Merry Christmas'
+  %load% obj 222 %actor% inv
 end
 ~
 #1296
@@ -1752,11 +1724,11 @@ Quest object loader~
 ~
 context %actor.id%
 say object vnum: %object.vnum%
- 
+
 set answer_yes say Yes, I want that object :)
 set answer_no say I already have that object !
 set answer_reward say There you go. Here's an object for you. Thanks!
- 
+
 if (%object.vnum% == 1301)
   if (%zone_12_object1%)
     %answer_no%
@@ -1797,17 +1769,17 @@ else
   say I do not want that object!
   return 0
 end
- 
-if (%zone_12_object1% && %zone_12_object2% && %zone_12_object3% && %zone_12_object4%) 
+
+if (%zone_12_object1% && %zone_12_object2% && %zone_12_object3% && %zone_12_object4%)
   %answer_reward%
   eval zone_12_reward_number %actor.zone_12_reward_number%+1
- 
+
   * cap this to a max of 12 rewards.
   if %zone_12_reward_number%>12
     set zone_12_reward_number 12
   end
   remote zone_12_reward_number %actor.id%
- 
+
   *  make sure all objects from 3016 and upwards have 'reward' as an alias
   eval loadnum 3015+%zone_12_reward_number%
   %load% o %loadnum%

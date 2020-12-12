@@ -33,6 +33,7 @@
 #define MAG_SUMMONS     (1 << 8)
 #define MAG_CREATIONS   (1 << 9)
 #define MAG_MANUAL      (1 << 10)
+#define MAG_ROOMS       (1 << 11)
 
 #define TYPE_UNDEFINED         (-1)
 #define SPELL_RESERVED_DBC       0  /* SKILL NUMBER ZERO -- RESERVED */
@@ -90,8 +91,10 @@
 #define SPELL_INFRAVISION       50 // Reserved Skill[] DO NOT CHANGE
 #define SPELL_WATERWALK         51 // Reserved Skill[] DO NOT CHANGE
 #define SPELL_IDENTIFY          52 // Reserved Skill[] DO NOT CHANGE
+#define SPELL_FLY               53 // Reserved Skill[] DO NOT CHANGE
+#define SPELL_DARKNESS          54
 /** Total Number of defined spells */
-#define NUM_SPELLS              52
+#define NUM_SPELLS              54
 
 /* Insert new spells here, up to MAX_SPELLS */
 #define MAX_SPELLS          130
@@ -102,12 +105,16 @@
 #define SKILL_HIDE          133 // Reserved Skill[] DO NOT CHANGE
 #define SKILL_KICK          134 // Reserved Skill[] DO NOT CHANGE
 #define SKILL_PICK_LOCK     135 // Reserved Skill[] DO NOT CHANGE
-//Undefined                   136
+#define SKILL_WHIRLWIND     136
 #define SKILL_RESCUE        137 // Reserved Skill[] DO NOT CHANGE
 #define SKILL_SNEAK         138 // Reserved Skill[] DO NOT CHANGE
 #define SKILL_STEAL         139 // Reserved Skill[] DO NOT CHANGE
 #define SKILL_TRACK         140 // Reserved Skill[] DO NOT CHANGE
-/* New skills may be added here up to MAX_SKILLS (200) */
+#define SKILL_BANDAGE       141 // Reserved Skill[] DO NOT CHANGE
+
+/*
+ *  New skills may be added here up to MAX_SKILLS (200)
+ */
 
 /*
  * NON-PLAYER AND OBJECT SPELLS AND SKILLS: The practice levels for the spells
@@ -143,10 +150,10 @@
 #define TYPE_PUNCH          313
 #define TYPE_STAB           314
 /** The total number of attack types */
-#define NUM_ATTACK_TYPES  15
+#define NUM_ATTACK_TYPES    15
 
 /* new attack types can be added here - up to TYPE_SUFFERING */
-#define TYPE_SUFFERING             399
+#define TYPE_SUFFERING      399
 
 #define SAVING_PARA   0
 #define SAVING_ROD    1
@@ -198,7 +205,7 @@ struct spell_info_type {
 
 /*
  * Possible Targets:
- *   bit 0 : IGNORE TARGET
+ *  bit 0 : IGNORE TARGET
  *  bit 1 : PC/NPC in room
  *  bit 2 : PC/NPC in world
  *  bit 3 : Object held
@@ -216,7 +223,7 @@ struct spell_info_type {
 #define SPELL_TYPE_SCROLL  4
 
 #define ASPELL(spellname) \
-void    spellname(int level, struct char_data *ch, \
+void spellname(int level, struct char_data *ch, \
           struct char_data *victim, struct obj_data *obj)
 
 #define MANUAL_SPELL(spellname)    spellname(level, caster, cvict, ovict);
@@ -236,40 +243,62 @@ ASPELL(spell_detect_poison);
 int find_skill_num(char *name);
 
 int mag_damage(int level, struct char_data *ch, struct char_data *victim, int spellnum, int savetype);
+
 void mag_affects(int level, struct char_data *ch, struct char_data *victim, int spellnum, int savetype);
+
 void mag_groups(int level, struct char_data *ch, int spellnum, int savetype);
+
 void mag_masses(int level, struct char_data *ch, int spellnum, int savetype);
+
 void mag_areas(int level, struct char_data *ch, int spellnum, int savetype);
+
+void mag_rooms(int level, struct char_data *ch, int spellnum);
+
 void mag_summons(int level, struct char_data *ch, struct obj_data *obj, int spellnum, int savetype);
+
 void mag_points(int level, struct char_data *ch, struct char_data *victim, int spellnum, int savetype);
+
 void mag_unaffects(int level, struct char_data *ch, struct char_data *victim, int spellnum, int type);
+
 void mag_alter_objs(int level, struct char_data *ch, struct obj_data *obj, int spellnum, int type);
+
 void mag_creations(int level, struct char_data *ch, int spellnum);
+
 int call_magic(struct char_data *caster, struct char_data *cvict, struct obj_data *ovict, int spellnum, int level, int casttype);
+
 void mag_objectmagic(struct char_data *ch, struct obj_data *obj, char *argument);
+
 int cast_spell(struct char_data *ch, struct char_data *tch, struct obj_data *tobj, int spellnum);
 
-/* other prototypes */
+/*
+ *  other prototypes
+ */
 void spell_level(int spell, int chclass, int level);
 void init_spell_levels(void);
 const char *skill_name(int num);
 
-/* From magic.c */
+/*
+ *  From magic.c
+ */
 int mag_savingthrow(struct char_data *ch, int type, int modifier);
 void affect_update(void);
 
-/* from spell_parser.c */
+/*
+ *  from spell_parser.c
+ */
 ACMD(do_cast);
 void unused_spell(int spl);
 void mag_assign_spells(void);
 
-/* Global variables exported */
-#ifndef __SPELL_PARSER_C__
+/*
+ *  Global variables
+ */
+#  ifndef __SPELL_PARSER_C__
 
 extern struct spell_info_type spell_info[];
 extern char cast_arg2[];
 extern const char *unused_spellname;
 
-#endif /* __SPELL_PARSER_C__ */
+#  endif // __SPELL_PARSER_C__
 
-#endif /* _SPELLS_H_ */
+#endif // _SPELLS_H_

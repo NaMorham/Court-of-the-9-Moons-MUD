@@ -30,10 +30,10 @@
 #define TRIGEDIT_ARGUMENT           8
 #define TRIGEDIT_COPY               9
 
-#define OLC_SCRIPT_EDIT     99999  // arbitrary > highest possible room number
-#define SCRIPT_MAIN_MENU        0
-#define SCRIPT_NEW_TRIGGER      1
-#define SCRIPT_DEL_TRIGGER      2
+#define OLC_SCRIPT_EDIT         82766    // arbitrary > highest possible room number
+#define SCRIPT_MAIN_MENU            0
+#define SCRIPT_NEW_TRIGGER          1
+#define SCRIPT_DEL_TRIGGER          2
 
 #define OLC_SCRIPT_EDIT_MODE(d) (OLC(d)->script_mode)   // parse input mode
 #define OLC_SCRIPT(d)           (OLC(d)->script)        // script editing

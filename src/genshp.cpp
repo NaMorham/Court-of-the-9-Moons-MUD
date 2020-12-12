@@ -20,8 +20,9 @@
  * NOTE (gg): Didn't modify sedit much. Don't consider it as 'recent' as the
  * other editors with regard to updates or style.
  */
-
-// local (file scope) functions
+/*
+ *  local (file scope) functions
+ */
 static void copy_shop_list(IDXTYPE **tlist, IDXTYPE *flist);
 static void copy_shop_type_list(struct shop_buy_data **tlist, struct shop_buy_data *flist);
 static void free_shop_strings(struct shop_data *shop);
@@ -75,7 +76,7 @@ static void copy_shop_list(IDXTYPE **tlist, IDXTYPE *flist)
     }
 
     // Count number of entries.
-    for (i = 0; flist[i] != NOTHING; i++) { }
+    for (i = 0; flist[i] != NOTHING; i++) {}
     num_items = i + 1;
 
     // Make space for entries.
@@ -99,7 +100,7 @@ static void copy_shop_type_list(struct shop_buy_data **tlist, struct shop_buy_da
     }
 
     // Count number of entries.
-    for (i = 0; BUY_TYPE(flist[i]) != NOTHING; i++) { }
+    for (i = 0; BUY_TYPE(flist[i]) != NOTHING; i++) {}
     num_items = i + 1;
 
     // Make space for entries.
@@ -120,7 +121,7 @@ void remove_shop_from_type_list(struct shop_buy_data **list, int num)
     struct shop_buy_data *nlist;
 
     // Count number of entries.
-    for (i = 0; (*list)[i].type != NOTHING; i++) { }
+    for (i = 0; (*list)[i].type != NOTHING; i++) {}
 
     if ((num < 0) || (num >= i)) {
         return;
@@ -166,7 +167,7 @@ void add_shop_to_int_list(IDXTYPE **list, IDXTYPE newi)
     IDXTYPE i, num_items, *nlist;
 
     // Count number of entries.
-    for (i = 0; (*list)[i] != NOTHING; i++) { }
+    for (i = 0; (*list)[i] != NOTHING; i++) {}
     num_items = i;
 
     // Make a new list and slot in the new entry.
@@ -387,7 +388,7 @@ int save_shops(zone_rnum zone_num)
 {
     int i, j, rshop, num_shops = 0;
     FILE *shop_file;
-    char fname[128], oldname[128];
+    char fname[128], oldname[128], buf[MAX_STRING_LENGTH];
     struct shop_data *shop;
 
 #if CIRCLE_UNSIGNED_INDEX
@@ -436,7 +437,7 @@ int save_shops(zone_rnum zone_num)
             fprintf(shop_file, "-1\n");
 
             // Save messages. Added some defaults as sanity checks.
-            fprintf(shop_file,
+            sprintf(buf,
                 "%s~\n"
                 "%s~\n"
                 "%s~\n"
@@ -460,6 +461,8 @@ int save_shops(zone_rnum zone_num)
                 S_KEEPER(shop) == NOBODY ? -1 : mob_index[S_KEEPER(shop)].vnum,
                 S_NOTRADE(shop)
                 );
+
+            fputs(convert_from_tabs(buf), shop_file);
 
             // Save the rooms.
             for (j = 0; S_ROOM(shop, j) != NOWHERE; j++) {

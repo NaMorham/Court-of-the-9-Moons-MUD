@@ -35,18 +35,6 @@
 #define PT_FLAGS(i) (player_table[(i)].flags)
 #define PT_LLAST(i) (player_table[(i)].last)
 
-// 'global' vars defined here and used externally
-/**
- * @deprecated Since this file really is basically a functional extension
- * of the database handling in db.c, until the day that the mud is broken
- * down to be less monolithic, I don't see why the following should be defined
- * anywhere but there.
-struct player_index_element *player_table = NULL;
-int  top_of_p_table = 0;
-int  top_of_p_file  = 0;
-long top_idnum      = 0;
-*/
-
 /*
  * local functions
  */
@@ -139,7 +127,7 @@ int create_entry(char *name)
  * Remove an entry from the in-memory player index table.
  * Requires the 'pos' value returned by the get_ptable_by_name function
  */
-void remove_player_from_index(int pos)
+static void remove_player_from_index(int pos)
 {
     int i;
 
@@ -157,7 +145,7 @@ void remove_player_from_index(int pos)
         PT_LEVEL(i - 1) = PT_LEVEL(i);
         PT_FLAGS(i - 1) = PT_FLAGS(i);
         PT_LLAST(i - 1) = PT_LLAST(i);
-    }
+    }  // for (i ...
     PT_PNAME(top_of_p_table) = NULL;
 
     // Reduce the index table counter
@@ -229,7 +217,7 @@ long get_ptable_by_name(const char *name)
         if (!str_cmp(player_table[i].name, name)) {
             return (i);
         }
-    }
+    }  // for (i ...
 
     return (-1);
 }
@@ -242,7 +230,7 @@ long get_id_by_name(const char *name)
         if (!str_cmp(player_table[i].name, name)) {
             return (player_table[i].id);
         }
-    }
+    }  // for (i ...
 
     return (-1);
 }
@@ -255,7 +243,7 @@ char *get_name_by_id(long id)
         if (player_table[i].id == id) {
             return (player_table[i].name);
         }
-    }
+    }  // for (i ...
 
     return (NULL);
 }
@@ -294,7 +282,7 @@ int load_char(const char *name, struct char_data *ch)
         ch->affected = NULL;
         for (i = 1; i <= MAX_SKILLS; i++) {
             GET_SKILL(ch, i) = 0;
-        }
+        }  // for (i ...
         GET_SEX(ch) = PFDEF_SEX;
         GET_CLASS(ch) = PFDEF_CLASS;
         GET_RACE(ch) = PFDEF_RACE;
@@ -304,7 +292,7 @@ int load_char(const char *name, struct char_data *ch)
         GET_ALIGNMENT(ch) = PFDEF_ALIGNMENT;
         for (i = 0; i < NUM_OF_SAVING_THROWS; i++) {
             GET_SAVE(ch, i) = PFDEF_SAVETHROW;
-        }
+        }  // for (i ...
         GET_LOADROOM(ch) = PFDEF_LOADROOM;
         GET_INVIS_LEV(ch) = PFDEF_INVISLEV;
         GET_FREEZE_LEV(ch) = PFDEF_FREEZELEV;
@@ -736,7 +724,7 @@ int load_char(const char *name, struct char_data *ch)
                 mudlog(NRM, LVL_GOD, TRUE, "SYSERR: Unknown tag [%s] in pfile [%s]", tag, name);
                 sprintf(buf, "SYSERR: Unknown tag %s in pfile %s", tag, name);
             }
-        }
+        }  // while (get_line(fl, line))
     }
 
     affect_total(ch);
@@ -762,12 +750,12 @@ void save_char(struct char_data * ch)
 {
     FILE *fl;
     char filename[40], buf[MAX_STRING_LENGTH], bits[127], bits2[127], bits3[127], bits4[127];
-    int i, id, save_index = FALSE;
+    int i, j, id, save_index = FALSE;
     struct affected_type *aff, tmp_aff[MAX_AFFECT];
     struct obj_data *char_eq[NUM_WEARS];
     trig_data *t;
 
-    if (IS_NPC(ch) || GET_PFILEPOS(ch) < 0) {
+    if (IS_NPC(ch) || (GET_PFILEPOS(ch) < 0)) {
         return;
     }
 
@@ -814,15 +802,13 @@ void save_char(struct char_data * ch)
     for (aff = ch->affected, i = 0; i < MAX_AFFECT; i++) {
         if (aff) {
             tmp_aff[i] = *aff;
+            for (j = 0; j < AF_ARRAY_MAX; j++)
+                tmp_aff[i].bitvector[j] = aff->bitvector[j];
             tmp_aff[i].next = 0;
             aff = aff->next;
         }
         else {
-            tmp_aff[i].type = 0;    // Zero signifies not used
-            tmp_aff[i].duration = 0;
-            tmp_aff[i].modifier = 0;
-            tmp_aff[i].location = 0;
-            tmp_aff[i].bitvector = 0;
+            new_affect(&(tmp_aff[i]));
             tmp_aff[i].next = 0;
         }
     }  // for (aff ...
@@ -1055,16 +1041,16 @@ void save_char(struct char_data * ch)
     }
 
     // Save affects
-    if (tmp_aff[0].type > 0) {
+    if (tmp_aff[0].spell > 0) {
         fprintf(fl, "Affs:\n");
         for (i = 0; i < MAX_AFFECT; i++) {
             aff = &tmp_aff[i];
-            if (aff->type) {
-                fprintf(fl, "%d %d %d %d %d\n", aff->type, aff->duration,
-                    aff->modifier, aff->location, (int)aff->bitvector);
+            if (aff->spell) {
+                fprintf(fl, "%d %d %d %d %d %d %d %d\n", aff->spell, aff->duration,
+                    aff->modifier, aff->location, aff->bitvector[0], aff->bitvector[1], aff->bitvector[2], aff->bitvector[3]);
             }
         }  // for (i ...
-        fprintf(fl, "0 0 0 0 0\n");
+        fprintf(fl, "0 0 0 0 0 0 0 0\n");
     }
 
     write_aliases_ascii(fl, ch);
@@ -1074,7 +1060,7 @@ void save_char(struct char_data * ch)
 
     // More char_to_store code to add spell and eq affections back in.
     for (i = 0; i < MAX_AFFECT; i++) {
-        if (tmp_aff[i].type) {
+        if (tmp_aff[i].spell) {
             affect_to_char(ch, &tmp_aff[i]);
         }
     }  // for (i ...
@@ -1169,7 +1155,7 @@ void tag_argument(char *argument, char *tag)
  */
 void remove_player(int pfilepos)
 {
-    char filename[MAX_STRING_LENGTH];
+    char filename[MAX_STRING_LENGTH], timestr[25];
     int i;
 
     if (!*player_table[pfilepos].name) {
@@ -1181,11 +1167,10 @@ void remove_player(int pfilepos)
         if (get_filename(filename, sizeof(filename), i, player_table[pfilepos].name)) {
             unlink(filename);
         }
-    }
-
-    WriteLogf("PCLEAN: %s Lev: %d Last: %s",
-        player_table[pfilepos].name, player_table[pfilepos].level,
-        asctime(localtime(&player_table[pfilepos].last)));
+    }  // for (i ...
+    strftime(timestr, sizeof(timestr), "%c", localtime(&(player_table[pfilepos].last)));
+    WriteLogf("PCLEAN: %s Lev: %d Last: %s", player_table[pfilepos].name,
+        player_table[pfilepos].level, timestr);
     player_table[pfilepos].name[0] = '\0';
 
     // Update index table.
@@ -1228,20 +1213,34 @@ void clean_pfiles(void)
 
 static void load_affects(FILE *fl, struct char_data *ch)
 {
-    int num = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, i;
+    int num = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0, num7 = 0, num8 = 0, i, n_vars;
     char line[MAX_INPUT_LENGTH + 1];
     struct affected_type af;
 
     i = 0;
     do {
+        new_affect(&af);
         get_line(fl, line);
-        sscanf(line, "%d %d %d %d %d", &num, &num2, &num3, &num4, &num5);
+        n_vars = sscanf(line, "%d %d %d %d %d %d %d %d", &num, &num2, &num3, &num4, &num5, &num6, &num7, &num8);
         if (num > 0) {
-            af.type = num;
+            af.spell = num;
             af.duration = num2;
             af.modifier = num3;
             af.location = num4;
-            af.bitvector = num5;
+            if (n_vars == 8) {                       // New 128-bit version
+                af.bitvector[0] = num5;
+                af.bitvector[1] = num6;
+                af.bitvector[2] = num7;
+                af.bitvector[3] = num8;
+            }
+            else if (n_vars == 5) {           // Old 32-bit conversion version
+                if (num5 > 0 && num5 < NUM_AFF_FLAGS) {  // Ignore invalid values
+                    SET_BIT_AR(af.bitvector, num5);
+                }
+            }
+            else {
+                WriteLogf("SYSERR: Invalid affects in pfile (%s), expecting 5 or 8 values", GET_NAME(ch));
+            }
             affect_to_char(ch, &af);
             i++;
         }
@@ -1327,7 +1326,7 @@ static void write_aliases_ascii(FILE *file, struct char_data *ch)
     for (temp = GET_ALIASES(ch); temp; temp = temp->next) {
         fprintf(file,
             " %s\n"   // Alias: prepend a space in order to avoid issues with aliases beginning
-                      // with * (get_line treats lines beginning with * as comments and ignores them
+            // with * (get_line treats lines beginning with * as comments and ignores them
             "%s\n"    // Replacement: always prepended with a space in memory anyway
             "%d\n",   // Type
             temp->alias,

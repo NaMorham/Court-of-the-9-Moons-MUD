@@ -49,6 +49,11 @@ You see the Reading Room.
 ~
 ~
 0 -1 3000
+D5
+You see the temple square.
+~
+~
+0 -1 3005
 E
 paintings ancient wall peasants gods giants~
    The paintings are numerous in style and quality.  But, they all have the same
@@ -126,7 +131,7 @@ temple gate.  The entrance to the Clerics' Guild is to the west, and the old
 Grunting Boar Inn, is to the east.  Just south of here you see the market
 square, the center of Midgaard.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the temple.
 ~
@@ -202,7 +207,7 @@ Free instructions provided by the Grunting Boar Inn.
 E
 writing carving carvings symbols symbol~
    Although it is very hard to understand, you think it looks a lot like beer,
-poems about beer, and small beer-mugs.  
+poems about beer, and small beer-mugs.
 ~
 S
 #3008
@@ -225,12 +230,12 @@ You see the entrance hall.
 E
 sign~
    Rooms are expensive but good!  You may:
- 
+
    Offer - get an offer on a room - Time is in real life days.
    Rent  - Rent a room (saves your stuff, and quits the game),
            minimum charge is one day.
- 
- 
+
+
                           MY WAY OR THE HIGHWAY
                              PAY YOUR RENT!
                 WE WON'T THINK TWICE BEFORE KICKING YOU OUT.
@@ -255,7 +260,7 @@ danish pastry~
 Denmark (which surely is not the capital of Sweden!  ).  Former ruler of
 Scandinavia, England, Northern Germany, Northern France, Russia, Greenland,
 Iceland, Estonia etc.  Etc.  The sight of those large, wholesome chokoladeboller
-makes your mouth water and your soul sing.  
+makes your mouth water and your soul sing.
 ~
 E
 sign~
@@ -291,7 +296,7 @@ S
 The Weapon Shop~
    The smell of worked metals and various quenching oils fills the room.  Every
 available space in the room including the ceiling is loaded with various
-equipment and weaponry.  There is a small note on the counter.  
+equipment and weaponry.  There is a small note on the counter.
 ~
 30 136 0 0 0 0
 D2
@@ -316,7 +321,7 @@ entrance to the Guild of Magic Users.  The street continues east towards the
 market square.  The magic shop is to the north and to the west is the city
 gate.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the magic shop.
 ~
@@ -341,10 +346,10 @@ S
 #3013
 Main Street~
    You are on the main street passing through the City of Midgaard.  South of
-here is the entrance to the Armory, and the bakery is to the north.  East of
+here is the entrance to the Armoury, and the bakery is to the north.  East of
 here is the market square.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the bakery.
 ~
@@ -356,7 +361,7 @@ You see the market square.
 ~
 0 -1 3014
 D2
-You see the armory.
+You see the armoury.
 ~
 ~
 0 -1 3020
@@ -373,7 +378,7 @@ A large, peculiar looking statue is standing in the middle of the square.
 Roads lead in every direction, north to the temple square, south to the
 common square, east and westbound is the main street.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the temple square.
 ~
@@ -405,7 +410,7 @@ Main Street~
 general store, and the main street continues east.  To the west you see and
 hear the market place, to the south a small door leads into the Pet Shop.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the general store.
 ~
@@ -433,7 +438,7 @@ Main Street~
 Guild of Swordsmen.  To the east you leave town and to the west the street
 leads to the market square.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the weapon shop.
 ~
@@ -504,9 +509,9 @@ You see the bar.
 0 -1 3018
 S
 #3020
-The Armory~
-   The armory has a wide assortment of armor displayed on the walls and in the
-windows. Helmets, shields, and suits of armor are for sale. To the north is
+The Armoury~
+   The armoury has a wide assortment of armour displayed on the walls and in the
+windows. Helmets, shields, and suits of armour are for sale. To the north is
 the main street. On the wall is a small note.
 ~
 30 136 0 0 0 0
@@ -538,10 +543,11 @@ You see the main street.
 ~
 ~
 0 -1 3016
-D2
+D1
+You see the swordsmen's bar, many noises comes from there.
 ~
 ~
-0 0 3022
+0 -1 3022
 S
 #3022
 The Bar Of Swordsmen~
@@ -550,14 +556,16 @@ furniture is all around you in small pieces.  To the south is the yard, and
 to the west is the entrance hall.
 ~
 30 140 0 0 0 0
-D0
+D2
+You see the practice yard.
 ~
 ~
-0 0 3021
-D1
+0 -1 3023
+D3
+You see the entrance hall to the warriors' guild.
 ~
 ~
-0 0 3023
+0 -1 3021
 S
 #3023
 The Tournament And Practice Yard~
@@ -565,10 +573,11 @@ The Tournament And Practice Yard~
 A well leads down into darkness.
 ~
 30 12 0 0 0 0
-D3
+D0
+You see the bar.
 ~
 ~
-0 0 3022
+0 -1 3022
 D5
 You can't see what is down there, it is too dark.  Looks like it would be
 impossible to climb back up.
@@ -581,7 +590,7 @@ The Eastern End Of Poor Alley~
    You are at the poor alley.  South of here is the Grubby Inn and to the
 east you see common square.  The alley continues further west.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see the common square.
 ~
@@ -604,7 +613,7 @@ The Common Square~
 the poor alley and to the east is the dark alley.  To the north, this square
 is connected to the market square.  From the south you notice a nasty smell.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the market square.
 ~
@@ -631,7 +640,7 @@ The Dark Alley~
    The dark alley, to the west is the common square and to the south is the
 Guild of Thieves.  The alley continues east.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 The alley continues east.
 ~
@@ -690,7 +699,7 @@ You see the entrance hall to the thieves' guild.
 0 -1 3027
 E
 furniture~
-   As you look at the furniture, the chair you sit on disappears.  
+   As you look at the furniture, the chair you sit on disappears.
 ~
 S
 #3029
@@ -717,7 +726,7 @@ The Dump~
 garbage you can see a large junction of pipes, looks like the entrance to the
 sewer system.  North of here you see the common square.
 ~
-30 4 0 0 0 0
+30 4 0 0 0 2
 D0
 You see the common square.
 ~
@@ -786,7 +795,7 @@ Inside The West Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  Main Street leads
 east and Wall Road leads south from here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see Main Street.
 ~
@@ -806,23 +815,23 @@ gate~
 E
 bridge footbridge~
    It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.  
+from one tower to the other.
 ~
 E
 gate~
    It is a set of very big double doors made from hard wood.  They have been
 reinforced with large iron bands to make them even more sturdy.  One of the
-doors is equipped with a very big lock.  
+doors is equipped with a very big lock.
 ~
 E
 tower towers~
-   Both of the towers are built from large grey rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.  
+   Both of the towers are built from large gray rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
 ~
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3041
@@ -831,7 +840,7 @@ Inside The East Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  Main Street leads
 west from here.  To the south you see the Water Shop.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see the city gate.
 ~
@@ -850,23 +859,23 @@ You see Main Street.
 E
 bridge footbridge~
    It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.  
+from one tower to the other.
 ~
 E
 gate~
    It is a set of very big double doors made from hard wood.  They have been
 reinforced with large iron bands to make them even more sturdy.  One of the
-doors is equipped with a very big lock.  
+doors is equipped with a very big lock.
 ~
 E
 tower towers~
-   Both of the towers are built from large grey rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.  
+   Both of the towers are built from large gray rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
 ~
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3042
@@ -874,7 +883,7 @@ Wall Road~
    You are walking next to the western city wall.  The road continues further
 south and the city gate is just north of here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the city gate.
 ~
@@ -887,8 +896,8 @@ The road continues further south.
 0 -1 3043
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3043
@@ -897,7 +906,7 @@ Wall Road~
 north and south.  A small, poor alley leads east.
 Some letters have been written on the wall here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 The road continues further north.
 ~
@@ -919,8 +928,8 @@ wall writing letters~
 ~
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3044
@@ -928,7 +937,7 @@ Poor Alley~
    You are on Poor Alley, which continues further east.  You see the
 city wall to the west.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 The alley leads east.
 ~
@@ -945,7 +954,7 @@ The Dark Alley At The Levee~
    You are standing in the alley which continues east and west.  South of
 here you see the levee.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 The alley leads east.
 ~
@@ -968,7 +977,7 @@ The Eastern End Of The Alley~
 east, blocking any further movement.  A small warehouse is directly south of
 here.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D2
 You see the warehouse.
 ~
@@ -985,7 +994,7 @@ Wall Road~
    You are standing on the road next to the western city wall, which
 continues north.  South of here is a bridge across the river.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the road.
 ~
@@ -998,8 +1007,8 @@ You see the bridge.
 0 -1 3051
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3048
@@ -1019,7 +1028,7 @@ The Levee~
    You are at the levee.  South of here you see the river gently flowing west.
 The river bank is very low making it possible to enter the river.
 ~
-30 128 0 0 0 0
+30 128 0 0 0 1
 D0
 You see the alley.
 ~
@@ -1049,7 +1058,7 @@ On The Bridge~
 built out from the western city wall and the river flows west through an
 opening in the wall ten feet below the bridge.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the road.
 ~
@@ -1062,17 +1071,17 @@ You see the Concourse.
 0 -1 3100
 E
 bridge~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar, just like the wall.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar, just like the wall.
 ~
 E
 opening~
-   You cannot really see it from here as it is somewhere beneath your feet.  
+   You cannot really see it from here as it is somewhere beneath your feet.
 ~
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3052
@@ -1081,7 +1090,7 @@ Outside The West Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  To the west you
 can see the edge of a big forest.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 The city gate is to the east.
 ~
@@ -1095,23 +1104,23 @@ The forest edge is to the west.
 E
 bridge footbridge~
    It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.  
+from one tower to the other.
 ~
 E
 gate~
    It is a set of very big double doors made from hard wood.  They have been
 reinforced with large iron bands to make them even more sturdy.  One of the
-doors is equipped with a very big lock.  
+doors is equipped with a very big lock.
 ~
 E
 tower towers~
-   Both of the towers are built from large grey rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.  
+   Both of the towers are built from large gray rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
 ~
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3053
@@ -1120,7 +1129,7 @@ Outside The East Gate Of Midgaard~
 connected with a footbridge across the heavy wooden gate.  To the east the
 plains stretch out in the distance.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D1
 You see the plains.
 ~
@@ -1134,28 +1143,28 @@ gate~
 E
 bridge footbridge~
    It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.  
+from one tower to the other.
 ~
 E
 gate~
    It is a set of very big double doors made from hard wood.  They have been
 reinforced with large iron bands to make them even more sturdy.  One of the
-doors is equipped with a very big lock.  
+doors is equipped with a very big lock.
 ~
 E
 tower towers~
-   Both of the towers are built from large grey rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.  
+   Both of the towers are built from large gray rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
 ~
 E
 wall~
-   It is built from large grey rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.  
+   It is built from large gray rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3054
 By The Temple Altar~
-   You are by the temple altar in the northern end of the Temple of Midgaard. 
+   You are by the temple altar in the northern end of the Temple of Midgaard.
 A huge altar made from white polished marble dominates this part of the temple.
 Towering behind the altar is a ten foot tall sitting statue of Odin, the King of
 the Gods. To the north, steps lead out the back of the temple towards the
@@ -1175,14 +1184,14 @@ You see the southern end of the temple.
 E
 altar~
    Even though the altar is more than ten feet long it appears to be made from a
-single block of white virgin marble.  
+single block of white virgin marble.
 ~
 E
 statue odin king god~
    The statue represents the one-eyed Odin sitting on a his throne.  He has
-long, grey hair and beard and a strict look on his face.  On top of the throne,
+long, gray hair and beard and a strict look on his face.  On top of the throne,
 just above his shoulders, his two ravens Hugin and Munin are sitting and at his
-feet are his wolves Gere and Freke.  
+feet are his wolves Gere and Freke.
 ~
 S
 #3058
@@ -1204,7 +1213,7 @@ Behind The Temple Altar~
 of here.  To the north, the path continues through the lush contryside of
 Midgaard towards the Dragonhelm Mountains far off to the north.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see the lush, green countryside of Midgaard.
 ~
@@ -1229,7 +1238,7 @@ stay here forever, surrounded by powerful beauty in all directions.
    The path you are on continues north through the field and south back
 to Midgaard.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 1
 D0
 You see more of the path through the Great Field.
 ~
@@ -1254,7 +1263,7 @@ stay here forever, surrounded by powerful beauty in all directions.
    There is a strange structure on the eastern side of the path.  A small
 dirt path splits off of the main path and leads off to the west.
 ~
-30 4 0 0 0 0
+30 4 0 0 0 1
 D0
 The path continues northwards bringing you ever closer to the Dragonhelm
 Mountains.
@@ -1285,7 +1294,7 @@ been pried open by curious customs agents, and are now stacked along the west
 wall, hiding plenty of 'WANTED' posters.
 There is a sign posted on the wall here.
 ~
-30 152 0 0 0 0
+30 8 0 0 0 1
 D2
 You see the entrance to the Grunting Boar Inn and Tavern.
 ~
@@ -1314,24 +1323,24 @@ E
 letters envelopes assorted~
    Envelopes of all sizes are heaped into hugh piles around the room.  As you
 look closer, you see a letter that you had posted a full week ago, laying
-unnoticed and slightly rat-chewed towards the bottom of the pile.  
+unnoticed and slightly rat-chewed towards the bottom of the pile.
 ~
 E
 cobwebs~
-   They seem to cover everything here, even the Postmaster himself.  
+   They seem to cover everything here, even the Postmaster himself.
 ~
 E
 crates opened large~
    As you know, it is illegal to send contraband items through the Midgaard
 Mail.  The customs agents use this as a great excuse to seize liquor, rare
-spices, and just about anything they might find useful or profitable.  
+spices, and just about anything they might find useful or profitable.
 ~
 E
 WANTED posters poster wall~
    Faces of various known Killers and Thieves can barely be seen behind the
 crates on the west wall.  Some of them look quite familar, sorta like that guy
 who you saw in the Reception a minute ago...  But then again, they are rather
-hard to see past the crates.  
+hard to see past the crates.
 ~
 S
 #3063
@@ -1340,7 +1349,7 @@ The Midgaard Donation Room~
 are a couple of small wooden benches here where people occasionally sit
 while they wait for items to appear.  The temple is to the west.
 ~
-30 28 0 0 0 0
+30 28 0 0 0 1
 D3
 The busy temple is back west.
 ~
@@ -1353,7 +1362,7 @@ The Cryogenic Center~
 body-length canisters lined up against the walls.  The Reception is to the
 south.
 ~
-30 8 0 0 0 0
+30 8 0 0 0 1
 D2
 The Reception is to the south.
 ~
@@ -1373,7 +1382,7 @@ stay here forever, surrounded by powerful beauty in all directions.
    The way north appears to be blocked by a large plot device and you cannot
 see any way around it.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 2
 D0
 Unfortunately the way north is blocked by a large plot device and there
 does not seem to be any way around it.
@@ -1389,7 +1398,7 @@ on the eastern side of the path.
 E
 plot device~
    What more is a plot device than something to block a certain direction for
-reasons beyond your comprehension.  
+reasons beyond your comprehension.
 ~
 S
 #3066
@@ -1406,7 +1415,7 @@ in all directions.
    There is a large rusty gate sitting in a stone archway just to the
 west.
 ~
-30 0 0 0 0 0
+30 0 0 0 0 2
 D1
 The path meets up with a larger path just to the east.
 ~

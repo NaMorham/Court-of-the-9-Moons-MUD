@@ -39,18 +39,17 @@ char *fread_string(FILE * fl, const char *error)
         }
 
         for (point = buf + strlen(buf) - 2; point >= buf && isspace(*point); point--);
-            if ((flag = (*point == '~'))) {
-                if (*(buf + strlen(buf) - 3) == '\n') {
-                    *(buf + strlen(buf) - 2) = '\0';
-                }
-                else {
-                    *(buf + strlen(buf) - 2) = '\0';
-                }
+        if ((flag = (*point == '~'))) {
+            if (*(buf + strlen(buf) - 3) == '\n') {
+                *(buf + strlen(buf) - 2) = '\0';
             }
+            else {
+                *(buf + strlen(buf) - 2) = '\0';
+            }
+        }
     } while (!flag);
 
     // do the allocate boogie
-
     if (strlen(buf) > 0) {
         CREATE(rslt, char, strlen(buf) + 1);
         strcpy(rslt, buf);
@@ -60,7 +59,6 @@ char *fread_string(FILE * fl, const char *error)
     }
     return (rslt);
 }
-
 
 void do_list(FILE * shop_f, FILE * newshop_f, int max)
 {
@@ -73,11 +71,10 @@ void do_list(FILE * shop_f, FILE * newshop_f, int max)
         if (temp > 0) {
             fprintf(newshop_f, "%d%s", temp, buf);
         }
-    }
+    }  // for (count ...
 
     fprintf(newshop_f, "-1\n");
 }
-
 
 void do_float(FILE * shop_f, FILE * newshop_f)
 {
@@ -93,7 +90,6 @@ void do_float(FILE * shop_f, FILE * newshop_f)
     fprintf(newshop_f, "%s \n", str);
 }
 
-
 void do_int(FILE * shop_f, FILE * newshop_f)
 {
     int i, j;
@@ -102,7 +98,6 @@ void do_int(FILE * shop_f, FILE * newshop_f)
     fprintf(newshop_f, "%d \n", i);
 }
 
-
 void do_string(FILE * shop_f, FILE * newshop_f, char *msg)
 {
     char *ptr;
@@ -110,8 +105,8 @@ void do_string(FILE * shop_f, FILE * newshop_f, char *msg)
     ptr = fread_string(shop_f, msg);
     fprintf(newshop_f, "%s~\n", ptr);
     free(ptr);
+    ptr = NULL;
 }
-
 
 static int boot_the_shops_conv(FILE * shop_f, FILE * newshop_f, char *filename)
 {
@@ -127,6 +122,7 @@ static int boot_the_shops_conv(FILE * shop_f, FILE * newshop_f, char *filename)
             sprintf(buf2, "shop #%d in shop file %s", temp, filename);
             fprintf(newshop_f, "#%d~\n", temp);
             free(buf);          // Plug memory leak!
+            buf = NULL;
             printf("   #%d\n", temp);
 
             do_list(shop_f, newshop_f, MAX_PROD);    // Produced Items
@@ -136,25 +132,30 @@ static int boot_the_shops_conv(FILE * shop_f, FILE * newshop_f, char *filename)
 
             do_list(shop_f, newshop_f, MAX_TRADE);  // Bought Items
 
-            for (count = 0; count < 7; count++)     // Keeper msgs
+            for (count = 0; count < 7; count++) {   // Keeper msgs
                 do_string(shop_f, newshop_f, buf2);
+            }
 
-            for (count = 0; count < 5; count++)     // Misc
+            for (count = 0; count < 5; count++) {   // Misc
                 do_int(shop_f, newshop_f);
+            }
             fprintf(newshop_f, "-1\n");
-            for (count = 0; count < 4; count++)     // Open/Close
+            for (count = 0; count < 4; count++) {   // Open/Close
                 do_int(shop_f, newshop_f);
+            }
 
         }
         else {
             if (*buf == '$') {    // EOF
                 free(buf);        // Plug memory leak!
+                buf = NULL;
                 fprintf(newshop_f, "$~\n");
                 break;
             }
             else if (strstr(buf, VERSION3_TAG)) {
                 printf("%s: New format detected, conversion aborted!\n", filename);
                 free(buf);        // Plug memory leak!
+                buf = NULL;
                 return (1);
             }
         }

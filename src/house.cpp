@@ -248,14 +248,16 @@ static int find_house(room_vnum vnum)
 static void House_save_control(void)
 {
     FILE *fl;
-    int i;
 
     if (!(fl = fopen(HCONTROL_FILE, "wb"))) {
         perror("SYSERR: Unable to open house control file.");
         return;
     }
     // write all the house control recs in one fell swoop.  Pretty nifty, eh?
-    i = fwrite(house_control, sizeof(struct house_control_rec), num_of_houses, fl);
+    if (fwrite(house_control, sizeof(struct house_control_rec), num_of_houses, fl) != (size_t)num_of_houses) {
+        perror("SYSERR: Unable to save house control file.");
+        return;
+    }
 
     fclose(fl);
 }
@@ -269,7 +271,6 @@ void House_boot(void)
     struct house_control_rec temp_house;
     room_rnum real_house, real_atrium;
     FILE *fl;
-    int i;
 
     memset((char *)house_control, 0, sizeof(struct house_control_rec)*MAX_HOUSES);
 
@@ -283,7 +284,8 @@ void House_boot(void)
         return;
     }
     while (!feof(fl) && (num_of_houses < MAX_HOUSES)) {
-        i = fread(&temp_house, sizeof(struct house_control_rec), 1, fl);
+        if (fread(&temp_house, sizeof(struct house_control_rec), 1, fl) != 1)
+            break;
 
         if (feof(fl)) {
             break;
@@ -300,7 +302,7 @@ void House_boot(void)
         else if ((real_atrium = real_room(temp_house.atrium)) == NOWHERE) {
             continue;            // house doesn't have an atrium -- skip
         }
-        else if ((temp_house.exit_num < 0) || (temp_house.exit_num >= NUM_OF_DIRS)) {
+        if (temp_house.exit_num < 0 || temp_house.exit_num >= DIR_COUNT) {
             continue;            // invalid exit num -- skip
         }
         else if (TOROOM(real_house, temp_house.exit_num) != real_atrium) {
@@ -322,7 +324,7 @@ void House_boot(void)
 /*
  * "House Control" functions
  */
-const char *HCONTROL_FORMAT =
+static const char *HCONTROL_FORMAT =
 "Usage: hcontrol build <house vnum> <exit direction> <player name>\r\n"
 "       hcontrol destroy <house vnum>\r\n"
 "       hcontrol pay <house vnum>\r\n"
@@ -331,7 +333,7 @@ const char *HCONTROL_FORMAT =
 void hcontrol_list_houses(struct char_data *ch, char *arg)
 {
     int i;
-    char *timestr, *temp;
+    char *temp;
     char built_on[128], last_pay[128], own_name[MAX_NAME_LENGTH + 1];
 
     if (arg && *arg) {
@@ -367,18 +369,14 @@ void hcontrol_list_houses(struct char_data *ch, char *arg)
         }
 
         if (house_control[i].built_on) {
-            timestr = asctime(localtime(&(house_control[i].built_on)));
-            *(timestr + 10) = '\0';
-            strlcpy(built_on, timestr, sizeof(built_on));
+            strftime(built_on, sizeof(built_on), "%a %b %d %Y", localtime(&(house_control[i].built_on)));
         }
         else {
             strcpy(built_on, "Unknown");    // strcpy: OK (for 'strlen("Unknown") < 128')
         }
 
         if (house_control[i].last_payment) {
-            timestr = asctime(localtime(&(house_control[i].last_payment)));
-            *(timestr + 10) = '\0';
-            strlcpy(last_pay, timestr, sizeof(last_pay));
+            strftime(last_pay, sizeof(last_pay), "%a %b %d %Y", localtime(&(house_control[i].last_payment)));
         }
         else {
             strcpy(last_pay, "None");    // strcpy: OK (for 'strlen("None") < 128')
@@ -386,7 +384,7 @@ void hcontrol_list_houses(struct char_data *ch, char *arg)
 
         // Now we need a copy of the owner's name to capitalize. -gg 6/21/98
         strcpy(own_name, temp);    // strcpy: OK (names guaranteed <= MAX_NAME_LENGTH+1)
-        send_to_char(ch, "%7d %7d  %-10s    %2d    %-12s %s\r\n",
+        send_to_char(ch, "%7d %7d    %-15s       %2d       %-12s %s\r\n",
             house_control[i].vnum, house_control[i].atrium, built_on,
             house_control[i].num_of_guests, CAP(own_name), last_pay);
 
@@ -751,7 +749,7 @@ static int ascii_convert_house(struct char_data *ch, obj_vnum vnum)
     FILE *in, *out;
     char infile[MAX_INPUT_LENGTH], *outfile;
     struct obj_data *tmp;
-    int i, j = 0, k;
+    int i, j = 0;
 
     House_get_filename(vnum, infile, sizeof(infile));
 
@@ -773,7 +771,8 @@ static int ascii_convert_house(struct char_data *ch, obj_vnum vnum)
 
     while (!feof(in)) {
         struct obj_file_elem object;
-        k = fread(&object, sizeof(struct obj_file_elem), 1, in);
+        if (fread(&object, sizeof(struct obj_file_elem), 1, in) != 1)
+            return (0);
         if (ferror(in)) {
             perror("SYSERR: Reading house file in House_load");
             send_to_char(ch, "...read error in house rent file.\r\n");
@@ -795,7 +794,7 @@ static int ascii_convert_house(struct char_data *ch, obj_vnum vnum)
             }
             j++;
         }
-    }
+    }  // while (!feof(in))
 
     fprintf(out, "$~\n");
 
@@ -833,16 +832,16 @@ static struct obj_data *Obj_from_store(struct obj_file_elem object, int *locatio
     GET_OBJ_VAL(obj, 3) = object.value[3];
     for (taeller = 0; taeller < EF_ARRAY_MAX; taeller++) {
         GET_OBJ_EXTRA(obj)[taeller] = object.extra_flags[taeller];
-    }
+    }  // for (taeller ...
     GET_OBJ_WEIGHT(obj) = object.weight;
     GET_OBJ_TIMER(obj) = object.timer;
     for (taeller = 0; taeller < AF_ARRAY_MAX; taeller++) {
         GET_OBJ_AFFECT(obj)[taeller] = object.bitvector[taeller];
-    }
+    }  // for (taeller ...
 
     for (j = 0; j < MAX_OBJ_AFFECT; j++) {
         obj->affected[j] = object.affected[j];
-    }
+    }  // for (j ...
 
     return (obj);
 }

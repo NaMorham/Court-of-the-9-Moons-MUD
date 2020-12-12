@@ -16,7 +16,7 @@ Compiling with MS Visual C++ 8.0:
 3.  Select "Win32 Console Application." Click OK.
 
 4.  On the next screen Select "Application Settings" and check "Empty
-    Project" under the "Additonal Options" heading. Click Finish.
+    Project" under the "Additional Options" heading. Click Finish.
 
 5.  In the solution explorer, right click on the "header" folder, and select
     Add->Existing Item...
@@ -82,4 +82,4 @@ Do this:
   Expand 'C/C++'
   Click on Preprocessor
   At the end of the 'Preprocessor Definitions' add:
-  ;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE 
+  ;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE

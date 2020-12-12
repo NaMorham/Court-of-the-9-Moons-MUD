@@ -26,6 +26,9 @@ void assign_mobiles(void);
 void assign_objects(void);
 void assign_rooms(void);
 
+#include "structs.h"
+const char *get_spec_func_name(SPECIAL(*func));
+
 /*****************************************************************************
  * Begin Functions and defines for spec_procs.c
  ****************************************************************************/
@@ -48,4 +51,4 @@ SPECIAL(cityguard);
 SPECIAL(pet_shops);
 SPECIAL(bank);
 
-#endif /* _SPEC_PROCS_H_ */
+#endif  // _SPEC_PROCS_H_

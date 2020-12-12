@@ -6,13 +6,13 @@ eval rwrist %actor.eq(rwrist)%
 eval lwrist %actor.eq(lwrist)%
 if (%rwrist.vnum% == 2708)
 %send% %actor% A magical force seems to ebb, allowing you to pass.
- 
+
 elseif (%lwrist.vnum% == 2708)
 %send% %actor% A magical force seems to ebb, allowing you to pass.
- 
+
 elseif (%actor.varexists(Zn27_shacklepass)%)
 %send% %actor% A magical force seems to ebb, allowing you to pass.
- 
+
 else
 %send% %actor% A powerful force seems to repel you, preventing you from entering.
 %force% %actor% sit
@@ -27,7 +27,7 @@ testmemory~
 ~
 wait 4 s
 poke %actor.name%
-say i've seen you before, %actor.name%.
+say I've seen you before, %actor.name%.
 mforget %actor.name%
 ~
 #2702
@@ -35,34 +35,34 @@ mforget %actor.name%
 0 h 100
 ~
 if (%actor.varexists(zn27_greeted)%)
-wait 1 s
-%send% %actor% The guard whispers to you ' Please do not tell me you are giving up!'
- else
-wait 1 s
-tell %actor.name%  Halt! You cannot pass here.
-wait 2 s
-msend %actor% The guard seems to think for a minute, looking you up and down.
-wait 2 s
-msend %actor% The guard takes a deep breath and glances nervously over his shoulder, before turning back to you.
-wait 3 s
-%send% %actor% The guard whispers to you ' You look like a person of great might. Perhaps you could help us...'
-wait 2 s
-msend %actor% The guard glances quickly over his shoulder again.
-wait 2 s
-%send% %actor% The guard whispers to you 'An evil sorceress has taken over our caves, and is forcing my people to build her a palace in the mountainside.'
-wait 3 s
-%send% %actor% The guard whispers to you 'She is most cruel, and if you can rid us of her we would be eternally grateful.'
-wait 2 s
-%send% %actor% The guard whispers to you 'I will let you pass, though it may cost my life.' 
-wait 2 s
-%send% %actor% The guard whispers to you 'Please do not let us down!'
-set Zn27_greeted 1
-      remote Zn27_greeted %actor.id%
-wait 2 s
-msend %actor% The guard whispers to you: Here, take this and hold it if your eyes are not accustomed to the dark.
-%load% obj 2703
-give mushroom %actor.name%
-drop mushroom
+  wait 1 s
+  %send% %actor% The guard whispers to you 'Please do not tell me you are giving up!'
+else
+  wait 1 s
+  tell %actor.name%  Halt! You cannot pass here.
+  wait 2 s
+  msend %actor% The guard seems to think for a minute, looking you up and down.
+  wait 2 s
+  msend %actor% The guard takes a deep breath and glances nervously over his shoulder, before turning back to you.
+  wait 3 s
+  %send% %actor% The guard whispers to you 'You look like a person of great might. Perhaps you could help us...'
+  wait 2 s
+  msend %actor% The guard glances quickly over his shoulder again.
+  wait 2 s
+  %send% %actor% The guard whispers to you 'An evil sorceress has taken over our caves, and is forcing my people to build her a palace in the mountainside.'
+  wait 3 s
+  %send% %actor% The guard whispers to you 'She is most cruel, and if you can rid us of her we would be eternally grateful.'
+  wait 2 s
+  %send% %actor% The guard whispers to you 'I will let you pass, though it may cost my life.'
+  wait 2 s
+  %send% %actor% The guard whispers to you 'Please do not let us down!'
+  set Zn27_greeted 1
+  remote Zn27_greeted %actor.id%
+  wait 2 s
+  msend %actor% The guard whispers to you: Here, take this and hold it if your eyes are not accustomed to the dark.
+  %load% obj 2703
+  give mushroom %actor.name%
+  drop mushroom
 end
 ~
 #2703
@@ -101,7 +101,7 @@ tell %actor.name% You are not allowed to be here!
 wait 1 s
 %send% %actor% A dying memlin gasps: Please help me...
 wait 2 s
-%send% %actor% A dying memlin gasps: my death cannot be stopped, please end it now.
+%send% %actor% A dying memlin gasps: My death cannot be stopped, please end it now.
 wait 3 s
 emote groans with pain as you hear a loud creaking sound.
 ~
@@ -245,7 +245,7 @@ wait 1 s
 wait 1 s
 clap
 wait 1 s
-%send% %actor% A blind child feels for your arm and grips it. 
+%send% %actor% A blind child feels for your arm and grips it.
 fol %actor.name%
 wait 1 s
 %send% %actor% A blind child tells you 'Please pat me when you want me to stop following.'
@@ -274,11 +274,11 @@ wait 2 s
 say I think if he were here he would want you to have it though.
 wait 2 s
 say I hid it in that cupboard where you found me... in the floorboards.
- 
+
 set Zn27_childquest 1
 remote Zn27_childquest %actor.id%
- 
- 
+
+
 else
 wait 1 s
 follow %self%
@@ -324,7 +324,7 @@ wait 2 s
 rdelete Zn27_shacklereject %actor.id%
 else
 return 0
-end 
+end
 ~
 #2717
 (2707) Room resets shacklepass~
@@ -479,7 +479,7 @@ end
 (2714) child quest on death~
 0 f 100
 ~
-%echo% @BA partially-petrified memlin gasps with his dying breath: my daughter... find her... in the Sandy... Tunn...@n
+%echo% @BA partially-petrified memlin gasps with his dying breath: My daughter... find her... in the Sandy... Tunn...@n
 ~
 #2725
 test for Tink~
@@ -804,7 +804,7 @@ test door~
 2 c 100
 enter~
 if ("%arg%" == "space")
-%send% %actor% A previously concealed space suddenly becomes apparant.
+%send% %actor% A previously concealed space suddenly becomes apparent.
 %echoaround% %actor% %actor.name% has discovered a hidden space!
 %door% 2740 down flags a
 %door% 2740 down room 2741
@@ -845,7 +845,7 @@ TESTCOMBAT 2~
 ~
 switch %random.3%
   case 0
-    %echo% The warrior raises his sword
+    %echo% The warrior raises his sword.
 set raise 1
 remote raise %actor.id%
 wait 4 s
@@ -884,7 +884,7 @@ rdelete stab %actor.id%
 end
  break
 default
-%echo% The warrior raises his sword
+%echo% The warrior raises his sword.
 set raise 1
 remote raise %actor.id%
 wait 4 s
@@ -986,7 +986,7 @@ eval where %self.room%
 if %where.east(bits)% == DOOR CLOSED
   return 0
 else
-  say Impudent fool! Your insolence forces me to take action
+  say Impudent fool! Your insolence forces me to take action!
   %damage% %actor% 100
 end
 ~
@@ -1244,7 +1244,7 @@ elseif %room.vnum% == 2790
 elseif %room.vnum% == 2792
   say The direct descendants of a Cui and a Denuo joining are known as Ve.
   wait 1 s
-  say They inherit characteristics of both their parents, usually turning to prophesying and magic arts,  their skills and powers outdoing even the strongest of their Denuo brothers.
+  say They inherit characteristics of both their parents, usually turning to prophesying and magic arts, their skills and powers outdoing even the strongest of their Denuo brothers.
   wait 3 s
   say Ve also have extra powers of perception and foresight, though at times they are uncertain and unclear.
 elseif %room.vnum% == 2791
@@ -1258,14 +1258,14 @@ wait 5 s
 wait 4 s
   say Very rarely, a Tor will suddenly fail whenever balance shifts extremely in the universe. These occasional shifts demand redirection of Imari focus, causing the power of the Tor to weaken and allowing the lifeform to awaken and emerge.
 wait 7 s
-  say The lifeform that emerges from a Tor is called a Nevim, a potent and unnatural concentration of lamen life, closest in power to the Imari themselves. 
+  say The lifeform that emerges from a Tor is called a Nevim, a potent and unnatural concentration of lamen life, closest in power to the Imari themselves.
 wait 4 s
-  say Nevim do not feel the pull of Navi and do not perceive the greater state of the cosmos, using their powers according to their own will and wreaking havoc upon the universal balance. 
+  say Nevim do not feel the pull of Navi and do not perceive the greater state of the cosmos, using their powers according to their own will and wreaking havoc upon the universal balance.
 wait 5 s
   say Shunned through fear and isolated from every other form of life, Nevim become bitter and angry, forces of destruction and causing much pain in an attempt to exorcise their own.
   wait 1 s
 elseif %room.vnum% == 2793
-  say The second wave brings forth the Denuo, the lesser beings, the second-born who live and die without changing form, colouring the lamen that flows through them but being entirely of miru. 
+  say The second wave brings forth the Denuo, the lesser beings, the second-born who live and die without changing form, colouring the lamen that flows through them but being entirely of miru.
   wait 3 s
   say The Khan'li, the Dynar, and myself of Memlin kind, are all examples of Denuo life.
 elseif %room.vnum% == 2794
@@ -1273,7 +1273,7 @@ elseif %room.vnum% == 2794
   wait 4 s
   say Black and red are their colours and they enjoy sharp points, reflective surfaces for their inclination to repel light and singular works of beauty, believing themselves superior as the firstborn.
   wait 4 s
-  say They live mainly underground or in caves, seeking to escape the occasional rains and sculpting their showy palaces into mountains. 
+  say They live mainly underground or in caves, seeking to escape the occasional rains and sculpting their showy palaces into mountains.
   wait 3 s
   say They believe in domination of the strong over the weak and have hardly any sense of guilt or compassion, taking no pleasure in cruelty but exercising it without hesitation for the slightest benefit.
   wait 4 s
@@ -1281,7 +1281,7 @@ elseif %room.vnum% == 2794
   wait 4 s
   say They are passionate, ambitious, powerful, proud, single-minded and fearless.
 elseif %room.vnum% == 2795
-  say Dynar are smaller than the Khan'li, but just as adept at fighting, extremely fast, able to contort their bodies amazingly and putting their skills to use in the construction of elaborate weapons and studying of the world. 
+  say Dynar are smaller than the Khan'li, but just as adept at fighting, extremely fast, able to contort their bodies amazingly and putting their skills to use in the construction of elaborate weapons and studying of the world.
   wait 4 s
   say Pale-skinned, their blood is as the milky sap of trees, having slight phosphorescent properties which causes them to glow faintly in darkness.
   wait 3 s
@@ -1301,7 +1301,7 @@ wait 3 s
 wait 6 s
   say Well adapted to living and digging small tunnel networks for themselves, the memlins occasionally also build habitats in deep forests.
 wait 4 s
-  say The memlin skills are a mystery to most as they are an unaggressive race, It is known that they do not bleed, having bodies that rise and return to earth and that neither fire nor water harm them.
+  say The memlin skills are a mystery to most as they are an unaggressive race. It is known that they do not bleed, having bodies that rise and return to earth and that neither fire nor water harm them.
 wait 6 s
   say In times of great need, it is said that they can call instant death upon an enemy, though these cases are so rarely witnessed that they are often believed to be myth.
 wait 5 s
@@ -1590,7 +1590,7 @@ xxtestxx
 test~
 2 c 100
 xxhealxx~
-if %actor.admin%
+if %actor.level% > 30
   return 0
   halt
 else
@@ -1666,7 +1666,7 @@ wait 2 s
 yes~
 emote smiles happily.
 wait 1 s
-say Its like this, see... 
+say Its like this, see...
 wait 1 s
 emote stands up and traces a circle in the sand.
 wait 2 s

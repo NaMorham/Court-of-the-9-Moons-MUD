@@ -1,9 +1,9 @@
-/* ************************************************************************
-*  File: webster.c                                         Part of tbaMUD *
-*  Usage: Use an online dictionary via tell m-w <word>.                   *
-*                                                                         *
-*  Based on the Circle 3.0 syntax checker and wld2html programs.          *
-************************************************************************ */
+/****************************************************************************
+ *  File: webster.c                                         Part of tbaMUD  *
+ *  Usage: Use an online dictionary via tell m-w <word>.                    *
+ *                                                                          *
+ *  Based on the Circle 3.0 syntax checker and wld2html programs.           *
+ ****************************************************************************/
 
 #define log(msg) fprintf(stderr, "%s\n", msg)
 
@@ -17,6 +17,7 @@ char buf[MEM_USE];
 int get_line(FILE * fl, char *buf);
 void skip_spaces(char **string);
 void parse_webster_html(char *arg);
+
 int main(int argc, char **argv)
 {
     int pid = 0;
@@ -58,18 +59,18 @@ void parse_webster_html(char *arg) {
     unlink("webster.html");     // We can still read
 
     for (; get_line(infile, buf) != 0;) {
-        if (strncmp(buf, "<script>write_ads(AdsNum, 0)</script>", 37) != 0) {
-            continue; // read until we hit the line with results in it.
+        if (strncmp(buf, "<script>write_ads(AdsNum, 0)</script>", 40) != 0) {
+            continue;   // read until we hit the line with results in it.
         }
 
-        p = buf + 37;
+        p = buf + 40;
 
         if (strncmp(p, "<br>", 4) == 0) {
             fprintf(outfile, "That word could not be found.\n");
             goto end;
         }
-        else if (strncmp(p, "<div ", 5) == 0) {  // definition is here, all in one line.
-            while (strncmp(p, "ds-list", 7)) {  //seek to the definition
+        else if (strncmp(p, "<div ", 5) == 0) {     // definition is here, all in one line.
+            while (strncmp(p, "ds-list", 7)) {      // seek to the definition
                 p++;
             }
 
@@ -80,12 +81,10 @@ void parse_webster_html(char *arg) {
 
             fprintf(outfile, "Info on: %s\n\n", arg);
 
-            while (1)
-            {
+            while (1) {
                 q = outline;
 
-                while (*p != '<')
-                {
+                while (*p != '<') {
                     assert(p < scanbuf + sizeof(scanbuf));
                     *q++ = *p++;
                 }
@@ -111,8 +110,7 @@ void parse_webster_html(char *arg) {
             p = strtok(scanbuf, ">");   // chop the line at the end of tags: <br><b>word</b> becomes "<br>" "<b>" "word</b>"
             p = strtok(NULL, ">");      // skip the rest of this tag.
 
-            while (1)
-            {
+            while (1) {
                 q = outline;
 
                 while (*p != '<') {
@@ -132,17 +130,16 @@ void parse_webster_html(char *arg) {
                 }
 
                 p = strtok(NULL, ">");
-            }
+            }  // while (1)
         }
-        else
-        {
+        else {
             // weird.. one of the above should be correct.
             fprintf(outfile, "It would appear that the free online dictionary has changed their format.\n"
                 "Sorry, but you might need a webrowser instead.\n\n"
                 "See http://www.thefreedictionary.com/%s", arg);
             goto end;
         }
-    }
+    }  // for (; get_line( ...
 
 end:
     fclose(infile);

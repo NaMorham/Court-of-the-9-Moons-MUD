@@ -179,33 +179,35 @@ char *telopts[NTELOPTS+1] = {
 
 #define    MODE_MASK        0x1f
 
-/* Not part of protocol, but needed to simplify things... */
-#define MODE_FLOW        0x0100
-#define MODE_ECHO        0x0200
-#define MODE_INBIN        0x0400
-#define MODE_OUTBIN        0x0800
-#define MODE_FORCE        0x1000
+/*
+ * Not part of protocol, but needed to simplify things...
+ */
+#define MODE_FLOW           0x0100
+#define MODE_ECHO           0x0200
+#define MODE_INBIN          0x0400
+#define MODE_OUTBIN         0x0800
+#define MODE_FORCE          0x1000
 
 #define    SLC_SYNCH        1
-#define    SLC_BRK            2
-#define    SLC_IP            3
-#define    SLC_AO            4
-#define    SLC_AYT            5
-#define    SLC_EOR            6
+#define    SLC_BRK          2
+#define    SLC_IP           3
+#define    SLC_AO           4
+#define    SLC_AYT          5
+#define    SLC_EOR          6
 #define    SLC_ABORT        7
-#define    SLC_EOF            8
-#define    SLC_SUSP        9
-#define    SLC_EC            10
-#define    SLC_EL            11
-#define    SLC_EW            12
-#define    SLC_RP            13
+#define    SLC_EOF          8
+#define    SLC_SUSP         9
+#define    SLC_EC           10
+#define    SLC_EL           11
+#define    SLC_EW           12
+#define    SLC_RP           13
 #define    SLC_LNEXT        14
-#define    SLC_XON            15
-#define    SLC_XOFF        16
+#define    SLC_XON          15
+#define    SLC_XOFF         16
 #define    SLC_FORW1        17
 #define    SLC_FORW2        18
 
-#define    NSLC            18
+#define    NSLC             18
 
 /*
  * For backwards compatability, we define SLC_NAMES to be the
@@ -319,9 +321,9 @@ extern char *enctype_names[];
 #  endif
 
 
-#  define    ENCRYPT_NAME_OK(x)    ((unsigned int)(x) < ENCRYPT_CNT)
-#  define    ENCRYPT_NAME(x)        encrypt_names[x]
+#  define    ENCRYPT_NAME_OK(x) ((unsigned int)(x) < ENCRYPT_CNT)
+#  define    ENCRYPT_NAME(x)    encrypt_names[x]
 
-#  define    ENCTYPE_NAME_OK(x)    ((unsigned int)(x) < ENCTYPE_CNT)
-#  define    ENCTYPE_NAME(x)        enctype_names[x]
+#  define    ENCTYPE_NAME_OK(x) ((unsigned int)(x) < ENCTYPE_CNT)
+#  define    ENCTYPE_NAME(x)    enctype_names[x]
 #endif /* _ARPA_TELNET_H */

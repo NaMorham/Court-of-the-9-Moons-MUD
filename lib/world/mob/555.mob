@@ -292,7 +292,7 @@ Iolo the Bard~
 Iolo sits here with a bottle in his hand and a smile on his face.
 ~
    Iolo is one of the first Warriors of Destiny.  He seems to be a little bit
-tipsy from the party and you wonder why he has wandered down to the cellar.  
+tipsy from the party and you wonder why he has wandered down to the cellar.
 Anyway, in the spirit of the virtue Compassion that he embodies, he holds out a
 bottle for you.
 ~
@@ -312,7 +312,7 @@ Chuckles the Jester~
 Chuckles the Jester is juggling and entertaining.
 ~
    Chuckles the Jester is here mumbling, 'Spam Spam.'  This annoying character is
-Lord British's major entertainment.  He is laughing and telling corny jokes.  
+Lord British's major entertainment.  He is laughing and telling corny jokes.
 He seems to hold his dinner in his hands, and when he dances, the bells on his
 hat jingle merrily.
 ~
@@ -634,7 +634,7 @@ gremlin creature~
 the gremlin~
 This little creature sneaks around and steals your food.
 ~
-   It seems to be just a head with little hands and feet sticking out of it.  
+   It seems to be just a head with little hands and feet sticking out of it.
 It does not seem like these things could hurt you, but your money pouch seems
 much lighter.
 ~
@@ -803,7 +803,7 @@ tinker~
 a tinker~
 A tinker is fiddling with one device or another.
 ~
-   The tinker has huge rippling muscles and a scarred skin.  You realize that
+   The tinker has huge rippling muscles and a scarred skin.  You realise that
 his great Sacrifice to his craft has led to his incredible strength and
 weaponskill.  This is not one you wish to fight.
 ~
@@ -905,8 +905,8 @@ dragon~
 the dragon~
 A dragon lies on his heap of treasure with fire billowing out of his maw.
 ~
-   The dragon looks like every other dragon you've seen; wings, tail, fire.  
-Only this one doesn't have a dorky color attached to it.  And doesn't talk about
+   The dragon looks like every other dragon you've seen; wings, tail, fire.
+Only this one doesn't have a dorky colour attached to it.  And doesn't talk about
 annoying C terms.
 ~
 42 0 0 0 0 0 0 0 -1000 E
@@ -931,8 +931,8 @@ paladin~
 the paladin~
 A paladin practices his sword strokes here.
 ~
-   This paladin works hard to keep his Honor and the Honor of his people.  
-Honor does not lead his life, Honor is his life.  His shiny armor and equally
+   This paladin works hard to keep his Honor and the Honor of his people.
+Honor does not lead his life, Honor is his life.  His shiny armour and equally
 shiny sword serves to remind you that he is among Britannia's most powerful
 battalion.
 ~
@@ -1336,7 +1336,7 @@ Sentri~
 Sentri stoically stands here, protecting his Lord and castle.
 ~
    Sentri is a powerful man whose only job is to protect the life of Lord
-British.  In seeing this done he is completely armored and wields a heavy blade.
+British.  In seeing this done he is completely armoured and wields a heavy blade.
 ~
 10 0 0 0 0 0 0 0 750 E
 25 12 -5 5d5+250 4d4+4
@@ -1505,11 +1505,11 @@ SavingBreath: 5
 SavingSpell: 5
 E
 #55568
-armorer~
-the armorer~
-The Armorer stands here.
+armourer~
+the armourer~
+The Armourer stands here.
 ~
-   The Armorer sells...  Armor.
+   The Armourer sells...  Armour.
 ~
 10 0 0 0 64 0 0 0 0 E
 32 10 -9 6d6+320 5d5+5

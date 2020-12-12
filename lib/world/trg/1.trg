@@ -86,7 +86,7 @@ Mob Greet Hannibal - 140~
 if %actor.is_pc%
   wait 1 sec
   if %actor.sex% == male
-    say Good day sir, what would you like? 
+    say Good day sir, what would you like?
   elseif %actor.sex% == female
     wait 1 sec
     say Good day maam, what can I get you?
@@ -331,7 +331,7 @@ Mob Greet Baker - 187~
 if %actor.is_pc%
   wait 1 sec
   say best bread in town.
-  wait 1 sec      
+  wait 1 sec
   if %actor.sex% == male
     emote slams some dough down onto the counter.
   elseif %actor.sex% == female
@@ -543,7 +543,7 @@ switch %actor.level%
     dg_cast 'blindness' %actor%
   break
   case 11
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 12
     dg_cast 'lightning bolt' %actor%
@@ -670,7 +670,7 @@ if %actor.is_pc%
     eval stolen %item_to_steal.vnum%
     eval name %item_to_steal.name%
     %load% obj %stolen%
-    %purge% %item_to_steal% 
+    %purge% %item_to_steal%
     wait 2 sec
     * Lets go sell it to Morgan using its first keyword.
     down
@@ -688,104 +688,107 @@ end
 Questmaster Greet - 3~
 0 g 100
 ~
-* By Rumble of The Builder Academy    builderacademy.net 9091 
-* Part of a timed quest to kill a mob or find an object. Trigs 138-144. 
+* By Rumble of The Builder Academy    builderacademy.net 9091
+* Part of a timed quest to kill a mob or find an object. Trigs 138-144.
 * A simple automated quest so only let players earn up to 50 questpoints.
-if %actor.is_pc% && %actor.questpoints% < 50 
-  wait 2 sec 
-  * Check to see if they are not on a zone 1 quest. 
-  if !%actor.varexists(on_quest_zone_1)% 
-    say Welcome %actor.name%, are you interested in a simple quest? 
-  else 
-    *get the values from the player variable 
-    extract day 1 %actor.on_quest_zone_1% 
-    extract hour 2 %actor.on_quest_zone_1% 
-    * Set  this value to the number of mud hours in a mud day 
-    set HOURS_IN_DAY 24 
-    * Compare the values to the current time 
-    * (Your hours per day and days per year vary on each mud.) 
-    * (You may also want to check for 'time.year') 
-    eval current_ticks (%time.day%/%HOURS_IN_DAY%)+%time.hour% 
-    eval start_ticks (%day%/%HOURS_IN_DAY%)+%hour% 
-    *find out the time difference in ticks 
-    eval ticks_passed %current_ticks%-%start_ticks% 
-    *check if 10 ticks (~10 mins) have passed 
-    if %ticks_passed% > 10 
-      rdelete on_quest_zone_1 %actor.id% 
-      say Welcome %actor.name%, are you interested in a simple quest? 
-    else 
-      say How is your quest going %actor.name%, do you have a quest token or the quest mobs head for me? 
-    end 
-  end 
+if %actor.is_pc% && %actor.questpoints% < 50
+  wait 2 sec
+  * Check to see if they are not on a zone 1 quest.
+  if !%actor.varexists(on_quest_zone_1)%
+    say Welcome %actor.name%, are you interested in a simple quest?
+  else
+    *get the values from the player variable
+    extract day 1 %actor.on_quest_zone_1%
+    extract hour 2 %actor.on_quest_zone_1%
+    * Set  this value to the number of mud hours in a mud day
+    set HOURS_IN_DAY 24
+    * Compare the values to the current time
+    * (Your hours per day and days per year vary on each mud.)
+    * (You may also want to check for 'time.year')
+    eval current_ticks (%time.day%/%HOURS_IN_DAY%)+%time.hour%
+    eval start_ticks (%day%/%HOURS_IN_DAY%)+%hour%
+    *find out the time difference in ticks
+    eval ticks_passed %current_ticks%-%start_ticks%
+    *check if 10 ticks (~10 mins) have passed
+    if %ticks_passed% > 10
+      rdelete on_quest_zone_1 %actor.id%
+      say Welcome %actor.name%, are you interested in a simple quest?
+    else
+      say How is your quest going %actor.name%, do you have a quest token or the quest mobs head for me?
+    end
+  end
 end
 ~
 #139
 Questmaster Quest Assignment - 3~
 0 d 1
 *~
-* By Rumble of The Builder Academy    builderacademy.net 9091 
-* Part of a timed quest to kill a mob or find an object. Trigs 138-144. 
-if %actor.varexists(on_quest_zone_1)% 
-  *get the values from the player variable 
-  extract day 1 %actor.on_quest_zone_1% 
-  extract hour 2 %actor.on_quest_zone_1% 
-  * Set  this value to the number of mud hours in a mud day 
-  set HOURS_IN_DAY 24 
-  * Compare the values to the current time 
-  * (Your hours per day and days per year vary on each mud.) 
-  * (You may also want to check for 'time.year') 
-  eval current_ticks (%time.day%/%HOURS_IN_DAY%)+%time.hour% 
-  eval start_ticks (%day%/%HOURS_IN_DAY%)+%hour% 
-  *find out the time difference in ticks 
-  eval ticks_passed %current_ticks%-%start_ticks% 
-  *check if 10 ticks (~10 mins) have passed 
-  if %ticks_passed% > 10 
-    rdelete on_quest_zone_1 %actor.id% 
-  else 
-    halt 
-  end 
-end 
-if %actor.questpoints% > 50 
-  halt 
-end 
+* By Rumble of The Builder Academy    builderacademy.net 9091
+* Part of a timed quest to kill a mob or find an object. Trigs 138-144.
+if %actor% == %self%
+  halt
+end
+if %actor.varexists(on_quest_zone_1)%
+  *get the values from the player variable
+  extract day 1 %actor.on_quest_zone_1%
+  extract hour 2 %actor.on_quest_zone_1%
+  * Set  this value to the number of mud hours in a mud day
+  set HOURS_IN_DAY 24
+  * Compare the values to the current time
+  * (Your hours per day and days per year vary on each mud.)
+  * (You may also want to check for 'time.year')
+  eval current_ticks (%time.day%/%HOURS_IN_DAY%)+%time.hour%
+  eval start_ticks (%day%/%HOURS_IN_DAY%)+%hour%
+  *find out the time difference in ticks
+  eval ticks_passed %current_ticks%-%start_ticks%
+  *check if 10 ticks (~10 mins) have passed
+  if %ticks_passed% > 10
+    rdelete on_quest_zone_1 %actor.id%
+  else
+    halt
+  end
+end
+if %actor.questpoints% > 50
+  halt
+end
 * This loop goes through the entire string of words the actor says. .car is the
-* word and .cdr is the remaining string. 
-eval word %speech.car% 
-eval rest %speech.cdr% 
-while %word% 
-  * Check to see if the word is yes or an abbreviation of yes. 
-  if yes /= %word% 
-    say Very well %actor.name%. Would you like to find an object or hunt a mobile? 
-    halt 
-  end 
-  * Pick a room from 100 to 365. 
-  eval loadroom 99 + %random.265%  
-  if mobile /= %word% || hunt /= %word% 
-    * Load the mob in the random room picked above. 
-    %at% %loadroom% %load% m 15 
-    say Go kill the quest mob and bring me its head %actor.name%. You only have 10 minutes! 
-    * Load an object on the player that counts down from 10 minutes. 
-    %load% obj 16 %actor% inv 
-    %send% %actor% %self.name% gives you the quest timer. 
-    %echoaround% %actor% %self.name% gives %actor.name% the quest timer. 
-    set on_quest_zone_1 %time.day% %time.hour% 
-    remote on_quest_zone_1 %actor.id% 
-    halt 
-  elseif object /= %word% || find /= %word% 
-    say Go find the quest token and return it to me. You only have 10 minutes %actor.name%! 
-    %load% o 15 
-    %at% %loadroom% drop quest_token_zone_1 
-    %load% obj 16 %actor% inv 
-    %send% %actor% %self.name% gives you the quest timer. 
-    %echoaround% %actor% %self.name% gives %actor.name% the quest timer. 
-    set on_quest_zone_1 %time.day% %time.hour% 
-    remote on_quest_zone_1 %actor.id% 
-    halt 
-  end 
-  * End of the loop we need to take the next word in the string and save the 
-  * remainder for the next pass. 
-  eval word %rest.car% 
-  eval rest %rest.cdr% 
+* word and .cdr is the remaining string.
+eval word %speech.car%
+eval rest %speech.cdr%
+while %word%
+  * Check to see if the word is yes or an abbreviation of yes.
+  if yes /= %word%
+    say Very well %actor.name%. Would you like to find an object or hunt a mobile?
+    halt
+  end
+  * Pick a room from 100 to 365.
+  eval loadroom 99 + %random.265%
+  if mobile /= %word% || hunt /= %word%
+    * Load the mob in the random room picked above.
+    %at% %loadroom% %load% m 15
+    say Go kill the quest mob and bring me its head %actor.name%. You only have 10 minutes!
+    * Load an object on the player that counts down from 10 minutes.
+    %load% obj 16 %actor% inv
+    %send% %actor% %self.name% gives you the quest timer.
+    %echoaround% %actor% %self.name% gives %actor.name% the quest timer.
+    set on_quest_zone_1 %time.day% %time.hour%
+    remote on_quest_zone_1 %actor.id%
+    halt
+  elseif object /= %word% || find /= %word%
+    say Go find the quest token and return it to me. You only have 10 minutes %actor.name%!
+    %load% o 15
+    %at% %loadroom% drop quest_token_zone_1
+    %load% obj 16 %actor% inv
+    %send% %actor% %self.name% gives you the quest timer.
+    %echoaround% %actor% %self.name% gives %actor.name% the quest timer.
+    set on_quest_zone_1 %time.day% %time.hour%
+    remote on_quest_zone_1 %actor.id%
+    halt
+  end
+  * End of the loop we need to take the next word in the string and save the
+  * remainder for the next pass.
+  set word %rest.car%
+  set rest %rest.cdr%
 done
 ~
 #140
@@ -809,7 +812,7 @@ Quest 10 min Purge - 15, 16, 17~
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
 * Part of a timed quest to kill a mob or find an object. Trigs 138-144.
-* Attached to quest objects 15-17. Purges itself 10 minutes after loading if 
+* Attached to quest objects 15-17. Purges itself 10 minutes after loading if
 * player does not finish the quest.
 * Make sure timer is being carried by a player.
 if %self.carried_by%
@@ -817,7 +820,7 @@ if %self.carried_by%
   if %actor.is_pc%
     %send% %actor% Your quest time has run out. Try again.
     * Delete the on quest variable so they can try again.
-    rdelete on_quest_zone_1 %actor.id%   
+    rdelete on_quest_zone_1 %actor.id%
   end
 end
 * Purge the timer.
@@ -853,7 +856,7 @@ end
 wait 1 sec
 * If they had the head or the token.
 if %object.vnum% == 15 || %object.vnum% == 17
-  rdelete on_quest_zone_1 %actor.id%   
+  rdelete on_quest_zone_1 %actor.id%
   say Well done, %actor.name%.
   * Give them 50 gold and experience. Delete the on quest variable and purge.
   nop %actor.exp(50)%
@@ -874,7 +877,7 @@ Quest Mob Loads Head - 15~
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
 * Part of a timed quest to kill a mob or find an object. Trigs 138-144.
-* This is a load instead of a death trig because I want the head to purge 10 
+* This is a load instead of a death trig because I want the head to purge 10
 * minutes after loading.
 %load% obj 17
 ~
@@ -906,7 +909,7 @@ set actor %random.char%
 * only continue if an actor is defined.
 if %actor%
   * If they have lost more than half their hitpoints heal them.
-  if %actor.hitp% < %actor.maxhitp% / 2 
+  if %actor.hitp% < %actor.maxhitp% / 2
     wait 1 sec
     tell %actor.name% You are injured, let me help.
     wait 2 sec
@@ -923,7 +926,7 @@ Black Magi Spell - 144~
 * By Rumble of The Builder Academy    tbamud.com 9091
 if %actor.level% > 10
   say you are a fool %actor.name%.
-  dg_cast 'color spray' %actor%
+  dg_cast 'colour spray' %actor%
 end
 ~
 #148
@@ -958,7 +961,7 @@ Dog Emote - 192~
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
 eval number %random.4%
-set txt1 sniffs at you friendlily.
+set txt1 sniffs at you in greeting.
 set txt2 whimpers for some attention.
 set txt3 growls menacingly at your feet.
 set txt4 watches your every movement suspiciously.
@@ -982,26 +985,26 @@ emote %string%
 Angel Receives Treats - 207~
 0 j 100
 ~
-* By Rumble of The Builder Academy    tbamud.com 9091 
-* A simple receive trig if you give the dog food she will eat it. If you give 
-* her dog treats she will follow you. Everything else she drops. 
-if %object.type% == FOOD 
-  wait 1 sec 
-  emote swallows %object.shortdesc% without even chewing. 
-  wait 1 sec 
-  emote looks up at %actor.name%, hoping for some more. 
-  if %object.vnum% == 164 
-    wait 1 sec 
-    mfollow %actor%  
-  end 
+* By Rumble of The Builder Academy    tbamud.com 9091
+* A simple receive trig if you give the dog food she will eat it. If you give
+* her dog treats she will follow you. Everything else she drops.
+if %object.type% == FOOD
+  wait 1 sec
+  emote swallows %object.shortdesc% without even chewing.
+  wait 1 sec
+  emote looks up at %actor.name%, hoping for some more.
+  if %object.vnum% == 164
+    wait 1 sec
+    mfollow %actor%
+  end
   if %object.vnum% == 172
     halt
   end
-  %purge% %object% 
-else 
-  wait 1 s 
-  drop %object.name.car% 
-end 
+  %purge% %object%
+else
+  wait 1 s
+  drop %object.name.car%
+end
 ~
 #153
 Angel Follows Masters Commands - 207~
@@ -1021,7 +1024,7 @@ if %self.master% == %actor%
     break
     case down
       sit
-      emote lies down.  
+      emote lies down.
       wait 3 sec
       stand
     break
@@ -1033,7 +1036,7 @@ if %self.master% == %actor%
         emote growls at %speech.cdr.name% menacingly.
         mkill %speech.cdr%
       else
-        emote looks around for someone to attack.  
+        emote looks around for someone to attack.
       end
     break
     case rollover
@@ -1161,7 +1164,7 @@ Puppy plays - 191~
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
 if %actor.vnum% == 207
-  wait 1 sec 
+  wait 1 sec
   emote growls playfully at %actor.name%, crouching down into a mock attack position.
 elseif %actor.is_pc%
   wait 1 sec
@@ -1213,7 +1216,7 @@ set actor %random.char%
 * only continue if an actor is defined.
 if %actor.is_pc%
   * check if they are hurt.
-  if %actor.hitp% < %actor.maxhitp% 
+  if %actor.hitp% < %actor.maxhitp%
     * heal them their level in hitpoints.
     %damage% %actor% -%actor.level%
   end
@@ -1346,7 +1349,7 @@ elseif %cmd.mudcommand% == buy
     halt
   end
   *
-  if %actor.questpoints% < %quest_item_cost% 
+  if %actor.questpoints% < %quest_item_cost%
     tell %actor.name% You don't have enough questpoints for that.
   else
     %load% obj %quest_item% %actor% inv
@@ -1365,12 +1368,12 @@ Questpoint Setter - 44~
 questpoints~
 * By Rumble of The Builder Academy    tbamud.com 9091
 * Questpoint setter. For STAFF only! Make sure player has nohassle off.
-* Make sure name matches a player, purge mobs or use 0.name if you have 
-* troubles. 
+* Make sure name matches a player, purge mobs or use 0.name if you have
+* troubles.
 * Usage: questpoints <player> <#>
 if !%actor.is_pc% || %actor.level% < 32
   %send% %actor% Only human staff can use this.
-else  
+else
   set victim %arg.car%
   if %victim.is_pc%
     set questpoints %arg.cdr%
@@ -1399,7 +1402,7 @@ wa~
 * By Rumble of The Builder Academy    tbamud.com 9091
 if !%actor.has_item(83)% && %cmd.mudcommand% == wake
 nop %actor.pos(sitting)%
-  %send% %actor% As you slowly regain consciousness you hear a shuffling of feet outside the door. 
+  %send% %actor% As you slowly regain consciousness you hear a shuffling of feet outside the door.
   wait 30 sec
   %echo% Two shadows pass in front of your cell. Glancing under the door you see a set of dirty manacled feet pause outside. A scrap of paper falls to the ground and is quickly kicked under the door. A grunt is heard as a set of booted feet soon follow pushing the captive that had stopped.
   %load% obj 83
@@ -1601,7 +1604,7 @@ end
 ~
 #175
 Chuck Norris - 34~
-0 ab 12
+0 ab 8
 ~
 * Chuck Norris Facts!
 eval max %random.89%
@@ -1648,7 +1651,7 @@ set  text[40]  If at first you don't succeed, you are obviously not Chuck Norris
 set  text[41]  Geico saved 15%% by switching to Chuck Norris.
 set  text[42]  If you see Chuck Norris crying he will grant you a wish, if your wish is dying.
 set  text[43]  Pee Wee Herman got arrested for masturbating in public. The same day, Chuck Norris got an award for masturbating in public.
-set  text[44]  They say that lightning never strikes the same place twice. Niether does Chuck Norris. He doesn't have to.
+set  text[44]  They say that lightning never strikes the same place twice. Neither does Chuck Norris. He doesn't have to.
 set  text[45]  Water boils faster when Chuck Norris watches it.
 set  text[46]  Chuck Norris' cowboy boots are made from real cowboys.
 set  text[47]  When Chuck Norris exercises, the machine gets stronger.
@@ -1666,7 +1669,7 @@ set  text[58]  Switzerland isn't really neutral. They just haven't figured out w
 set  text[59]  When Chuck Norris was in middle school, his English teacher assigned an essay: "What is Courage?" Chuck Norris received an "A+" for writing only the words "Chuck Norris" and promptly turning in the paper.
 set  text[60]  Chuck Norris doesn't give Christmas presents. If you live to see Christmas, that is your Christmas present from Chuck.
 set  text[61]  Chuck Norris ends every relationship with "Its not me, its you".
-set  text[62]  Chuck Norris was sending an email one day, when he realized that it would be faster to run.
+set  text[62]  Chuck Norris was sending an email one day, when he realised that it would be faster to run.
 set  text[63]  When Chuck Norris laughs too hard while drinking milk, he accidently shits a cow.
 set  text[64]  One time in an airport a guy accidently called Chuck Norris "Chick Norris". He explained it was an honest mistake and apologized profusely. Chuck accepted his apology and politely signed an autograph. Nine months later, the guy's wife gave birth to a bearded baby. The guy knew exactly what had happened, and blames nobody but himself.
 set  text[65]  Chuck Norris doesn't understand why you should consult your doctor if your erection lasts for more than 4 hours. His erections have been known to last for up to 15 days.
@@ -1701,12 +1704,25 @@ eval speech %speech%
 #176
 Teleporter Recall - O82~
 1 c 7
-recall~
+re~
 * By Rumble of The Builder Academy    tbamud.com 9091
-%send% %actor% You recall to safety.
-%echoaround% %actor% %actor.name% recalls.
-%teleport% %actor% 3001
-%force% %actor% look
+if %cmd% == recall
+  eval teleporter_return_room %actor.room.vnum%
+  remote  teleporter_return_room %actor.id%
+  %send% %actor% You recall to safety.
+  %echoaround% %actor% %actor.name% recalls.
+  %teleport% %actor% 3001
+  %force% %actor% look
+  %echoaround% %actor% %actor.name% appears in the room.
+elseif %cmd% == return
+  %send% %actor% You return to your previous location.
+  %echoaround% %actor% %actor.name% teleports out of the room.
+  %teleport% %actor% %actor.teleporter_return_room%
+  %force% %actor% look
+  %echoaround% %actor% %actor.name% appears in the room.
+else
+  return 0
+end
 ~
 #177
 Kick Me Sign - O197~
@@ -1749,7 +1765,7 @@ set  text[5]  You should just name your third kid Baby. Trust me -- it'll save y
 set  text[6]  You can have many different jobs and still be lazy.
 set  text[7]  I enjoy the great taste of Duff. Yes, Duff is the only beer for me. Smooth, creamy Duff . . . zzzzzzzzzzzzz.
 set  text[8]  You can get free stuff if you mention a product in a magazine interview. Like Chips Ahoy! cookies.
-set  text[9]  You may think it's easier to de-ice your windshield with a flamethrower, but there are repercussions. Serious repercussions. 
+set  text[9]  You may think it's easier to de-ice your windshield with a flamethrower, but there are repercussions. Serious repercussions.
 set  text[10] There are some things that just aren't meant to be eaten.
 set  text[11] The intelligent man wins his battles with pointed words. I'm sorry -- I meant sticks. Pointed sticks.
 set  text[12] There are way too many numbers. The world would be a better place if we lost half of them -- starting with 8. I've always hated 8.
@@ -1758,7 +1774,7 @@ set  text[14] Be generous in the bedroom -- share your sandwich.
 set  text[15] I've climbed the highest mountains . . . fallen down the deepest valleys . . . I've been to Japan and Africa . . . and I've even gone into space. But I'd trade it all for a piece of candy right now.
 set  text[16] Every creature on God's earth has a right to exist. Except for that damn ruby-throated South American warbler.
 set  text[17] I don't need a surgeon telling me how to operate on myself.
-set  text[18] Sometimes I think there's no reason to get out of bed . . . then I feel wet, and I realize there is.
+set  text[18] Sometimes I think there's no reason to get out of bed . . . then I feel wet, and I realise there is.
 set  text[19] Let me just say, Winnie the Pooh getting his head caught in a honey pot? It's not funny. It can really happen.
 set  text[20] Even though it is awesome and powerful, I don't take no guff from the ocean.
 set  text[21] I never ate an animal I didn't like.
@@ -1771,8 +1787,8 @@ set  text[27] When you borrow something from your neighbor, always do it under t
 set  text[28] If a spaceship landed and aliens took me back to their planet and made me their leader, and I got to spend the rest of my life eating doughnuts and watching alien dancing girls and ruling with a swift and merciless hand? That would be sweet.
 set  text[29] I may not be the richest man on earth. Or the smartest. Or the handsomest.
 set  text[30] Never throw a butcher knife in anger.
-set  text[31] The office is no place for off-color remarks or offensive jokes. That's why I never go there.
-set  text[32] My favorite color is chocolate.
+set  text[31] The office is no place for off-colour remarks or offensive jokes. That's why I never go there.
+set  text[32] My favorite colour is chocolate.
 set  text[33] Always feel with your heart, although it's better with your hands.
 set  text[34] The hardest thing I've had to face as a father was burying my own child. He climbed back out, but it still hurts.
 set  text[35] If doctors are so right, why am I still alive?
@@ -1851,7 +1867,7 @@ set txt[1] the judge will do some things to you which are thought to be terrifyi
 set txt[2] what are the benefits of a stoic life? It is an ancient and honorable package of advice on how to stay out of the clutches of those who are trying to get you on the hook, trying to give you a feeling of obligation, trying to get moral leverage.
 set txt[3] There can be no such thing as being the "victim" of another. You can only be a "victim" of yourself.
 set txt[4] Show me a man who though sick is happy, who though in danger is happy, who though in prison is happy, and I'll show you a Stoic.
-set txt[5] remember you are an actor in a drama of such sort as the Author chooses - if short, then in a short one. If long, then in a long one. If it be his pleasure that you should enact a poor man, or a cripple, or a ruler, see that you act it well. 
+set txt[5] remember you are an actor in a drama of such sort as the Author chooses - if short, then in a short one. If long, then in a long one. If it be his pleasure that you should enact a poor man, or a cripple, or a ruler, see that you act it well.
 set txt[6] Things that are not within our own power, not without our Will, can by no means be either good or evil.
 set txt[7] For it is better to die of hunger, exempt from fear and guilt, than to live in affluence with perturbation.
 set txt[8] Lameness is an impediment to the leg, but not to the Will. Say this to yourself with regard to everything that happens. For you will find such things to be an impediment to something else, but not truly to yourself.
@@ -1908,17 +1924,17 @@ Socrates - 17~
 ~
 * Socrates - M17 - T183 By Rumble
 eval max %random.14%
-set txt[1] Let him that would move the world, first move himself. 
-set txt[2] Employ your time in improving yourself by other men's writings, so that you shall gain easily what others have labored hard for. 
+set txt[1] Let him that would move the world, first move himself.
+set txt[2] Employ your time in improving yourself by other men's writings, so that you shall gain easily what others have labored hard for.
 set txt[3] No evil can befall a good man
 set txt[4] You alone are in possession of the fundamental freedom of shaping your own attitude about what is going on.
-set txt[5] He is richest who is content with the least, for content is the wealth of nature. 
-set txt[6] And in knowing that you know nothing, that makes you the smartest of all. 
-set txt[7] To find yourself, think for yourself 
-set txt[8] My belief is that to have no wants is divine 
-set txt[9] I know nothing except the fact of my ignorance 
-set txt[10] By all means get married, If you get a good wife you'll become happy; If you get a bad one, you'll become a philosopher 
-set txt[11] As for me, all I know is that I know nothing. 
+set txt[5] He is richest who is content with the least, for content is the wealth of nature.
+set txt[6] And in knowing that you know nothing, that makes you the smartest of all.
+set txt[7] To find yourself, think for yourself
+set txt[8] My belief is that to have no wants is divine
+set txt[9] I know nothing except the fact of my ignorance
+set txt[10] By all means get married, If you get a good wife you'll become happy; If you get a bad one, you'll become a philosopher
+set txt[11] As for me, all I know is that I know nothing.
 set txt[12] We have devised a series of operating signals. The second one says "yes," "go," "concur," "execute," "good." For this we use any two of anything - the most efficient signal except for the single beat "no" signal.
 set txt[13] Honor is often what remains after faith, love, and hope are lost.
 set txt[14] It is the wise leader who comes to the conclusion that he can't be had if he can't be made to feel guilty.
@@ -1933,27 +1949,27 @@ Plato - 21~
 * Plato - M21 - T184 By Rumble
 eval max %random.22%
 set txt[1] Wise men speak because they have something to say; Fools because they have to say something
-set txt[2] Those who are too smart to engage in politics are punished by being governed by those who are dumber. 
-set txt[3] This I know - that I know nothing. 
-set txt[4] They do certainly give very strange, and newfangled, names to diseases. 
-set txt[5] The measure of a man is what he does with power. 
-set txt[6] The greatest wealth is to live content with little. 
-set txt[7] The man who makes everything that leads to happiness depend upon himself, and not upon other men, has adopted the very best plan for living happily. 
+set txt[2] Those who are too smart to engage in politics are punished by being governed by those who are dumber.
+set txt[3] This I know - that I know nothing.
+set txt[4] They do certainly give very strange, and newfangled, names to diseases.
+set txt[5] The measure of a man is what he does with power.
+set txt[6] The greatest wealth is to live content with little.
+set txt[7] The man who makes everything that leads to happiness depend upon himself, and not upon other men, has adopted the very best plan for living happily.
 set txt[8] For a man to conquer himself is the first and noblest of all victories.
-set txt[9] And now I depart hence condemned by you to suffer the penalty of death, and they, too, go their ways condemned by the truth to suffer the penalty of villainy and wrong; and I must abide by my award - let them abide by theirs. 
-set txt[10] Be kind, for everyone you meet is fighting a harder battle. 
-set txt[11] Necessity, who is the mother of invention. 
-set txt[12] You can discover more about a person in an hour of play than in a year of conversation. 
-set txt[13] When men speak ill of you, live so as nobody may believe them. 
-set txt[14] Good people do not need laws to tell them to act responsibly, while bad people will find a way around the laws. 
+set txt[9] And now I depart hence condemned by you to suffer the penalty of death, and they, too, go their ways condemned by the truth to suffer the penalty of villainy and wrong; and I must abide by my award - let them abide by theirs.
+set txt[10] Be kind, for everyone you meet is fighting a harder battle.
+set txt[11] Necessity, who is the mother of invention.
+set txt[12] You can discover more about a person in an hour of play than in a year of conversation.
+set txt[13] When men speak ill of you, live so as nobody may believe them.
+set txt[14] Good people do not need laws to tell them to act responsibly, while bad people will find a way around the laws.
 set txt[15] One of the penalties for refusing to participate in politics is that you end up being governed by your inferiors.
 set txt[16] The life which is unexamined is not worth living.
 set txt[17] Death is not the worst than can happen to men.
 set txt[18] Never discourage anyone...who continually makes progress, no matter how slow.
-set txt[19] Ignorance, the root and the stem of every evil. 
-set txt[20] No human thing is of serious importance. 
-set txt[21] Courage is simply endurance of the soul. 
-set txt[22] Courage must be exercised in the presence of fear. 
+set txt[19] Ignorance, the root and the stem of every evil.
+set txt[20] No human thing is of serious importance.
+set txt[21] Courage is simply endurance of the soul.
+set txt[22] Courage must be exercised in the presence of fear.
 set  speech %%txt[%max%]%%
 eval speech %speech%
 say %speech%
@@ -1978,18 +1994,18 @@ set txt[11] It is the mark of an educated mind to be able to entertain a thought
 set txt[12] Man perfected by society is the best of all animals; he is the most terrible of all when he lives without law, and without justice.
 set txt[13] I have gained this by philosophy: that I do without being commanded what others do only from fear of the law.
 set txt[14] It is possible to fail in many ways...while to succeed is possible only in one way.
-set txt[15] In poverty and other misfortunes of life, true friends are a sure refuge. The young they keep out of mischief; to the old they are a comfort and aid in their weakness, and those in the prime of life they incite to noble deeds. 
-set txt[16] Happiness is the meaning and the purpose of life, the whole aim and end of human existence. 
-set txt[17] He who is to be a good ruler must have first been ruled. 
-set txt[18] There was never a genius without a tincture of madness. 
-set txt[19] Those who educate children well are more to be honored than parents, for these only gave life, those the art of living well. 
-set txt[20] Those that know, do. Those that understand, teach. 
-set txt[21] I count him braver who overcomes his desires than him who conquers his enemies; for the hardest victory is over self. 
-set txt[22] The unfortunate need people who will be kind to them; the prosperous need people to be kind to. 
-set txt[23] Youth is easily deceived, because it is quick to hope. 
-set txt[24] Teaching is the highest form of understanding. 
+set txt[15] In poverty and other misfortunes of life, true friends are a sure refuge. The young they keep out of mischief; to the old they are a comfort and aid in their weakness, and those in the prime of life they incite to noble deeds.
+set txt[16] Happiness is the meaning and the purpose of life, the whole aim and end of human existence.
+set txt[17] He who is to be a good ruler must have first been ruled.
+set txt[18] There was never a genius without a tincture of madness.
+set txt[19] Those who educate children well are more to be honored than parents, for these only gave life, those the art of living well.
+set txt[20] Those that know, do. Those that understand, teach.
+set txt[21] I count him braver who overcomes his desires than him who conquers his enemies; for the hardest victory is over self.
+set txt[22] The unfortunate need people who will be kind to them; the prosperous need people to be kind to.
+set txt[23] Youth is easily deceived, because it is quick to hope.
+set txt[24] Teaching is the highest form of understanding.
 set txt[25] Excellence is an art won by training and habituation. We do not act rightly because we have virtue or excellence, but we rather have those because we have acted rightly. We are what we repeatedly do. Excellence, then, is not an act but a habit
-set txt[26] Courage is a man's ability to handle fear. 
+set txt[26] Courage is a man's ability to handle fear.
 set  speech %%txt[%max%]%%
 eval speech %speech%
 say %speech%
@@ -2001,33 +2017,33 @@ Confucius - 23~
 * By Rumble of The Builder Academy    tbamud.com 9091
 * Confucius - M23 - T186 By Rumble
 set max %random.27%
-set txt[1] Before you embark on a journey of revenge, dig two graves. 
-set txt[2] Everything has its beauty but not everyone sees it. 
-set txt[3] Forget injuries, never forget kindnesses. 
-set txt[4] It does not matter how slowly you go so long as you do not stop. 
-set txt[5] Respect yourself and others will respect you. 
-set txt[6] Study the past if you would define the future. 
+set txt[1] Before you embark on a journey of revenge, dig two graves.
+set txt[2] Everything has its beauty but not everyone sees it.
+set txt[3] Forget injuries, never forget kindnesses.
+set txt[4] It does not matter how slowly you go so long as you do not stop.
+set txt[5] Respect yourself and others will respect you.
+set txt[6] Study the past if you would define the future.
 set txt[7] The superior man, when resting in safety, does not forget that danger may come. When in a state of security he does not forget the possibility of ruin. When all is orderly, he does not forget that disorder may come.
-set txt[8] What the superior man seeks is in himself; what the small man seeks is in others. 
-set txt[9] Wheresoever you go, go with all your heart. 
-set txt[10] By nature, men are nearly alike; by practice, they get to be wide apart. 
-set txt[11] A man who has committed a mistake and doesn't correct it, is committing another mistake. 
-set txt[12] If you know, to recognize that you know, If you don't know, to realize that you don't know: That is knowledge. 
-set txt[13] Never hesitate to ask a lesser person. 
-set txt[14] People with virtue must speak out; People who speak are not all virtuous. 
-set txt[15] What you do not wish upon yourself, extend not to others. 
-set txt[16] We take great pains to persuade other that we are happy than in endeavoring to think so ourselves. 
-set txt[17] Better a diamond with a flaw than a pebble without. 
-set txt[18] The people may be made to follow a path of action, but they may not be made to understand it. 
-set txt[19] The superior man is modest in his speech, but exceeds in his actions. 
-set txt[20] The superior man...does not set his mind either for anything, or against anything; what is right he will follow. 
-set txt[21] To go beyond is as wrong as to fall short. 
-set txt[22] Virtue is not left to stand alone. He who practices it will have neighbors. 
-set txt[23] What the superior man seeks is in himself. What the mean man seeks is in others. 
-set txt[24] What you do not want done to yourself, do not do to others. 
-set txt[25] When you know a thing, to hold that you know it; and when you do not know a thing, to allow that you do not know it - this is knowledge. 
+set txt[8] What the superior man seeks is in himself; what the small man seeks is in others.
+set txt[9] Wheresoever you go, go with all your heart.
+set txt[10] By nature, men are nearly alike; by practice, they get to be wide apart.
+set txt[11] A man who has committed a mistake and doesn't correct it, is committing another mistake.
+set txt[12] If you know, to recognize that you know, If you don't know, to realise that you don't know: That is knowledge.
+set txt[13] Never hesitate to ask a lesser person.
+set txt[14] People with virtue must speak out; People who speak are not all virtuous.
+set txt[15] What you do not wish upon yourself, extend not to others.
+set txt[16] We take great pains to persuade other that we are happy than in endeavoring to think so ourselves.
+set txt[17] Better a diamond with a flaw than a pebble without.
+set txt[18] The people may be made to follow a path of action, but they may not be made to understand it.
+set txt[19] The superior man is modest in his speech, but exceeds in his actions.
+set txt[20] The superior man...does not set his mind either for anything, or against anything; what is right he will follow.
+set txt[21] To go beyond is as wrong as to fall short.
+set txt[22] Virtue is not left to stand alone. He who practices it will have neighbors.
+set txt[23] What the superior man seeks is in himself. What the mean man seeks is in others.
+set txt[24] What you do not want done to yourself, do not do to others.
+set txt[25] When you know a thing, to hold that you know it; and when you do not know a thing, to allow that you do not know it - this is knowledge.
 set txt[26] In any prisoner situation when you are communicating with a fellow prisoner be sure to agree about a danger signal first. Second make a cover story in case you are caught, and third, you need to decide on a backup communication system.
-set txt[27] The superior man understands what is right; the inferior man understands what is accepted by a majority. 
+set txt[27] The superior man understands what is right; the inferior man understands what is accepted by a majority.
 eval  speech %%txt[%max%]%%
 say %speech%
 ~
@@ -2037,51 +2053,51 @@ James Stockdale - 27~
 ~
 * James Stockdale - M27 - T187 By Rumble
 eval max %random.43%
-set txt[1] Francis Bacon once said, "Adversity doth best induce virtue... while luxury doth best induce vice."
-set txt[2] to quote Glenn Gray, "Numberless soldiers have died, more or less willingly, not for country or honor or religious faith or for any other abstract good, but because they realized that by fleeing their posts and rescuing themselves, they would expose their companions to greater danger. Such loyalty to the group is the essence of fighting morale."
+set txt[1] Francis Bacon once said, "Adversity doth best to induce virtue...while luxury doth best induce vice."
+set txt[2] To quote Glenn Gray, "Numberless soldiers have died, more or less willingly, not for country or honor or religious faith or for any other abstract good, but because they realised that by fleeing their posts and rescuing themselves, they would expose their companions to greater danger. Such loyalty to the group is the essence of fighting morale."
 set txt[3] Glenn Gray said, "Nothing is clearer than that men can act contrary to the alleged basic instinct of self-preservation and against all motives of self-interest and egoism. Were it not so, the history of our civilization would be completely different than what it has been."
 set txt[4] At its best, citizenship finds an equilibrium between two essential ingredients-that of rights and that of duties. When the idea of citizenship is losing its grip, one or the other of these elements becomes eroded. Either freedom is on the losing end, or the sense of duty, of obligation, goes down the drain.
-set txt[5] Ariel and Will Durant said it best, "Freedom and equality are sworn enemies, when one prevails the other dies."
+set txt[5] Ariel and Will Durant said it best, "Freedom and equality are sworn and everlasting enemies, and when one prevails the other dies."
 set txt[6] As a people we have become soft. Stress isn't a bad thing. It is actually good for you, particularly the kind that comes from physical exercise.
-set txt[7] The Durants also said, "What determines whether the challenge of history will or will not be met depends upon the presence or absence of creative individuals with a clarity of mind and energy of will, capable of effective responses to new situations.
-set txt[8] once one learns to accomodate the shocks of a stressful existence, his adrenalin, will power, and imagination are going to start churning to provide the maximum performance of the human mind.
-set txt[9] would a good soldier fighting a tough battle stop to say to himself how unhappy he is?
-set txt[10] Remember Herman Melville? " In time of peril, like the needle to the lodestone, obedience, irrespective of rank, generally flies to him who is best fitted to command.
+set txt[7] Ariel and Will Durant said, "What determines whether the challenge of history will or will not be met depends upon the presence or absence of creative individuals with a clarity of mind and energy of will, capable of effective responses to new situations.
+set txt[8] Once one learns to accomodate the shocks of a stressful existence, his adrenalin, will power, and imagination are going to start churning to provide the maximum performance of the human mind.
+set txt[9] Would a good soldier fighting a tough battle stop to say to himself how unhappy he is?
+set txt[10] Remember Herman Melville? "In time of peril, like the needle to the lodestone, obedience, irrespective of rank, generally flies to him who is best fitted to command."
 set txt[11] There is no evidence that the way of the World assures the punishment of evil or the reward of virtue.
 set txt[12] Humans seem to have an inborn need to believe that virtue will be rewarded and evil punished. Often, when they come face to face with the fact that this is not always so, they are crushed.
-set txt[13] from the Book of Ecclesiastes, "I returned and saw that the race is not always to the swift nor the battle to the strong, neither yet bread to the wise nor riches to men of understanding, nor favors to men of skill, but time and chance happeneth to them all."
-set txt[14] the key to our future leaders' merit may not be "hanging in there" when the light at the end of the tunnel is expected. It will be their performance when it looks like the light will never show up."
+set txt[13] From the Book of Ecclesiastes, "I returned and saw that the race is not always to the swift nor the battle to the strong, neither yet bread to the wise nor riches to men of understanding, nor favors to men of skill, but time and chance happeneth to them all."
+set txt[14] The key to our future leaders' merit may not be "hanging in there" when the light at the end of the tunnel is expected. It will be their performance when it looks like the light will never show up.
 set txt[15] Mark Van Doren was right, "Being an educated person means that given the necessity [after doomsday, so to speak], you could refound your own civilization."
 set txt[16] Captain McWhirr said "to go skimming over the years of existence to sink gently into a placid grave, ignorant of life to the last, without ever having been made to see all it may contain of perfidy, of violence, of terror."
 set txt[17] Harry Truman said, "Men make history, and not the other way around."
-set txt[18] Sir Arthur Conan Doyle wrote, "When one tries to rise above nature, one is liable to fall below it. The highest type of man may revert to the animal if he leaves the straight road of destiny. Consider, that the materialists, the sensualists, the worldy would all proplong their worthless lives. The spiritual would now avoid the call to something higher. It would be the survival of the least fit. What sort of cesspool may not our poor world become?
+set txt[18] Sir Arthur Conan Doyle wrote, "When one tries to rise above nature, one is liable to fall below it. The highest type of man may revert to the animal if he leaves the straight road of destiny. Consider, that the materialists, the sensualists, the worldy would all prolong their worthless lives. The spiritual would now avoid the call to something higher. It would be the survival of the least fit. What sort of cesspool may not our poor world become?"
 set txt[19] Remember when you are strung up by the ropes that they can get out of you only what they know you know.
-set txt[20] a hero is a man who will not accept the status quo if it does not meet his standards.
-set txt[21] any officer worth his salt, on detached duty and out of communication, has to have the right to sensibly modify the law, issue rules that fit the conditions, and be prepared to defend himself in court.
-set txt[22] my experience is a perfect example of the hermetic - the alchemical transformation that may occur when a human being is subjected to intense pressure within a crucible of suffering or confinement.
+set txt[20] A hero is a man who will not accept the status quo if it does not meet his standards.
+set txt[21] Any officer worth his salt, on detached duty and out of communication, has to have the right to sensibly modify the law, issue rules that fit the conditions, and be prepared to defend himself in court.
+set txt[22] My experience is a perfect example of the hermetic - the alchemical transformation that may occur when a human being is subjected to intense pressure within a crucible of suffering or confinement.
 set txt[23] Dostoyevsky was a wise man, "You see, gentlemen, reason is an excellent thing, there's no disputing that, but reason is nothing but reason and satisfies only the rational side of man's nature, while will is a manifestation of the whole life, that is, of the whole human life, including reason and all the impulses."
 set txt[24] I once read from Nichmachean Ethics: "There are some instances in which such actions elicit forgiveness rather than praise, for example, when a man acts improperly under a strain greater than human nature can bear, and which no one could endure. Yet there are, perhaps, also acts which no man can possibly be compelled to do, but rather than do them he should accept the most terrible sufferings and death."
-set txt[25] Wittgenstein is know for, "If it comes easy, it ain't worth a damn."
-set txt[26] Fr. Marius recalls someone remarking, "the important thing is not what they've made of you, but what you made of what they've made of you."
+set txt[25] Wittgenstein is known for, "If it comes easy, it ain't worth a damn."
+set txt[26] Fr. Marius recalls someone remarking, "The important thing is not what they've made of you, but what you made of what they've made of you."
 set txt[27] It was only when I lay there on the rotting prison straw that I sensed within myself the first stirrings of good. Gradually it was disclosed to me that the line separating good and evil passes not between states nor between classes nor between political parties, but right through every human heart, through all human hearts. And that is why I turn back to the years of my imprisonment and say, "Bless you, prison, for having been a part of my life."
 set txt[28] my rules are: BACK US: Don't Bow in public, stay off the Air, admit no Crimes, never Kiss them goodbye, Unity over Self. Never negotiate for yourself but only for us all. Not less than significant pain should cause you to submit.
-set txt[29] The lecture-room of the philosopher is a hospital, students ought not to walk out of it in pleasure, but in pain. 
+set txt[29] The lecture-room of the philosopher is a hospital, students ought not to walk out of it in pleasure, but in pain.
 set txt[30] I knew I could contain material - so long as they didn't know I knew it.
 set txt[31] Opportunities don't roll in as a saturating fog bank. They come as incidents. And you need spontaneity and instinct to capture them.
 set txt[32] Society's main objective is to instill virtue in its citizenry and that specific laws are a secondary concern.
-set txt[33] in prison I have concluded that the pincers of fear and guilt are the destroyers of men. Nothing else.
+set txt[33] In prison I have concluded that the pincers of fear and guilt are the destroyers of men. Nothing else.
 set txt[34] The challenge of education is not to prepare people for success but to prepare them for failure. I think that it's in hardship and failure that the heroes and the bums really get sorted out.
 set txt[35] Solzhenitsyn once commented, "If only there were evil people somewhere insidiously committing evil deeds, and it were necessary only to separate them from the rest of us and destroy them. But the line dividing good and evil cuts through the heart of every human being, and who is willing to destroy a piece of his own heart?"
 set txt[36] Edward Hidalgo once said, "Avoiding failure is not success." How right he was.
-set txt[37] Clemenceau believed that, "War is too important to be left to the general's."
+set txt[37] Clemenceau believed that, "War is too important to be left to the generals."
 set txt[38] I once asked Will Durant what he thought of American foreign policy. He told me, "I think we're all mixed up. We seem to be working on the assumption that if we're nice to other people they'll be nice to us. I can tell you that in the last 4000 years there's practically no evidence to support that view."
 set txt[39] Alfred Thayer Mahan believed that, "the purpose of power is to permit moral ideas to take root."
 set txt[39] The Durants said that "culture is a thin and fragile veneer that superimposes itself on mankind."
 set txt[40] The ones where are in trouble in here are the high school graduates who had enough sense to pick up the innuendo, and yet not enough education to accommodate it properly. A little knowledge is a dangerous thing.
-set txt[41] Prof Hans Morgethau once postulated, "in the world of the intellectual, ideas meet with ideas, and anything goes that is presented cleverly and with assurance. But in the practical world, ideas meet with facts, facts which make mincemeat of wrong ideas and throw the pieces in the ashcan of history."
+set txt[41] Prof Hans Morgethau once postulated, "In the world of the intellectual, ideas meet with ideas, and anything goes that is presented cleverly and with assurance. But in the practical world, ideas meet with facts, facts which make mincemeat of wrong ideas and throw the pieces in the ashcan of history."
 set txt[42] The greatest weapon our interrogators have against us is our own shame. They know how to manipulate it, our only protection is a clear conscience.
 set txt[42] We seem to have burdened ourselves with a national self-consciousness that has become a self-inflicted wound of guilt, a national shame at being strong.
-set txt[43] No one had to remind our founding fathers of the cost of freedom. 56 of them knowingly laid their lives, liberty and honor on the line when they signed that Declaration of Independence. And they paid their dues. In the ensuing war, nine were killed in action, five died as prisoners of war, twelve had their homes burned, several lost sons, one moan's wife died in prison, and seventeen (including Thomas Jefferson) went broke.
+set txt[43] No one had to remind our founding fathers of the cost of freedom. 56 of them knowingly laid their lives, liberty and honor on the line when they signed that Declaration of Independence. And they paid their dues. In the ensuing war, nine were killed in action, five died as prisoners of war, twelve had their homes burned, several lost sons, one man's wife died in prison, and seventeen (including Thomas Jefferson) went broke.
 set speech %%txt[%max%]%%
 eval speech %speech%
 say %speech%
@@ -2150,7 +2166,7 @@ Mob Quest Tutorial Example Quest accepted - 25~
 0 d 1
 yes~
 * By Rumble of The Builder Academy    tbamud.com 9091
-if %actor.varexists(solved_example_quest_zone_0)%
+if %actor.varexists(solved_example_quest_zone_0)% || !%actor.is_pc%
   halt
 else
   wait 1 sec
@@ -2195,9 +2211,9 @@ if %actor.is_pc%
   if %actor.varexists(TBA_greeting)%
     say Welcome back %actor.name%. Read through these rooms whenever you need a refresher.
   else
-    say Welcome to The Builder Academy %actor.name%. 
+    say Welcome to The Builder Academy %actor.name%.
     wait 1 sec
-    say Within this zone you can learn all the immortal commands and how to build. 
+    say Within this zone you can learn all the immortal commands and how to build.
     wait 2 sec
     say This zone is like a newbie zone, except for gods. All you have to do is walk through the zone and read every room description.
     wait 3 sec
@@ -2260,16 +2276,17 @@ TBA Welcome - 18~
 ~
 * By Rumble of The Builder Academy    tbamud.com 9091
 * TBA mortal greet to fill out the application.
+wait 1 sec
 if %actor.level% <= 1
   wait 3 sec
   if %actor.varexists(TBA_mortal_greeting)%
-    %echo% Friedrich Nietzsche says, 'Welcome back %actor.name%. Tell someone level 32 or above when you complete the application.'
+    %echo% Friedrich Nietzsche says, 'Welcome back %actor.name%. Tell a God, Great God, or Implementor when you complete the application.'
   else
-    %echo% Friedrich Nietzsche says, 'Welcome to The Builder Academy %actor.name%.' 
+    %echo% Friedrich Nietzsche says, 'Welcome to The Builder Academy %actor.name%.'
     wait 2 sec
     %echo% Friedrich Nietzsche says, 'If you are interested in learning how to build, or want to teach others, then you have come to the right place.'
     wait 2 sec
-    %echo% Friedrich Nietzsche says, 'Please fill out the application at: http://tbamud.com/BuilderApplication'
+    %echo% Friedrich Nietzsche says, 'Please fill out the application at: http://tbamud.com'
     nop %actor.thirst(-1)%
     nop %actor.hunger(-1)%
     set TBA_mortal_greeting 1

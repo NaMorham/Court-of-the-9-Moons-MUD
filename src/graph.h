@@ -17,4 +17,4 @@
 ACMD(do_track);
 void  hunt_victim(struct char_data *ch);  // find a path to the target char
 
-#endif /* _GRAPH_H_*/
+#endif  // _GRAPH_H_

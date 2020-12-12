@@ -2,8 +2,6 @@
 Rumble~
 The Builder Academy Zone~
 0 99 30 2 d 0 0 0 -1 -1
-M 0 25 1 21 	(the variable questmaster)
-D 0 21 2 2 	(Another Example With Quest Variables)
 M 0 34 1 8 	(Chuck Norris)
 M 0 29 2 7 	(Epictetus)
 D 0 20 0 2 	(Advanced Trigedit Example)
@@ -49,6 +47,7 @@ M 0 27 2 17 	(James Stockdale)
 M 0 26 1 22 	(the protector of the magic eight ball)
 R 0 22 47 -1 	(the magic eight ball)
 O 0 47 99 22 	(the magic eight ball)
+M 0 25 1 21 	(the variable questmaster)
 M 0 16 1 19 	(a quest ogre)
 M 0 14 1 18 	(the tutorial questmaster)
 S

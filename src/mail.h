@@ -13,21 +13,33 @@
 #ifndef _MAIL_H_
 #define _MAIL_H_
 
-/* You can modify the following constants to fit your own MUD.  */
+/*
+ *  You can modify the following constants to fit your own MUD.
+ */
 
-// minimum level a player must be to send mail
+/*
+ *  minimum level a player must be to send mail
+ */
 #define MIN_MAIL_LEVEL 1
 
-// # of gold coins required to send mail
+/*
+ *  # of gold coins required to send mail
+ */
 #define STAMP_PRICE 150
 
-// Maximum size of mail in bytes (arbitrary)
+/*
+ *  Maximum size of mail in bytes (arbitrary)
+ */
 #define MAX_MAIL_SIZE 8192
 
-// size of mail file allocation blocks
+/*
+ *  size of mail file allocation blocks
+ */
 #define BLOCK_SIZE 100
 
-// General, publicly available functions
+/*
+ *  General, publicly available functions
+ */
 SPECIAL(postmaster);
 
 /*
@@ -37,7 +49,10 @@ SPECIAL(postmaster);
  * 100 is a nice round number for BLOCK_SIZE and is the default. The mail system
  * will always allocate disk space in chunks of size BLOCK_SIZE.
  */
-/* DON'T TOUCH DEFINES BELOW. */
+
+/*
+ *  DON'T TOUCH DEFINES BELOW.
+ */
 int     scan_file(void);
 int     has_mail(long recipient);
 void    store_mail(long to, long from, char *message_pointer);
@@ -51,7 +66,9 @@ struct mail_t {
     char *body;
 };
 
-// old stuff below
+/*
+ *  old stuff below
+ */
 #define HEADER_BLOCK  (-1)
 #define LAST_BLOCK    (-2)
 #define DELETED_BLOCK (-3)

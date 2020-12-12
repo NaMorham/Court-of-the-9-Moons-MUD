@@ -20,4 +20,4 @@ room_rnum   duplicate_room(room_vnum to, room_rnum from);
 int         copy_room_strings(struct room_data *dest, struct room_data *source);
 int         free_room_strings(struct room_data *);
 
-#endif /* _GENWLD_H_ */
+#endif  // _GENWLD_H_

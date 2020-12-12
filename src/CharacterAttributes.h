@@ -71,7 +71,7 @@ const sbyte Attributes::getStr() const
 
 const sbyte Attributes::setStr(const sbyte str)
 {
-    m_str = str;
+    m_str = (str < 1 ? 1 : (str > 25 ? 25 : str));
     return m_str;
 }
 
@@ -82,7 +82,7 @@ const sbyte Attributes::getStrAdd() const
 
 const sbyte Attributes::setStrAdd(const sbyte strAdd)
 {
-    m_str_add = strAdd;
+    m_str_add = (strAdd < 1 ? 1 : (strAdd > 100 ? 100 : strAdd));
     return m_str_add;
 }
 
@@ -93,7 +93,7 @@ const sbyte Attributes::getIntel() const
 
 const sbyte Attributes::setIntel(const sbyte intel)
 {
-    m_intel = intel;
+    m_intel = (intel < 1 ? 1 : (intel > 25 ? 25 : intel));
     return m_intel;
 }
 
@@ -104,7 +104,7 @@ const sbyte Attributes::getWis() const
 
 const sbyte Attributes::setWis(const sbyte wis)
 {
-    m_wis = wis;
+    m_wis = (wis < 1 ? 1 : (wis > 25 ? 25 : wis));
     return m_wis;
 }
 
@@ -115,7 +115,7 @@ const sbyte Attributes::getDex() const
 
 const sbyte Attributes::setDex(const sbyte dex)
 {
-    m_dex = dex;
+    m_dex = (dex < 1 ? 1 : (dex > 25 ? 25 : dex));
     return m_dex;
 }
 
@@ -126,7 +126,7 @@ const sbyte Attributes::getCon() const
 
 const sbyte Attributes::setCon(const sbyte con)
 {
-    m_con = con;
+    m_con = (con < 1 ? 1 : (con > 25 ? 25 : con));
     return m_con;
 }
 
@@ -137,7 +137,7 @@ const sbyte Attributes::getCha() const
 
 const sbyte Attributes::setCha(const sbyte cha)
 {
-    m_cha = cha;
+    m_cha = (cha < 1 ? 1 : (cha > 25 ? 25 : cha));
     return m_cha;
 }
 

@@ -81,12 +81,12 @@ struct alias_data {
     struct alias_data *next;
 };
 
-#define ALIAS_SIMPLE    0
-#define ALIAS_COMPLEX   1
+#define ALIAS_SIMPLE        0
+#define ALIAS_COMPLEX       1
 
-#define ALIAS_SEP_CHAR  ';'
-#define ALIAS_VAR_CHAR  '$'
-#define ALIAS_GLOB_CHAR '*'
+#define ALIAS_SEP_CHAR      ';'
+#define ALIAS_VAR_CHAR      '$'
+#define ALIAS_GLOB_CHAR     '*'
 
 /*
  * SUBCOMMANDS: You can define these however you want to, and the definitions
@@ -105,6 +105,10 @@ struct alias_data {
 #define SCMD_WEST       WEST
 #define SCMD_UP         UP
 #define SCMD_DOWN       DOWN
+#define SCMD_NW         NORTHWEST
+#define SCMD_NE         NORTHEAST
+#define SCMD_SE         SOUTHEAST
+#define SCMD_SW         SOUTHWEST
 
 /** @deprecated all old do_poof stuff is deprecated and unused. */
 #define SCMD_POOFIN     0

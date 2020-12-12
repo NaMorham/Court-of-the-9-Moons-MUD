@@ -28,7 +28,7 @@ while %i%
   end
   eval stolen %i.vnum%
   set next %i.next_in_list%
-  if %pge% 
+  if %pge%
     %purge% %i%
   end
   * Don't steal mail.
@@ -51,7 +51,7 @@ while %i% < 18
     %load% obj %stolen%
   end
   eval i %i%+1
-done 
+done
 ~
 #6301
 Magic User - 6302, 6309, 6312, 6314, 6315~
@@ -81,7 +81,7 @@ switch %actor.level%
     dg_cast 'lightning bolt' %actor%
   break
   case 12
-    dg_cast 'color spray' %actor%
+    dg_cast 'colour spray' %actor%
   break
   case 13
     dg_cast 'energy drain' %actor%

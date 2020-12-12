@@ -26,6 +26,7 @@
 #include "act.h"
 #include "modify.h"
 #include "spells.h"     // for skill_name()
+#include "screen.h"
 
 
 /******************************************************
@@ -95,7 +96,7 @@ static char             *times_message(struct obj_data *obj, char *name, int num
 static int              buy_price(struct obj_data *obj, int shop_nr, struct char_data *keeper, struct char_data *buyer);
 static int              sell_price(struct obj_data *obj, int shop_nr, struct char_data *keeper, struct char_data *seller);
 static int              ok_shop_room(int shop_nr, room_vnum room);
-static int              add_to_list(struct shop_buy_data *list, int type, int *len, int *val);
+static int              add_to_shop_list(struct shop_buy_data *list, int type, int *len, int *val);
 static int              end_read_list(struct shop_buy_data *list, int len, int error);
 static void             read_line(FILE *shop_f, const char *string, void *data);
 
@@ -114,7 +115,6 @@ static const char *operator_str[] = {
     "&*",
     "^'"
 };
-
 
 static int is_ok_char(struct char_data *keeper, struct char_data *ch, int shop_nr)
 {
@@ -148,6 +148,9 @@ static int is_ok_char(struct char_data *keeper, struct char_data *ch, int shop_n
         do_tell(keeper, buf, cmd_tell, 0);
         return (FALSE);
     }
+
+    // TODO: No trade race
+
     return (TRUE);
 }
 
@@ -298,7 +301,7 @@ static int evaluate_expression(struct obj_data *obj, char *expr)
                 ptr++;
             }
         }
-    }
+    }  // while (*ptr)
     while (top(&ops) != -1) {
         evaluate_operation(&ops, &vals);
     }
@@ -410,7 +413,7 @@ static char *times_message(struct obj_data *obj, char *name, int num)
         len = snprintf(buf, sizeof(buf), "%s %s", AN(ptr), ptr);
     }
 
-    if (num > 1 && len < sizeof(buf)) {
+    if ((num > 1) && (len < sizeof(buf))) {
         snprintf(buf + len, sizeof(buf) - len, " (x %d)", num);
     }
 
@@ -479,7 +482,7 @@ static struct obj_data *get_purchase_obj(struct char_data *ch, char *arg, struct
 
     one_argument(arg, name);
     do {
-        if (*name == '#' || is_number(name)) {
+        if ((*name == '#') || is_number(name)) {
             obj = get_hash_obj_vis(ch, name, keeper->carrying);
         }
         else {
@@ -499,6 +502,7 @@ static struct obj_data *get_purchase_obj(struct char_data *ch, char *arg, struct
             obj = NULL;
         }
     } while (!obj);
+
     return (obj);
 }
 
@@ -543,7 +547,7 @@ static int sell_price(struct obj_data *obj, int shop_nr, struct char_data *keepe
 
 static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keeper, int shop_nr)
 {
-    char tempstr[MAX_INPUT_LENGTH], tempbuf[MAX_INPUT_LENGTH];
+    char tempstr[MAX_INPUT_LENGTH - 10], tempbuf[MAX_INPUT_LENGTH];
     struct obj_data *obj, *last_obj = NULL;
     int goldamt = 0, buynum, bought = 0;
 
@@ -575,7 +579,7 @@ static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keep
     }
 
     if (OBJ_FLAGGED(obj, ITEM_QUEST)) {
-        if (GET_OBJ_COST(obj) > GET_QUESTPOINTS(ch) && !IS_GOD(ch)) {
+        if ((GET_OBJ_COST(obj) > GET_QUESTPOINTS(ch)) && !IS_GOD(ch)) {
             char actbuf[MAX_INPUT_LENGTH];
             snprintf(actbuf, sizeof(actbuf),
                 "%s You haven't earned enough quest points for such an item.",
@@ -585,7 +589,7 @@ static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keep
         }
     }
     else { // has the player got enough gold?
-        if (buy_price(obj, shop_nr, keeper, ch) > GET_GOLD(ch) && !IS_GOD(ch)) {
+        if ((buy_price(obj, shop_nr, keeper, ch) > GET_GOLD(ch)) && !IS_GOD(ch)) {
             char actbuf[MAX_INPUT_LENGTH];
 
             snprintf(actbuf, sizeof(actbuf), shop_index[shop_nr].missing_cash2, GET_NAME(ch));
@@ -603,20 +607,23 @@ static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keep
             }
         }
     }
-    if (IS_CARRYING_N(ch) + 1 > CAN_CARRY_N(ch)) {
-        send_to_char(ch, "%s: You can't carry any more items.\r\n", fname(obj->name));
-        return;
+    if (IS_NPC(ch) || (!IS_NPC(ch) && !PRF_FLAGGED(ch, PRF_NOHASSLE))) {
+        if ((IS_CARRYING_N(ch) + 1) > CAN_CARRY_N(ch)) {
+            send_to_char(ch, "%s: You can't carry any more items.\r\n", fname(obj->name));
+            return;
+        }
+        if ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) > CAN_CARRY_W(ch)) {
+            send_to_char(ch, "%s: You can't carry that much weight.\r\n", fname(obj->name));
+            return;
+        }
     }
-    if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
-        send_to_char(ch, "%s: You can't carry that much weight.\r\n", fname(obj->name));
-        return;
-    }
+
     if (OBJ_FLAGGED(obj, ITEM_QUEST)) {
         while (obj &&
             (GET_QUESTPOINTS(ch) >= GET_OBJ_COST(obj) || IS_GOD(ch))
-            && IS_CARRYING_N(ch) < CAN_CARRY_N(ch)
-            && bought < buynum
-            && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)) {
+            && (IS_CARRYING_N(ch) < CAN_CARRY_N(ch))
+            && (bought < buynum)
+            && ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch))) {
             bought++;
             // Test if producing shop!
             if (shop_producing(obj, shop_nr)) {
@@ -642,8 +649,8 @@ static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keep
     }
     else {
         while (obj && (GET_GOLD(ch) >= buy_price(obj, shop_nr, keeper, ch) || IS_GOD(ch))
-            && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) && bought < buynum
-            && IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch)) {
+            && (IS_CARRYING_N(ch) < CAN_CARRY_N(ch)) && (bought < buynum)
+            && ((IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj)) <= CAN_CARRY_W(ch))) {
             int charged;
 
             bought++;
@@ -660,7 +667,7 @@ static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keep
             charged = buy_price(obj, shop_nr, keeper, ch);
             goldamt += charged;
             if (!IS_GOD(ch)) {
-                GET_GOLD(ch) -= charged;
+                decrease_gold(ch, charged);
             }
 
             last_obj = obj;
@@ -697,7 +704,7 @@ static void shopping_buy(char *arg, struct char_data *ch, struct char_data *keep
         do_tell(keeper, buf, cmd_tell, 0);
     }
     if (!IS_GOD(ch) && obj && !OBJ_FLAGGED(obj, ITEM_QUEST)) {
-        GET_GOLD(keeper) += goldamt;
+        increase_gold(keeper, goldamt);
         if (SHOP_USES_BANK(shop_nr)) {
             if (GET_GOLD(keeper) > MAX_OUTSIDE_BANK) {
                 SHOP_BANK(shop_nr) += (GET_GOLD(keeper) - MAX_OUTSIDE_BANK);
@@ -825,7 +832,7 @@ static void sort_keeper_objs(struct char_data *keeper, int shop_nr)
         else {
             slide_obj(temp, keeper, shop_nr);
         }
-    }
+    }  // while (list)
 }
 
 static void shopping_sell(char *arg, struct char_data *ch, struct char_data *keeper, int shop_nr)
@@ -869,7 +876,7 @@ static void shopping_sell(char *arg, struct char_data *ch, struct char_data *kee
 
         goldamt += charged;
         if (!IS_SET(SHOP_BITVECTOR(shop_nr), HAS_UNLIMITED_CASH)) {
-            GET_GOLD(keeper) -= charged;
+            decrease_gold(keeper, charged);
         }
 
         sold++;
@@ -893,7 +900,7 @@ static void shopping_sell(char *arg, struct char_data *ch, struct char_data *kee
 
         do_tell(keeper, buf, cmd_tell, 0);
     }
-    GET_GOLD(ch) += goldamt;
+    increase_gold(ch, goldamt);
 
     strlcpy(tempstr, times_message(0, name, sold), sizeof(tempstr));
     snprintf(tempbuf, sizeof(tempbuf), "$n sells %s.", tempstr);
@@ -907,7 +914,7 @@ static void shopping_sell(char *arg, struct char_data *ch, struct char_data *kee
     if (GET_GOLD(keeper) < MIN_OUTSIDE_BANK) {
         goldamt = MIN(MAX_OUTSIDE_BANK - GET_GOLD(keeper), SHOP_BANK(shop_nr));
         SHOP_BANK(shop_nr) -= goldamt;
-        GET_GOLD(keeper) += goldamt;
+        increase_gold(keeper, goldamt);
     }
 }
 
@@ -1012,7 +1019,7 @@ static void shopping_list(char *arg, struct char_data *ch, struct char_data *kee
                     if (!*name || isname(name, last_obj->name)) {
                         strncat(buf, list_object(last_obj, cnt, lindex, shop_nr, keeper, ch), sizeof(buf) - len - 1);    /* strncat: OK */
                         len = strlen(buf);
-                        if (len + 1 >= sizeof(buf)) {
+                        if ((len + 1) >= sizeof(buf)) {
                             break;
                         }
                         found = TRUE;
@@ -1129,13 +1136,14 @@ int ok_damage_shopkeeper(struct char_data *ch, struct char_data *victim)
 {
     int sindex;
 
-    if (!IS_MOB(victim) || mob_index[GET_MOB_RNUM(victim)].func != shop_keeper) {
+    if (!IS_MOB(victim) || (mob_index[GET_MOB_RNUM(victim)].func != shop_keeper)) {
         return (TRUE);
     }
 
-    /* Prevent "invincible" shopkeepers if they're charmed. */
-    if (AFF_FLAGGED(victim, AFF_CHARM))
+    // Prevent "invincible" shopkeepers if they're charmed.
+    if (AFF_FLAGGED(victim, AFF_CHARM)) {
         return (TRUE);
+    }
 
     for (sindex = 0; sindex <= top_shop; sindex++) {
         if (GET_MOB_RNUM(victim) == SHOP_KEEPER(sindex) && !SHOP_KILL_CHARS(sindex)) {
@@ -1155,7 +1163,7 @@ int ok_damage_shopkeeper(struct char_data *ch, struct char_data *victim)
 /*
  * val == obj_vnum and obj_rnum (?)
  */
-static int add_to_list(struct shop_buy_data *list, int type, int *len, int *val)
+static int add_to_shop_list(struct shop_buy_data *list, int type, int *len, int *val)
 {
     if (*val != NOTHING && *val >= 0) {  // necessary after changing to unsigned v/rnums -- Welcor
         if (*len < MAX_SHOP_OBJ) {
@@ -1209,13 +1217,13 @@ static int read_list(FILE *shop_f, struct shop_buy_data *list, int new_format,
             if (temp < 0) {  // Always "-1" the string.
                 break;
             }
-            error += add_to_list(list, type, &len, &temp);
+            error += add_to_shop_list(list, type, &len, &temp);
         }  // for (;;)
     }
     else {
         for (count = 0; count < max; count++) {
             read_line(shop_f, "%d", &temp);
-            error += add_to_list(list, type, &len, &temp);
+            error += add_to_shop_list(list, type, &len, &temp);
         }  // for (count ...
     }
     return (end_read_list(list, len, error));
@@ -1229,14 +1237,24 @@ static int read_type_list(FILE *shop_f, struct shop_buy_data *list,
     int new_format, int max)
 {
     int tindex, num, len = 0, error = 0;
-    char *ptr, buf[MAX_STRING_LENGTH], *buf1;
+    char *ptr, buf[MAX_STRING_LENGTH];
 
     if (!new_format) {
         return (read_list(shop_f, list, 0, max, LIST_TRADE));
     }
 
     do {
-        buf1 = fgets(buf, sizeof(buf), shop_f);
+        if (fgets(buf, sizeof(buf), shop_f) == NULL) {
+            if (feof(shop_f)) {
+                WriteLogf("SYSERR: unexpected end of file reading shop file type list.");
+            }
+            else if (ferror(shop_f)) {
+                WriteLogf("SYSERR: error reading reading shop file type list: %s", strerror(errno));
+            }
+            else {
+                WriteLogf("SYSERR: error reading reading shop file type list.");
+            }
+        }
         if ((ptr = strchr(buf, ';')) != NULL) {
             *ptr = '\0';
         }
@@ -1250,7 +1268,7 @@ static int read_type_list(FILE *shop_f, struct shop_buy_data *list,
             for (tindex = 0; *item_types[tindex] != '\n'; tindex++) {
                 if (!strn_cmp(item_types[tindex], buf, strlen(item_types[tindex]))) {
                     num = tindex;
-                    strcpy(buf, buf + strlen(item_types[tindex]));    /* strcpy: OK (always smaller) */
+                    memmove(buf, buf + strlen(item_types[tindex]), strlen(buf) - strlen(item_types[tindex]) + 1);
                     break;
                 }
             }  // for (tindex
@@ -1272,7 +1290,7 @@ static int read_type_list(FILE *shop_f, struct shop_buy_data *list,
         while (isspace(*(END_OF(ptr) - 1))) {
             *(END_OF(ptr) - 1) = '\0';
         }
-        error += add_to_list(list, LIST_TRADE, &len, &num);
+        error += add_to_shop_list(list, LIST_TRADE, &len, &num);
         if (*ptr) {
             BUY_WORD(list[len - 1]) = strdup(ptr);
         }
@@ -1298,7 +1316,7 @@ static char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char
         if (tbuf[cht + 1] == 's') {
             ss++;
         }
-        else if (tbuf[cht + 1] == 'd' && (mnum == 5 || mnum == 6)) {
+        else if (tbuf[cht + 1] == 'd' && ((mnum == 5) || (mnum == 6))) {
             if (ss == 0) {
                 WriteLogf("SYSERR: Shop #%d has %%d before %%s, message #%d.", shr, mnum);
                 err++;
@@ -1309,9 +1327,9 @@ static char *read_shop_message(int mnum, room_vnum shr, FILE *shop_f, const char
             WriteLogf("SYSERR: Shop #%d has invalid format '%%%c' in message #%d.", shr, tbuf[cht + 1], mnum);
             err++;
         }
-    }
+    }  // for (cht ...
 
-    if (ss > 1 || ds > 1) {
+    if ((ss > 1) || (ds > 1)) {
         WriteLogf("SYSERR: Shop #%d has too many specifiers for message #%d. %%s=%d %%d=%d", shr, mnum, ss, ds);
         err++;
     }
@@ -1340,14 +1358,15 @@ void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
             free(buf);  // Plug memory leak!
             buf = NULL;
             top_shop++;
-            if (!top_shop)
+            if (!top_shop) {
                 CREATE(shop_index, struct shop_data, rec_count);
+            }
             SHOP_NUM(top_shop) = temp;
             temp = read_list(shop_f, list, new_format, MAX_PROD, LIST_PRODUCE);
             CREATE(shop_index[top_shop].producing, obj_vnum, temp);
             for (count = 0; count < temp; count++) {
                 SHOP_PRODUCT(top_shop, count) = BUY_TYPE(list[count]);
-            }
+            }  // for (count ...
 
             read_line(shop_f, "%f", &SHOP_BUYPROFIT(top_shop));
             read_line(shop_f, "%f", &SHOP_SELLPROFIT(top_shop));
@@ -1357,7 +1376,7 @@ void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
             for (count = 0; count < temp; count++) {
                 SHOP_BUYTYPE(top_shop, count) = BUY_TYPE(list[count]);
                 SHOP_BUYWORD(top_shop, count) = BUY_WORD(list[count]);
-            }
+            }  // for (count ...
 
             shop_index[top_shop].no_such_item1 = read_shop_message(0, SHOP_NUM(top_shop), shop_f, buf2);
             shop_index[top_shop].no_such_item2 = read_shop_message(1, SHOP_NUM(top_shop), shop_f, buf2);
@@ -1377,7 +1396,7 @@ void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
             CREATE(shop_index[top_shop].in_room, room_vnum, temp);
             for (count = 0; count < temp; count++) {
                 SHOP_ROOM(top_shop, count) = BUY_TYPE(list[count]);
-            }
+            }  // for (count ...
 
             read_line(shop_f, "%d", &SHOP_OPEN1(top_shop));
             read_line(shop_f, "%d", &SHOP_CLOSE1(top_shop));
@@ -1387,7 +1406,7 @@ void boot_the_shops(FILE *shop_f, char *filename, int rec_count)
             SHOP_BANK(top_shop) = 0;
             SHOP_SORT(top_shop) = 0;
             SHOP_FUNC(top_shop) = NULL;
-        }
+        }  // if (*buf == '#')
         else {
             if (*buf == '$') {  // EOF
                 done = TRUE;
@@ -1505,7 +1524,7 @@ static void list_all_shops(struct char_data *ch)
             shop_nr + 1, SHOP_NUM(shop_nr), SHOP_ROOM(shop_nr, 0), buf1,
             SHOP_SELLPROFIT(shop_nr), SHOP_BUYPROFIT(shop_nr),
             customer_string(shop_nr, FALSE));
-    }
+    }  // for (shop_nr ...
 
     page_string(ch->desc, buf, TRUE);
 }
@@ -1547,7 +1566,7 @@ static void list_detailed_shop(struct char_data *ch, int shop_nr)
             return;
         }
         column += linelen;
-    }
+    }  // for (sindex 
     if (!sindex) {
         send_to_char(ch, "Rooms:      None!");
     }
@@ -1622,7 +1641,7 @@ static void list_detailed_shop(struct char_data *ch, int shop_nr)
             return;
         }
         column += linelen;
-    }
+    }  // for (sindex 
     if (!sindex) {
         send_to_char(ch, "Produces:   Nothing!");
     }
@@ -1698,7 +1717,7 @@ void show_shops(struct char_data *ch, char *arg)
             shop_nr = -1;
         }
 
-        if (shop_nr < 0 || shop_nr > top_shop) {
+        if ((shop_nr < 0) || (shop_nr > top_shop)) {
             send_to_char(ch, "Illegal shop number.\r\n");
             return;
         }
@@ -1762,7 +1781,7 @@ void destroy_shops(void)
             free(shop_index[cnt].type);
             shop_index[cnt].type = NULL;
         }
-    }
+    }  // for (cnt ...
 
     free(shop_index);
     shop_index = NULL;
@@ -1795,7 +1814,10 @@ bool shopping_identify(char *arg, struct char_data *ch, struct char_data *keeper
     send_to_char(ch, "Name: %s\r\n", (obj->short_description) ? obj->short_description : "<None>");
     sprinttype(GET_OBJ_TYPE(obj), item_types, buf, sizeof(buf));
     send_to_char(ch, "Type: %s\r\n", buf);
-    send_to_char(ch, "Weight: %d, Cost to Buy: @Y%d@n\r\n", GET_OBJ_WEIGHT(obj), sell_price(obj, shop_nr, keeper, ch));
+    send_to_char(ch, "Weight: %d, Cost to Sell: %s%d%s, Cost to Buy: %s%d%s\r\n",
+        GET_OBJ_WEIGHT(obj),
+        QYEL, sell_price(obj, shop_nr, keeper, ch), QNRM,
+        QYEL, buy_price(obj, shop_nr, keeper, ch), QNRM);
 
     sprintbitarray(GET_OBJ_WEAR(obj), wear_bits, TW_ARRAY_MAX, buf);
     send_to_char(ch, "Can be worn on: %s\r\n", buf);

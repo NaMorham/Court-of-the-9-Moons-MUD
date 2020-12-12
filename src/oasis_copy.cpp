@@ -34,12 +34,12 @@
  */
 static room_vnum redit_find_new_vnum(zone_rnum zone);
 
-/***********************************************************
-* This function makes use of the high level OLC functions  *
-* to copy most types of mud objects. The type of data is   *
-* determined by the subcmd variable and the functions are  *
-* looked up in a table.                                    *
-***********************************************************/
+/*************************************************************
+ *  This function makes use of the high level OLC functions  *
+ *  to copy most types of mud objects. The type of data is   *
+ *  determined by the subcmd variable and the functions are  *
+ *  looked up in a table.                                    *
+ *************************************************************/
 ACMD(do_oasis_copy)
 {
     int i, src_vnum, src_rnum, dst_vnum, dst_rnum;
@@ -63,19 +63,20 @@ ACMD(do_oasis_copy)
         { -1, NULL, NULL, NULL, "\n", "\n" }
     };
 
-    /* Find the given connection type in the table (passed in subcmd). */
+    // Find the given connection type in the table (passed in subcmd).
     for (i = 0; *(oasis_copy_info[i].text) != '\n'; i++) {
         if (subcmd == oasis_copy_info[i].con_type) {
             break;
         }
     }  // for (i ...
+
     // If not found, we don't support copying that type of data.
     if (*(oasis_copy_info[i].text) == '\n') {
         return;
     }
 
     // No copying as a mob or while being forced.
-    if (IS_NPC(ch) || !ch->desc || STATE(ch->desc) != CON_PLAYING) {
+    if (IS_NPC(ch) || !ch->desc || (STATE(ch->desc) != CON_PLAYING)) {
         return;
     }
 
@@ -106,7 +107,7 @@ ACMD(do_oasis_copy)
         return;
     }
 
-    /* Check that whatever it is isn't already being edited. */
+    // Check that whatever it is isn't already being edited.
     for (d = descriptor_list; d; d = d->next) {
         if (STATE(d) == subcmd) {
             if (d->olc && OLC_NUM(d) == dst_vnum) {
@@ -288,9 +289,9 @@ ACMD(do_dig)
     W_EXIT(IN_ROOM(ch), dir)->to_room = rrnum;
     add_to_save_list(zone_table[world[IN_ROOM(ch)].zone].number, SL_WLD);
 
-    send_to_char(ch, "You make an exit %s to room %d (%s).\r\n",
-        dirs[dir], rvnum, world[rrnum].name);
+    send_to_char(ch, "You make an exit %s to room %d (%s).\r\n", dirs[dir], rvnum, world[rrnum].name);
 
+    // @todo: pref or flag to override this
     // Check if we can dig from there to here.
     if (W_EXIT(rrnum, rev_dir[dir])) {
         send_to_char(ch, "You cannot dig from %d to here. The target room already has an exit to the %s.\r\n",
@@ -337,8 +338,7 @@ int buildwalk(struct char_data *ch, int dir)
     room_rnum rnum;
 
     if (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_BUILDWALK) &&
-        GET_LEVEL(ch) >= LVL_BUILDER) {
-
+        (GET_LEVEL(ch) >= LVL_BUILDER)) {
         get_char_colors(ch);
 
         if (!can_edit_zone(ch, world[IN_ROOM(ch)].zone)) {
@@ -366,6 +366,7 @@ int buildwalk(struct char_data *ch, int dir)
             OLC_ROOM(d)->description = strdup(buf);
             OLC_ROOM(d)->zone = OLC_ZNUM(d);
             OLC_ROOM(d)->number = NOWHERE;
+            OLC_ROOM(d)->sector_type = GET_BUILDWALK_SECTOR(ch);
 
             // Save the new room to memory. redit_save_internally handles adding the
             // room in the right place, etc.

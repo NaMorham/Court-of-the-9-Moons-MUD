@@ -84,6 +84,14 @@ zone_rnum create_new_zone(zone_vnum vzone_num, room_vnum bottom, room_vnum top, 
         *error = "Bottom room cannot be greater than top room.\r\n";
         return NOWHERE;
     }
+    else if (bottom <= 0) {
+        *error = "Bottom room cannot be less then 0.\r\n";
+        return NOWHERE;
+    }
+    else if (top >= IDXTYPE_MAX) {
+        *error = "Top greater than IDXTYPE_MAX. (Commonly 65535)\r\n";
+        return NOWHERE;
+    }
 
     for (i = 0; i < top_of_zone_table; i++) {
         if (zone_table[i].number == vzone_num) {
@@ -297,7 +305,7 @@ void create_world_index(int znum, const char *type)
             }
         }
         fprintf(newfile, "%s\n", buf);
-    }
+    }  // while (get_line(oldfile, buf))
 
     fclose(newfile);
     fclose(oldfile);
@@ -383,7 +391,7 @@ int save_zone(zone_rnum zone_num)
             (zone_table[zone_num].builders && *zone_table[zone_num].builders)
             ? zone_table[zone_num].builders : "None.",
             (zone_table[zone_num].name && *zone_table[zone_num].name)
-            ? zone_table[zone_num].name : "undefined",
+            ? convert_from_tabs(zone_table[zone_num].name) : "undefined",
             genolc_zone_bottom(zone_num),
             zone_table[zone_num].top,
             zone_table[zone_num].lifespan,
@@ -405,7 +413,7 @@ int save_zone(zone_rnum zone_num)
             (zone_table[zone_num].builders && *zone_table[zone_num].builders)
             ? zone_table[zone_num].builders : "None.",
             (zone_table[zone_num].name && *zone_table[zone_num].name)
-            ? zone_table[zone_num].name : "undefined",
+            ? convert_from_tabs(zone_table[zone_num].name) : "undefined",
             genolc_zone_bottom(zone_num),
             zone_table[zone_num].top,
             zone_table[zone_num].lifespan,
@@ -587,22 +595,22 @@ static void remove_cmd_from_list(ResetCommand_t **list, int pos)
  */
 int new_command(struct zone_data *zone, int pos)
 {
-  int subcmd = 0;
-  ResetCommand_t new_com;
+    int subcmd = 0;
+    ResetCommand_t new_com;
 
-  // Error check to ensure users hasn't given too large an index.
-  while (zone->cmd[subcmd].command != 'S') {
-      subcmd++;
-  }
+    // Error check to ensure users hasn't given too large an index.
+    while (zone->cmd[subcmd].command != 'S') {
+        subcmd++;
+    }
 
-  if (pos < 0 || pos > subcmd) {
-      return 0;
-  }
+    if (pos < 0 || pos > subcmd) {
+        return 0;
+    }
 
-  // Ok, let's add a new (blank) command.
-  new_com.command = 'N';
-  add_cmd_to_list(&zone->cmd, &new_com, pos);
-  return 1;
+    // Ok, let's add a new (blank) command.
+    new_com.command = 'N';
+    add_cmd_to_list(&zone->cmd, &new_com, pos);
+    return 1;
 }
 
 /*
@@ -624,4 +632,3 @@ void delete_zone_command(struct zone_data *zone, int pos)
     // Ok, let's zap it.
     remove_cmd_from_list(&zone->cmd, pos);
 }
-

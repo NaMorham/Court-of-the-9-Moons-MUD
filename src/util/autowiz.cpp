@@ -14,10 +14,10 @@
 #include "db.h"
 
 
-#define IMM_LMARG "   "
-#define IMM_NSIZE  16
-#define LINE_LEN   64
-#define MIN_LEVEL LVL_IMMORT
+#define IMM_LMARG   "   "
+#define IMM_NSIZE   16
+#define LINE_LEN    64
+#define MIN_LEVEL   LVL_IMMORT
 
 // max level that should be in columns instead of centered
 #define COL_LEVEL LVL_IMMORT
@@ -60,7 +60,7 @@ void initialize(void)
         tmp->params = &(level_params[i++]);
         tmp->next = levels;
         levels = tmp;
-    }
+    } // while (level_params...
 }
 
 void read_file(void)
@@ -83,13 +83,12 @@ void read_file(void)
     }
     // count the number of players in the index
     recs = 0;
-    while (get_line(fl, line))
-    {
+    while (get_line(fl, line)) {
         if (*line != '~')
         {
             recs++;
         }
-    }
+    }  // while (get_line ...
     rewind(fl);
 
     for (i = 0; i < recs; i++) {
@@ -102,7 +101,7 @@ void read_file(void)
             !(IS_SET(flags, PINDEX_DELETED))) {
             add_name(level, name);
         }
-    }
+    }  // for (i ...
     fclose(fl);
 }
 
@@ -120,7 +119,7 @@ void add_name(byte level, char *name)
         if (!isalpha(*ptr)) {
             return;
         }
-    }
+    }  // for (ptr ...
 
     tmp = (struct name_rec *) malloc(sizeof(struct name_rec));
     strcpy(tmp->name, name);
@@ -149,9 +148,9 @@ void sort_names(void)
                     strcpy(a->name, b->name);
                     strcpy(b->name, temp);
                 }
-            }
-        }
-    }
+            }  // for (b ...
+        }  // for (a ...
+    }  // for (curr_level ...
 }
 
 void write_wizlist(FILE * out, int minlev, int maxlev)
@@ -174,14 +173,14 @@ void write_wizlist(FILE * out, int minlev, int maxlev)
         i = 39 - (strlen(curr_level->params->level_name) >> 1);
         for (j = 1; j <= i; j++) {
             fputc(' ', out);
-        }
+        }  // for (j ...
         fprintf(out, "%s\n", curr_level->params->level_name);
         for (j = 1; j <= i; j++) {
             fputc(' ', out);
-        }
+        }  // for (j ...
         for (j = 1; j <= strlen(curr_level->params->level_name); j++) {
             fputc('~', out);
-        }
+        }  // for (j ...
         fprintf(out, "\n");
 
         strcpy(buf, "");
@@ -196,7 +195,7 @@ void write_wizlist(FILE * out, int minlev, int maxlev)
                     i = 40 - (strlen(buf) >> 1);
                     for (j = 1; j <= i; j++) {
                         fputc(' ', out);
-                    }
+                    }  // for (j ...
                 }
                 fprintf(out, "%s\n", buf);
                 strcpy(buf, "");
@@ -205,14 +204,14 @@ void write_wizlist(FILE * out, int minlev, int maxlev)
                 if (curr_level->params->level <= COL_LEVEL) {
                     for (j = 1; j <= (IMM_NSIZE - strlen(curr_name->name)); j++) {
                         strcat(buf, " ");
-                    }
+                    }  // for (j ...
                 }
                 if (curr_level->params->level > COL_LEVEL) {
                     strcat(buf, "   ");
                 }
             }
             curr_name = curr_name->next;
-        }
+        }  // while (curr_name)
 
         if (*buf) {
             if (curr_level->params->level <= COL_LEVEL) {
@@ -220,13 +219,14 @@ void write_wizlist(FILE * out, int minlev, int maxlev)
             }
             else {
                 i = 40 - (strlen(buf) >> 1);
-                for (j = 1; j <= i; j++)
+                for (j = 1; j <= i; j++) {
                     fputc(' ', out);
+                }  // for (j ...
                 fprintf(out, "%s\n", buf);
             }
         }
         fprintf(out, "\n");
-    }
+    }  // for (curr_level ...
 }
 
 int main(int argc, char **argv)
@@ -316,7 +316,7 @@ bitvector_t asciiflag_conv(char *flag)
         if (!isdigit(*p)) {
             is_number = 0;
         }
-    }
+    }  // for (p ...
 
     if (is_number) {
         flags = atol(flag);

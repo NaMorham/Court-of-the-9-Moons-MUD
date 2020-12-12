@@ -21,19 +21,25 @@
 #include "boards.h"
 #include "improved-edit.h"
 #include "oasis.h"
+#include "class.h"
 #include "dg_scripts.h"     // for trigedit_string_cleanup
 #include "modify.h"
 #include "quest.h"
 #include "ibt.h"
 
 
-// local (file scope) function prototpyes
+/*
+ *  local (file scope) function prototpyes
+ */
 static char *next_page(char *str, struct char_data *ch);
 static int count_pages(char *str, struct char_data *ch);
 static void playing_string_cleanup(struct descriptor_data *d, int action);
 static void exdesc_string_cleanup(struct descriptor_data *d, int action);
 
-// Local (file scope) global variables
+/*
+ *  Local (file scope) global variables
+ */
+
 /*
  * @deprecated string_fields appears to be no longer be used.
  * Left in but commented out.
@@ -54,11 +60,11 @@ static const char *string_fields[] =
  *  @deprecated length appears to no longer be used. Left in but commented out.
 static int length[] =
 {
-    15,
-    60,
+     15,
+     60,
     256,
     240,
-    60
+     60
 };
  */
 
@@ -75,8 +81,40 @@ void smash_tilde(char *str)
     // can't handle those, yet. - Welcor
     char *p = str;
     for (; *p; p++) {
-        if (*p == '~' && (*(p + 1) == '\r' || *(p + 1) == '\n' || *(p + 1) == '\0')) {
+        if ((*p == '~') && ((*(p + 1) == '\r') || (*(p + 1) == '\n') || (*(p + 1) == '\0'))) {
             *p = ' ';
+        }
+    }  // for (; *p; p++)
+}
+
+/* Parse out the @ character and replace it with the '\t' to work with
+ * KaVir's protocol snippet */
+void parse_at(char *str)
+{
+    char *p = str;
+    for (; *p; p++) {
+        if (*p == '@') {
+            if (*(p + 1) != '@') {
+                *p = '\t';
+            }
+            else {
+                p++;
+            }
+        }
+    }  // for (; *p; p++)
+}
+
+void parse_tab(char *str)
+{
+    char *p = str;
+    for (; *p; p++) {
+        if (*p == '\t') {
+            if (*(p + 1) != '\t') {
+                *p = '@';
+            }
+            else {
+                p++;
+            }
         }
     }  // for (; *p; p++)
 }
@@ -121,7 +159,7 @@ void string_add(struct descriptor_data *d, char *str)
 
     // Determine if this is the terminal string, and truncate if so. Changed to
     // only accept '@' if it's by itself. - fnord
-    if ((action = (*str == '@' && !str[1]))) {
+    if ((action = (*str == '\t' && !str[1]))) {
         *str = '\0';
     }
     else {
@@ -203,7 +241,7 @@ void string_add(struct descriptor_data *d, char *str)
     }
 
     // Ok, now final cleanup.
-    if (action == STRINGADD_SAVE || action == STRINGADD_ABORT) {
+    if ((action == STRINGADD_SAVE) || (action == STRINGADD_ABORT)) {
         int i;
         struct {
             int mode;
@@ -220,7 +258,7 @@ void string_add(struct descriptor_data *d, char *str)
             { CON_HEDIT,    hedit_string_cleanup },
             { CON_QEDIT,    qedit_string_cleanup },
             { CON_IBTEDIT,  ibtedit_string_cleanup },
-            { -1, NULL }
+            { -1,           NULL }
         };
 
         for (i = 0; cleanup_modes[i].func; i++) {
@@ -275,6 +313,7 @@ static void playing_string_cleanup(struct descriptor_data *d, int action)
         }
         else {
             write_to_output(d, "Idea aborted!\r\n");
+            clean_ibt_list(SCMD_IDEA);
         }
     }
     if (PLR_FLAGGED(d->character, PLR_BUG)) {
@@ -284,6 +323,7 @@ static void playing_string_cleanup(struct descriptor_data *d, int action)
         }
         else {
             write_to_output(d, "Bug aborted!\r\n");
+            clean_ibt_list(SCMD_BUG);
         }
     }
     if (PLR_FLAGGED(d->character, PLR_TYPO)) {
@@ -293,6 +333,7 @@ static void playing_string_cleanup(struct descriptor_data *d, int action)
         }
         else {
             write_to_output(d, "Typo aborted!\r\n");
+            clean_ibt_list(SCMD_TYPO);
         }
     }
 }
@@ -315,7 +356,7 @@ ACMD(do_skillset)
     struct char_data *vict;
     char name[MAX_INPUT_LENGTH];
     char buf[MAX_INPUT_LENGTH], helpbuf[MAX_STRING_LENGTH];
-    int skill, value, i, qend;
+    int skill, value, i, qend, pc, pl;
 
     argument = one_argument(argument, name);
 
@@ -342,6 +383,8 @@ ACMD(do_skillset)
         return;
     }
     skip_spaces(&argument);
+    pc = GET_CLASS(vict);
+    pl = GET_LEVEL(vict);
 
     // If there is no chars in argument
     if (!*argument) {
@@ -388,6 +431,14 @@ ACMD(do_skillset)
         send_to_char(ch, "You can't set NPC skills.\r\n");
         return;
     }
+    if ((spell_info[skill].min_level[(pc)] >= LVL_IMMORT) && (pl < LVL_IMMORT)) {
+        send_to_char(ch, "%s cannot be learned by mortals.\r\n", spell_info[skill].name);
+        return;
+    }
+    else if (spell_info[skill].min_level[(pc)] > pl) {
+        send_to_char(ch, "%s is a level %d %s.\r\n", GET_NAME(vict), pl, pc_class_types[pc]);
+        send_to_char(ch, "The minimum level for %s is %d for %ss.\r\n", spell_info[skill].name, spell_info[skill].min_level[(pc)], pc_class_types[pc]);
+    }
 
     // find_skill_num() guarantees a valid spell_info[] index, or -1, and we
     // checked for the -1 above so we are safe here.
@@ -402,7 +453,9 @@ ACMD(do_skillset)
  */
 static char *next_page(char *str, struct char_data *ch)
 {
-    int col = 1, line = 1;
+    int col = 1, line = 1, count, pw;
+
+    pw = (GET_SCREEN_WIDTH(ch) >= 40 && GET_SCREEN_WIDTH(ch) <= 250) ? GET_SCREEN_WIDTH(ch) : PAGE_WIDTH;
 
     for (;; str++) {
         // If end of string, return NULL.
@@ -415,10 +468,11 @@ static char *next_page(char *str, struct char_data *ch)
         }
         // Check for the begining of an ANSI color code block.
         else if (*str == '\x1B') {
-            str++;
+            for (count = 0; *str != 'm' && count < 9; count++)
+                str++;
         }
-        else if (*str == '@') {
-            if (*(str + 1) != '@')
+        else if (*str == '\t') {
+            if (*(str + 1) != '\t')
                 str++;
         }
 
@@ -435,7 +489,7 @@ static char *next_page(char *str, struct char_data *ch)
 
             // We need to check here and see if we are over the page width, and if
             // so, compensate by going to the begining of the next line.
-            else if (col++ > PAGE_WIDTH) {
+            else if (col++ > pw) {
                 col = 1;
                 line++;
             }
@@ -544,10 +598,10 @@ void show_string(struct descriptor_data *d, char *input)
         return;
     }
     // If we're displaying the last page, just send it to the character, and
-    // then free up the space we used. Also send a @n - to make color stop
+    // then free up the space we used. Also send a \tn - to make color stop
     // bleeding. - Welcor
     if (d->showstr_page + 1 >= d->showstr_count) {
-        send_to_char(d->character, "%s@n", d->showstr_vector[d->showstr_page]);
+        send_to_char(d->character, "%s\tn", d->showstr_vector[d->showstr_page]);
         free(d->showstr_vector);
         d->showstr_vector = NULL;
         d->showstr_count = 0;

@@ -591,9 +591,9 @@ struct in_addr {
     ssize_t write(int fildes, const void *buf, size_t nbyte);
 #endif
 
-#endif /* __COMM_C__ */
+#endif  // __COMM_C__
 
-#endif /* NO_LIBRARY_PROTOTYPES */
+#endif  // NO_LIBRARY_PROTOTYPES
 
-#endif /* _SYSDEP_H_ */
+#endif  // _SYSDEP_H_
 

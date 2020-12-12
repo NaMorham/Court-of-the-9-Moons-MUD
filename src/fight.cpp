@@ -29,10 +29,16 @@
 #include "quest.h"
 
 
-/* locally defined global variables, used externally */
-/* head of l-list of fighting chars */
+/*
+ * locally defined global variables, used externally
+ */
+/*
+ * head of l-list of fighting chars
+ */
 struct char_data *combat_list = NULL;
-/* Weapon attack texts */
+/*
+ * Weapon attack texts
+ */
 struct attack_hit_type attack_hit_text[] =
 {
   {"hit",      "hits"},      // 0
@@ -52,18 +58,26 @@ struct attack_hit_type attack_hit_text[] =
   {"stab",     "stabs"}
 };
 
-/* local (file scope only) variables */
+/*
+ * local (file scope only) variables
+ */
 static struct char_data *next_combat_list = NULL;
 
-/* local file scope utility functions */
+/*
+ * local file scope utility functions
+ */
 static void perform_group_gain(struct char_data *ch, int base, struct char_data *victim);
 static void dam_message(int dam, struct char_data *ch, struct char_data *victim, int w_type);
+#if 0
 static void free_messages_type(struct msg_type *msg);
+#endif  // temp if needed
 static void make_corpse(struct char_data *ch);
 static void change_alignment(struct char_data *ch, struct char_data *victim);
 static void group_gain(struct char_data *ch, struct char_data *victim);
 static void solo_gain(struct char_data *ch, struct char_data *victim);
-/** @todo refactor this function name */
+/*
+ * @todo refactor this function name
+ */
 static char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural);
 static int compute_thaco(struct char_data *ch, struct char_data *vict);
 
@@ -101,6 +115,7 @@ int compute_armor_class(struct char_data *ch)
     return (MAX(-100, armorclass));  // -100 is lowest
 }
 
+#if 0
 static void free_messages_type(struct msg_type *msg)
 {
     if (msg->attacker_msg) {
@@ -132,7 +147,8 @@ void free_messages(void)
 
             fight_messages[i].msg = fight_messages[i].msg->next;
             free(former);
-        }
+            former = NULL;
+        }  // while (fight_messages[i].msg)
     }  // for (i ...
 }
 
@@ -190,10 +206,11 @@ void load_messages(void)
             while (!feof(fl) && (*chk == '\n' || *chk == '*')) {
                 buf = fgets(chk, 128, fl);
             }
-        }
-    }
+        }  // while (*chk == 'M')
+    }  // while (!feof(fl))
     fclose(fl);
 }
+#endif  // temp if needed
 
 void update_pos(struct char_data *victim)
 {
@@ -228,7 +245,8 @@ void check_killer(struct char_data *ch, struct char_data *vict)
 
     SET_BIT_AR(PLR_FLAGS(ch), PLR_KILLER);
     send_to_char(ch, "If you want to be a PLAYER KILLER, so be it...\r\n");
-    mudlog(BRF, LVL_IMMORT, TRUE, "PC Killer bit set on %s for initiating attack on %s at %s.",
+    mudlog(BRF, MAX(LVL_IMMORT, MAX(GET_INVIS_LEV(ch), GET_INVIS_LEV(vict))),
+        TRUE, "PC Killer bit set on %s for initiating attack on %s at %s.",
         GET_NAME(ch), GET_NAME(vict), world[IN_ROOM(vict)].name);
 }
 
@@ -306,7 +324,7 @@ static void make_corpse(struct char_data *ch)
         if (y < TW_ARRAY_MAX) {
             corpse->obj_flags.wear_flags[y] = 0;
         }
-    }
+    }  // for (x ...
     SET_BIT_AR(GET_OBJ_WEAR(corpse), ITEM_WEAR_TAKE);
     SET_BIT_AR(GET_OBJ_EXTRA(corpse), ITEM_NODONATE);
     GET_OBJ_VAL(corpse, 0) = 0;    // You can't store stuff in a corpse
@@ -371,7 +389,7 @@ void death_cry(struct char_data *ch)
 
     act("Your blood freezes as you hear $n's death cry.", FALSE, ch, 0, 0, TO_ROOM);
 
-    for (door = 0; door < NUM_OF_DIRS; door++) {
+    for (door = 0; door < DIR_COUNT; door++) {
         if (CAN_GO(ch, door)) {
             send_to_room(world[IN_ROOM(ch)].dir_option[door]->to_room, "Your blood freezes as you hear someone's death cry.\r\n");
         }
@@ -380,6 +398,8 @@ void death_cry(struct char_data *ch)
 
 void raw_kill(struct char_data * ch, struct char_data * killer)
 {
+    struct char_data *i;
+
     if (FIGHTING(ch)) {
         stop_fighting(ch);
     }
@@ -396,11 +416,24 @@ void raw_kill(struct char_data * ch, struct char_data * killer)
             death_cry(ch);
         }
     }
-    else
+    else {
         death_cry(ch);
+    }
 
     if (killer) {
-        autoquest_trigger_check(killer, ch, NULL, AQ_MOB_KILL);
+        if (killer->group) {
+            while ((i = (struct char_data *) simple_list(killer->group->members)) != NULL)
+                if (IN_ROOM(i) == IN_ROOM(ch) || (world[IN_ROOM(i)].zone == world[IN_ROOM(ch)].zone))
+                    autoquest_trigger_check(i, ch, NULL, AQ_MOB_KILL);
+        }
+        else {
+            autoquest_trigger_check(killer, ch, NULL, AQ_MOB_KILL);
+        }
+    }
+
+    // Alert Group if Applicable
+    if (GROUP(ch)) {
+        send_to_group(ch, GROUP(ch), "%s has died.\r\n", GET_NAME(ch));
     }
 
     update_pos(ch);
@@ -426,9 +459,16 @@ void die(struct char_data * ch, struct char_data * killer)
 
 static void perform_group_gain(struct char_data *ch, int base, struct char_data *victim)
 {
-    int share;
+    int share, hap_share;
 
     share = MIN(CONFIG_MAX_EXP_GAIN, MAX(1, base));
+
+    if ((IS_HAPPYHOUR) && (IS_HAPPYEXP))
+    {
+       // This only reports the correct amount - the calc is done in gain_exp
+       hap_share = share + (int)((float)share * ((float)HAPPY_EXP / (float)(100)));
+       share = MIN(CONFIG_MAX_EXP_GAIN, MAX(1, hap_share));
+    }
 
     if (share > 1) {
         send_to_char(ch, "You receive your share of experience -- %d points.\r\n", share);
@@ -443,28 +483,16 @@ static void perform_group_gain(struct char_data *ch, int base, struct char_data 
 
 static void group_gain(struct char_data *ch, struct char_data *victim)
 {
-    int tot_members, base, tot_gain;
+    int tot_members = 0, base, tot_gain;
     struct char_data *k;
-    struct follow_type *f;
 
-    if (!(k = ch->master)) {
-        k = ch;
-    }
-
-    if (AFF_FLAGGED(k, AFF_GROUP) && (IN_ROOM(k) == IN_ROOM(ch))) {
-        tot_members = 1;
-    }
-    else {
-        tot_members = 0;
-    }
-
-    for (f = k->followers; f; f = f->next) {
-        if (AFF_FLAGGED(f->follower, AFF_GROUP) && IN_ROOM(f->follower) == IN_ROOM(ch)) {
+    while ((k = (struct char_data *) simple_list(GROUP(ch)->members)) != NULL) {
+        if (IN_ROOM(ch) == IN_ROOM(k)) {
             tot_members++;
         }
-    }  // for (f ...
+    }
 
-    // round up to the next highest tot_members
+    // round up to the nearest tot_members
     tot_gain = (GET_EXP(victim) / 3) + tot_members - 1;
 
     // prevent illegal xp creation when killing players
@@ -479,20 +507,16 @@ static void group_gain(struct char_data *ch, struct char_data *victim)
         base = 0;
     }
 
-    if (AFF_FLAGGED(k, AFF_GROUP) && IN_ROOM(k) == IN_ROOM(ch)) {
-        perform_group_gain(k, base, victim);
-    }
-
-    for (f = k->followers; f; f = f->next) {
-        if (AFF_FLAGGED(f->follower, AFF_GROUP) && IN_ROOM(f->follower) == IN_ROOM(ch)) {
-            perform_group_gain(f->follower, base, victim);
+    while ((k = (struct char_data *) simple_list(GROUP(ch)->members)) != NULL) {
+        if (IN_ROOM(k) == IN_ROOM(ch)) {
+            perform_group_gain(k, base, victim);
         }
-    }  // for (f ...
+    }
 }
 
 static void solo_gain(struct char_data *ch, struct char_data *victim)
 {
-    int exp;
+    int exp, happy_exp;
 
     exp = MIN(CONFIG_MAX_EXP_GAIN, GET_EXP(victim) / 3);
 
@@ -505,6 +529,11 @@ static void solo_gain(struct char_data *ch, struct char_data *victim)
     }
 
     exp = MAX(exp, 1);
+
+    if (IS_HAPPYHOUR && IS_HAPPYEXP) {
+        happy_exp = exp + (int)((float)exp * ((float)HAPPY_EXP / (float)(100)));
+        exp = MAX(happy_exp, 1);
+    }
 
     if (exp > 1) {
         send_to_char(ch, "You receive %d experience points.\r\n", exp);
@@ -661,7 +690,7 @@ static void dam_message(int dam, struct char_data *ch, struct char_data *victim,
 
     // damage message to damagee
     if (GET_LEVEL(victim) >= LVL_IMMORT) {
-        send_to_char(victim, "@R(%d)", dam);
+        send_to_char(victim, "\tR(%d)", dam);
     }
     buf = replace_string(dam_weapons[msgnum].to_victim,
         attack_hit_text[w_type].singular, attack_hit_text[w_type].plural);
@@ -681,6 +710,8 @@ int skill_message(int dam, struct char_data *ch, struct char_data *vict,
 
     struct obj_data *weap = GET_EQ(ch, WEAR_WIELD);
 
+    // @todo restructure the messages library to a pointer based system as
+    // opposed to the current cyclic location system.
     for (i = 0; i < MAX_MESSAGES; i++) {
         if (fight_messages[i].a_type == attacktype) {
             nr = dice(1, fight_messages[i].number_of_attacks);
@@ -750,7 +781,7 @@ int skill_message(int dam, struct char_data *ch, struct char_data *vict,
  */
 int damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype)
 {
-    long local_gold = 0;
+    long local_gold = 0, happy_gold = 0;
     char local_buf[256];
     struct char_data *tmp_char;
     struct obj_data *corpse_obj;
@@ -915,7 +946,7 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
     // Uh oh.  Victim died.
     if (GET_POS(victim) == POS_DEAD) {
         if (ch != victim && (IS_NPC(victim) || victim->desc)) {
-            if (AFF_FLAGGED(ch, AFF_GROUP)) {
+            if (GROUP(ch)) {
                 group_gain(ch, victim);
             }
             else {
@@ -924,19 +955,26 @@ int damage(struct char_data *ch, struct char_data *victim, int dam, int attackty
         }
 
         if (!IS_NPC(victim)) {
-            mudlog(BRF, LVL_IMMORT, TRUE, "%s killed by %s at %s", GET_NAME(victim), GET_NAME(ch), world[IN_ROOM(victim)].name);
+            mudlog(BRF, MAX(LVL_IMMORT, MAX(GET_INVIS_LEV(ch), GET_INVIS_LEV(victim))),
+                TRUE, "%s killed by %s at %s", GET_NAME(victim), GET_NAME(ch), world[IN_ROOM(victim)].name);
             if (MOB_FLAGGED(ch, MOB_MEMORY)) {
                 forget(ch, victim);
             }
         }
         // Cant determine GET_GOLD on corpse, so do now and store
         if (IS_NPC(victim)) {
+            if ((IS_HAPPYHOUR) && (IS_HAPPYGOLD))
+            {
+                happy_gold = (long)(GET_GOLD(victim) * (((float)(HAPPY_GOLD)) / (float)100));
+                happy_gold = MAX(0, happy_gold);
+                increase_gold(victim, happy_gold);
+            }
             local_gold = GET_GOLD(victim);
             sprintf(local_buf, "%ld", (long)local_gold);
         }
 
         die(victim, ch);
-        if (IS_AFFECTED(ch, AFF_GROUP) && (local_gold > 0) && PRF_FLAGGED(ch, PRF_AUTOSPLIT)) {
+        if (GROUP(ch) && (local_gold > 0) && PRF_FLAGGED(ch, PRF_AUTOSPLIT)) {
             generic_find("corpse", FIND_OBJ_ROOM, ch, &tmp_char, &corpse_obj);
             if (corpse_obj) {
                 do_get(ch, "all.coin corpse", 0, 0);
@@ -987,7 +1025,7 @@ void hit(struct char_data *ch, struct char_data *victim, int type)
     int w_type, victim_ac, calc_thaco, dam, diceroll;
 
     // Check that the attacker and victim exist
-    if (!ch ) {
+    if (!ch) {
         WriteLogf("Can't hit someone if the character does not exist.");
         return;
     }
@@ -1028,6 +1066,12 @@ void hit(struct char_data *ch, struct char_data *victim, int type)
 
     // roll the die and take your chances...
     diceroll = rand_number(1, 20);
+
+    // report for debugging if necessary
+    if (CONFIG_DEBUG_MODE >= NRM) {
+        send_to_char(ch, "\t1Debug:\r\n    \t2Thaco: \t3%d\r\n    \t2AC: \t3%d\r\n    \t2Diceroll: \t3%d\tn\r\n",
+            calc_thaco, victim_ac, diceroll);
+    }
 
     // Decide whether this is a hit or a miss.
     //  Victim asleep = hit, otherwise:
@@ -1102,8 +1146,7 @@ void hit(struct char_data *ch, struct char_data *victim, int type)
  */
 void perform_violence(void)
 {
-    struct char_data *ch;
-    struct follow_type *k;
+    struct char_data *ch, *tch;
 
     for (ch = combat_list; ch; ch = next_combat_list) {
         next_combat_list = ch->next_fighting;
@@ -1130,19 +1173,32 @@ void perform_violence(void)
             continue;
         }
 
-        for (k = ch->followers; k; k = k->next) {
-            // should followers auto-assist master?
-            if (!IS_NPC(k->follower) && !FIGHTING(k->follower) && PRF_FLAGGED(k->follower,
-                PRF_AUTOASSIST) && (IN_ROOM(k->follower) == IN_ROOM(ch))) {
-                do_assist(k->follower, GET_NAME(ch), 0, 0);
-            }
-        }  // for (k ...
+        if (GROUP(ch) && GROUP(ch)->members && GROUP(ch)->members->iSize) {
+            struct iterator_data Iterator;
 
-        // should master auto-assist followers?
-        if (ch->master && PRF_FLAGGED(ch->master, PRF_AUTOASSIST) &&
-            FIGHTING(ch) && !FIGHTING(ch->master) &&
-            (IN_ROOM(ch->master) == IN_ROOM(ch)) && !IS_NPC(ch->master)) {
-            do_assist(ch->master, GET_NAME(ch), 0, 0);
+            tch = (struct char_data *) merge_iterator(&Iterator, GROUP(ch)->members);
+            for (; tch; tch = (char_data *)next_in_list(&Iterator)) {
+                if (tch == ch) {
+                    continue;
+                }
+                if (!IS_NPC(tch) && !PRF_FLAGGED(tch, PRF_AUTOASSIST)) {
+                    continue;
+                }
+                if (IN_ROOM(ch) != IN_ROOM(tch)) {
+                    continue;
+                }
+                if (FIGHTING(tch)) {
+                    continue;
+                }
+                if (GET_POS(tch) != POS_STANDING) {
+                    continue;
+                }
+                if (!CAN_SEE(tch, ch)) {
+                    continue;
+                }
+
+                do_assist(tch, GET_NAME(ch), 0, 0);
+            }  // for (; tch; ...
         }
 
         hit(ch, FIGHTING(ch), TYPE_UNDEFINED);
@@ -1150,5 +1206,5 @@ void perform_violence(void)
             char actbuf[MAX_INPUT_LENGTH] = "";
             (GET_MOB_SPEC(ch)) (ch, ch, 0, actbuf);
         }
-    }
+    }  // for (ch ...
 }

@@ -59,7 +59,7 @@ ASPELL(spell_create_water)
 
 ASPELL(spell_recall)
 {
-    if (victim == NULL || IS_NPC(victim)) {
+    if ((victim == NULL) || IS_NPC(victim)) {
         return;
     }
 
@@ -97,8 +97,7 @@ ASPELL(spell_teleport)
         ROOM_FLAGGED(to_room, ROOM_GODROOM) || ZONE_FLAGGED(GET_ROOM_ZONE(to_room), ZONE_CLOSED) ||
         ZONE_FLAGGED(GET_ROOM_ZONE(to_room), ZONE_NOASTRAL));
 
-    act("$n slowly fades out of existence and is gone.",
-        FALSE, victim, 0, 0, TO_ROOM);
+    act("$n slowly fades out of existence and is gone.", FALSE, victim, 0, 0, TO_ROOM);
     char_from_room(victim);
     char_to_room(victim, to_room);
     act("$n slowly fades into existence.", FALSE, victim, 0, 0, TO_ROOM);
@@ -111,7 +110,7 @@ ASPELL(spell_teleport)
 #define SUMMON_FAIL "You failed.\r\n"
 ASPELL(spell_summon)
 {
-    if (ch == NULL || victim == NULL) {
+    if ((ch == NULL) || (victim == NULL)) {
         return;
     }
 
@@ -137,13 +136,14 @@ ASPELL(spell_summon)
         if (!IS_NPC(victim) && !PRF_FLAGGED(victim, PRF_SUMMONABLE) &&
             !PLR_FLAGGED(victim, PLR_KILLER)) {
             send_to_char(victim, "%s just tried to summon you to: %s.\r\n"
-                "%s failed because you have summon protection on.\r\n"
+                "This failed because you have summon protection on.\r\n"
                 "Type NOSUMMON to allow other players to summon you.\r\n",
                 GET_NAME(ch), world[IN_ROOM(ch)].name,
                 (ch->player.sex == SEX_MALE) ? "He" : "She");
 
             send_to_char(ch, "You failed because %s has summon protection on.\r\n", GET_NAME(victim));
-            mudlog(BRF, LVL_IMMORT, TRUE, "%s failed summoning %s to %s.", GET_NAME(ch), GET_NAME(victim), world[IN_ROOM(ch)].name);
+            mudlog(BRF, MAX(LVL_IMMORT, MAX(GET_INVIS_LEV(ch), GET_INVIS_LEV(victim))), TRUE,
+                "%s failed summoning %s to %s.", GET_NAME(ch), GET_NAME(victim), world[IN_ROOM(ch)].name);
             return;
         }
     }
@@ -170,7 +170,7 @@ ASPELL(spell_summon)
 /*
  * Used by the locate object spell to check the alias list on objects
  */
-int isname_obj(char *search, char *list)
+static int isname_obj(char *search, char *list)
 {
     char *found_in_list;    // But could be something like 'ring' in 'shimmering.'
     char searchname[128];
@@ -213,8 +213,9 @@ int isname_obj(char *search, char *list)
     }
     else {  // It is embedded inside namelist. Is it preceded by a space?
         found_pos = found_in_list - namelist;
-        if (namelist[found_pos - 1] == ' ')
+        if (namelist[found_pos - 1] == ' ') {
             found_name = 1;
+        }
     }
 
     if (found_name) {
@@ -242,8 +243,9 @@ ASPELL(spell_locate_object)
     j = GET_LEVEL(ch) / 2;  // # items to show = twice char's level
 
     for (i = object_list; i && (j > 0); i = i->next) {
-        if (!isname_obj(name, i->name))
+        if (!isname_obj(name, i->name)) {
             continue;
+        }
 
         send_to_char(ch, "%c%s", UPPER(*i->short_description), i->short_description + 1);
 
@@ -271,7 +273,7 @@ ASPELL(spell_charm)
 {
     struct affected_type af;
 
-    if (victim == NULL || ch == NULL) {
+    if ((victim == NULL) || (ch == NULL)) {
         return;
     }
 
@@ -290,7 +292,7 @@ ASPELL(spell_charm)
     else if (AFF_FLAGGED(ch, AFF_CHARM)) {
         send_to_char(ch, "You can't have any followers of your own!\r\n");
     }
-    else if (AFF_FLAGGED(victim, AFF_CHARM) || level < GET_LEVEL(victim)) {
+    else if (AFF_FLAGGED(victim, AFF_CHARM) || (level < GET_LEVEL(victim))) {
         send_to_char(ch, "You fail.\r\n");
     }
     // player charming another player - no legal reason for this
@@ -310,7 +312,8 @@ ASPELL(spell_charm)
 
         add_follower(victim, ch);
 
-        af.type = SPELL_CHARM;
+        new_affect(&af);
+        af.spell = SPELL_CHARM;
         af.duration = 24 * 2;
         if (GET_CHA(ch)) {
             af.duration *= GET_CHA(ch);
@@ -318,9 +321,7 @@ ASPELL(spell_charm)
         if (GET_INT(victim)) {
             af.duration /= GET_INT(victim);
         }
-        af.modifier = 0;
-        af.location = 0;
-        af.bitvector = AFF_CHARM;
+        SET_BIT_AR(af.bitvector, AFF_CHARM);
         affect_to_char(victim, &af);
 
         act("Isn't $n just such a nice fellow?", FALSE, ch, 0, victim, TO_VICT);
@@ -372,10 +373,7 @@ ASPELL(spell_identify)
             }
 
             if (GET_OBJ_VAL(obj, 3) >= 1 && len < sizeof(bitbuf)) {
-                i = snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 3)));
-                if (i >= 0) {
-                    len += i;
-                }
+                snprintf(bitbuf + len, sizeof(bitbuf) - len, " %s", skill_name(GET_OBJ_VAL(obj, 3)));
             }
 
             send_to_char(ch, "This %s casts: %s\r\n", item_types[(int)GET_OBJ_TYPE(obj)], bitbuf);
@@ -431,12 +429,12 @@ ASPELL(spell_enchant_weapon)
 {
     int i;
 
-    if (ch == NULL || obj == NULL) {
+    if ((ch == NULL) || (obj == NULL)) {
         return;
     }
 
     // Either already enchanted or not a weapon.
-    if (GET_OBJ_TYPE(obj) != ITEM_WEAPON || OBJ_FLAGGED(obj, ITEM_MAGIC)) {
+    if ((GET_OBJ_TYPE(obj) != ITEM_WEAPON) || OBJ_FLAGGED(obj, ITEM_MAGIC)) {
         return;
     }
 

@@ -34,6 +34,7 @@
 #  include <dir.h>
 # else // MSVC
 #  include <direct.h>
+#  include <winsock.h>
 # endif
 # include <mmsystem.h>
 #endif // CIRCLE_WINDOWS
@@ -77,11 +78,13 @@
 #include "boards.h"
 #include "act.h"
 #include "ban.h"
+#include "msgedit.h"
 #include "fight.h"
 #include "spells.h"     // for affect_update
 #include "modify.h"
 #include "quest.h"
 #include "ibt.h"        // for free_ibt_lists
+#include "mud_event.h"
 
 
 #ifndef INVALID_SOCKET
@@ -106,6 +109,8 @@ FILE *logfile = NULL;     // Where to send the log messages.
 unsigned long pulse = 0;  // number of pulses since game start
 ush_int port;
 socket_t mother_desc;
+int next_tick = SECS_PER_MUD_HOUR;    // Tick countdown
+
 // used with do_tell and handle_webster_file utility
 long last_webster_teller = -1L;
 
@@ -171,15 +176,17 @@ static sigfunc *my_signal(int signo, sigfunc *func);
 
 // Webster Dictionary Lookup functions
 static RETSIGTYPE websterlink(int sig);
-static size_t proc_colors(char *txt, size_t maxlen, int parse);
-static void handle_webster_file();
+static void handle_webster_file(void);
+
+static void msdp_update(void); /* KaVir plugin*/
 
 // externally defined functions, used locally
 #ifdef __CXREF__
-#undef FD_ZERO
-#undef FD_SET
-#undef FD_ISSET
-#undef FD_CLR
+#undef  FD_ZERO
+#undef  FD_SET
+#undef  FD_ISSET
+#undef  FD_CLR
+
 #define FD_ZERO(x)
 #define FD_SET(x, y) 0
 #define FD_ISSET(x, y) 0
@@ -262,10 +269,10 @@ int main(int argc, char **argv)
     while ((pos < argc) && (*(argv[pos]) == '-')) {
         if (*(argv[pos] + 1) == 'f') {
             if (*(argv[pos] + 2)) {
-                CONFIG_CONFFILE = strdup(argv[pos] + 2);
+                CONFIG_CONFFILE = argv[pos] + 2;
             }
             else if (++pos < argc) {
-                CONFIG_CONFFILE = strdup(argv[pos]);
+                CONFIG_CONFFILE = argv[pos];
             }
             else {
                 puts("SYSERR: File name to read from expected after option -f.");
@@ -273,7 +280,7 @@ int main(int argc, char **argv)
             }
         }
         pos++;
-    }
+    }  // while ((pos < argc) && ...
     pos = 1;
 
     if (!CONFIG_CONFFILE) {
@@ -294,10 +301,10 @@ int main(int argc, char **argv)
             break;
         case 'o':
             if (*(argv[pos] + 2)) {
-                CONFIG_LOGNAME = strdup(argv[pos] + 2);
+                CONFIG_LOGNAME = argv[pos] + 2;
             }
             else if (++pos < argc) {
-                CONFIG_LOGNAME = strdup(argv[pos]);
+                CONFIG_LOGNAME = argv[pos];
             }
             else {
                 puts("SYSERR: File name to log to expected after option -o.");
@@ -364,7 +371,7 @@ int main(int argc, char **argv)
             break;
         }
         pos++;
-    }
+    }  // while ((pos < ...
 
     if (pos < argc) {
         if (!isdigit(*argv[pos])) {
@@ -404,19 +411,22 @@ int main(int argc, char **argv)
 
     if (!scheck) {
         WriteLogf("Clearing other memory.");
-        free_bufpool();         // comm.c
-        free_player_index();    // players.c
-        free_messages();        // fight.c
-        free_text_files();      // db.c
-        board_clear_all();      // boards.c
-        free(cmd_sort_info);    // act.informative.c
-        free_command_list();    // act.informative.c
-        free_social_messages(); // act.social.c
-        free_help_table();      // db.c
-        free_invalid_list();    // ban.c
-        free_save_list();       // genolc.c
+        free_bufpool();             // comm.c
+        free_player_index();        // players.c
+        free_messages();            // fight.c
+        free_text_files();          // db.c
+        board_clear_all();          // boards.c
+        free(cmd_sort_info);        // act.informative.c
+        free_command_list();        // act.informative.c
+        free_social_messages();     // act.social.c
+        free_help_table();          // db.c
+        free_invalid_list();        // ban.c
+        free_save_list();           // genolc.c
         free_strings(&config_info, OASIS_CFG); // oasis_delete.c
-        free_ibt_lists();       // ibt.c
+        free_ibt_lists();           // ibt.c
+        free_recent_players();      // act.informative.c
+        free_list(world_events);    // free up our global lists
+        free_list(global_lists);
     }
 
     if (last_act_message) {
@@ -446,7 +456,7 @@ void copyover_recover()
 #else
     struct descriptor_data *d;
     FILE *fp;
-    char host[1024];
+    char host[1024], guiopt[1024];
     int desc, i, player_i;
     bool fOld;
     char name[MAX_INPUT_LENGTH];
@@ -468,9 +478,22 @@ void copyover_recover()
     // read boot_time - first line in file
     i = fscanf(fp, "%ld\n", (long *)&boot_time);
 
+    if (i != 1) {
+        log("SYSERR: Error reading boot time.");
+    }
+
     for (;;) {
         fOld = TRUE;
-        i = fscanf(fp, "%d %ld %s %s\n", &desc, &pref, name, host);
+        if (fscanf(fp, "%d %ld %s %s %s\n", &desc, &pref, name, host, guiopt) != 5) {
+            if (!feof(fp)) {
+                if (ferror(fp))
+                    log("SYSERR: error reading copyover file %s: %s", COPYOVER_FILE, strerror(errno));
+                else if (!feof(fp))
+                    log("SYSERR: could not scan line in copyover file %s.", COPYOVER_FILE);
+                exit(1);
+            }
+        }
+
         if (desc == -1) {
             break;
         }
@@ -492,10 +515,15 @@ void copyover_recover()
 
         d->connected = CON_CLOSE;
 
+        CopyoverSet(d, guiopt);
+
         // Now, find the pfile
         CREATE(d->character, struct char_data, 1);
         clear_char(d->character);
         CREATE(d->character->player_specials, struct player_special_data, 1);
+
+        new_mobile_data(d->character);
+
         d->character->desc = d;
 
         if ((player_i = load_char(name, d->character)) >= 0) {
@@ -522,15 +550,28 @@ void copyover_recover()
             write_to_descriptor(desc, "\n\rCopyover recovery complete.\n\r");
             GET_PREF(d->character) = pref;
             enter_player_game(d);
+
+            // Clear their load room if it's not persistant.
+            if (!PLR_FLAGGED(d->character, PLR_LOADROOM))
+                GET_LOADROOM(d->character) = NOWHERE;
+
             d->connected = CON_PLAYING;
             look_at_room(d->character, 0);
+
+            // Add to the list of 'recent' players (since last reboot) with copyover flag
+            if (AddRecentPlayer(GET_NAME(d->character), d->host, FALSE, TRUE) == FALSE)
+            {
+                mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "Failure to AddRecentPlayer (returned FALSE).");
+            }
         }
-    }
+    }  // for (;;)
     fclose(fp);
 #endif  // CIRCLE_WINDOWS
 }
 
-// Init sockets, run game, and cleanup sockets
+/*
+ *  Init sockets, run game, and cleanup sockets
+ */
 static void init_game(ush_int local_port)
 {
     // We don't want to restart if we crash before we get up.
@@ -624,8 +665,7 @@ static socket_t init_socket(ush_int local_port)
         WriteLogf("Max players set to %d", max_players);
 
         if ((s = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
-            WriteLogf("SYSERR: Error opening network connection: Winsock error #%d",
-                WSAGetLastError());
+            WriteLogf("SYSERR: Error opening network connection: Winsock error #%d", WSAGetLastError());
             exit(1);
         }
     }
@@ -642,7 +682,7 @@ static socket_t init_socket(ush_int local_port)
         perror("SYSERR: Error creating socket");
         exit(1);
     }
-#endif                // CIRCLE_WINDOWS
+#endif  // CIRCLE_WINDOWS
 
 #if defined(SO_REUSEADDR) && !defined(CIRCLE_MACINTOSH)
     opt = 1;
@@ -711,8 +751,15 @@ static int get_max_players(void)
         // set the current to the maximum
         limit.rlim_cur = limit.rlim_max;
         if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
-            perror("SYSERR: calling setrlimit");
-            exit(1);
+#if defined(__APPLE__) && defined(RLIMIT_NOFILE) && defined(OPEN_MAX)
+            // On OS X, setting rlim_cur above OPEN_MAX fails, so try again
+            // with OPEN_MAX.
+            limit.rlim_cur = OPEN_MAX;
+#endif
+            if (setrlimit(RLIMIT_NOFILE, &limit) < 0) {
+                perror("SYSERR: calling setrlimit");
+                exit(1);
+            }
         }
 #ifdef RLIM_INFINITY
         if (limit.rlim_max == RLIM_INFINITY) {
@@ -827,7 +874,7 @@ void game_loop(socket_t local_mother_desc)
             FD_SET(d->descriptor, &input_set);
             FD_SET(d->descriptor, &output_set);
             FD_SET(d->descriptor, &exc_set);
-        }
+        }  // for (d ...
 
         // At this point, we have completed all input, output and heartbeat
         // activity from the previous iteration, so we have to put ourselves
@@ -881,17 +928,20 @@ void game_loop(socket_t local_mother_desc)
                 FD_CLR(d->descriptor, &output_set);
                 close_socket(d);
             }
-        }
+        }  // for (d ...
 
         // Process descriptors with input pending
         for (d = descriptor_list; d; d = next_d) {
             next_d = d->next;
             if (FD_ISSET(d->descriptor, &input_set)) {
+                if (d->pProtocol != NULL) {  // KaVir's plugin
+                    d->pProtocol->WriteOOB = 0;  // KaVir's plugin
+                }
                 if (process_input(d) < 0) {
                     close_socket(d);
                 }
             }
-        }
+        }  // for (d ...
 
         // Process commands we just read from process_input
         for (d = descriptor_list; d; d = next_d) {
@@ -931,13 +981,13 @@ void game_loop(socket_t local_mother_desc)
             if (d->showstr_count) {  // Reading something w/ pager
                 show_string(d, comm);
             }
-            else if (d->str) {       // Writing boards, mail, etc.
+            else if (d->str) {  // Writing boards, mail, etc.
                 string_add(d, comm);
             }
             else if (STATE(d) != CON_PLAYING) {  // In menus, etc.
                 nanny(d, comm);
             }
-            else {            // else: we're playing normally.
+            else {  // else: we're playing normally.
                 if (aliased) {  // To prevent recursive aliases.
                     d->has_prompt = TRUE;    // To get newline before next cmd output.
                 }
@@ -946,7 +996,7 @@ void game_loop(socket_t local_mother_desc)
                 }
                 command_interpreter(d->character, comm); // Send it to interpreter
             }
-        }
+        }  // for (d ...
 
         // Send queued output out to the operating system (ultimately to user).
         for (d = descriptor_list; d; d = next_d) {
@@ -960,7 +1010,7 @@ void game_loop(socket_t local_mother_desc)
                     d->has_prompt = 1;
                 }
             }
-        }
+        }  // for (d ...
 
         // Print prompts for other descriptors who had no other output
         for (d = descriptor_list; d; d = d->next) {
@@ -968,7 +1018,7 @@ void game_loop(socket_t local_mother_desc)
                 write_to_descriptor(d->descriptor, make_prompt(d));
                 d->has_prompt = TRUE;
             }
-        }
+        }  // for (d ...
 
         // Kick out folks in the CON_CLOSE or CON_DISCONNECT state
         for (d = descriptor_list; d; d = next_d) {
@@ -976,7 +1026,7 @@ void game_loop(socket_t local_mother_desc)
             if (STATE(d) == CON_CLOSE || STATE(d) == CON_DISCONNECT) {
                 close_socket(d);
             }
-        }
+        }  // for (d ...
 
         // Now, we execute as many pulses as necessary--just one if we haven't
         // missed any pulses, or make up for lost time if we missed a few
@@ -1023,7 +1073,7 @@ void game_loop(socket_t local_mother_desc)
         // Update tics_passed for deadlock protection (UNIX only)
         tics_passed++;
 #endif
-    }
+    }  // while (!circle_shutdown)
 }
 
 void heartbeat(int heart_pulse)
@@ -1036,11 +1086,16 @@ void heartbeat(int heart_pulse)
         script_trigger_check();
     }
 
+    if (!(heart_pulse % PASSES_PER_SEC)) {  // EVERY second
+        msdp_update();
+        next_tick--;
+    }
+
     if (!(heart_pulse % PULSE_ZONE)) {
         zone_update();
     }
 
-    if (!(heart_pulse % PULSE_IDLEPWD)) {  // 15 seconds
+    if (!(heart_pulse % PULSE_IDLEPWD)) {   // 15 seconds
         check_idle_passwords();
     }
 
@@ -1053,6 +1108,7 @@ void heartbeat(int heart_pulse)
     }
 
     if (!(heart_pulse % (SECS_PER_MUD_HOUR * PASSES_PER_SEC))) {    // Tick !
+        next_tick = SECS_PER_MUD_HOUR;    // Reset tick coundown
         weather_and_time(1);
         check_time_triggers();
         affect_update();
@@ -1101,7 +1157,7 @@ static void timediff(struct timeval *rslt, struct timeval *a, struct timeval *b)
             rslt->tv_usec = a->tv_usec - b->tv_usec;
         }
     }
-    else {        // a->tv_sec > b->tv_sec
+    else {  // a->tv_sec > b->tv_sec
         rslt->tv_sec = a->tv_sec - b->tv_sec;
         if (a->tv_usec < b->tv_usec) {
             rslt->tv_usec = a->tv_usec + 1000000 - b->tv_usec;
@@ -1137,7 +1193,7 @@ static void record_usage(void)
         if (IS_PLAYING(d)) {
             sockets_playing++;
         }
-    }
+    }  // for (d ...
 
     WriteLogf("nusage: %-3d sockets connected, %-3d sockets playing", sockets_connected, sockets_playing);
 
@@ -1198,6 +1254,7 @@ char *ANSI[] = { "@", A"0m",A"0m",
     "!"
 };
 
+// @todo: use this struct instead of the 2 arrays (ANSI and CODE)
 struct ColourMapping
 {
     const char *ansi;
@@ -1275,13 +1332,13 @@ static size_t proc_colors(char *txt, size_t maxlen, int parse)
         // if we get here we have a color code
         s++; // s now points to the code
 
-        if (!*s) {   // string was terminated with @
+        if (!*s) {      // string was terminated with @
             *d++ = '@';
             // s will now point to '\0' in the for() check
             continue;
         }
 
-        if (!parse) {       // not parsing, just skip the code, unless it's @@
+        if (!parse) {   // not parsing, just skip the code, unless it's @@
             if (*s == '@') {
                 *d++ = '@';
             }
@@ -1295,21 +1352,21 @@ static size_t proc_colors(char *txt, size_t maxlen, int parse)
                 // c now points to the first char in color code
                 for (c = ANSI[i]; *c && ((size_t)(d - p) < maxlen);) {
                     *d++ = *c++;
-                }
+                }  // for (c ...
 
                 break;
             }
-        }
+        }  // for (i ...
         // If we couldn't find any correct color code let's just skip it - Welcor
         s++;
-
-    } // for loop
+    }  // for (; *s && ...
 
     // make sure txt is NULL - terminated
     d = '\0';
     strncpy(txt, p, maxlen - 1);
 
     free(p);
+    p = NULL;
 
     return strlen(txt);
 }
@@ -1327,34 +1384,34 @@ static char *make_prompt(struct descriptor_data *d)
     else if (d->str) {
         strcpy(prompt, "] ");    // strcpy: OK (for 'MAX_PROMPT_LENGTH >= 3')
     }
-    else if (STATE(d) == CON_PLAYING && !IS_NPC(d->character)) {
+    else if ((STATE(d) == CON_PLAYING) && (!IS_NPC(d->character))) {
         int count;
         size_t len = 0;
 
         *prompt = '\0';
 
-        if (GET_INVIS_LEV(d->character) && len < sizeof(prompt)) {
+        if (GET_INVIS_LEV(d->character) && (len < sizeof(prompt))) {
             count = snprintf(prompt + len, sizeof(prompt) - len, "i%d ", GET_INVIS_LEV(d->character));
             if (count >= 0) {
                 len += count;
             }
         }
         // show only when below 25%
-        if (PRF_FLAGGED(d->character, PRF_DISPAUTO) && len < sizeof(prompt)) {
+        if (PRF_FLAGGED(d->character, PRF_DISPAUTO) && (len < sizeof(prompt))) {
             struct char_data *ch = d->character;
-            if (GET_HIT(ch) << 2 < GET_MAX_HIT(ch)) {
+            if ((GET_HIT(ch) << 2) < GET_MAX_HIT(ch)) {
                 count = snprintf(prompt + len, sizeof(prompt) - len, "%dH ", GET_HIT(ch));
                 if (count >= 0) {
                     len += count;
                 }
             }
-            if (GET_MANA(ch) << 2 < GET_MAX_MANA(ch) && len < sizeof(prompt)) {
+            if (((GET_MANA(ch) << 2) < GET_MAX_MANA(ch)) && (len < sizeof(prompt))) {
                 count = snprintf(prompt + len, sizeof(prompt) - len, "%dM ", GET_MANA(ch));
                 if (count >= 0) {
                     len += count;
                 }
             }
-            if (GET_MOVE(ch) << 2 < GET_MAX_MOVE(ch) && len < sizeof(prompt)) {
+            if (((GET_MOVE(ch) << 2) < GET_MAX_MOVE(ch)) && (len < sizeof(prompt))) {
                 count = snprintf(prompt + len, sizeof(prompt) - len, "%dV ", GET_MOVE(ch));
                 if (count >= 0) {
                     len += count;
@@ -1362,21 +1419,21 @@ static char *make_prompt(struct descriptor_data *d)
             }
         }
         else {  // not auto prompt
-            if (PRF_FLAGGED(d->character, PRF_DISPHP) && len < sizeof(prompt)) {
+            if (PRF_FLAGGED(d->character, PRF_DISPHP) && (len < sizeof(prompt))) {
                 count = snprintf(prompt + len, sizeof(prompt) - len, "%dH ", GET_HIT(d->character));
                 if (count >= 0) {
                     len += count;
                 }
             }
 
-            if (PRF_FLAGGED(d->character, PRF_DISPMANA) && len < sizeof(prompt)) {
+            if (PRF_FLAGGED(d->character, PRF_DISPMANA) && (len < sizeof(prompt))) {
                 count = snprintf(prompt + len, sizeof(prompt) - len, "%dM ", GET_MANA(d->character));
                 if (count >= 0) {
                     len += count;
                 }
             }
 
-            if (PRF_FLAGGED(d->character, PRF_DISPMOVE) && len < sizeof(prompt)) {
+            if (PRF_FLAGGED(d->character, PRF_DISPMOVE) && (len < sizeof(prompt))) {
                 count = snprintf(prompt + len, sizeof(prompt) - len, "%dV ", GET_MOVE(d->character));
                 if (count >= 0) {
                     len += count;
@@ -1384,14 +1441,14 @@ static char *make_prompt(struct descriptor_data *d)
             }
         }
 
-        if (PRF_FLAGGED(d->character, PRF_BUILDWALK) && len < sizeof(prompt)) {
+        if (PRF_FLAGGED(d->character, PRF_BUILDWALK) && (len < sizeof(prompt))) {
             count = snprintf(prompt + len, sizeof(prompt) - len, "BUILDWALKING ");
             if (count >= 0) {
                 len += count;
             }
         }
 
-        if (PRF_FLAGGED(d->character, PRF_AFK) && len < sizeof(prompt)) {
+        if (PRF_FLAGGED(d->character, PRF_AFK) && (len < sizeof(prompt))) {
             count = snprintf(prompt + len, sizeof(prompt) - len, "AFK ");
             if (count >= 0) {
                 len += count;
@@ -1416,7 +1473,7 @@ static char *make_prompt(struct descriptor_data *d)
             strncat(prompt, "> ", sizeof(prompt) - len - 1);    // strncat: OK
         }
     }
-    else if (STATE(d) == CON_PLAYING && IS_NPC(d->character)) {
+    else if ((STATE(d) == CON_PLAYING) && IS_NPC(d->character)) {
         snprintf(prompt, sizeof(prompt), "%s> ", GET_NAME(d->character));
     }
     else {
@@ -1487,7 +1544,7 @@ static void flush_queues(struct descriptor_data *d)
         d->input.head = d->input.head->next;
         free(tmp->text);
         free(tmp);
-    }
+    }  // while (d ...
 }
 
 /*
@@ -1521,11 +1578,15 @@ size_t vwrite_to_output(struct descriptor_data *t, const char *format, va_list a
     }
 
     wantsize = size = vsnprintf(txt, sizeof(txt), format, args);
-    if (t->character) {
-        wantsize = size = proc_colors(txt, sizeof(txt), COLOR_ON(t->character));
+
+    strcpy(txt, ProtocolOutput(t, txt, (int*)&wantsize)); // <--- Add this line
+    size = wantsize;                    // <--- Add this line
+    if (t->pProtocol->WriteOOB > 0) {   // <--- Add this line
+        --t->pProtocol->WriteOOB;       // <--- Add this line
     }
+
     // If exceeding the size of the buffer, truncate it for the overflow message
-    if (size < 0 || wantsize >= sizeof(txt)) {
+    if ((size < 0) || (wantsize >= sizeof(txt))) {
         size = sizeof(txt) - 1;
         strcpy(txt + size - strlen(text_overflow), text_overflow);    // strcpy: OK
     }
@@ -1587,7 +1648,7 @@ static void free_bufpool(void)
         }
         free(bufpool);
         bufpool = tmp;
-    }
+    }  // while (bufpool)
 }
 
 //  socket handling
@@ -1699,23 +1760,25 @@ static void init_descriptor(struct descriptor_data *newd, int desc)
     *newd->output = '\0';
     newd->bufptr = 0;
     newd->has_prompt = 1;  // prompt is part of greetings
-    STATE(newd) = CON_GET_NAME;
+    STATE(newd) = CONFIG_PROTOCOL_NEGOTIATION ? CON_GET_PROTOCOL : CON_GET_NAME;
     CREATE(newd->history, char *, HISTORY_SIZE);
     if (++last_desc == 1000) {
         last_desc = 1;
     }
     newd->desc_num = last_desc;
+    newd->pProtocol = ProtocolCreate(); /* KaVir's plugin*/
+    newd->events = create_list();
 }
 
 static int new_descriptor(socket_t s)
 {
     socket_t desc;
     int sockets_connected = 0;
+    int greetsize;
     socklen_t i;
     struct descriptor_data *newd;
     struct sockaddr_in peer;
     struct hostent *from;
-    char greet_copy[MAX_STRING_LENGTH];
 
     // accept the new connection
     i = sizeof(peer);
@@ -1777,13 +1840,17 @@ static int new_descriptor(socket_t s)
     newd->next = descriptor_list;
     descriptor_list = newd;
 
-    // This is where the greetings are actually sent to the new player
-    // Adjusted by Jamdog to show color codes on the greetings page
-    *greet_copy = '\0';
-    sprintf(greet_copy, "%s", GREETINGS);
-    proc_colors(greet_copy, MAX_STRING_LENGTH, TRUE);
-    write_to_output(newd, "%s", greet_copy);
-
+    if (CONFIG_PROTOCOL_NEGOTIATION) {
+        // Attach Event
+        NEW_EVENT(ePROTOCOLS, newd, NULL, 1.5 * PASSES_PER_SEC);
+        // KaVir's plugin
+        write_to_output(newd, "Attempting to Detect Client, Please Wait...\r\n");
+        ProtocolNegotiate(newd);
+    }
+    else {
+        greetsize = strlen(GREETINGS);
+        write_to_output(newd, "%s", ProtocolOutput(newd, GREETINGS, &greetsize));
+    }
     return (0);
 }
 
@@ -1813,15 +1880,18 @@ static int process_output(struct descriptor_data *t)
 
     // add the extra CRLF if the person isn't in compact mode
     if (STATE(t) == CON_PLAYING && t->character && !IS_NPC(t->character) && !PRF_FLAGGED(t->character, PRF_COMPACT)) {
-        strcat(osb, "\r\n");    // strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space)
+        if (!t->pProtocol->WriteOOB) {
+            strcat(osb, "\r\n");    // strcpy: OK (osb:MAX_SOCK_BUF-2 reserves space)
+        }
     }
 
-    // add a prompt
-    strcat(i, make_prompt(t));    // strcpy: OK (i:MAX_SOCK_BUF reserves space)
+    if (!t->pProtocol->WriteOOB) {  // add a prompt
+        strcat(i, make_prompt(t));    // strcpy: OK (i:MAX_SOCK_BUF reserves space)
+    }
 
     // now, send the output.  If this is an 'interruption', use the prepended
     // CRLF, otherwise send the straight output sans CRLF.
-    if (t->has_prompt) {
+    if (t->has_prompt && !t->pProtocol->WriteOOB) {
         t->has_prompt = FALSE;
         result = write_to_descriptor(t->descriptor, i);
         if (result >= 2) {
@@ -1915,7 +1985,7 @@ ssize_t perform_socket_write(socket_t desc, const char *txt, size_t length)
     // result < 0: An error was encountered.
 
     // Transient error?
-    if (WSAGetLastError() == WSAEWOULDBLOCK || WSAGetLastError() == WSAEINTR) {
+    if ((WSAGetLastError() == WSAEWOULDBLOCK) || (WSAGetLastError() == WSAEINTR)) {
         return (0);
     }
 
@@ -2003,7 +2073,7 @@ int write_to_descriptor(socket_t desc, const char *txt)
             total -= bytes_written;
             write_total += bytes_written;
         }
-    }
+    }  // while (total > 0)
 
     return (write_total);
 }
@@ -2099,6 +2169,7 @@ static int process_input(struct descriptor_data *t)
     size_t space_left;
     char *ptr, *read_point, *write_point, *nl_pos = NULL;
     char tmp[MAX_INPUT_LENGTH];
+    static char read_buf[MAX_PROTOCOL_BUFFER] = { '\0' }; // KaVir's plugin
 
     // first, find the point where we left off reading data
     buf_length = strlen(t->inbuf);
@@ -2111,7 +2182,16 @@ static int process_input(struct descriptor_data *t)
             return (-1);
         }
 
-        bytes_read = perform_socket_read(t->descriptor, read_point, space_left);
+       // Read # of "bytes_read" from socket, and if we have something, mark the sizeof data
+       // in the read_buf array as NULL
+       if ((bytes_read = perform_socket_read(t->descriptor, read_buf, space_left)) > 0)
+          read_buf[bytes_read] = '\0';
+
+       // Since we have recieved atleast 1 byte of data from the socket, lets run it through
+       // ProtocolInput() and rip out anything that is Out Of Band
+       if (bytes_read > 0) {
+           bytes_read = ProtocolInput(t, read_buf, bytes_read, t->inbuf);
+       }
 
         if (bytes_read < 0) {  // Error, disconnect them.
             return (-1);
@@ -2128,7 +2208,7 @@ static int process_input(struct descriptor_data *t)
             if (ISNEWL(*ptr)) {
                 nl_pos = ptr;
             }
-        }
+        }  // for (ptr ...
 
         read_point += bytes_read;
         space_left -= bytes_read;
@@ -2183,7 +2263,7 @@ static int process_input(struct descriptor_data *t)
                     space_left--;
                 }
             }
-        }
+        }  // for (ptr ...
 
         *write_point = '\0';
 
@@ -2203,10 +2283,10 @@ static int process_input(struct descriptor_data *t)
         if ((*tmp == '!') && !(*(tmp + 1))) {  // Redo last command.
             strcpy(tmp, t->last_input);        // strcpy: OK (by mutual MAX_INPUT_LENGTH)
         }
-        else if (*tmp == '!' && *(tmp + 1)) {
+        else if ((*tmp == '!') && *(tmp + 1)) {
             char *commandln = (tmp + 1);
-            int starting_pos = t->history_pos,
-                cnt = (t->history_pos == 0 ? HISTORY_SIZE - 1 : t->history_pos - 1);
+            int starting_pos = t->history_pos;
+            int cnt = (t->history_pos == 0 ? HISTORY_SIZE - 1 : t->history_pos - 1);
 
             skip_spaces(&commandln);
             for (; cnt != starting_pos; cnt--) {
@@ -2219,7 +2299,7 @@ static int process_input(struct descriptor_data *t)
                 if (cnt == 0) {  // At top, loop to bottom.
                     cnt = HISTORY_SIZE;
                 }
-            }
+            }  // for (; cnt ...
         }
         else if (*tmp == '^') {
             if (!(failed_subst = perform_subst(t, t->last_input, tmp))) {
@@ -2230,6 +2310,7 @@ static int process_input(struct descriptor_data *t)
             strcpy(t->last_input, tmp);                 // strcpy: OK (by mutual MAX_INPUT_LENGTH)
             if (t->history[t->history_pos]) {
                 free(t->history[t->history_pos]);       // Clear the old line.
+                t->history[t->history_pos] = NULL;
             }
             t->history[t->history_pos] = strdup(tmp);   // Save the new.
             if (++t->history_pos >= HISTORY_SIZE) {     // Wrap to top.
@@ -2240,8 +2321,8 @@ static int process_input(struct descriptor_data *t)
         // The '--' command flushes the queue.
         if ((*tmp == '-') && (*(tmp + 1) == '-') && !(*(tmp + 2))) {
             write_to_output(t, "All queued commands cancelled.\r\n");
-            flush_queues(t);  // Flush the command queue
-            return (1);            // No need to process the -- command any further, so quit back out
+            flush_queues(t);    // Flush the command queue
+            failed_subst = 1;   // Allow the read point to be moved, but don't add to queue
         }
 
         if (!failed_subst) {
@@ -2251,7 +2332,7 @@ static int process_input(struct descriptor_data *t)
         // find the end of this line
         while (ISNEWL(*nl_pos)) {
             nl_pos++;
-        }
+        }  // while (ISNEWL(*nl_pos))
 
         // see if there's another newline in the input buffer
         read_point = ptr = nl_pos;
@@ -2259,8 +2340,8 @@ static int process_input(struct descriptor_data *t)
             if (ISNEWL(*ptr)) {
                 nl_pos = ptr;
             }
-        }
-    }
+        }  // for (nl ...
+    }  // while (nl_pos != NULL)
 
     // now move the rest of the buffer up to the beginning for the next pass
     write_point = t->inbuf;
@@ -2280,7 +2361,6 @@ static int process_input(struct descriptor_data *t)
 static int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 {
     char newsub[MAX_INPUT_LENGTH + 5];
-
     char *first(NULL), *second(NULL), *strpos(NULL);
 
     // First is the position of the beginning of the first string (the one to be
@@ -2333,11 +2413,13 @@ void close_socket(struct descriptor_data *d)
 
     // Forget snooping
     if (d->snooping) {
+        // do not free
         d->snooping->snoop_by = NULL;
     }
 
     if (d->snoop_by) {
         write_to_output(d->snoop_by, "Your victim is no longer among us.\r\n");
+        // do not free
         d->snoop_by->snooping = NULL;
     }
 
@@ -2349,6 +2431,7 @@ void close_socket(struct descriptor_data *d)
         if (!IS_NPC(d->character) && PLR_FLAGGED(d->character, PLR_MAILING) && d->str) {
             if (*(d->str)) {
                 free(*(d->str));
+                *(d->str) = NULL;
             }
             free(d->str);
             d->str = NULL;
@@ -2388,17 +2471,35 @@ void close_socket(struct descriptor_data *d)
         for (cnt = 0; cnt < HISTORY_SIZE; cnt++) {
             if (d->history[cnt]) {
                 free(d->history[cnt]);
+                d->history[cnt] = NULL;
             }
-        }
+        }  // for (cnt ...
         free(d->history);
+        d->history = NULL;
     }
 
     if (d->showstr_head) {
         free(d->showstr_head);
+        d->showstr_head = NULL;
     }
     if (d->showstr_count) {
         free(d->showstr_vector);
+        d->showstr_vector = NULL;
     }
+
+    // KaVir's plugin
+    ProtocolDestroy(d->pProtocol);
+
+    // Mud Events
+    if (d->events->iSize > 0) {
+        mud_event_t *pEvent;
+
+        while ((pEvent = (mud_event_t*)simple_list(d->events)) != NULL) {
+            event_cancel(pEvent);
+        }
+    }
+
+    free_list(d->events);
 
     // Kill any OLC stuff
     switch (d->connected) {
@@ -2412,6 +2513,7 @@ void close_socket(struct descriptor_data *d)
     case CON_AEDIT:
     case CON_HEDIT:
     case CON_QEDIT:
+    case CON_MSGEDIT:
         cleanup_olc(d, CLEANUP_ALL);
         break;
     default:
@@ -2428,7 +2530,7 @@ static void check_idle_passwords(void)
 
     for (d = descriptor_list; d; d = next_d) {
         next_d = d->next;
-        if (STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME) {
+        if ((STATE(d) != CON_PASSWORD) && (STATE(d) != CON_GET_NAME)) {
             continue;
         }
         if (!d->idle_tics) {
@@ -2440,7 +2542,7 @@ static void check_idle_passwords(void)
             write_to_output(d, "\r\nTimed out... goodbye.\r\n");
             STATE(d) = CON_CLOSE;
         }
-    }
+    }  // for (d ...
 }
 
 /*
@@ -2529,7 +2631,7 @@ static RETSIGTYPE websterlink(int sig)
  */
 static RETSIGTYPE reap(int sig)
 {
-    while (waitpid(-1, NULL, WNOHANG) > 0);
+    while (waitpid(-1, NULL, WNOHANG) > 0) { }
 
     my_signal(SIGCHLD, reap);
 }
@@ -2595,7 +2697,7 @@ static sigfunc *my_signal(int signo, sigfunc *func)
 
 static void signal_setup(void)
 {
-#ifndef CIRCLE_MACINTOSH
+#  ifndef CIRCLE_MACINTOSH
     struct itimerval itime;
     struct timeval interval;
 
@@ -2618,7 +2720,7 @@ static void signal_setup(void)
     // just to be on the safe side:
     my_signal(SIGHUP, hupsig);
     my_signal(SIGCHLD, reap);
-#endif // CIRCLE_MACINTOSH
+#  endif // CIRCLE_MACINTOSH
     my_signal(SIGINT, hupsig);
     my_signal(SIGTERM, hupsig);
     my_signal(SIGPIPE, SIG_IGN);
@@ -2629,6 +2731,31 @@ static void signal_setup(void)
 /*
  * Public routines for system-to-player-communication.
  */
+void game_info(const char *format, ...)
+{
+    struct descriptor_data *i;
+    va_list args;
+    char messg[MAX_STRING_LENGTH];
+    if (format == NULL) {
+        return;
+    }
+    sprintf(messg, "\tcInfo: \ty");
+    for (i = descriptor_list; i; i = i->next) {
+        if (STATE(i) != CON_PLAYING) {
+            continue;
+        }
+        if (!(i->character)) {
+            continue;
+        }
+
+        write_to_output(i, "%s", messg);
+        va_start(args, format);
+        vwrite_to_output(i, format, args);
+        va_end(args);
+        write_to_output(i, "\tn\r\n");
+    }  // for (i ...
+}
+
 size_t send_to_char(struct char_data *ch, const char *messg, ...)
 {
     if (ch->desc && messg && *messg)
@@ -2661,21 +2788,20 @@ void send_to_all(const char *messg, ...)
         va_start(args, messg);
         vwrite_to_output(i, messg, args);
         va_end(args);
-    }
+    }  // for (i ...
 }
 
 void send_to_outdoor(const char *messg, ...)
 {
     struct descriptor_data *i;
+    va_list args;
 
     if (!messg || !*messg) {
         return;
     }
 
     for (i = descriptor_list; i; i = i->next) {
-        va_list args;
-
-        if (STATE(i) != CON_PLAYING || i->character == NULL) {
+        if ((STATE(i) != CON_PLAYING) || (i->character == NULL)) {
             continue;
         }
         if (!AWAKE(i->character) || !OUTSIDE(i->character)) {
@@ -2705,6 +2831,31 @@ void send_to_room(room_rnum room, const char *messg, ...)
         va_start(args, messg);
         vwrite_to_output(i->desc, messg, args);
         va_end(args);
+    }  // for (i ...
+}
+
+/*
+ * Sends a message to the entire group, except for ch.
+ * Send 'ch' as NULL, if you want to message to reach
+ * everyone. -Vatiken
+ */
+void send_to_group(struct char_data *ch, struct group_data *group, const char * msg, ...)
+{
+    struct char_data *tch;
+    va_list args;
+
+    if (msg == NULL) {
+        return;
+    }
+
+    while ((tch = (char_data*)simple_list(group->members)) != NULL) {
+        if ((tch != ch) && !IS_NPC(tch) && tch->desc && (STATE(tch->desc) == CON_PLAYING)) {
+            write_to_output(tch->desc, "%s[%sGroup%s]%s ",
+                CCGRN(tch, C_NRM), CBGRN(tch, C_NRM), CCGRN(tch, C_NRM), CCNRM(tch, C_NRM));
+            va_start(args, msg);
+            vwrite_to_output(tch->desc, msg, args);
+            va_end(args);
+        }
     }
 }
 
@@ -2735,12 +2886,12 @@ void send_to_range(room_vnum start, room_vnum finish, const char *messg, ...)
                 va_start(args, messg);
                 vwrite_to_output(i->desc, messg, args);
                 va_end(args);
-            }
+            }  // for (i ...
         }
-    }
+    }  // for (j ...
 }
 
-const char *ACTNULL = "<NULL>";
+static const char *ACTNULL = "<NULL>";
 #define CHECK_NULL(pointer, expression) \
     if ((pointer) == NULL) i = ACTNULL; else i = (expression);
 /*
@@ -2752,7 +2903,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
     const char *i = NULL;
     char lbuf[MAX_STRING_LENGTH], *buf, *j;
     bool uppercasenext = FALSE;
-    struct char_data *dg_victim = NULL;
+    struct char_data *dg_victim = (char_data *)((to == vict_obj) ? vict_obj : NULL);
     struct obj_data *dg_target = NULL;
     char *dg_arg = NULL;
 
@@ -2822,7 +2973,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
                 break;
                 // uppercase previous word
             case 'u':
-                for (j = buf; j > lbuf && !isspace((int)*(j - 1)); j--);
+                for (j = buf; j > lbuf && !isspace((int)*(j - 1)); j--) { }
                 if (j != buf) {
                     *j = UPPER(*j);
                 }
@@ -2848,7 +2999,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
                     uppercasenext = FALSE;
                 }
                 buf++;
-            }
+            }  // while ((*buf = *(i++)))
             orig++;
         }
         else if (!(*(buf++) = *(orig++))) {
@@ -2858,7 +3009,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
             *(buf - 1) = UPPER(*(buf - 1));
             uppercasenext = FALSE;
         }
-    }
+    }  // for (;;)
 
     *(--buf) = '\r';
     *(++buf) = '\n';
@@ -2879,7 +3030,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 }
 
 char *act(const char *str, int hide_invisible, struct char_data *ch,
-    struct obj_data *obj, void *vict_obj, int type)
+        struct obj_data *obj, void *vict_obj, int type)
 {
     struct char_data *to = NULL;
     int to_sleeping;
@@ -2935,15 +3086,15 @@ char *act(const char *str, int hide_invisible, struct char_data *ch,
                 sprintf(buf, "%s%s%s", CCYEL(i->character, C_NRM), str, CCNRM(i->character, C_NRM));
                 perform_act(buf, ch, obj, vict_obj, i->character);
             }
-        }
+        }  // for (i ...
         return last_act_message;
     }
 
     // ASSUMPTION: at this point we know type must be TO_NOTVICT or TO_ROOM
-    if (ch && IN_ROOM(ch) != NOWHERE) {
+    if (ch && (IN_ROOM(ch) != NOWHERE)) {
         to = world[IN_ROOM(ch)].people;
     }
-    else if (obj && IN_ROOM(obj) != NOWHERE) {
+    else if (obj && (IN_ROOM(obj) != NOWHERE)) {
         to = world[IN_ROOM(obj)].people;
     }
     else {
@@ -2958,7 +3109,7 @@ char *act(const char *str, int hide_invisible, struct char_data *ch,
         if (hide_invisible && ch && !CAN_SEE(to, ch)) {
             continue;
         }
-        if (type != TO_ROOM && to == vict_obj) {
+        if ((type != TO_ROOM) && (to == vict_obj)) {
             continue;
         }
         perform_act(str, ch, obj, vict_obj, to);
@@ -2990,7 +3141,7 @@ static void setup_log(const char *filename, int fd)
     }
 #endif
 
-    if (filename == NULL || *filename == '\0') {
+    if ((filename == NULL) || (*filename == '\0')) {
         // No filename, set us up with the descriptor we just opened.
         logfile = s_fp;
         puts("Using file descriptor for logging.");
@@ -3027,8 +3178,7 @@ static int open_logfile(const char *filename, FILE *stderr_fp)
     }
 
     if (logfile) {
-        printf("Using log file '%s'%s.\n",
-            filename, stderr_fp ? " with redirection" : "");
+        printf("Using log file '%s'%s.\n", filename, stderr_fp ? " with redirection" : "");
         return (TRUE);
     }
 
@@ -3086,10 +3236,9 @@ static void handle_webster_file(void)
         }
         len += nlen;
         get_line(fl, line);
-    }
+    }  // while (!feof(fl))
 
-    if (len >= sizeof(retval))
-    {
+    if (len >= sizeof(retval)) {
         const char *overflow = "\r\n**OVERFLOW**\r\n";
         strcpy(retval + sizeof(retval) - strlen(overflow) - 1, overflow); // strcpy: OK
     }
@@ -3097,4 +3246,63 @@ static void handle_webster_file(void)
 
     send_to_char(ch, "You get this feedback from Merriam-Webster:\r\n");
     page_string(ch->desc, retval, 1);
+}
+
+/*
+ * KaVir's plugin
+ */
+static void msdp_update(void)
+{
+    struct descriptor_data *d;
+    int PlayerCount = 0;
+    char buf[MAX_STRING_LENGTH];
+    extern const char *pc_class_types[];
+
+    for (d = descriptor_list; d; d = d->next) {
+        struct char_data *ch = d->character;
+        if (ch && !IS_NPC(ch) && (d->connected == CON_PLAYING)) {
+            struct char_data *pOpponent = FIGHTING(ch);
+            ++PlayerCount;
+
+            MSDPSetString(d, eMSDP_CHARACTER_NAME, GET_NAME(ch));
+            MSDPSetNumber(d, eMSDP_ALIGNMENT, GET_ALIGNMENT(ch));
+            MSDPSetNumber(d, eMSDP_EXPERIENCE, GET_EXP(ch));
+
+            MSDPSetNumber(d, eMSDP_HEALTH, GET_HIT(ch));
+            MSDPSetNumber(d, eMSDP_HEALTH_MAX, GET_MAX_HIT(ch));
+            MSDPSetNumber(d, eMSDP_LEVEL, GET_LEVEL(ch));
+
+            sprinttype(ch->player.chclass, pc_class_types, buf, sizeof(buf));
+            MSDPSetString(d, eMSDP_CLASS, buf);
+
+            MSDPSetNumber(d, eMSDP_MANA, GET_MANA(ch));
+            MSDPSetNumber(d, eMSDP_MANA_MAX, GET_MAX_MANA(ch));
+            MSDPSetNumber(d, eMSDP_WIMPY, GET_WIMP_LEV(ch));
+            MSDPSetNumber(d, eMSDP_MONEY, GET_GOLD(ch));
+            MSDPSetNumber(d, eMSDP_MOVEMENT, GET_MOVE(ch));
+            MSDPSetNumber(d, eMSDP_MOVEMENT_MAX, GET_MAX_MOVE(ch));
+            MSDPSetNumber(d, eMSDP_AC, compute_armor_class(ch));
+
+            // This would be better moved elsewhere
+            if (pOpponent != NULL) {
+                int hit_points = (GET_HIT(pOpponent) * 100) / GET_MAX_HIT(pOpponent);
+                MSDPSetNumber(d, eMSDP_OPPONENT_HEALTH, hit_points);
+                MSDPSetNumber(d, eMSDP_OPPONENT_HEALTH_MAX, 100);
+                MSDPSetNumber(d, eMSDP_OPPONENT_LEVEL, GET_LEVEL(pOpponent));
+                MSDPSetString(d, eMSDP_OPPONENT_NAME, PERS(pOpponent, ch));
+            }
+            else {  // Clear the values
+                MSDPSetNumber(d, eMSDP_OPPONENT_HEALTH, 0);
+                MSDPSetNumber(d, eMSDP_OPPONENT_LEVEL, 0);
+                MSDPSetString(d, eMSDP_OPPONENT_NAME, "");
+            }
+
+            MSDPUpdate(d);
+        }
+
+        // Ideally this should be called once at startup, and again whenever
+        // someone leaves or joins the mud.    But this works, and it keeps the
+        // snippet simple.    Optimise as you see fit.
+        MSSPSetPlayers(PlayerCount);
+    }  // for (d ...
 }

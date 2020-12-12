@@ -78,11 +78,11 @@ void load_banned(void)
             if (!strcmp(ban_type, ban_types[i])) {
                 next_node->type = i;
             }
-        }
+        }  // for (i ...
 
         next_node->next = ban_list;
         ban_list = next_node;
-    }
+    }  // while (fscanf ...
 
     fclose(fl);
 }
@@ -106,7 +106,7 @@ int isbanned(char *hostname)
         if (strstr(hostname, banned_node->site)) {  // if hostname is a substring
             i = MAX(i, banned_node->type);
         }
-    }
+    }  // for (banned_node ...
 
     return (i);
 }
@@ -133,7 +133,7 @@ static void write_ban_list(void)
     return;
 }
 
-#define BAN_LIST_FORMAT "%-25.25s  %-8.8s  %-10.10s  %-16.16s\r\n"
+#define BAN_LIST_FORMAT "%-25.25s    %-8.8s    %-15.15s    %-16.16s\r\n"
 ACMD(do_ban)
 {
     char flag[MAX_INPUT_LENGTH], site[MAX_INPUT_LENGTH], *nextchar;
@@ -159,15 +159,14 @@ ACMD(do_ban)
 
         for (ban_node = ban_list; ban_node; ban_node = ban_node->next) {
             if (ban_node->date) {
-                strlcpy(timestr, asctime(localtime(&(ban_node->date))), 10);
-                timestr[10] = '\0';
+                strftime(timestr, sizeof(timestr), "%a %b %d %Y", localtime(&(ban_node->date)));
             }
             else {
                 strcpy(timestr, "Unknown");    // strcpy: OK (strlen("Unknown") < 16)
             }
 
             send_to_char(ch, BAN_LIST_FORMAT, ban_node->site, ban_types[ban_node->type], timestr, ban_node->name);
-        }
+        }  // for (ban_node ...
         return;
     }
 
@@ -185,14 +184,14 @@ ACMD(do_ban)
             send_to_char(ch, "That site has already been banned -- unban it to change the ban type.\r\n");
             return;
         }
-    }
+    }  // for (ban_node ...
 
     CREATE(ban_node, struct ban_list_element, 1);
     strncpy(ban_node->site, site, BANNED_SITE_LENGTH);    // strncpy: OK (b_n->site:BANNED_SITE_LENGTH+1)
+    ban_node->site[BANNED_SITE_LENGTH] = '\0';
     for (nextchar = ban_node->site; *nextchar; nextchar++) {
         *nextchar = LOWER(*nextchar);
-    }
-    ban_node->site[BANNED_SITE_LENGTH] = '\0';
+    }  // for (nextchar ...
     strncpy(ban_node->name, GET_NAME(ch), MAX_NAME_LENGTH);    // strncpy: OK (b_n->size:MAX_NAME_LENGTH+1)
     ban_node->name[MAX_NAME_LENGTH] = '\0';
     ban_node->date = time(0);
@@ -201,7 +200,7 @@ ACMD(do_ban)
         if (!str_cmp(flag, ban_types[i])) {
             ban_node->type = i;
         }
-    }
+    }  // for (i ...
 
     ban_node->next = ban_list;
     ban_list = ban_node;
@@ -232,7 +231,7 @@ ACMD(do_unban)
         else {
             ban_node = ban_node->next;
         }
-    }
+    }  // while (ban_node && !found)
 
     if (!found) {
         send_to_char(ch, "That site is not currently banned.\r\n");
@@ -271,14 +270,14 @@ int valid_name(char *newname)
                 return (IS_PLAYING(dt));
             }
         }
-    }
+    }  // for (dt ...
 
     // count vowels
     for (i = 0; newname[i]; i++) {
         if (strchr("aeiouyAEIOUY", newname[i])) {
             vowels++;
         }
-    }
+    }  // for (i ...
 
     // return invalid if no vowels
     if (!vowels) {
@@ -306,7 +305,7 @@ int valid_name(char *newname)
         if (strstr(tempname, invalid_list[i])) {
             return (0);
         }
-    }
+    }  // for (i ...
 
     return (1);
 }

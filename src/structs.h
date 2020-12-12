@@ -12,6 +12,8 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
+#include "protocol.h"   // Kavir Plugin
+#include "lists.h"
 #include "mudtypes.h"
 
 /**
@@ -32,9 +34,36 @@
  */
 #define USE_AUTOEQ    1
 
-/* preamble */
+/*
+ *  preamble
+ */
+/**
+ * As of bpl20, it should be safe to use unsigned data types for the various
+ * virtual and real number data types.    There really isn't a reason to use
+ * signed anymore so use the unsigned types and get 65,535 objects instead of
+ * 32,768. NOTE: This will likely be unconditionally unsigned later.
+ * 0 = use signed indexes; 1 = use unsigned indexes
+ */
+#define CIRCLE_UNSIGNED_INDEX   1
 
-#include "mudtypes.h"
+#if CIRCLE_UNSIGNED_INDEX
+# define IDXTYPE        ush_int         //!< Index types are unsigned short ints
+# define IDXTYPE_MAX    USHRT_MAX       //!< Used for compatibility checks.
+# define IDXTYPE_MIN    0               //!< Used for compatibility checks.
+# define NOWHERE        ((IDXTYPE)~0)   //!< Sets to ush_int_MAX, or 65,535
+# define NOTHING        ((IDXTYPE)~0)   //!< Sets to ush_int_MAX, or 65,535
+# define NOBODY         ((IDXTYPE)~0)   //!< Sets to ush_int_MAX, or 65,535
+# define NOFLAG         ((IDXTYPE)~0)   //!< Sets to ush_int_MAX, or 65,535
+#else
+# define IDXTYPE        sh_int          //!< Index types are unsigned short ints
+# define IDXTYPE_MAX    SHRT_MAX        //!< Used for compatibility checks.
+# define IDXTYPE_MIN    SHRT_MIN        //!< Used for compatibility checks.
+# define NOWHERE        ((IDXTYPE)-1)   //!< nil reference for rooms
+# define NOTHING        ((IDXTYPE)-1)   //!< nil reference for objects
+# define NOBODY         ((IDXTYPE)-1)   //!< nil reference for mobiles
+# define NOFLAG         ((IDXTYPE)-1)   //!< nil reference for flags
+#endif
+
 #include "CharacterAttributes.h"
 
 /**
@@ -43,69 +72,81 @@
 #define SPECIAL(name) \
     int (name)(struct char_data *ch, void *me, int cmd, char *argument)
 
-// room-related defines
+// -------- room-related defines --------
 /*
  * The cardinal directions: used as index to room_data.dir_option[]
  */
 enum eDirections
 {
-    NORTH = 0,    //!< The direction north
-    EAST,        //!< The direction east
-    SOUTH,        //!< The direction south
-    WEST,        //!< The direction west
-    UP,            //!< The direction up
-    DOWN,        //!< The direction down
+    NORTH = 0,          //!< The direction north
+    EAST,               //!< The direction east
+    SOUTH,              //!< The direction south
+    WEST,               //!< The direction west
+    UP,                 //!< The direction up
+    DOWN,               //!< The direction down
+
+    NORTHWEST,          //!< The direction north-west
+    NORTHEAST,          //!< The direction north-east
+    SOUTHEAST,          //!< The direction south-east
+    SOUTHWEST,          //!< The direction south-west
 
     // Total number of directions available to move in. BEFORE CHANGING THIS, make
     // sure you change every other direction and movement based item that this will
     // impact.
-    NUM_OF_DIRS        // 6
+    NUM_OF_DIRS         // 6 or 10
 };
 
 // Room flags: used in room_data.room_flags
 // WARNING: In the world files, NEVER set the bits marked "R" ("Reserved")
 enum eRoomTypes
 {
-    ROOM_DARK = 0,        //!< Dark room, light needed to see
-    ROOM_DEATH,            //!< Death trap, instant death
-    ROOM_NOMOB,            //!< MOBs not allowed in room
-    ROOM_INDOORS,        //!< Indoors, no weather
-    ROOM_PEACEFUL,        //!< Violence not allowed
+    ROOM_DARK = 0,      //!< Dark room, light needed to see
+    ROOM_DEATH,         //!< Death trap, instant death
+    ROOM_NOMOB,         //!< MOBs not allowed in room
+    ROOM_INDOORS,       //!< Indoors, no weather
+    ROOM_PEACEFUL,      //!< Violence not allowed
+    // 5
     ROOM_SOUNDPROOF,    //!< Shouts, gossip blocked
-    ROOM_NOTRACK,        //!< Track won't go through
-    ROOM_NOMAGIC,        //!< Magic not allowed
+    ROOM_NOTRACK,       //!< Track won't go through
+    ROOM_NOMAGIC,       //!< Magic not allowed
     ROOM_TUNNEL,        //!< Room for only 1 person
-    ROOM_PRIVATE,        //!< Can't teleport in
-    ROOM_GODROOM,        //!< LVL_GOD+ only allowed
-    ROOM_HOUSE,            //!< (R) Room is a house
-    ROOM_HOUSE_CRASH,    //!< (R) House needs saving
+    ROOM_PRIVATE,       //!< Can't teleport in
+    // 10
+    ROOM_GODROOM,       //!< LVL_GOD+ only allowed
+    ROOM_HOUSE,         //!< (R) Room is a house
+    ROOM_HOUSE_CRASH,   //!< (R) House needs saving
     ROOM_ATRIUM,        //!< (R) The door to a house
-    ROOM_OLC,            //!< (R) Modifyable/!compress
-    ROOM_BFS_MARK,        //!< (R) breath-first srch mrk
-    ROOM_WORLDMAP,        //!< World-map style maps here
+    ROOM_OLC,           //!< (R) Modifyable/!compress
+    // 15
+    ROOM_BFS_MARK,      //!< (R) breath-first srch mrk
+    ROOM_WORLDMAP,      //!< World-map style maps here
 
     // Must be last
-    NUM_ROOM_FLAGS        //!< The total number of Room Flags
+    NUM_ROOM_FLAGS      //!< The total number of Room Flags
 };
 
 // Zone info: Used in zone_data.zone_flags
-#define ZONE_CLOSED       0  //!< Zone is closed - players cannot enter
-#define ZONE_NOIMMORT     1  //!< Immortals (below LVL_GRGOD) cannot enter this zone
-#define ZONE_QUEST        2  //!< This zone is a quest zone (not implemented)
-#define ZONE_GRID         3  //!< Zone is 'on the grid', connected, show on 'areas'
-#define ZONE_NOBUILD      4  //!< Building is not allowed in the zone
-#define ZONE_NOASTRAL     5  //!< No teleportation magic will work to or from this zone
-/** The total number of Zone Flags */
-#define NUM_ZONE_FLAGS    6
+#define ZONE_CLOSED       0     //!< Zone is closed - players cannot enter
+#define ZONE_NOIMMORT     1     //!< Immortals (below LVL_GRGOD) cannot enter this zone
+#define ZONE_QUEST        2     //!< This zone is a quest zone (not implemented)
+#define ZONE_GRID         3     //!< Zone is 'on the grid', connected, show on 'areas'
+#define ZONE_NOBUILD      4     //!< Building is not allowed in the zone
+#define ZONE_NOASTRAL     5     //!< No teleportation magic will work to or from this zone
+#define ZONE_WORLDMAP     6     //!< Whole zone uses the WORLDMAP by default
+
+/*
+ * The total number of Zone Flags
+ */
+#define NUM_ZONE_FLAGS    7
 
 // Exit info: used in room_data.dir_option.exit_info
-#define EX_ISDOOR     (1 << 0)   //!< Exit is a door
-#define EX_CLOSED     (1 << 1)   //!< The door is closed
-#define EX_LOCKED     (1 << 2)   //!< The door is locked
-#define EX_PICKPROOF  (1 << 3)   //!< Lock can't be picked
-#define EX_BREAKABLE  (1 << 4)   //!< The door can be smashed
-#define EX_BROKEN     (1 << 5)   //!< The exit is broken
-#define EX_HIDDEN     (1 << 6)   //!< The exit is hidden
+#define EX_ISDOOR       (1 << 0)    //!< Exit is a door
+#define EX_CLOSED       (1 << 1)    //!< The door is closed
+#define EX_LOCKED       (1 << 2)    //!< The door is locked
+#define EX_PICKPROOF    (1 << 3)    //!< Lock can't be picked
+#define EX_HIDDEN       (1 << 4)    //!< Exit is hidden, secret
+#define EX_BREAKABLE    (1 << 5)    //!< The door can be smashed
+#define EX_BROKEN       (1 << 6)    //!< The exit is broken
 
 // Sector types: used in room_data.sector_type
 enum eSectorType
@@ -115,11 +156,13 @@ enum eSectorType
     SECT_FIELD,         //!< In a field
     SECT_FOREST,        //!< In a forest
     SECT_HILLS,         //!< In the hills
+    // 5
     SECT_MOUNTAIN,      //!< On a mountain
     SECT_WATER_SWIM,    //!< Swimmable water
     SECT_WATER_NOSWIM,  //!< Water - need a boat
     SECT_FLYING,        //!< Flying
     SECT_UNDERWATER,    //!< Underwater
+    // 10
     SECT_TRACK,         //!< On a dirt path or track
     SECT_ROAD,          //!< On a road or non city street
 
@@ -130,36 +173,45 @@ enum eSectorType
 // char and mob-related defines
 
 // History
-#define HIST_ALL       0 //!< Index to history of all channels
-#define HIST_SAY       1 //!< Index to history of all 'say'
-#define HIST_GOSSIP    2 //!< Index to history of all 'gossip'
-#define HIST_WIZNET    3 //!< Index to history of all 'wiznet'
-#define HIST_TELL      4 //!< Index to history of all 'tell'
-#define HIST_SHOUT     5 //!< Index to history of all 'shout'
-#define HIST_GRATS     6 //!< Index to history of all 'grats'
-#define HIST_HOLLER    7 //!< Index to history of all 'holler'
-#define HIST_AUCTION   8 //!< Index to history of all 'auction'
+#define HIST_ALL        0   //!< Index to history of all channels
+#define HIST_SAY        1   //!< Index to history of all 'say'
+#define HIST_GOSSIP     2   //!< Index to history of all 'gossip'
+#define HIST_WIZNET     3   //!< Index to history of all 'wiznet'
+#define HIST_TELL       4   //!< Index to history of all 'tell'
+#define HIST_SHOUT      5   //!< Index to history of all 'shout'
+#define HIST_GRATS      6   //!< Index to history of all 'grats'
+#define HIST_HOLLER     7   //!< Index to history of all 'holler'
+#define HIST_AUCTION    8   //!< Index to history of all 'auction'
 
-#define NUM_HIST       9 //!< Total number of history indexes
+#define NUM_HIST        9   //!< Total number of history indexes
 
-#define HISTORY_SIZE   5 //!< Number of last commands kept in each history
+#define HISTORY_SIZE    5   //!< Number of last commands kept in each history
 
-// PC classes
-#define CLASS_UNDEFINED      (-1) //!< PC Class undefined
-#define CLASS_MAGIC_USER  0    //!< PC Class Magic User
-#define CLASS_CLERIC      1    //!< PC Class Cleric
-#define CLASS_THIEF       2    //!< PC Class Thief
-#define CLASS_WARRIOR     3    //!< PC Class Warrior
+/*
+ *  Group Defines
+ */
+#define GROUP_OPEN       (1 << 0)   //!< Group is open for members
+#define GROUP_ANON       (1 << 1)   //!< Group is Anonymous
+#define GROUP_NPC        (1 << 2)   //!< Group created by NPC and thus not listed
+
+/*
+ *  PC classes
+ */
+#define CLASS_UNDEFINED     (-1)//!< PC Class undefined
+#define CLASS_MAGIC_USER    0   //!< PC Class Magic User
+#define CLASS_CLERIC        1   //!< PC Class Cleric
+#define CLASS_THIEF         2   //!< PC Class Thief
+#define CLASS_WARRIOR       3   //!< PC Class Warrior
 //* Total number of available PC Classes
-#define NUM_CLASSES      4
+#define NUM_CLASSES         4
 
 // NPC classes (currently unused - feel free to implement!)
-#define CLASS_OTHER       0    //!< NPC Class Other (or undefined)
-#define CLASS_UNDEAD      1    //!< NPC Class Undead
-#define CLASS_HUMANOID    2    //!< NPC Class Humanoid
-#define CLASS_ANIMAL      3    //!< NPC Class Animal
-#define CLASS_DRAGON      4    //!< NPC Class Dragon
-#define CLASS_GIANT       5    //!< NPC Class Giant
+#define CLASS_OTHER         0   //!< NPC Class Other (or undefined)
+#define CLASS_UNDEAD        1   //!< NPC Class Undead
+#define CLASS_HUMANOID      2   //!< NPC Class Humanoid
+#define CLASS_ANIMAL        3   //!< NPC Class Animal
+#define CLASS_DRAGON        4   //!< NPC Class Dragon
+#define CLASS_GIANT         5   //!< NPC Class Giant
 
 enum eRaces
 {
@@ -173,54 +225,59 @@ enum eRaces
 };
 
 // Sex
-#define SEX_NEUTRAL   0        //!< Neutral Sex (Hermaphrodite)
-#define SEX_MALE      1        //!< Male Sex (XY Chromosome)
-#define SEX_FEMALE    2        //!< Female Sex (XX Chromosome)
+#define SEX_NEUTRAL     0   //!< Neutral Sex (Hermaphrodite)
+#define SEX_MALE        1   //!< Male Sex (XY Chromosome)
+#define SEX_FEMALE      2   //!< Female Sex (XX Chromosome)
 
-#define NUM_GENDERS   3        //<! Total number of Genders
+#define NUM_GENDERS     3   //<! Total number of Genders
 
 // Positions
 enum ePositions
 {
-    POS_DEAD = 0,    //!< Position = dead
-    POS_MORTALLYW,    //!< Position = mortally wounded
-    POS_INCAP,        //!< Position = incapacitated
-    POS_STUNNED,    //!< Position = stunned
-    POS_SLEEPING,    //!< Position = sleeping
-    POS_RESTING,    //!< Position = resting
-    POS_SITTING,    //!< Position = sitting
-    POS_FIGHTING,    //!< Position = fighting
-    POS_STANDING,    //!< Position = standing
+    POS_DEAD = 0,       //!< Position = dead
+    POS_MORTALLYW,      //!< Position = mortally wounded
+    POS_INCAP,          //!< Position = incapacitated
+    POS_STUNNED,        //!< Position = stunned
+    POS_SLEEPING,       //!< Position = sleeping
+    // 5
+    POS_RESTING,        //!< Position = resting
+    POS_SITTING,        //!< Position = sitting
+    POS_FIGHTING,       //!< Position = fighting
+    POS_STANDING,       //!< Position = standing
 
-    NUM_POSITIONS    //!< Total number of positions
+    NUM_POSITIONS       //!< Total number of positions
 };
 
 // Player flags: used by char_data.char_specials.act
 enum ePlayerFlags
 {
-    PLR_KILLER = 0,        //!< Player is a player-killer
-    PLR_THIEF,            //!< Player is a player-thief
-    PLR_FROZEN,            //!< Player is frozen
+    PLR_KILLER = 0,     //!< Player is a player-killer
+    PLR_THIEF,          //!< Player is a player-thief
+    PLR_FROZEN,         //!< Player is frozen
     PLR_DONTSET,        //!< Don't EVER set (ISNPC bit, set by mud)
     PLR_WRITING,        //!< Player writing (board/mail/olc)
+    // 5
     PLR_MAILING,        //!< Player is writing mail
-    PLR_CRASH,            //!< Player needs to be crash-saved
-    PLR_SITEOK,            //!< Player has been site-cleared
+    PLR_CRASH,          //!< Player needs to be crash-saved
+    PLR_SITEOK,         //!< Player has been site-cleared
     PLR_NOSHOUT,        //!< Player not allowed to shout/goss
     PLR_NOTITLE,        //!< Player not allowed to set title
+    // 10
     PLR_DELETED,        //!< Player deleted - space reusable
-    PLR_LOADROOM,        //!< Player uses nonstandard loadroom
-    PLR_NOWIZLIST,        //!< Player shouldn't be on wizlist
-    PLR_NODELETE,        //!< Player shouldn't be deleted
-    PLR_INVSTART,        //!< Player should enter game wizinvis
-    PLR_CRYO,            //!< Player is cryo-saved (purge prog)
-    PLR_NOTDEADYET,        //!< (R) Player being extracted
+    PLR_LOADROOM,       //!< Player uses nonstandard loadroom
+    PLR_NOWIZLIST,      //!< Player shouldn't be on wizlist
+    PLR_NODELETE,       //!< Player shouldn't be deleted
+    PLR_INVSTART,       //!< Player should enter game wizinvis
+    // 15
+    PLR_CRYO,           //!< Player is cryo-saved (purge prog)
+    PLR_NOTDEADYET,     //!< (R) Player being extracted
     PLR_BUG,            //!< Player is writing a bug
     PLR_IDEA,           //!< Player is writing an idea
     PLR_TYPO,           //!< Player is writing a typo
+    // 20
 
     // Must be last
-    NUM_PLAYER_FLAGS     //!< Number of player flags in use
+    NUM_PLAYER_FLAGS    //!< Number of player flags in use
 };
 
 enum eMobFlags
@@ -250,7 +307,7 @@ enum eMobFlags
     MOB_NOTDEADYET,     //!< (R) Mob being extracted
 
     // Must be last
-    NUM_MOB_FLAGS = (MOB_NOTDEADYET-1)  //<! Total number of Mob Flags; it should be 1 less than MOB_NOT_DEADYET
+    NUM_MOB_FLAGS = (MOB_NOTDEADYET - 1)  //<! Total number of Mob Flags; it should be 1 less than MOB_NOT_DEADYET
 };
 
 // Preference flags: used by char_data.player_specials.pref
@@ -261,35 +318,43 @@ enum ePreferenceFlags
     PRF_NOSHOUT,        //!< Can't hear shouts
     PRF_NOTELL,         //!< Can't receive tells
     PRF_DISPHP,         //!< Display hit points in prompt
+    // 5
     PRF_DISPMANA,       //!< Display mana points in prompt
     PRF_DISPMOVE,       //!< Display move points in prompt
     PRF_AUTOEXIT,       //!< Display exits in a room
     PRF_NOHASSLE,       //!< Aggr mobs won't attack
     PRF_QUEST,          //!< On quest
+    // 10
     PRF_SUMMONABLE,     //!< Can be summoned
     PRF_NOREPEAT,       //!< No repetition of comm commands
     PRF_HOLYLIGHT,      //!< Can see in dark
     PRF_COLOR_1,        //!< Color (low bit)
     PRF_COLOR_2,        //!< Color (high bit)
+    // 15
     PRF_NOWIZ,          //!< Can't hear wizline
     PRF_LOG1,           //!< On-line System Log (low bit)
     PRF_LOG2,           //!< On-line System Log (high bit)
     PRF_NOAUCT,         //!< Can't hear auction channel
     PRF_NOGOSS,         //!< Can't hear gossip channel
+    // 20
     PRF_NOGRATZ,        //!< Can't hear grats channel
     PRF_SHOWVNUMS,      //!< Can see VNUMs
     PRF_DISPAUTO,       //!< Show prompt HP, MP, MV when < 25%
     PRF_CLS,            //!< Clear screen in OLC
     PRF_BUILDWALK,      //!< Build new rooms while walking
+    // 25
     PRF_AFK,            //!< AFK flag
     PRF_AUTOLOOT,       //!< Loot everything from a corpse
     PRF_AUTOGOLD,       //!< Loot gold from a corpse
     PRF_AUTOSPLIT,      //!< Split gold with group
     PRF_AUTOSAC,        //!< Sacrifice a corpse
+    // 30
     PRF_AUTOASSIST,     //!< Auto-assist toggle
     PRF_AUTOMAP,        //!< Show map at the side of room descs
     PRF_AUTOKEY,        //!< Automatically unlock locked doors when opening
     PRF_AUTODOOR,       //!< Use the next available door
+    PRF_ZONERESETS,     //!< See zone resets
+    // 35
 
     // Must be last
     NUM_PRF_FLAGS       //!< Total number of available PRF flags
@@ -308,7 +373,7 @@ enum eAffectBits
     AFF_SENSE_LIFE,     //!< Char can sense hidden life
     AFF_WATERWALK,      //!< Char can walk on water
     AFF_SANCTUARY,      //!< Char protected by sanct
-    AFF_GROUP,          //!< (R) Char is grouped
+    AFF_UNUSED,         //!< UNUSED - Previously (R) Char is grouped
     AFF_CURSE,          //!< Char is cursed
     AFF_INFRAVISION,    //!< Char can see in dark
     AFF_POISON,         //!< (R) Char is poisoned
@@ -335,40 +400,48 @@ enum eConnectionState
     CON_GET_NAME,       //!< Login with name
     CON_NAME_CNFRM,     //!< New character, confirm name
     CON_PASSWORD,       //!< Login with password
+    // 5
     CON_NEWPASSWD,      //!< New character, create password
     CON_CNFPASSWD,      //!< New character, confirm password
     CON_QSEX,           //!< Choose character sex
     CON_QCLASS,         //!< Choose character class
     CON_RMOTD,          //!< Reading the message of the day
+    // 10
     CON_MENU,           //!< At the main menu
     CON_PLR_DESC,       //!< Enter a new character description prompt
     CON_CHPWD_GETOLD,   //!< Changing passwd: Get old
     CON_CHPWD_GETNEW,   //!< Changing passwd: Get new
     CON_CHPWD_VRFY,     //!< Changing passwd: Verify new password
+    // 15
     CON_DELCNF1,        //!< Character Delete: Confirmation 1
     CON_DELCNF2,        //!< Character Delete: Confirmation 2
     CON_DISCONNECT,     //!< In-game link loss (leave character)
     CON_OEDIT,          //!< OLC mode - object editor
     CON_REDIT,          //!< OLC mode - room editor
+    // 20
     CON_ZEDIT,          //!< OLC mode - zone info editor
     CON_MEDIT,          //!< OLC mode - mobile editor
     CON_SEDIT,          //!< OLC mode - shop editor
     CON_TEDIT,          //!< OLC mode - text editor
     CON_CEDIT,          //!< OLC mode - conf editor
+    // 25
     CON_AEDIT,          //!< OLC mode - social (action) edit
     CON_TRIGEDIT,       //!< OLC mode - trigger edit
     CON_HEDIT,          //!< OLC mode - help edit
     CON_QEDIT,          //!< OLC mode - quest edit
     CON_PREFEDIT,       //!< OLC mode - preference edit
+    // 30
     CON_IBTEDIT,        //!< OLC mode - idea/bug/typo edit
+    CON_MSGEDIT,        //!< OLC mode - message editor
+    CON_GET_PROTOCOL,   //!< Used at log-in while attempting to get protocols
 
     // Must be last
     NUM_CON_STATES      //!< Number of connection states
 };
 
 // OLC States range - used by IS_IN_OLC and IS_PLAYING
-#define FIRST_OLC_STATE CON_OEDIT     //!< The first CON_ state that is an OLC
-#define LAST_OLC_STATE  CON_PREFEDIT  //!< The last CON_ state that is an OLC
+#define FIRST_OLC_STATE     CON_OEDIT   //!< The first CON_ state that is an OLC
+#define LAST_OLC_STATE      CON_MSGEDIT //!< The last CON_ state that is an OLC
 
 // Character equipment positions: used as index for char_data.equipment[]
 /*
@@ -413,21 +486,25 @@ enum eItemTypes
     ITEM_WAND,          //!< Item is a wand
     ITEM_STAFF,         //!< Item is a staff
     ITEM_WEAPON,        //!< Item is a weapon
+    // 6
     ITEM_FURNITURE,     //!< Sittable Furniture
     ITEM_FREE,          //!< Unimplemented
     ITEM_TREASURE,      //!< Item is a treasure, not gold
     ITEM_ARMOR,         //!< Item is armor
     ITEM_POTION,        //!< (10) Item is a potion
+    // 11
     ITEM_WORN,          //!< Unimplemented
     ITEM_OTHER,         //!< Misc object
     ITEM_TRASH,         //!< Trash - shopkeepers won't buy
     ITEM_FREE2,         //!< Unimplemented
     ITEM_CONTAINER,     //!< Item is a container
+    // 16
     ITEM_NOTE,          //!< Item is note
     ITEM_DRINKCON,      //!< Item is a drink container
     ITEM_KEY,           //!< Item is a key
     ITEM_FOOD,          //!< Item is food
     ITEM_MONEY,         //!< (20) Item is money (gold)
+    // 21
     ITEM_PEN,           //!< Item is a pen
     ITEM_BOAT,          //!< Item is a boat
     ITEM_FOUNTAIN,      //!< Item is a fountain
@@ -615,20 +692,27 @@ enum eLiquidTypes
  * LVL_IMMORT should always be the LOWEST immortal level.  The number of
  * mortal levels will always be LVL_IMMORT - 1.
  */
+/* --- old way ---
 #define LVL_IMPL    34  //!< Level of Implementors
 #define LVL_GRGOD   33  //!< Level of Greater Gods
 #define LVL_GOD     32  //!< Level of Gods
-#define LVL_IMMORT    31  //!< Level of Immortals
+#define LVL_IMMORT  31  //!< Level of Immortals
+/*/
+#define LVL_IMMORT  31              //!< Level of Immortals
+#define LVL_GOD     (LVL_IMMORT+1)  //!< Level of Gods
+#define LVL_GRGOD   (LVL_GOD+1)     //!< Level of Greater Gods
+#define LVL_IMPL    (LVL_GRGOD+1)   //!< Level of Implementors
+//*/
 
 /**
  * Minimum level to build and to run the saveall command
  */
-#define LVL_BUILDER    LVL_IMMORT
+#define LVL_BUILDER         LVL_IMMORT
 
 /**
  * Arbitrary number that won't be in a string
  */
-#define MAGIC_NUMBER    (0x06)
+#define MAGIC_NUMBER        (0x06)
 
 /**
  * OPT_USEC determines how many commands will be processed by the MUD per
@@ -641,72 +725,75 @@ enum eLiquidTypes
  * @see PASSES_PER_SEC
  * @see RL_SEC
  */
-#define OPT_USEC    100000
+#define OPT_USEC            100000
 /**
  * How many heartbeats equate to one real second.
  * @see OPT_USEC
  * @see RL_SEC
  */
-#define PASSES_PER_SEC    (1000000 / OPT_USEC)
+#define PASSES_PER_SEC      (1000000 / OPT_USEC)
 /**
  * Used with other macros to define at how many heartbeats a control loop
  * gets executed. Helps to translate pulse counts to real seconds for
  * human comprehension.
  * @see PASSES_PER_SEC
  */
-#define RL_SEC        * PASSES_PER_SEC
+#define RL_SEC              * PASSES_PER_SEC
 
 /** Controls when a zone update will occur. */
-#define PULSE_ZONE      (10 RL_SEC)
+#define PULSE_ZONE          (10 RL_SEC)
 /** Controls when mobile (NPC) actions and updates will occur. */
-#define PULSE_MOBILE    (10 RL_SEC)
+#define PULSE_MOBILE        (10 RL_SEC)
 /** Controls the time between turns of combat. */
-#define PULSE_VIOLENCE  ( 2 RL_SEC)
+#define PULSE_VIOLENCE      (2 RL_SEC)
 /**
  * Controls when characters and houses (if implemented) will be autosaved.
  * @see CONFIG_AUTO_SAVE
  */
-#define PULSE_AUTOSAVE  (60 RL_SEC)
+#define PULSE_AUTOSAVE      (60 RL_SEC)
 /** Controls when checks are made for idle name and password CON_ states */
-#define PULSE_IDLEPWD   (15 RL_SEC)
+#define PULSE_IDLEPWD       (15 RL_SEC)
 /** Currently unused. */
-#define PULSE_SANITY    (30 RL_SEC)
+#define PULSE_SANITY        (30 RL_SEC)
 /**
  * How often to log # connected sockets and # active players.
  * Currently set for 5 minutes.
  */
-#define PULSE_USAGE     (5 * 60 RL_SEC)
+#define PULSE_USAGE         (5 * 60 RL_SEC)
 /**
  * Controls when to save the current ingame MUD time to disk.
  * This should be set >= SECS_PER_MUD_HOUR
  */
-#define PULSE_TIMESAVE    (30 * 60 RL_SEC)
+#define PULSE_TIMESAVE      (30 * 60 RL_SEC)
 
 // Variables for the output buffering system
-#define MAX_SOCK_BUF       (24 * 1024) //!< Size of kernel's sock buf
-#define MAX_PROMPT_LENGTH  96          //!< Max length of prompt
-#define GARBAGE_SPACE      32          //!< Space for **OVERFLOW** etc
-#define SMALL_BUFSIZE      1024        //!< Static output buffer size
+#define MAX_SOCK_BUF       (24 * 1024)  //!< Size of kernel's sock buf
+#define MAX_PROMPT_LENGTH  96           //!< Max length of prompt
+#define GARBAGE_SPACE      32           //!< Space for **OVERFLOW** etc
+#define SMALL_BUFSIZE      1024         //!< Static output buffer size
 /** Max amount of output that can be buffered */
 #define LARGE_BUFSIZE      (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
-#define MAX_STRING_LENGTH     49152  //!< Max length of string, as defined
-#define MAX_INPUT_LENGTH      512    //!< Max length per *line* of input
-#define MAX_RAW_INPUT_LENGTH  1024   //!< Max size of *raw* input
-#define MAX_MESSAGES          60     //!< Max Different attack message types
-#define MAX_NAME_LENGTH       20     //!< Max PC/NPC name length
-#define MAX_PWD_LENGTH        30     //!< Max PC password length
-#define MAX_TITLE_LENGTH      80     //!< Max PC title length
-#define HOST_LENGTH           40     //!< Max hostname resolution length
-#define PLR_DESC_LENGTH       4096   //!< Max length for PC description
-#define MAX_SKILLS            200    //!< Max number of skills/spells
-#define MAX_AFFECT            32     //!< Max number of player affections
-#define MAX_OBJ_AFFECT        6      //!< Max object affects
-#define MAX_NOTE_LENGTH       4000   //!< Max length of text on a note obj
-#define MAX_LAST_ENTRIES      6000   //!< Max log entries??
-#define MAX_HELP_KEYWORDS     256    //!< Max length of help keyword string
+#define MAX_STRING_LENGTH     49152     //!< Max length of string, as defined
+#define MAX_INPUT_LENGTH      512       //!< Max length per *line* of input
+#define MAX_RAW_INPUT_LENGTH  (12 * 1024) //!< Max size of *raw* input
+#define MAX_MESSAGES          60        //!< Max Different attack message types
+#define MAX_NAME_LENGTH       20        //!< Max PC/NPC name length
+#define MAX_PWD_LENGTH        30        //!< Max PC password length
+#define MAX_TITLE_LENGTH      80        //!< Max PC title length
+#define HOST_LENGTH           40        //!< Max hostname resolution length
+#define PLR_DESC_LENGTH       4096      //!< Max length for PC description
+#define MAX_SKILLS            200       //!< Max number of skills/spells
+#define MAX_AFFECT            32        //!< Max number of player affections
+#define MAX_OBJ_AFFECT        6         //!< Max object affects
+#define MAX_NOTE_LENGTH       4000      //!< Max length of text on a note obj
+#define MAX_LAST_ENTRIES      6000      //!< Max log entries??
+#define MAX_HELP_KEYWORDS     256       //!< Max length of help keyword string
 #define MAX_HELP_ENTRY        MAX_STRING_LENGTH //!< Max size of help entry
-#define MAX_COMPLETED_QUESTS  1024   //!< Maximum number of completed quests allowed
+#define MAX_COMPLETED_QUESTS  1024      //!< Maximum number of completed quests allowed
+
+#define MAX_GOLD 2140000000             //!< Maximum possible on hand gold (2.14 Billion)
+#define MAX_BANK 2140000000             //!< Maximum possible in bank gold (2.14 Billion)
 
 /**
  * Define the largest set of commands for a trigger.
@@ -714,23 +801,40 @@ enum eLiquidTypes
  */
 #define MAX_CMD_LENGTH 16384
 
-/* Various virtual (human-reference) number types. */
-typedef IDXTYPE room_vnum;    //!< vnum specifically for room
-typedef IDXTYPE obj_vnum;    //!< vnum specifically for object
-typedef IDXTYPE mob_vnum;    //!< vnum specifically for mob (NPC)
-typedef IDXTYPE zone_vnum;    //!< vnum specifically for zone
-typedef IDXTYPE shop_vnum;    //!< vnum specifically for shop
-typedef IDXTYPE trig_vnum;    //!< vnum specifically for triggers
-typedef IDXTYPE qst_vnum;    //!< vnum specifically for quests
+/*
+ *  Type Definitions
+ */
+typedef signed char sbyte;      //!< 1 byte; vals = -127 to 127
+typedef unsigned char ubyte;    //!< 1 byte; vals = 0 to 255
+typedef signed short int sh_int; //*< 2 bytes; vals = -32,768 to 32,767
+typedef unsigned short int ush_int; //!< 2 bytes; vals = 0 to 65,535
+#if !defined(__cplusplus)       // Anyone know a portable method?
+typedef char bool;              //!< Technically 1 signed byte; vals should only = TRUE or FALSE.
+#endif
+
+#if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)    // Hm, sysdep.h?
+typedef signed char byte;       //!< Technically 1 signed byte; vals should only = TRUE or FALSE.
+#endif
+
+/*
+ *  Various virtual (human-reference) number types.
+ */
+typedef IDXTYPE room_vnum;      //!< vnum specifically for room
+typedef IDXTYPE obj_vnum;       //!< vnum specifically for object
+typedef IDXTYPE mob_vnum;       //!< vnum specifically for mob (NPC)
+typedef IDXTYPE zone_vnum;      //!< vnum specifically for zone
+typedef IDXTYPE shop_vnum;      //!< vnum specifically for shop
+typedef IDXTYPE trig_vnum;      //!< vnum specifically for triggers
+typedef IDXTYPE qst_vnum;       //!< vnum specifically for quests
 
 /* Various real (array-reference) number types. */
-typedef IDXTYPE room_rnum;    //!< references an instance of a room
-typedef IDXTYPE obj_rnum;    //!< references an instance of a obj
-typedef IDXTYPE mob_rnum;    //!< references an instance of a mob (NPC)
-typedef IDXTYPE zone_rnum;    //!< references an instance of a zone
-typedef IDXTYPE shop_rnum;    //!< references an instance of a shop
-typedef IDXTYPE trig_rnum;    //!< references an instance of a trigger
-typedef IDXTYPE qst_rnum;    //!< references an instance of a quest
+typedef IDXTYPE room_rnum;      //!< references an instance of a room
+typedef IDXTYPE obj_rnum;       //!< references an instance of a obj
+typedef IDXTYPE mob_rnum;       //!< references an instance of a mob (NPC)
+typedef IDXTYPE zone_rnum;      //!< references an instance of a zone
+typedef IDXTYPE shop_rnum;      //!< references an instance of a shop
+typedef IDXTYPE trig_rnum;      //!< references an instance of a trigger
+typedef IDXTYPE qst_rnum;       //!< references an instance of a quest
 
 /**
  * Bitvector type for 32 bit unsigned long bitvectors. 'unsigned long long'
@@ -813,13 +917,15 @@ struct obj_data
     struct obj_data *in_obj;            ///!< Points to carrying object, or NULL
     struct obj_data *contains;            ///!< List of objects being carried, or NULL
 
-    long id;                            ///!< used by DG triggers - unique id
+    long script_id;                            ///!< used by DG triggers - fetch only with obj_script_id()
     struct trig_proto_list *proto_script; ///!< list of default triggers
     struct script_data *script;         ///!< script info for the object
 
     struct obj_data *next_content;        ///!< For 'contains' lists
     struct obj_data *next;                ///!< For the object list
     struct char_data *sitting_here;        ///!< For furniture, who is sitting in it
+
+    struct list_data *events;          //*< Used for object events
 };
 
 /**
@@ -870,7 +976,9 @@ struct rent_info
     int spare7;
 };
 
-// room-related structures
+/*
+ *  room-related structures
+ */
 
 /**
  * Direction (north, south, east...) information for rooms.
@@ -905,6 +1013,8 @@ struct room_data
     struct script_data *script;                 //!< script info for the room
     struct obj_data *contents;                  //!< List of items in room
     struct char_data *people;                   //!< List of NPCs / PCs in room
+
+    struct list_data * events;
 };
 
 // char-related structures
@@ -944,6 +1054,16 @@ struct time_data
     int played;   //!< This is the total accumulated time played in secs
 };
 
+/*
+ *  Group Data Struct
+ */
+struct group_data
+{
+    struct char_data * leader;
+    struct list_data * members;
+    int group_flags;
+};
+
 /**
  * The pclean_criteria_data is set up in config.c and used in db.c to determine
  * the conditions which will cause a player character to be deleted from disk
@@ -960,7 +1080,7 @@ struct pclean_criteria_data
  */
 struct char_player_data
 {
-    char passwd[MAX_PWD_LENGTH+1]; //!< PC's password
+    char passwd[MAX_PWD_LENGTH + 1]; //!< PC's password
     char *name;                    //!< PC / NPC name
     char *short_descr;             //!< NPC 'actions'
     char *long_descr;              //!< PC / NPC look description
@@ -968,7 +1088,7 @@ struct char_player_data
     char *title;                   //!< PC / NPC title
     byte sex;                      //!< PC / NPC sex
     byte chclass;                  //!< PC / NPC class
-	byte chrace;                   //!< PC / NPC race
+    byte chrace;                   //!< PC / NPC race
     byte level;                    //!< PC / NPC level
     struct time_data time;         //!< PC AGE in days
     ubyte weight;                  //!< PC / NPC weight
@@ -1054,7 +1174,7 @@ struct char_special_data
  */
 struct player_special_data_saved
 {
-    byte skills[MAX_SKILLS+1];      //!< Character skills.
+    byte skills[MAX_SKILLS + 1];      //!< Character skills.
     int wimp_level;                 //!< Below this # of hit points, flee!
     byte freeze_level;              //!< Level of god who froze char, if any
     sh_int invis_level;             //!< level of invisibility
@@ -1069,12 +1189,12 @@ struct player_special_data_saved
     int olc_zone;                   //!< Current olc permissions
     int questpoints;                //!< Number of quest points earned
     qst_vnum *completed_quests;     //!< Quests completed
-    int    num_completed_quests;    //!< Number completed
-    int    current_quest;           //!< vnum of current quest
-    int    quest_time;              //!< time left on current quest
-    int    quest_counter;           //!< Count of targets left to get
-    time_t   lastmotd;              //!< Last time player read motd
-    time_t   lastnews;              //!< Last time player read news
+    int num_completed_quests;       //!< Number completed
+    int current_quest;              //!< vnum of current quest
+    int quest_time;                 //!< time left on current quest
+    int quest_counter;              //!< Count of targets left to get
+    time_t lastmotd;                //!< Last time player read motd
+    time_t lastnews;                //!< Last time player read news
 };
 
 /**
@@ -1093,6 +1213,7 @@ struct player_special_data
     void *last_olc_targ;        //!< ? Currently Unused ?
     int last_olc_mode;          //!< ? Currently Unused ?
     char *host;                 //!< Resolved hostname, or ip, for player.
+    int buildwalk_sector;       //!< Default sector type for buildwalk
 };
 
 /**
@@ -1112,11 +1233,11 @@ struct mob_special_data
  */
 struct affected_type
 {
-    sh_int type;                    //!< The type of spell that caused this
+    sh_int spell;                   //!< The spell that caused this
     sh_int duration;                //!< For how long its effects will last
     sbyte modifier;                 //!< Added/subtracted to/from apropriate ability
     byte location;                  //!< Tells which ability to change(APPLY_XXX).
-    long /*bitvector_t*/bitvector;  //!< Tells which bits to set (AFF_XXX).
+    int bitvector[AF_ARRAY_MAX];    //!< Tells which bits to set (AFF_XXX).
 
     struct affected_type *next;     //!< The next affect in the list of affects.
 };
@@ -1156,7 +1277,7 @@ struct char_data
     struct obj_data *carrying;              //!< List head for objects in inventory
     struct descriptor_data *desc;           //!< Descriptor/connection info; NPCs = NULL
 
-    long id;                                //!< used by DG triggers - unique id
+    long script_id;                         //!< used by DG triggers - fetch only with char_script_id()
     struct trig_proto_list *proto_script;   //!< list of default triggers
     struct script_data *script;             //!< script info for the object
     struct script_memory *memory;           //!< for mob memory triggers
@@ -1168,7 +1289,11 @@ struct char_data
     struct follow_type *followers;          //!< List of characters following
     struct char_data *master;               //!< List of character being followed
 
+    struct group_data *group;               //!< Character's Group
+
     long pref;                              //!< unique session id
+
+    struct list_data * events;
 };
 
 /**
@@ -1198,7 +1323,7 @@ struct txt_q
 struct descriptor_data
 {
     socket_t descriptor;                //!< file descriptor for socket
-    char host[HOST_LENGTH+1];           //!< hostname
+    char host[HOST_LENGTH + 1];           //!< hostname
     byte bad_pws;                       //!< number of bad pw attemps this login
     byte idle_tics;                     //!< tics idle at password prompt
     int connected;                      //!< mode of 'connectedness'
@@ -1229,6 +1354,9 @@ struct descriptor_data
     struct descriptor_data *snoop_by;   //!< And who is snooping this char
     struct descriptor_data *next;       //!< link to next descriptor
     struct oasis_olc_data *olc;         //!< OLC info
+    protocol_t *pProtocol;              //!< Kavir plugin
+
+    struct list_data * events;
 };
 
 // other miscellaneous structures
@@ -1260,9 +1388,9 @@ struct message_type
  */
 struct message_list
 {
-    int a_type;               //!< The id of this attack type.
-    int number_of_attacks;    //!< How many attack messages to chose from.
-    struct message_type *msg; //!< List of messages.
+    int a_type;                 //!< The id of this attack type.
+    int number_of_attacks;      //!< How many attack messages to chose from.
+    struct message_type *msg;   //!< List of messages.
 };
 
 /**
@@ -1365,7 +1493,6 @@ struct int_app_type
 struct con_app_type
 {
     sh_int hitp;    //!< Added to a character's new MAXHP at each new level.
-    sh_int shock;   //!< Historically affects resurrection chances.
 };
 
 /**
@@ -1413,6 +1540,30 @@ struct guild_info_type
     int direction;
 };
 
+/*
+ * * Happy Hour Data
+ */
+struct happyhour {
+    int qp_rate;
+    int exp_rate;
+    int gold_rate;
+    int ticks_left;
+};
+
+/*
+ * * structure for list of recent players (see 'recent' command)
+ */
+struct recent_player
+{
+    int       vnum;                 // The ID number for this instance
+    char    name[MAX_NAME_LENGTH];  // The char name of the player
+    bool    new_player;             // Is this a new player?
+    bool    copyover_player;        // Is this a player that was on during the last copyover?
+    time_t time;                    // login time
+    char    host[HOST_LENGTH + 1];  // Host IP address
+    struct recent_player *next;     // Pointer to the next instance
+};
+
 // Config structs
 
 /**
@@ -1438,12 +1589,14 @@ struct game_data
     int track_through_doors;    //!< Track through doors while closed?
     int no_mort_to_immort;      //!< Prevent mortals leveling to imms?
     int disp_closed_doors;      //!< Display closed doors in autoexit?
+    int diagonal_dirs;          //!< Are there 6 or 10 directions?
     int map_option;             //!< MAP_ON, MAP_OFF or MAP_IMM_ONLY
     int map_size;               //!< Default size for map command
     int minimap_size;           //!< Default size for mini-map (automap)
     int script_players;         //!< Is attaching scripts to players allowed?
 
     char *OK;                   //!< When player receives 'Okay.' text.
+    char *HUH;                  //!< 'Huh!?!'
     char *NOPERSON;             //!< 'No one by that name here.'
     char *NOEFFECT;             //!< 'Nothing seems to happen.'
 };
@@ -1496,6 +1649,10 @@ struct game_operation
     char *WELC_MESSG;       //!< The welcome message.
     char *START_MESSG;      //!< The start msg for new characters.
     int medit_advanced;     //!< Does the medit OLC show the advanced stats menu ?
+    int ibt_autosave;       //!< Does "bug resolve" autosave ?
+    int protocol_negotiation; //!< Enable the protocol negotiation system ?
+    int special_in_comm;    //!< Enable use of a special character in communication channels ?
+    int debug_mode;         //!< Current Debug Mode
 };
 
 /**

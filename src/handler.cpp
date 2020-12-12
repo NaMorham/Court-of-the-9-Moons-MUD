@@ -15,6 +15,7 @@
 #include "comm.h"
 #include "db.h"
 #include "handler.h"
+#include "screen.h"
 #include "interpreter.h"
 #include "spells.h"
 #include "dg_scripts.h"
@@ -22,15 +23,20 @@
 #include "class.h"
 #include "fight.h"
 #include "quest.h"
+#include "mud_event.h"
 
 
-// local file scope variables
+/*
+ *  local file scope variables
+ */
 static int extractions_pending = 0;
 
-// local file scope functions
+/*
+ *  local file scope functions
+ */
 static int apply_ac(struct char_data *ch, int eq_pos);
 static void update_object(struct obj_data *obj, int use);
-static void affect_modify(struct char_data *ch, byte loc, sbyte mod, long bitv, bool add);
+static void affect_modify_ar(struct char_data * ch, byte loc, sbyte mod, int bitv[], bool add);
 
 
 char *fname(const char *namelist)
@@ -69,7 +75,7 @@ int is_name(const char *str, const char *namelist)
                 return (0);
             }
 
-            if (!*curstr || *curname == ' ') {
+            if (!*curstr || (*curname == ' ')) {
                 break;
             }
 
@@ -80,6 +86,7 @@ int is_name(const char *str, const char *namelist)
 
         // skip to next name
         for (; isalpha(*curname); curname++) { }
+
         if (!*curname) {
             return (0);
         }
@@ -119,7 +126,7 @@ int isname(const char *str, const char *namelist)
     return 0;
 }
 
-void aff_apply_modify(struct char_data *ch, byte loc, sbyte mod, char *msg)
+static void aff_apply_modify(struct char_data *ch, byte loc, sbyte mod, char *msg)
 {
     switch (loc) {
     case APPLY_NONE:
@@ -149,9 +156,10 @@ void aff_apply_modify(struct char_data *ch, byte loc, sbyte mod, char *msg)
         ch->aff_abils.setCha(GET_CHA(ch) + mod);
         break;
 
-    // Do Not Use.
+        // Do Not Use.
     case APPLY_CLASS:
         break;
+
     case APPLY_LEVEL:
         break;
 
@@ -223,20 +231,7 @@ void aff_apply_modify(struct char_data *ch, byte loc, sbyte mod, char *msg)
     }  // switch
 }
 
-static void affect_modify(struct char_data * ch, byte loc, sbyte mod, long bitv, bool add)
-{
-    if (add) {
-        SET_BIT_AR(AFF_FLAGS(ch), bitv);
-    }
-    else {
-        REMOVE_BIT_AR(AFF_FLAGS(ch), bitv);
-        mod = -mod;
-    }
-
-    aff_apply_modify(ch, loc, mod, "affect_modify");
-}
-
-void affect_modify_ar(struct char_data * ch, byte loc, sbyte mod, int bitv[], bool add)
+static void affect_modify_ar(struct char_data * ch, byte loc, sbyte mod, int bitv[], bool add)
 {
     int i, j;
 
@@ -283,7 +278,7 @@ void affect_total(struct char_data *ch)
     }  // for (i ...
 
     for (af = ch->affected; af; af = af->next) {
-        affect_modify(ch, af->location, af->modifier, af->bitvector, FALSE);
+        affect_modify_ar(ch, af->location, af->modifier, af->bitvector, FALSE);
     }  // for (af ...
 
     ch->aff_abils = ch->real_abils;
@@ -299,7 +294,7 @@ void affect_total(struct char_data *ch)
     }  // for (i ...
 
     for (af = ch->affected; af; af = af->next) {
-        affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE);
+        affect_modify_ar(ch, af->location, af->modifier, af->bitvector, TRUE);
     }  // for (af
 
     // Make certain values are between 0..25, not < 0 and not > 25!
@@ -312,7 +307,7 @@ void affect_total(struct char_data *ch)
     ch->aff_abils.setCha(MAX(0, MIN(GET_CHA(ch), i)));
     ch->aff_abils.setStr(MAX(0, GET_STR(ch)));
 
-    if (IS_NPC(ch)) {
+    if (IS_NPC(ch) || (GET_LEVEL(ch) >= LVL_GRGOD)) {
         ch->aff_abils.setStr(MIN(GET_STR(ch), i));
     }
     else {
@@ -338,7 +333,7 @@ void affect_to_char(struct char_data *ch, struct affected_type *af)
     affected_alloc->next = ch->affected;
     ch->affected = affected_alloc;
 
-    affect_modify(ch, af->location, af->modifier, af->bitvector, TRUE);
+    affect_modify_ar(ch, af->location, af->modifier, af->bitvector, TRUE);
     affect_total(ch);
 }
 
@@ -356,14 +351,14 @@ void affect_remove(struct char_data *ch, struct affected_type *af)
         return;
     }
 
-    affect_modify(ch, af->location, af->modifier, af->bitvector, FALSE);
+    affect_modify_ar(ch, af->location, af->modifier, af->bitvector, FALSE);
     REMOVE_FROM_LIST(af, ch->affected, next);
     free(af);
     affect_total(ch);
 }
 
 /*
- * Call affect_remove with every spell of spelltype "skill"
+ * Call affect_remove with every affect from the spell "type"
  */
 void affect_from_char(struct char_data *ch, int type)
 {
@@ -371,7 +366,7 @@ void affect_from_char(struct char_data *ch, int type)
 
     for (hjp = ch->affected; hjp; hjp = next) {
         next = hjp->next;
-        if (hjp->type == type) {
+        if (hjp->spell == type) {
             affect_remove(ch, hjp);
         }
     }  // for (hjp ...
@@ -386,7 +381,7 @@ bool affected_by_spell(struct char_data *ch, int type)
     struct affected_type *hjp;
 
     for (hjp = ch->affected; hjp; hjp = hjp->next) {
-        if (hjp->type == type) {
+        if (hjp->spell == type) {
             return (TRUE);
         }
     }  // for (hjp ...
@@ -403,7 +398,7 @@ void affect_join(struct char_data *ch, struct affected_type *af,
     for (hjp = ch->affected; !found && hjp; hjp = next) {
         next = hjp->next;
 
-        if ((hjp->type == af->type) && (hjp->location == af->location)) {
+        if ((hjp->spell == af->spell) && (hjp->location == af->location)) {
             if (add_dur) {
                 af->duration += hjp->duration;
             }
@@ -435,13 +430,9 @@ void char_from_room(struct char_data *ch)
 {
     struct char_data *temp;
 
-    if (ch == NULL) {
-        WriteLogf("SYSERR: NULL character in %s, char_from_room", __FILE__);
+    if ((ch == NULL) || (IN_ROOM(ch) == NOWHERE)) {
+        WriteLogf("SYSERR: NULL character or NOWHERE in %s, char_from_room", __FILE__);
         exit(1);
-    }
-    else if (IN_ROOM(ch) == NOWHERE) {
-        WriteLogf("SYSERR: Character (%d:%s) NOWHERE in %s, char_from_room", IS_NPC(ch) ? ch->id : -1, ch->player.name, __FILE__);
-        return;  // we can survive this
     }
 
     if (FIGHTING(ch) != NULL) {
@@ -468,9 +459,9 @@ void char_from_room(struct char_data *ch)
  */
 void char_to_room(struct char_data *ch, room_rnum room)
 {
-    if (ch == NULL || room == NOWHERE || room > top_of_world) {
+    if ((ch == NULL) || (room == NOWHERE) || (room > top_of_world)) {
         WriteLogf("SYSERR: Illegal value(s) passed to char_to_room. (Room: %d/%d Ch: %p",
-            room, top_of_world, ch);
+            room, top_of_world, (void *)ch);
     }
     else {
         ch->next_in_room = world[room].people;
@@ -517,7 +508,7 @@ void obj_to_char(struct obj_data *object, struct char_data *ch)
         }
     }
     else {
-        WriteLogf("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", object, ch);
+        WriteLogf("SYSERR: NULL obj (%p) or char (%p) passed to obj_to_char.", (void *)object, (void *)ch);
     }
 }
 
@@ -800,7 +791,7 @@ void obj_to_room(struct obj_data *object, room_rnum room)
 {
     if (!object || (room == NOWHERE) || (room > top_of_world)) {
         WriteLogf("SYSERR: Illegal value(s) passed to obj_to_room. (Room #%d/%d, obj %p)",
-            room, top_of_world, object);
+            room, top_of_world, (void *)object);
     }
     else {
         object->next_content = world[room].contents;
@@ -823,7 +814,7 @@ void obj_from_room(struct obj_data *object)
 
     if (!object || IN_ROOM(object) == NOWHERE) {
         WriteLogf("SYSERR: NULL object (%p) or obj not in a room (%d) passed to obj_from_room",
-            object, IN_ROOM(object));
+            (void *)object, IN_ROOM(object));
         return;
     }
 
@@ -854,14 +845,13 @@ void obj_to_obj(struct obj_data *obj, struct obj_data *obj_to)
 
     if (!obj || !obj_to || (obj == obj_to)) {
         WriteLogf("SYSERR: NULL object (%p) or same source (%p) and target (%p) obj passed to obj_to_obj.",
-            obj, obj, obj_to);
+            (void *)obj, (void *)obj, (void *)obj_to);
         return;
     }
 
     obj->next_content = obj_to->contains;
     obj_to->contains = obj;
     obj->in_obj = obj_to;
-    tmp_obj = obj->in_obj;
 
     // Add weight to container, unless unlimited.
     if (GET_OBJ_VAL(obj->in_obj, 0) > 0) {
@@ -889,7 +879,6 @@ void obj_from_obj(struct obj_data *obj)
         return;
     }
     obj_from = obj->in_obj;
-    temp = obj->in_obj;
     REMOVE_FROM_LIST(obj, obj_from->contains, next_content);
 
     // Subtract weight from containers container unless unlimited.
@@ -969,6 +958,18 @@ void extract_obj(struct obj_data *obj)
 
     if (SCRIPT(obj)) {
         extract_script(obj, OBJ_TRIGGER);
+    }
+
+    if (obj->events != NULL) {
+        if (obj->events->iSize > 0) {
+            mud_event_t* pEvent;
+
+            while ((pEvent = (mud_event_t *)(simple_list(obj->events))) != NULL) {
+                event_cancel(pEvent);
+            }
+        }
+        free_list(obj->events);
+        obj->events = NULL;
     }
 
     if (GET_OBJ_RNUM(obj) == NOTHING || obj->proto_script != obj_proto[GET_OBJ_RNUM(obj)].proto_script) {
@@ -1073,7 +1074,7 @@ void extract_char_final(struct char_data *ch)
                 if (d->character && GET_IDNUM(ch) == GET_IDNUM(d->character)) {
                     STATE(d) = CON_CLOSE;
                 }
-            }
+            }  // for (d ...
             STATE(ch->desc) = CON_MENU;
             write_to_output(ch->desc, "%s", CONFIG_MENU);
         }
@@ -1082,6 +1083,10 @@ void extract_char_final(struct char_data *ch)
     // On with the character's assets...
     if (ch->followers || ch->master) {
         die_follower(ch);
+    }
+    // Check to see if we are grouped!
+    if (GROUP(ch)) {
+        leave_group(ch);
     }
 
     // transfer objects to room, if any
@@ -1109,12 +1114,21 @@ void extract_char_final(struct char_data *ch)
         }
     } // for (k ...
 
-    // we can't forget the hunters either...
+    // Wipe character from the memory of hunters and other intelligent NPCs...
     for (temp = character_list; temp; temp = temp->next) {
+        // PCs can't use MEMORY, and don't use HUNTING()
+        if (!IS_NPC(temp))
+            continue;
+        // If "temp" is hunting our extracted char, stop the hunt.
         if (HUNTING(temp) == ch) {
             HUNTING(temp) = NULL;
         }
-    }
+        // If "temp" has allocated memory data and our ch is a PC, forget the
+        // extracted character (if he/she is remembered)
+        if (!IS_NPC(ch) && GET_POS(ch) == POS_DEAD && MEMORY(temp)) {
+            forget(temp, ch); // forget() is safe to use without a check.
+        }
+    }  // for (temp ...
 
     char_from_room(ch);
 
@@ -1149,19 +1163,23 @@ void extract_char_final(struct char_data *ch)
  * in the list gets killed, for example, by an area spell. Why do we leave them
  * on the character_list? Because code doing 'vict = vict->next' would get
  * really confused otherwise.
+ *
+ * Fixed a bug where it would over-count extractions if you try to extract the
+ * same character twice (e.g. double-purging in a script) -khufu / EmpireMUD
  */
 void extract_char(struct char_data *ch)
 {
     char_from_furniture(ch);
+    clear_char_event_list(ch);
 
-    if (IS_NPC(ch)) {
+    if (IS_NPC(ch) && !MOB_FLAGGED(ch, MOB_NOTDEADYET)) {
         SET_BIT_AR(MOB_FLAGS(ch), MOB_NOTDEADYET);
+        ++extractions_pending;
     }
-    else {
+    else if (!IS_NPC(ch) && !PLR_FLAGGED(ch, PLR_NOTDEADYET)) {
         SET_BIT_AR(PLR_FLAGS(ch), PLR_NOTDEADYET);
+        ++extractions_pending;
     }
-
-    extractions_pending++;
 }
 
 /*
@@ -1202,7 +1220,7 @@ void extract_pending_chars(void)
         else {
             character_list = next_vict;
         }
-    }
+    }  // for (vict ...
 
     if (extractions_pending > 0) {
         WriteLogf("SYSERR: Couldn't find %d extractions as counted.", extractions_pending);
@@ -1467,7 +1485,7 @@ const char *money_desc(int amount)
         {  250000, "a mountain of gold coins" },
         {  500000, "a huge mountain of gold coins" },
         { 1000000, "an enormous mountain of gold coins" },
-        { 0, NULL },
+        { 0,       NULL },
     };
 
     if (amount <= 0) {
@@ -1562,7 +1580,7 @@ struct obj_data *create_money(int amount)
  * describes what it filled in.
  */
 int generic_find(char *arg, bitvector_t bitvector, struct char_data *ch,
-    struct char_data **tar_ch, struct obj_data **tar_obj)
+        struct char_data **tar_ch, struct obj_data **tar_obj)
 {
     int i, found, number;
     char name_val[MAX_INPUT_LENGTH];
@@ -1639,5 +1657,117 @@ int find_all_dots(char *arg)
     }
     else {
         return (FIND_INDIV);
+    }
+}
+
+/*
+ *  Group Handlers
+ */
+struct group_data * create_group(struct char_data * leader)
+{
+    struct group_data * new_group;
+
+    /* Allocate Group Memory & Attach to Group List*/
+    CREATE(new_group, struct group_data, 1);
+    add_to_list(new_group, group_list);
+
+    // Allocate Members List
+    new_group->members = create_list();
+
+    // Clear Data
+    new_group->group_flags = 0;
+
+    // Assign Data
+    SET_BIT(GROUP_FLAGS(new_group), GROUP_OPEN);
+
+    if (IS_NPC(leader)) {
+        SET_BIT(GROUP_FLAGS(new_group), GROUP_NPC);
+    }
+
+    join_group(leader, new_group);
+
+    return (new_group);
+}
+
+void free_group(struct group_data * group)
+{
+    struct char_data *tch;
+    struct iterator_data Iterator;
+
+    if (group->members->iSize) {
+        for (tch = (struct char_data *) merge_iterator(&Iterator, group->members);
+            tch;
+            tch = (char_data *)next_in_list(&Iterator)) {
+            leave_group(tch);
+        }
+
+        remove_iterator(&Iterator);
+    }
+
+    free_list(group->members);
+    remove_from_list(group, group_list);
+    free(group);
+    group = NULL;
+}
+
+void leave_group(struct char_data *ch)
+{
+    struct group_data *group;
+    struct char_data *tch;
+    struct iterator_data Iterator;
+    bool found_pc = FALSE;
+
+    if ((group = ch->group) == NULL) {
+        return;
+    }
+
+    send_to_group(NULL, group, "%s has left the group.\r\n", GET_NAME(ch));
+
+    remove_from_list(ch, group->members);
+    ch->group = NULL;
+
+    if (group->members->iSize) {
+        for (tch = (struct char_data *) merge_iterator(&Iterator, group->members);
+            tch; tch = (char_data *)next_in_list(&Iterator)) {
+            if (!IS_NPC(tch)) {
+                found_pc = TRUE;
+            }
+        }  // for (tch ...
+
+        remove_iterator(&Iterator);
+    }
+
+    if (!found_pc) {
+        SET_BIT(GROUP_FLAGS(group), GROUP_NPC);
+    }
+
+    if (GROUP_LEADER(group) == ch && group->members->iSize) {
+        group->leader = (struct char_data *) random_from_list(group->members);
+        send_to_group(NULL, group, "%s has assumed leadership of the group.\r\n", GET_NAME(GROUP_LEADER(group)));
+    }
+    else if (group->members->iSize == 0) {
+        free_group(group);
+    }
+}
+
+void join_group(struct char_data *ch, struct group_data *group)
+{
+    add_to_list(ch, group->members);
+
+    if (group->leader == NULL) {
+        group->leader = ch;
+    }
+
+    ch->group = group;
+
+    if (IS_SET(group->group_flags, GROUP_NPC) && !IS_NPC(ch)) {
+        REMOVE_BIT(GROUP_FLAGS(group), GROUP_NPC);
+    }
+
+    if (group->leader == ch) {
+        send_to_group(NULL, group, "%s becomes leader of the group.\r\n", GET_NAME(ch));
+    }
+    else {
+        send_to_group(NULL, group, "%s joins the group.\r\n", GET_NAME(ch));
     }
 }

@@ -18,11 +18,13 @@
 #ifndef _BAN_H_
 #define _BAN_H_
 
-/* don't change these */
-#define BAN_NOT   0
-#define BAN_NEW   1
+/*
+ *  don't change these
+ */
+#define BAN_NOT     0
+#define BAN_NEW     1
 #define BAN_SELECT  2
-#define BAN_ALL   3
+#define BAN_ALL     3
 
 #define BANNED_SITE_LENGTH    50
 struct ban_list_element {
@@ -33,19 +35,22 @@ struct ban_list_element {
    struct ban_list_element *next;
 };
 
-/* Global functions */
+/*
+ *  Global functions
+ */
 /* Utility Functions */
-void load_banned(void);
-int isbanned(char *hostname);
-int valid_name(char *newname);
-void read_invalid_list(void);
-void free_invalid_list(void);
+void    load_banned(void);
+int     isbanned(char *hostname);
+int     valid_name(char *newname);
+void    read_invalid_list(void);
+void    free_invalid_list(void);
 /* Command functions without subcommands */
 ACMD(do_ban);
 ACMD(do_unban);
 
-/* Global buffering */
 #ifndef __BAN_C__
+
+/* Global buffering */
 
 extern struct ban_list_element *ban_list;
 extern int num_invalid;
