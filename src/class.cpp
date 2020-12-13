@@ -51,6 +51,8 @@ const char *pc_class_types[] = {
 /*
  * The menu for choosing a class in interpreter.c:
  */
+#if 0
+// Moved to interpreter.cpp
 const char *class_menu =
 "\r\n"
 "Select a class:\r\n"
@@ -58,21 +60,48 @@ const char *class_menu =
 "    [\t(T\t)]hief\r\n"
 "    [\t(W\t)]arrior\r\n"
 "    [\t(M\t)]agic-user\r\n";
+#endif
 
 /*
  * The code to interpret a class letter -- used in interpreter.c when a new
  * character is selecting a class and by 'set class' in act.wizard.c.
+ *
+ * No check for a valid race combination
  */
 int parse_class(char arg)
 {
     arg = LOWER(arg);
 
     switch (arg) {
-    case 'm': return CLASS_MAGIC_USER;
-    case 'c': return CLASS_CLERIC;
-    case 'w': return CLASS_WARRIOR;
-    case 't': return CLASS_THIEF;
-    default:  return CLASS_UNDEFINED;
+    case 'm':
+        return CLASS_MAGIC_USER;
+    case 'c':
+        return CLASS_CLERIC;
+    case 'w':
+        return CLASS_WARRIOR;
+    case 't':
+        return CLASS_THIEF;
+    default:
+        // @todo: log here
+        return CLASS_UNDEFINED;
+    }
+
+}
+
+/*
+ * Validates the class and race combination
+ */
+bool class_race_is_valid(byte chclass, byte chrace)
+{
+    if ((chclass <= CLASS_UNDEFINED) || (chclass >= NUM_CLASSES)) {
+        return false;
+    }
+    else if ((chrace <= RACE_UNKNOWN) || (chrace >= NUM_RACES)) {
+        return false;
+    }
+    else {
+        // check if the bit is set
+        return ((classes_for_race[chrace] & (1 << chclass)) != 0);
     }
 }
 

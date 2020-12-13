@@ -29,6 +29,7 @@
 #include "act.h"        // ACMDs located within the act*.c files
 #include "ban.h"
 #include "class.h"
+#include "race.h"
 #include "graph.h"
 #include "hedit.h"
 #include "house.h"
@@ -1483,6 +1484,39 @@ EVENTFUNC(get_protocols)
 }
 
 /*
+ * Build and display the class menu appropriate for the race
+ */
+static void show_class_menu(struct descriptor_data *d)
+{
+    char buf[MAX_STRING_LENGTH]; // probably too big
+    size_t len;
+    struct char_data *ch = d->character;
+    ush_int avail_classes = ((ch->player.chrace > RACE_UNKNOWN) && (ch->player.chrace < NUM_RACES) ?
+        classes_for_race[ch->player.chrace] : CLASS_WARRIOR);  // a bad default, but we get something :(
+
+    memset(buf, 0, sizeof(char)*MAX_STRING_LENGTH);
+
+    len = snprintf(buf, MAX_STRING_LENGTH, "\r\n"
+        "Select a class:\r\n");
+
+    // we could have a loop here..., if so, we need an array/struct for it - later problem
+    if (avail_classes & CLASSB_CLERIC) {
+        len += snprintf(buf + len, MAX_STRING_LENGTH - len, "    [\t(C\t)]leric\r\n");
+    }
+    if (avail_classes & CLASSB_THIEF) {
+        len += snprintf(buf + len, MAX_STRING_LENGTH - len, "    [\t(T\t)]hief\r\n");
+    }
+    if (avail_classes & CLASSB_WARRIOR) {
+        len += snprintf(buf + len, MAX_STRING_LENGTH - len, "    [\t(W\t)]arrior\r\n");
+    }
+    if (avail_classes & CLASSB_MAGIC_USER) {
+        len += snprintf(buf + len, MAX_STRING_LENGTH - len, "    [\t(M\t)]agic-user\r\n");
+    }
+
+    write_to_output(d, "%s\r\nClass: ", buf);
+}
+
+/*
  * Deal with newcomers and other non-playing sockets
  */
 void nanny(struct descriptor_data *d, char *arg)
@@ -1792,7 +1826,22 @@ void nanny(struct descriptor_data *d, char *arg)
             return;
         }
 
-        write_to_output(d, "%s\r\nClass: ", class_menu);
+        //write_to_output(d, "%s\r\nClass: ", class_menu);
+        //STATE(d) = CON_QCLASS;
+        write_to_output(d, "%s\r\nRace: ", race_menu);
+        STATE(d) = CON_QRACE;
+        break;
+
+    case CON_QRACE:
+        load_result = parse_race(*arg);
+        if (load_result == RACE_UNKNOWN) {
+            write_to_output(d, "\r\nThat's not a valid race.\r\nRace: ");
+            return;
+        }
+        else {
+            GET_RACE(d->character) = load_result;
+        }
+        show_class_menu(d);
         STATE(d) = CON_QCLASS;
         break;
 
@@ -1800,6 +1849,10 @@ void nanny(struct descriptor_data *d, char *arg)
         load_result = parse_class(*arg);
         if (load_result == CLASS_UNDEFINED) {
             write_to_output(d, "\r\nThat's not a class.\r\nClass: ");
+            return;
+        }
+        else if (!class_race_is_valid(load_result, GET_RACE(d->character))) {
+            write_to_output(d, "\r\nThat's not a valid class for a %s.\r\nClass: ", get_race_string(GET_RACE(d->character)));
             return;
         }
         else {

@@ -197,10 +197,6 @@ static int can_take_obj(struct char_data *ch, struct obj_data *obj)
             act("$p: you can't carry that much weight.", FALSE, ch, obj, 0, TO_CHAR);
             return (0);
         }
-        else if (!(CAN_WEAR(obj, ITEM_WEAR_TAKE))) {
-            act("$p: you can't take that!", FALSE, ch, obj, 0, TO_CHAR);
-            return (0);
-        }
     }
 
     if (OBJ_SAT_IN_BY(obj)){
@@ -1310,7 +1306,9 @@ static void wear_message(struct char_data *ch, struct obj_data *obj, int where)
         { "$n wields $p.",
           "You wield $p." },
         { "$n grabs $p.",
-          "You grab $p." }
+          "You grab $p." }//,
+        //{ "$n wears $p on $s back.",
+        //  "You wear $p on your back." }
     };
 
     act(wear_messages[where][0], TRUE, ch, obj, 0, TO_ROOM);
@@ -1324,11 +1322,11 @@ static void perform_wear(struct char_data *ch, struct obj_data *obj, int where)
     // an object with a HOLD bit.)
 
     int wear_bitvectors[] = {
-        ITEM_WEAR_TAKE, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_NECK,
-        ITEM_WEAR_NECK, ITEM_WEAR_BODY, ITEM_WEAR_HEAD, ITEM_WEAR_LEGS,
-        ITEM_WEAR_FEET, ITEM_WEAR_HANDS, ITEM_WEAR_ARMS, ITEM_WEAR_SHIELD,
-        ITEM_WEAR_ABOUT, ITEM_WEAR_WAIST, ITEM_WEAR_WRIST, ITEM_WEAR_WRIST,
-        ITEM_WEAR_WIELD, ITEM_WEAR_TAKE
+       ITEM_WEAR_TAKE, ITEM_WEAR_FINGER, ITEM_WEAR_FINGER, ITEM_WEAR_NECK,
+       ITEM_WEAR_NECK, ITEM_WEAR_BODY, ITEM_WEAR_HEAD, ITEM_WEAR_LEGS,
+       ITEM_WEAR_FEET, ITEM_WEAR_HANDS, ITEM_WEAR_ARMS, ITEM_WEAR_SHIELD,
+       ITEM_WEAR_ABOUT, ITEM_WEAR_WAIST, ITEM_WEAR_WRIST, ITEM_WEAR_WRIST,
+       ITEM_WEAR_WIELD, ITEM_WEAR_TAKE//, ITEM_WEAR_BACK
     };
 
     const char *already_wearing[] = {
@@ -1349,7 +1347,8 @@ static void perform_wear(struct char_data *ch, struct obj_data *obj, int where)
         "YOU SHOULD NEVER SEE THIS MESSAGE.  PLEASE REPORT.\r\n",
         "You're already wearing something around both of your wrists.\r\n",
         "You're already wielding a weapon.\r\n",
-        "You're already holding something.\r\n"
+        "You're already holding something.\r\n"//,
+        //"You're already wearing something on your back.\r\n"
     };
 
     // first, make sure that the wear position is valid.
@@ -1390,6 +1389,7 @@ int find_eq_pos(struct char_data *ch, struct obj_data *obj, char *arg)
         "neck",
         "!RESERVED!",
         "body",
+        //"back",
         "head",
         "legs",
         "feet",
@@ -1415,6 +1415,9 @@ int find_eq_pos(struct char_data *ch, struct obj_data *obj, char *arg)
         if (CAN_WEAR(obj, ITEM_WEAR_BODY)) {
             where = WEAR_BODY;
         }
+        //if (CAN_WEAR(obj, ITEM_WEAR_BACK)) {
+        //    where = WEAR_BACK;
+        //}
         if (CAN_WEAR(obj, ITEM_WEAR_HEAD)) {
             where = WEAR_HEAD;
         }

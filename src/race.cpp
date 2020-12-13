@@ -29,22 +29,24 @@
 #include "race.h"
 
 
+// @todo: this... better... as a type
 /*
- * Names first
+ * Names first - must be in the same order as the enum
  */
 const char *race_abbrevs[] =
 {
-    "Tr",
     "Hu",
+    "Tr",
     "Og",
     "Fa",
     "\n"
 };
 
+// Must be in the same order as the abbreviations (and enum)
 const char *pc_race_types[] =
 {
-    "Trolloc",
     "Human",
+    "Trolloc",
     "Ogier",
     "Fade",
     "\n"
@@ -56,10 +58,10 @@ const char *pc_race_types[] =
 const char *race_menu =
     "\r\n"
     "Select a race:\r\n"
-    "  [T]rolloc\r\n"
-    "  [H]uman\r\n"
-    "  [O]gier\r\n"
-    "  [F]ade\r\n";
+    "    [\t(T\t)]rolloc\r\n"
+    "    [\t(H\t)]uman\r\n"
+    "    [\t(O\t)]gier\r\n"
+    "    [\t(F\t)]ade\r\n";
 
 /*
  * The code to interpret a race letter -- used in interpreter.c when a new
@@ -1444,6 +1446,18 @@ int invalid_race(struct char_data *ch, struct obj_data *obj)
     return FALSE;
 }
 
+/*
+ * Safe wrapper for getting a string representation of a race
+ */
+const char *get_race_string(int race)
+{
+    if ((race <= RACE_UNKNOWN) || (race >= NUM_RACES)) {
+        return "UNKNOWN";
+    }
+    else {
+        return pc_race_types[race];
+    }
+}
 
 /*
  * TODO: Replace or remove, this is just a copy of class for now.

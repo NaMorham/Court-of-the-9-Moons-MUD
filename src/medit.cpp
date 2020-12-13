@@ -36,7 +36,7 @@ static void medit_disp_positions(struct descriptor_data *d);
 static void medit_disp_sex(struct descriptor_data *d);
 static void medit_disp_attack_types(struct descriptor_data *d);
 static bool medit_illegal_mob_flag(int fl);
-static int    medit_get_mob_flag_by_number(int num);
+static int medit_get_mob_flag_by_number(int num);
 static void medit_disp_mob_flags(struct descriptor_data *d);
 static void medit_disp_aff_flags(struct descriptor_data *d);
 static void medit_disp_menu(struct descriptor_data *d);
@@ -52,7 +52,7 @@ ACMD(do_oasis_medit)
     char buf2[MAX_STRING_LENGTH];
 
     // No building as a mob or while being forced.
-    if (IS_NPC(ch) || !ch->desc || STATE(ch->desc) != CON_PLAYING) {
+    if (IS_NPC(ch) || !ch->desc || (STATE(ch->desc) != CON_PLAYING)) {
         return;
     }
 
@@ -96,7 +96,7 @@ ACMD(do_oasis_medit)
         number = atoi(buf1);
     }
 
-    if (number < IDXTYPE_MIN || number > IDXTYPE_MAX) {
+    if ((number < IDXTYPE_MIN) || (number > IDXTYPE_MAX)) {
         send_to_char(ch, "That mobile VNUM can't exist.\r\n");
         return;
     }
@@ -104,7 +104,7 @@ ACMD(do_oasis_medit)
     // Check that whatever it is isn't already being edited.
     for (d = descriptor_list; d; d = d->next) {
         if (STATE(d) == CON_MEDIT) {
-            if (d->olc && OLC_NUM(d) == number) {
+            if (d->olc && (OLC_NUM(d) == number)) {
                 send_to_char(ch, "That mobile is currently being edited by %s.\r\n",
                     GET_NAME(d->character));
                 return;

@@ -58,5 +58,6 @@ extern size_t action_bits_count;
 extern size_t affected_bits_count;
 extern size_t extra_bits_count;
 extern size_t wear_bits_count;
+extern ush_int classes_for_race[];
 
 #endif      // _CONSTANTS_H_

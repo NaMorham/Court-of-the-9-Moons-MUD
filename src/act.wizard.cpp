@@ -3286,7 +3286,13 @@ static int perform_set(struct char_data *ch, struct char_data *vict, int mode, c
             send_to_char(ch, "That is not a class.\r\n");
             return (0);
         }
-        GET_CLASS(vict) = i;
+        else if (!class_race_is_valid(i, GET_RACE(ch))) {
+            send_to_char(ch, "That is not a valid class for a %s.\r\n", get_race_string(GET_RACE(ch)));
+            return (0);
+        }
+        else {
+            GET_CLASS(vict) = i;
+        }
         break;
     case 8:  // color
         SET_OR_REMOVE(PRF_FLAGS(vict), (PRF_COLOR_1));

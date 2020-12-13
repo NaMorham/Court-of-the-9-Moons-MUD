@@ -372,6 +372,7 @@ const char *wear_where[] = {
     "<worn around neck>   ",
     "<worn around neck>   ",
     "<worn on body>       ",
+    "<worn on back>       ",
     "<worn on head>       ",
     "<worn on legs>       ",
     "<worn on feet>       ",
@@ -398,6 +399,7 @@ const char *equipment_types[] = {
     "First worn around Neck",
     "Second worn around Neck",
     "Worn on body",
+    "Worn on back",
     "Worn on head",
     "Worn on legs",
     "Worn on feet",
@@ -498,6 +500,9 @@ const char *extra_bits[] = {
     "ANTI_TROLLOC",
     "ANTI_OGIER",
     "ANTI_FADE",
+    //"*ATTACH_ITEM1",
+    //"*ATTACH_ITEM2",
+    //"*ATTACH_ITEM3",
     "\n"
 };
 
@@ -1057,3 +1062,11 @@ affected_bits_count = sizeof(affected_bits) / sizeof(affected_bits[0]) - 1,
 extra_bits_count = sizeof(extra_bits) / sizeof(extra_bits[0]) - 1,
 // Number of defined wear bit descriptions.
 wear_bits_count = sizeof(wear_bits) / sizeof(wear_bits[0]) - 1;
+
+// bits for each race, specifying which classes are allowed
+extern ush_int classes_for_race[] = {
+    CLASSB_ANYPC,                                   //<! RACE_HUMAN,
+    CLASSB_WARRIOR | CLASSB_THIEF,                  //<! RACE_TROLLOC,
+    CLASSB_CLERIC | CLASSB_THIEF | CLASSB_WARRIOR,  //<! RACE_OGIER,
+    CLASSB_WARRIOR | CLASSB_THIEF                   //<! RACE_FADE,
+};

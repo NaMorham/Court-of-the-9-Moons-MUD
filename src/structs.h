@@ -202,16 +202,41 @@ enum eSectorType
 #define CLASS_CLERIC        1   //!< PC Class Cleric
 #define CLASS_THIEF         2   //!< PC Class Thief
 #define CLASS_WARRIOR       3   //!< PC Class Warrior
-//* Total number of available PC Classes
+// Total number of available PC Classes
 #define NUM_CLASSES         4
 
 // NPC classes (currently unused - feel free to implement!)
-#define CLASS_OTHER         0   //!< NPC Class Other (or undefined)
-#define CLASS_UNDEAD        1   //!< NPC Class Undead
-#define CLASS_HUMANOID      2   //!< NPC Class Humanoid
-#define CLASS_ANIMAL        3   //!< NPC Class Animal
-#define CLASS_DRAGON        4   //!< NPC Class Dragon
-#define CLASS_GIANT         5   //!< NPC Class Giant
+#define CLASS_OTHER         4   //!< NPC Class Other (or undefined)
+#define CLASS_UNDEAD        5   //!< NPC Class Undead
+#define CLASS_HUMANOID      6   //!< NPC Class Humanoid
+#define CLASS_ANIMAL        7   //!< NPC Class Animal
+#define CLASS_DRAGON        8   //!< NPC Class Dragon
+#define CLASS_GIANT         9   //!< NPC Class Giant
+
+// Number of available NPC classes
+#define NUM_NPC_CLASSES     6
+
+#define TOTAL_CLASSES       (NUM_CLASSES + NUM_NPC_CLASSES)
+
+// does not need to be an enum, but...
+enum eClassBits {
+    CLASSB_NONE = 0,
+    CLASSB_MAGIC_USER   = (1 << CLASS_MAGIC_USER),
+    CLASSB_CLERIC       = (1 << CLASS_CLERIC),
+    CLASSB_THIEF        = (1 << CLASS_THIEF),
+    CLASSB_WARRIOR      = (1 << CLASS_WARRIOR),
+
+    CLASSB_OTHER        = (1 << CLASS_OTHER),
+    CLASSB_UNDEAD       = (1 << CLASS_UNDEAD),
+    CLASSB_HUMANOID     = (1 << CLASS_HUMANOID),
+    CLASSB_ANIMAL       = (1 << CLASS_ANIMAL),
+    CLASSB_DRAGON       = (1 << CLASS_DRAGON),
+    CLASSB_GIANT        = (1 << CLASS_GIANT),
+
+    CLASSB_ANYPC        = (CLASSB_MAGIC_USER | CLASSB_CLERIC | CLASSB_THIEF | CLASSB_WARRIOR),
+    CLASSB_ANYNPC       = (CLASSB_OTHER | CLASSB_UNDEAD | CLASSB_HUMANOID | CLASSB_ANIMAL | CLASSB_DRAGON | CLASSB_GIANT),
+    CLASSB_ANY          = (CLASSB_ANYPC | CLASSB_ANYNPC)
+};
 
 enum eRaces
 {
@@ -222,6 +247,19 @@ enum eRaces
     RACE_FADE,
 
     NUM_RACES    // Must be last
+};
+
+enum eRaceBits
+{
+    RACEB_NONE      = 0,
+    RACEB_HUMAN     = (1 << RACE_HUMAN),
+    RACEB_TROLLOC   = (1 << RACE_TROLLOC),
+    RACEB_OGIER     = (1 << RACE_OGIER),
+    RACEB_FADE      = (1 << RACE_FADE),
+
+    // races that *can* be dark or light, not a must or should map
+    RACEB_DARK      = (RACEB_HUMAN | RACEB_TROLLOC | RACEB_FADE),
+    RACEB_LIGHT     = (RACEB_HUMAN | RACEB_OGIER)
 };
 
 // Sex
@@ -434,6 +472,7 @@ enum eConnectionState
     CON_IBTEDIT,        //!< OLC mode - idea/bug/typo edit
     CON_MSGEDIT,        //!< OLC mode - message editor
     CON_GET_PROTOCOL,   //!< Used at log-in while attempting to get protocols
+    CON_QRACE,          //!< Choose character race
 
     // Must be last
     NUM_CON_STATES      //!< Number of connection states
@@ -470,6 +509,7 @@ enum eWearPositions
     WEAR_WRIST_L,       //!< Equipment Location Left Wrist
     WEAR_WIELD,         //!< Equipment Location Weapon
     WEAR_HOLD,          //!< Equipment Location held in offhand
+    //WEAR_BACK,          //!< Equipment on the back
 
     // Must be last
     NUM_WEARS,          //!< Total number of available equipment lcoations
@@ -533,6 +573,7 @@ enum eWearFlags
     ITEM_WEAR_WRIST,    //!< Item can be worn on wrist
     ITEM_WEAR_WIELD,    //!< Item can be wielded
     ITEM_WEAR_HOLD,     //!< Item can be held
+    //ITEM_WEAR_BACK,     //!< Item can be worn on the back
 
     // Must be last
     NUM_ITEM_WEARS      //!< Total number of item wears
@@ -563,6 +604,9 @@ enum eObjectFlags
     ITEM_ANTI_TROLLOC,      //!< Not usable by trollocs
     ITEM_ANTI_OGIER,        //!< Not usable by ogier
     ITEM_ANTI_FADE,         //!< Not usable by fades
+    //ITEM_ATTACH_ITEM1,      //!< *NOT IMPL YET* Allows an item to be attached to another item (pack, belt, sash, ...)
+    //ITEM_ATTACH_ITEM2,      //!< *NOT IMPL YET* Allows an item to be attached to another item (pack, belt, sash, ...)
+    //ITEM_ATTACH_ITEM3,      //!< *NOT IMPL YET* Allows an item to be attached to another item (pack, belt, sash, ...)
 
     // Must be last
     NUM_ITEM_FLAGS          //!< Total number of item flags

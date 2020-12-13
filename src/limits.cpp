@@ -431,8 +431,8 @@ void point_update(void)
 {
     struct char_data *i, *next_char;
     struct obj_data *j, *next_thing, *jj, *next_thing2;
-    room_rnum rmRNum_dbg;
-    room_vnum rmVNum;
+    //room_rnum rmRNum_dbg;  // Need to re-institute these for better logging
+    //room_vnum rmVNum;
 
     // characters
     for (i = character_list; i; i = next_char) {
@@ -533,7 +533,7 @@ void point_update(void)
                 }*/
 
 #ifdef _DEBUG
-                WriteLogf("Extracting object in %s:%d, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
+                WriteLogf("[DBG] Extracting (corpse) object in %s:%d, Obj[%d, %s]", __FILE__, __LINE__, GET_OBJ_VNUM(j), GET_OBJ_SHORT(j));
 #endif
                 extract_obj(j);
             }

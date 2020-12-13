@@ -54,7 +54,7 @@ ACMD(do_say)
             parse_at(argument);
         }
 
-        snprintf(buf, sizeof(buf), "$n@n says, '%s@n'", argument);
+        snprintf(buf, sizeof(buf), "$n\tn says, '%s\tn'", argument);
         msg = act(buf, FALSE, ch, 0, 0, TO_ROOM | DG_NO_TRIG);
 
         for (vict = world[IN_ROOM(ch)].people; vict; vict = vict->next_in_room) {
@@ -67,7 +67,7 @@ ACMD(do_say)
             send_to_char(ch, "%s", CONFIG_OK);
         }
         else {
-            sprintf(buf, "You say, '%s@n'", argument);
+            sprintf(buf, "You say, '%s\tn'", argument);
             msg = act(buf, FALSE, ch, 0, 0, TO_CHAR | DG_NO_TRIG);
             add_history(ch, msg, HIST_SAY);
         }

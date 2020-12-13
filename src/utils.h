@@ -746,9 +746,15 @@ do {                                                                      \
 #define CAN_CARRY_N(ch)         (5 + (GET_DEX(ch) >> 1) + (GET_LEVEL(ch) >> 1))
 // Return whether or not ch is awake.
 #define AWAKE(ch)               (GET_POS(ch) > POS_SLEEPING)
+// Race can see in dark
+inline bool race_can_see_in_dark(struct char_data *ch) {
+    return (ch && ((ch->player.chrace == RACE_FADE) || (ch->player.chrace == RACE_TROLLOC) || 
+        (ch->player.chrace == RACE_OGIER)));
+}
 // Defines if ch can see in general in the dark.
 #define CAN_SEE_IN_DARK(ch) \
-   (AFF_FLAGGED(ch, AFF_INFRAVISION) || (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)))
+   (AFF_FLAGGED(ch, AFF_INFRAVISION) || (!IS_NPC(ch) && PRF_FLAGGED(ch, PRF_HOLYLIGHT)) || \
+    race_can_see_in_dark(ch))
 
 // Defines if ch is good.
 #define IS_GOOD(ch)             (GET_ALIGNMENT(ch) >= 350)
@@ -870,7 +876,7 @@ do {                                                                      \
 // Defines if there is enough light for sub to see in.
 #define LIGHT_OK(sub)    (!AFF_FLAGGED(sub, AFF_BLIND) && \
    (IS_LIGHT(IN_ROOM(sub)) || AFF_FLAGGED((sub), AFF_INFRAVISION) || \
-   GET_LEVEL(sub) >= LVL_IMMORT))
+   (GET_LEVEL(sub) >= LVL_IMMORT) || race_can_see_in_dark(sub)))
 
 // Defines if sub character can see the invisible obj character.
 #define INVIS_OK(sub, obj) \
@@ -891,6 +897,32 @@ do {                                                                      \
 #define CAN_SEE(sub, obj) (SELF(sub, obj) || \
    ((GET_REAL_LEVEL(sub) >= (IS_NPC(obj) ? 0 : GET_INVIS_LEV(obj))) && \
    IMM_CAN_SEE(sub, obj)))
+
+inline bool can_see_player(struct char_data *ch, struct char_data *vict)
+{
+    //byte ch_lvl, vict_lvl;
+
+    if (!ch) {
+        // @todo: error log here, bad call, no viewer
+        return false;
+    }
+    if (!vict) {
+        // @todo: warning log here, bad call, no obj
+        return false;
+    }
+    if (ch == vict) {
+        return true;  // can see yourself (well, you are aware of)
+    }
+
+    //ch_lvl = GET_REAL_LEVEL(ch);
+    //vict_lvl = (IS_NPC(vict) ? 0 : GET_INVIS_LEV(vict));
+
+    // issue with CHECK_PLAYER_SPECIAL using a var called dummy_mob
+
+    // WIP
+    //if () {
+    //}
+}
 // End of CAN_SEE
 
 // Can the sub character see the obj if it is invisible?

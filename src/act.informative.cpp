@@ -72,7 +72,7 @@ static void show_obj_to_char(struct obj_data *obj, struct char_data *ch, int mod
     struct char_data *temp;
 
     if (!obj || !ch) {
-        WriteLogf("SYSERR: NULL pointer in show_obj_to_char(): obj=%p ch=%p", obj, ch);
+        WriteLogf("SYSERR: NULL pointer in show_obj_to_char(): obj=%p ch=%p", (void *)obj, (void *)ch);
         //  SYSERR_DESC: Somehow a NULL pointer was sent to show_obj_to_char() in
         //  either the 'obj' or the 'ch' variable.  The error will indicate which
         //  was NULL by listing both of the pointers passed to it.  This is often a
@@ -1077,14 +1077,14 @@ ACMD(do_score)
             send_to_char(ch, "%sPOOFIN:  %s%s %s%s\r\n", QYEL, QCYN, GET_NAME(ch), POOFIN(ch), QNRM);
         }
         else {
-            send_to_char(ch, "%sPOOFIN:  %s%s appears with an ear-splitting bang.%s\r\n", QYEL, QCYN, GET_NAME(ch), QNRM);
+            send_to_char(ch, "%sPOOFIN:  %s%s appears in a flash of light.%s\r\n", QYEL, QCYN, GET_NAME(ch), QNRM);
         }
 
         if (POOFOUT(ch)) {
             send_to_char(ch, "%sPOOFOUT: %s%s %s%s\r\n", QYEL, QCYN, GET_NAME(ch), POOFOUT(ch), QNRM);
         }
         else {
-            send_to_char(ch, "%sPOOFOUT: %s%s disappears in a puff of smoke.%s\r\n", QYEL, QCYN, GET_NAME(ch), QNRM);
+            send_to_char(ch, "%sPOOFOUT: %s%s turns misty and goes ... somewhere.%s\r\n", QYEL, QCYN, GET_NAME(ch), QNRM);
         }
 
         send_to_char(ch, "Your current zone: %s%d%s\r\n", CCCYN(ch, C_NRM), GET_OLC_ZONE(ch),
@@ -2577,8 +2577,8 @@ ACMD(do_commands)
 {
     int no, i, cmd_num;
     int wizhelp = 0, socials = 0;
-    struct char_data *vict;
-    char buf[MAX_STRING_LENGTH];
+    //struct char_data *vict;
+    //char buf[MAX_STRING_LENGTH];
     const char *commands[1000];
     int overflow = sizeof(commands) / sizeof(commands[0]);
 
@@ -2599,7 +2599,7 @@ ACMD(do_commands)
 
         i = cmd_sort_info[cmd_num];
 
-        if ((complete_cmd_info[i].minimum_level < 0) || (GET_LEVEL(vict) < complete_cmd_info[i].minimum_level)) {
+        if ((complete_cmd_info[i].minimum_level < 0) || (GET_LEVEL(ch) < complete_cmd_info[i].minimum_level)) {
             continue;
         }
 

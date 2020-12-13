@@ -19,6 +19,7 @@ int         invalid_race(struct char_data *ch, struct obj_data *obj);
 int         parse_race(char arg);
 const char  *racetitle_female(int chrace, int level);
 const char  *racetitle_male(int chrace, int level);
+const char  *get_race_string(int race);
 
 
 // Global variables
