@@ -748,6 +748,7 @@ int load_char(const char *name, struct char_data *ch)
  */
 void save_char(struct char_data * ch)
 {
+    // @todo: v3 ascii files - json? xml?
     FILE *fl;
     char filename[40], buf[MAX_STRING_LENGTH], bits[127], bits2[127], bits3[127], bits4[127];
     int i, j, id, save_index = FALSE;
@@ -846,18 +847,18 @@ void save_char(struct char_data * ch)
     if (POOFOUT(ch)) {
         fprintf(fl, "PfOt: %s\n", POOFOUT(ch));
     }
-    if (GET_SEX(ch) != PFDEF_SEX) {
+    //if (GET_SEX(ch) != PFDEF_SEX) {
         fprintf(fl, "Sex : %d\n", GET_SEX(ch));
-    }
-    if (GET_CLASS(ch) != PFDEF_CLASS) {
+    //}
+    //if (GET_CLASS(ch) != PFDEF_CLASS) {
         fprintf(fl, "Clas: %d\n", GET_CLASS(ch));
-    }
-    if (GET_RACE(ch) != PFDEF_RACE) {
+    //}
+    //if (GET_RACE(ch) != PFDEF_RACE) {
         fprintf(fl, "Race: %d\n", GET_RACE(ch));
-    }
-    if (GET_LEVEL(ch) != PFDEF_LEVEL) {
+    //}
+    //if (GET_LEVEL(ch) != PFDEF_LEVEL) {
         fprintf(fl, "Levl: %d\n", GET_LEVEL(ch));
-    }
+    //}
 
     fprintf(fl, "Id  : %ld\n", GET_IDNUM(ch));
     fprintf(fl, "Brth: %ld\n", (long)ch->player.time.birth);
@@ -874,15 +875,15 @@ void save_char(struct char_data * ch)
     if (GET_HOST(ch)) {
         fprintf(fl, "Host: %s\n", GET_HOST(ch));
     }
-    if (GET_HEIGHT(ch) != PFDEF_HEIGHT) {
+    //if (GET_HEIGHT(ch) != PFDEF_HEIGHT) {
         fprintf(fl, "Hite: %d\n", GET_HEIGHT(ch));
-    }
-    if (GET_WEIGHT(ch) != PFDEF_WEIGHT) {
+    //}
+    //if (GET_WEIGHT(ch) != PFDEF_WEIGHT) {
         fprintf(fl, "Wate: %d\n", GET_WEIGHT(ch));
-    }
-    if (GET_ALIGNMENT(ch) != PFDEF_ALIGNMENT) {
+    //}
+    //if (GET_ALIGNMENT(ch) != PFDEF_ALIGNMENT) {
         fprintf(fl, "Alin: %d\n", GET_ALIGNMENT(ch));
-    }
+    //}
 
     sprintascii(bits, PLR_FLAGS(ch)[0]);
     sprintascii(bits2, PLR_FLAGS(ch)[1]);
@@ -927,9 +928,9 @@ void save_char(struct char_data * ch)
     if (GET_INVIS_LEV(ch) != PFDEF_INVISLEV) {
         fprintf(fl, "Invs: %d\n", GET_INVIS_LEV(ch));
     }
-    if (GET_LOADROOM(ch) != PFDEF_LOADROOM) {
+    //if (GET_LOADROOM(ch) != PFDEF_LOADROOM) {
         fprintf(fl, "Room: %d\n", GET_LOADROOM(ch));
-    }
+    //}
 
     if (GET_BAD_PWS(ch) != PFDEF_BADPWS) {
         fprintf(fl, "Badp: %d\n", GET_BAD_PWS(ch));
@@ -958,26 +959,26 @@ void save_char(struct char_data * ch)
         fprintf(fl, "Move: %d/%d\n", GET_MOVE(ch), GET_MAX_MOVE(ch));
     }
 
-    if (GET_STR(ch) != PFDEF_STR || GET_ADD(ch) != PFDEF_STRADD) {
+    //if (GET_STR(ch) != PFDEF_STR || GET_ADD(ch) != PFDEF_STRADD) {
         fprintf(fl, "Str : %d/%d\n", GET_STR(ch), GET_ADD(ch));
-    }
+    //}
 
 
-    if (GET_INT(ch) != PFDEF_INT) {
+    //if (GET_INT(ch) != PFDEF_INT) {
         fprintf(fl, "Int : %d\n", GET_INT(ch));
-    }
-    if (GET_WIS(ch) != PFDEF_WIS) {
+    //}
+    //if (GET_WIS(ch) != PFDEF_WIS) {
         fprintf(fl, "Wis : %d\n", GET_WIS(ch));
-    }
-    if (GET_DEX(ch) != PFDEF_DEX) {
+    //}
+    //if (GET_DEX(ch) != PFDEF_DEX) {
         fprintf(fl, "Dex : %d\n", GET_DEX(ch));
-    }
-    if (GET_CON(ch) != PFDEF_CON) {
+    //}
+    //if (GET_CON(ch) != PFDEF_CON) {
         fprintf(fl, "Con : %d\n", GET_CON(ch));
-    }
-    if (GET_CHA(ch) != PFDEF_CHA) {
+    //}
+    //if (GET_CHA(ch) != PFDEF_CHA) {
         fprintf(fl, "Cha : %d\n", GET_CHA(ch));
-    }
+    //}
 
     if (GET_AC(ch) != PFDEF_AC) {
         fprintf(fl, "Ac  : %d\n", GET_AC(ch));
@@ -985,12 +986,12 @@ void save_char(struct char_data * ch)
     if (GET_GOLD(ch) != PFDEF_GOLD) {
         fprintf(fl, "Gold: %d\n", GET_GOLD(ch));
     }
-    if (GET_BANK_GOLD(ch) != PFDEF_BANK) {
+    //if (GET_BANK_GOLD(ch) != PFDEF_BANK) {
         fprintf(fl, "Bank: %d\n", GET_BANK_GOLD(ch));
-    }
-    if (GET_EXP(ch) != PFDEF_EXP) {
+    //}
+    //if (GET_EXP(ch) != PFDEF_EXP) {
         fprintf(fl, "Exp : %d\n", GET_EXP(ch));
-    }
+    //}
     if (GET_HITROLL(ch) != PFDEF_HITROLL) {
         fprintf(fl, "Hrol: %d\n", GET_HITROLL(ch));
     }
