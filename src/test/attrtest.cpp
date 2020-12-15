@@ -15,6 +15,9 @@
 #include <string.h>
 #include <math.h>
 
+#include "../conf.h"
+#include "../sysdep.h"s
+
 // general utility
 #define TIME_BUF_SZ 64
 #define DEFAULT_STR_BUF 1024
@@ -250,8 +253,10 @@ struct char_data {
 #define GET_RACE(ch) (ch->chrace)
 #define GET_CLASS(ch) (ch->chclass)
 
-#define FAILED C_BRED"FAIL"C_NRM
-#define PASSED C_BGRN"PASS"C_NRM
+#define FAILED_STR C_BRED"FAIL"C_NRM
+#define PASSED_STR C_BGRN"PASS"C_NRM
+
+void init_colour(int argc, char *argv[]);
 
 bool min_tests(size_t &pass_count, size_t &test_count);
 bool max_tests(size_t &pass_count, size_t &test_count);
@@ -261,9 +266,12 @@ bool rand_tests(size_t &pass_count, size_t &test_count);
 //---------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
-    circle_srandom(time(0));
     size_t pass_count,  test_count, total_count = 0, total_pass = 0;
     double total_pct_pass = 0.0;
+
+    init_colour(argc, argv);
+
+    circle_srandom(time(0));
 
     printf("Wooo?\n");
     basic_log("%s--- Test Min/Max/Limit ---%s", C_BYEL, C_NRM);
@@ -292,6 +300,36 @@ int main(int argc, char *argv[])
         total_pct_pass, C_NRM);
 
     return 0;
+}
+
+
+//---------------------------------------------------------------------------
+void init_colour(int argc, char *argv[]) {
+#ifdef _WIN32
+#include <Windows.h>
+#include <winternl.h>
+
+    HANDLE cmd = GetStdHandle(STD_OUTPUT_HANDLE);
+    unsigned long ir = 0;
+    NtQueryObject(cmd, ObjectTypeInformation, NULL, 0, &ir);
+    PPUBLIC_OBJECT_TYPE_INFORMATION info = (PPUBLIC_OBJECT_TYPE_INFORMATION)(malloc(ir));
+    NtQueryObject(cmd, ObjectTypeInformation, info, ir, &ir);
+    if (info->TypeName.Buffer[0] == 'K' && info->TypeName.Buffer[1] == 'e' && info->TypeName.Buffer[2] == 'y') {
+        /*cmd*/
+        printf("Running as cmd\n");
+    }
+    else if (info->TypeName.Buffer[0] == 'F' && info->TypeName.Buffer[1] == 'i' && info->TypeName.Buffer[2] == 'l' && info->TypeName.Buffer[3] == 'e') {
+        /*cygwin*/
+        printf("Running as cygwin\n");
+    }
+    else{
+        /*dont know*/
+        printf("Running as unknown [%s]\n", info->TypeName);
+    }
+    free(info);
+#else
+    printf("Running on non windows\n");
+#endif
 }
 
 //---------------------------------------------------------------------------
@@ -329,7 +367,7 @@ bool min_tests(size_t &pass_count, size_t &test_count) {
         struct test_minmax &test = min_tests[test_num];
         int result = MIN(test.val1, test.val2);
         basic_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
-            C_CYN, test_num+1, test_count, C_NRM, test.name, (result == test.expected ? PASSED : FAILED),
+            C_CYN, test_num+1, test_count, C_NRM, test.name, (result == test.expected ? PASSED_STR : FAILED_STR),
             C_BBLK, test.val1, C_NRM, C_BBLK, test.val2, C_NRM, C_BBLK, result, C_NRM, C_BBLK, test.expected, C_NRM);
         pass_count += (result == test.expected ? 1 : 0);
     }
@@ -368,7 +406,7 @@ bool max_tests(size_t &pass_count, size_t &test_count) {
         struct test_minmax &test = max_tests[test_num];
         int result = MAX(test.val1, test.val2);
         basic_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
-            C_CYN, test_num+1, test_count, C_NRM, test.name, (result == test.expected ? PASSED : FAILED),
+            C_CYN, test_num + 1, test_count, C_NRM, test.name, (result == test.expected ? PASSED_STR : FAILED_STR),
             C_BBLK, test.val1, C_NRM, C_BBLK, test.val2, C_NRM, C_BBLK, result, C_NRM, C_BBLK, test.expected, C_NRM);
         pass_count += (result == test.expected ? 1 : 0);
     }
@@ -433,7 +471,7 @@ bool limit_tests(size_t &pass_count, size_t &test_count) {
         struct test_limit &test = limit_tests[test_num];
         int result = LIMIT(test.val, test.minv, test.maxv);
         basic_log("%s[%2u/%2u] %s %24.24s: %s - Min [%s%3d%s], Val [%s%3d%s], Max [%s%3d%s] -> Got [%s%3d%s], Expected [%s%3d%s]",
-            C_CYN, test_num+1, test_count, C_NRM, test.name, (result == test.expected ? PASSED : FAILED),
+            C_CYN, test_num + 1, test_count, C_NRM, test.name, (result == test.expected ? PASSED_STR : FAILED_STR),
             C_BBLK, test.minv, C_NRM, C_BBLK, test.val, C_NRM, C_BBLK, test.maxv, C_NRM,
             C_BBLK, result, C_NRM, C_BBLK, test.expected, C_NRM);
         pass_count += (result == test.expected ? 1 : 0);
@@ -632,6 +670,11 @@ void basic_vlog(const char *format, va_list args)
     char timeBuf[TIME_BUF_SZ];
     char timeFmt[TIME_BUF_SZ];
 
+#ifdef CIRCLE_WINDOWS
+    time_t ct = time(0);
+    //strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%b %d %H:%M:%S %Y", localtime(&ct));
+    strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%%Y-%%m-%%dT%%H:%%M:%%S", gmtime(&ct));
+#else
     long            ms; // Milliseconds
     time_t          s;  // Seconds
     struct timespec spec;
@@ -653,6 +696,7 @@ void basic_vlog(const char *format, va_list args)
 
     sprintf(timeFmt, "%%Y-%%m-%%dT%%H:%%M:%%S.%03.3ld %%Z", ms);
     (void)strftime(timeBuf, TIME_BUF_SZ, timeFmt, gmtime(&s));
+#endif
 
     fprintf(stderr, "[%s] ", timeBuf);
     vfprintf(stderr, format, args);
