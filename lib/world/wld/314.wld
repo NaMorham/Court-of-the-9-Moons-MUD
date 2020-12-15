@@ -27,7 +27,7 @@ nutball- this voice he hears, he takes to be the Lord Almighty. The
 voice tells him that only through human sacrifice will he ascend
 through the gates of Heaven. X'Raantra, though obviously crazy, is
 extremely enigmatic and has been able to gather a good number of people
-to join in his cult which is centered in the ruins of this old asylum.
+to join in his cult which is centreed in the ruins of this old asylum.
 There are a few spec_procs I added to a couple of mobs - just for
 effect, really. The zone probably will not lack without these procs.
 Links: 00n
@@ -36,8 +36,8 @@ S
 #31401
 At the Old Fountain~
    A fountain, dry and cracked and blackened by grime and dirt, stands in the
-center of this small court.  The fountain boasts the figure of a man standing
-proudly in the center, a thick tome tucked under his one arm and the other hand
+centre of this small court.  The fountain boasts the figure of a man standing
+proudly in the centre, a thick tome tucked under his one arm and the other hand
 holding onto his lapels.  There is still some sort of liquid at the bottom of
 the fountain, but it does not appear to be safe for consumption.
 ~
@@ -134,7 +134,7 @@ S
 The Asylum Grounds~
    Close by to the west is the door to a long two story building made of carved
 stone.  The court around you must once have been quite a sight with the fountain
-in the center and the surrounding buildings, however someone or something caused
+in the centre and the surrounding buildings, however someone or something caused
 all of this to be abandoned and left to rot into its current state.  Perhaps
 funding ran out, perhaps a disease.  One can only surmise.
 ~
@@ -179,7 +179,7 @@ Inner Hall of the Academy~
    The floor of this building is made from some of concrete that was once white
 concrete.  It is now stained black from the years of disuse and neglect, the
 elements getting a solid hold on its degradation.  A door lies on the east wall,
-a small hole cut in upper center area where it appears there might once have
+a small hole cut in upper centre area where it appears there might once have
 been glass placed.  The hallway runs north from here, a thin trail of old blood
 running along the length of the floor.
 ~
@@ -201,7 +201,7 @@ S
 Inner Hall of the Academy~
    The hall here looks much the same as the hall to the south, the grime making
 everything blend together dirtily.  Another door leads off to the east, the same
-opening in its top center where it appears a window might once have been.  The
+opening in its top centre where it appears a window might once have been.  The
 trail of blood continues north to the end of the hall and leads into yet another
 door there.
 ~
@@ -712,7 +712,7 @@ S
 #31437
 Just North of the Courtyard~
    The path enters into the northwest corner of a large stone courtyard,
-complete with a huge stone gazebo in the center.  It turns out the gazebo is the
+complete with a huge stone gazebo in the centre.  It turns out the gazebo is the
 source of the flickering light, as some sort of fire is lit upon it, humans
 moving about around that fire.  All along in the courtyard are also people who
 seem to be about some sort of business, whether swaying in some ritual of some
@@ -789,7 +789,7 @@ D0
 S
 #31442
 Asylum Courtyard~
-   The courtyard here is enormous, dominated in the center by a large gazebo
+   The courtyard here is enormous, dominated in the centre by a large gazebo
 which holds within a flickering flame of some sort.  The stones underfoot are
 tacky, sticking to the soles of boots and shoes, making progress at the very
 least discouraged.
@@ -811,7 +811,7 @@ S
 #31443
 Asylum Courtyard~
    This is the main courtyard for the entire asylum.  A huge stone gazebo
-dominates the center of the courtyard, stone steps leading up to its main floor
+dominates the centre of the courtyard, stone steps leading up to its main floor
 from every direction.  The ground underfoot is tacky to the touch, making feet
 stick it.
 ~
@@ -831,7 +831,7 @@ D3
 S
 #31444
 Asylum Courtyard~
-   This courtyard was once very obviously the center of traffic for the asylum
+   This courtyard was once very obviously the centre of traffic for the asylum
 back in the day.  A large stone gazebo lies directly south from here, a set of
 wide steps leading up into it.  The stone of the courtyard is even more soaked
 with blood than the rest of the previous areas, the thick stains making travel
@@ -854,8 +854,8 @@ D3
 S
 #31445
 Asylum Courtyard~
-   This courtyard was once very obviously the center of traffic for the asylum
-back in the day.  A large stone gazebo lies in the center of the courtyard, a
+   This courtyard was once very obviously the centre of traffic for the asylum
+back in the day.  A large stone gazebo lies in the centre of the courtyard, a
 set of wide steps leading up into it.  The stone of the courtyard is even more
 soaked with blood than the rest of the previous areas, the thick stains making
 travel almost difficult as the thick, dried blood attempts to stick to the
@@ -1177,7 +1177,7 @@ Asylum Courtyard~
    This is the far northeast end of the courtyard.  An old decrepit chapel lies
 to the east, the entrance south from here.  From this angle, a tall bell tower
 can be seen rising high above the chapel, the bell still hanging inside.  A
-large stone gazebo lies in the center of the courtyard, a flickering light
+large stone gazebo lies in the centre of the courtyard, a flickering light
 burninng strong inside.
 ~
 314 1 0 0 0 0
@@ -1193,7 +1193,7 @@ S
 #31459
 Asylum Courtyard~
    The entrance to a chapel lies just south from here, a wide set of stone steps
-leading up east to the main door.  To the southwest, in the center of the
+leading up east to the main door.  To the southwest, in the centre of the
 courtyard, is a large stone gazebo with a ceremony of some sort in progress.
 People of some race or another can be seen shuffling about in the courtyard
 going about some sort of business.
@@ -1218,7 +1218,7 @@ Entrance to the Chapel~
 which has withstood the ravages of time and looters.  The wood must once have
 been very beautiful with its carved cherubs and angels floating about on its
 surface, but now those angels are smeared in blood, their faces ghastly and
-horrific in the flickering light.  The steps up to the gazebo in the center of
+horrific in the flickering light.  The steps up to the gazebo in the centre of
 the courtyard lie just west.
 ~
 314 1 0 0 0 0
@@ -1282,7 +1282,7 @@ S
 Asylum Courtyard~
    This is the south end of the courtyard, bound by a long building who's
 entrance lies to the south, one of two entrances.  The gazebo lies to the
-northeast, in the center of the courtyard.
+northeast, in the centre of the courtyard.
 ~
 314 1 0 0 0 0
 D0
@@ -1326,7 +1326,7 @@ S
 Asylum Courtyard~
    This is the southern end of the courtyard where it butts up against the wall
 of a long stone building.  A door to that building lies to the south, the gazebo
-standing in the center of the courtyard - almost seeming to beckon entry.
+standing in the centre of the courtyard - almost seeming to beckon entry.
 ~
 314 1 0 0 0 0
 D0

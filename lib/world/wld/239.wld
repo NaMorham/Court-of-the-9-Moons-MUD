@@ -605,7 +605,7 @@ D4
 S
 #23921
 A Huge Pile of Bones~
-   The petrified corpse of a slain dragon of immense size lays in the center of
+   The petrified corpse of a slain dragon of immense size lays in the centre of
 a mountain of bones here.  The dragon corpse is surrounded by thousands of
 skeletons of brave dwarven warriors still clad in burnt and partially melted
 armour.  Scattered here and there are smaller skeletons of orcs, wolves, giant
@@ -637,7 +637,7 @@ However the distal side is broken and what remains of it is hanging down the
 chasm in a twisted menagerie of cable, stone, mithril, and gold.  The proximal
 side has somehow remained suspended on the west side, but droops down
 precariously and could tumble into the chasm at any moment.  To the west there
-is a large gray and black heap.  You notice a pile of rubble on the proximal
+is a large grey and black heap.  You notice a pile of rubble on the proximal
 side which doesn't seem to fit there.  The rubble consist of hides, sticks,
 tree trunks, and bones of small animals.  To the north the path delves down
 into the chasm.
@@ -777,7 +777,7 @@ S
 A Lookout Post~
    This is an old orc lookout post.  There are wooden planks on the filthy
 cluttered floor.  A few crude rows of bunks line the back wall.  There is a
-dirty black fireplace in the center of the room.  Around the walls are slits in
+dirty black fireplace in the centre of the room.  Around the walls are slits in
 the sides that someone could look out of.  Leading up and down the tree are
 small footholds someone has used to climb the tree.
 ~
@@ -1540,7 +1540,7 @@ the chasm, lit with the scarlet glow.
 239 264 0 0 0 4
 D2
    An obsidian gate 8 metrons high, 4 metrons wide carved with drow runes.
-There is a red rune in the center of the door which might be a keyhole.
+There is a red rune in the centre of the door which might be a keyhole.
 ~
 gate runed~
 1 23929 23962
@@ -1558,7 +1558,7 @@ or scarlet and dimly lights the path along the chasm.
 E
 gate obsidian~
    An obsidian gate 8 metrons high, 4 metrons wide carved with drow runes.
-There is a red rune in the center of the door which might be a keyhole.
+There is a red rune in the centre of the door which might be a keyhole.
 ~
 S
 #23962
@@ -1571,7 +1571,7 @@ north.  The cave continues on to the south.
 239 140 0 0 0 4
 D0
    A huge obsidian door carved with drow runes.  The door is about 8 metrons
-high and there is a red rune in the center for a key.
+high and there is a red rune in the centre for a key.
 ~
 gate runed~
 1 23929 23961
@@ -1583,7 +1583,7 @@ Towards a dim passageway.
 E
 gate~
    An obsidian gate 8 metrons high, 4 metrons wide carved with drow runes.
-There is a red rune in the center of the door which might be a keyhole.
+There is a red rune in the centre of the door which might be a keyhole.
 ~
 S
 #23963
@@ -2081,7 +2081,7 @@ spider web approching a central zone.  The strands are about 20 metrons long
 and 8 cm thick.  If one fell off a supporting strand, they would not fall too
 far before landing on another.  The strands are symetrically designed and
 radiate from the central chamber within the zone.  One can barely make out
-another chamber directly in the center which is suspended in space by the
+another chamber directly in the centre which is suspended in space by the
 thousands of strands of spiderweb supporting it.
 ~
 239 137 0 0 0 5

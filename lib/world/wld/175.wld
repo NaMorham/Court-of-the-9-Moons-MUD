@@ -66,7 +66,7 @@ quicksilver mirror.
 ~
 175 8 0 0 0 0
 D0
-The mirror is a gray stone frame the size of a door set against the wall. Within it, a vertical pool of quicksilver ripples gently, held in place by some magical means.
+The mirror is a grey stone frame the size of a door set against the wall. Within it, a vertical pool of quicksilver ripples gently, held in place by some magical means.
 ~
 ~
 0 0 17515
@@ -89,7 +89,7 @@ To the west lies the base of a staircase.
 0 0 17516
 E
 mirror~
-   The mirror is a gray stone frame the size of a door set against the wall.
+   The mirror is a grey stone frame the size of a door set against the wall.
 Within it, a vertical pool of quicksilver ripples gently, held in place by some
 magical means.
 ~
@@ -246,7 +246,7 @@ The Guardian Room~
 the four cardinal directions lies a door, and only the northern is even
 remotely earthly in appearance.  The west wall has a carved obsidian doorframe
 attached, pure blackness inside.  The east is the inverse of the first, a
-carved ivory frame with glowing white light.  The south has a gray stone frame,
+carved ivory frame with glowing white light.  The south has a grey stone frame,
 and liquid quicksilver ripples gently on the surface.
 ~
 175 8 0 0 0 0
@@ -423,7 +423,7 @@ T 17507
 #17520
 The Forge.~
    This room looks to be an oversized forge.  An anvil larger then you are
-stands in the center of the room, and several huge smithy weapons adorn the
+stands in the centre of the room, and several huge smithy weapons adorn the
 walls.  The chimeny to the forge looks safe to climb, but a large grate blocks
 your path upwards.
 ~
@@ -456,7 +456,7 @@ T 17508
 The Windy Chimney~
    By some trick of placement, a gale blows up the chimney from below.  The
 rushing air howls and wails, pulling and pushing at anything not fixed to the
-wall.  Above you is another grate, with a plaque fixed in the center.
+wall.  Above you is another grate, with a plaque fixed in the centre.
 ~
 175 0 0 0 0 0
 D5

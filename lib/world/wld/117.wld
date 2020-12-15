@@ -76,10 +76,10 @@ Lobby~
    The lobby of the tower is packed with shoppers.  To the west lies 'The
 Turkey's Gobble', a restaurant famous for it's broiled turkey.  To the north .
 is 'Defender's Dream', an armour shop with strong looking protective gear on
-display.  There is an orchestra playing in the center of the lobby, with many
+display.  There is an orchestra playing in the centre of the lobby, with many
 people sitting down at benches to listen to the majestic music.  Up above are
 the houses and offices of the members of the community government There are some
-pews lined around the center where the Orchestra plays.
+pews lined around the centre where the Orchestra plays.
 ~
 117 8 0 0 0 0
 D0
@@ -108,7 +108,7 @@ display~
 ~
 E
 orchestra~
-   There is a full orchestra at the center of the lobby.  They are playing a
+   There is a full orchestra at the centre of the lobby.  They are playing a
 song that seems to relax the soul and fit the scenery quite well.
 ~
 S
@@ -168,7 +168,7 @@ fashion.
 E
 towers~
    The towers are tall and they seem to overlook all of the red forest
-surrounding it.  They are made of a gray stone and have many windows in the
+surrounding it.  They are made of a grey stone and have many windows in the
 walls.
 ~
 E
@@ -291,7 +291,7 @@ T 11723
 Phel's Office~
    This room is extremely fancy looking.  Its walls are painted tan with a dark
 green border at the ceiling.  The ceiling has an elaborate fan which blows a
-nice breeze.  The desk in the center of the room is circular, complete with a
+nice breeze.  The desk in the centre of the room is circular, complete with a
 nice computer, a telephone, some paperwork, and decorations.  The floor is made
 of marble just like the corridor.
 ~
@@ -302,12 +302,12 @@ D1
 0 11700 11707
 E
 celing fan~
-   The smooth celing has an elaborate fan in the center which blows a soothing
+   The smooth celing has an elaborate fan in the centre which blows a soothing
 breeze in the room.
 ~
 E
 desk paperwork decorations computer telephone~
-   The desk in the center of the room is circular, complete with a nice
+   The desk in the centre of the room is circular, complete with a nice
 computer, a telephone, some paperwork, and decorations.
 ~
 E
@@ -637,7 +637,7 @@ S
 #11722
 The Town Plaza~
    The white path leads here, into a large circular park with large stumps
-people can sit on around the edge and a huge water fountain in the center that
+people can sit on around the edge and a huge water fountain in the centre that
 citizens are drinking from.  The most noticeable thing about the plaza is the
 gigantic tree in the northeast corner.  It is no ordinary tree around here, for
 the leaves are green!  The people gather around this mysterious tree and wonder
@@ -682,7 +682,7 @@ T 11715
 Pathway~
    This pathway is the junction between the plaza and the second tower.  The
 forest is only slightly visible from here, and the tile of the path is clean and
-beautiful flowers line the sides.  The looming gray stone tower is to the north
+beautiful flowers line the sides.  The looming grey stone tower is to the north
 and the town plaza is to the south.
 ~
 117 4 0 0 0 1
@@ -706,7 +706,7 @@ T 11716
 Entrance to Tower #2 (Housing)~
    The mediocre archway made of stone bears the gate to the domestic lives of
 Los Torres.  The tower stretches far up, though not so far as to drive anyone
-living at the top insane from vertigo.  It is made of dark gray stone and is
+living at the top insane from vertigo.  It is made of dark grey stone and is
 spruced here and there with windows made of crystal clear glass.  The white
 pathway is kept nice and tidy for the citizens passing through.  The forest of
 red continues north even though the path ends here.
@@ -722,7 +722,7 @@ D2
 0 11700 11723
 E
 tower windows~
-   The tower stands high and is made of a dark gray coloured stone.  Windows made
+   The tower stands high and is made of a dark grey coloured stone.  Windows made
 of crystal clear glass appear occasionally on the wall.
 ~
 E
@@ -731,7 +731,7 @@ path~
 ~
 E
 archway~
-   The archway is made of a dark gray stone and isn't to impressive.  The gate
+   The archway is made of a dark grey stone and isn't to impressive.  The gate
 underneath it leads into all the houses of the citizens of Los Torres.
 ~
 S
@@ -789,7 +789,7 @@ T 11717
 #11726
 Behind the Fireplace~
    The fireplace opened up and made a small passageway!  It's pretty bare made
-of gray stone, and it has a bunch of ash particles in the air.  It looks like
+of grey stone, and it has a bunch of ash particles in the air.  It looks like
 the outside is just to the north.
 ~
 117 264 0 0 0 0
@@ -834,7 +834,7 @@ S
 Second Floor~
    The staircase continues upward throughout the edge of the tower.  The
 staircase continues both upwards and downwards.  There is a large round rug
-spread over the center of the floor.
+spread over the centre of the floor.
 ~
 117 8 0 0 0 0
 D0
@@ -859,7 +859,7 @@ staircase~
 ~
 E
 rug~
-   The rug is spread over the center of the floor, giving the room some
+   The rug is spread over the centre of the floor, giving the room some
 atmosphere.
 ~
 S
@@ -998,7 +998,7 @@ S
 Fourth Floor~
    Yet again, the stairs lead upward.  This is the fourth floor, and there are
 an unusually large amount of windows in this room.  There is another circular
-rug in the center of the room.
+rug in the centre of the room.
 ~
 117 0 0 0 0 0
 D0
@@ -1073,7 +1073,7 @@ S
 Fifth Floor~
    This is a very tall tower!  The end must be near, for there is a small amount
 of light coming from the exit up.  Yet another square rug is placed in the
-center of the floor.
+centre of the floor.
 ~
 117 8 0 0 0 0
 D0
@@ -1159,7 +1159,7 @@ S
 #11740
 Sixth Floor~
    This is the final floor inside the tower, the top is just above.  Light
-pours in from the exit up.  There isn't a rug in the center of the floor, but
+pours in from the exit up.  There isn't a rug in the centre of the floor, but
 instead, a small statue dedicated to Thedoric, of all people.
 ~
 117 0 0 0 0 0
@@ -1186,7 +1186,7 @@ Downstairs the rooms are a bit darker.
 ~
 E
 statue thedoric~
-   In the center of the room is a small statue dedicated to Thedoric, who is
+   In the centre of the room is a small statue dedicated to Thedoric, who is
 doing a dramatic pose.  By the looks of it, he hasn't really done anything.
 ~
 S
@@ -1388,7 +1388,7 @@ S
 #11751
 Defender's Dream~
    Defender's Dream is a store dealing with armour and weapons.  There are all
-sorts of things on display from a large gray sword to a blue helm with a face
+sorts of things on display from a large grey sword to a blue helm with a face
 mask.  There is a sign that says 'Items on display are for DISPLAY ONLY, DO NOT
 TOUCH' The floor is a white tile which has been stained with many footprints
 from all the shoppers.  The ceiling is painted a rather alarming shade of red
@@ -1624,7 +1624,7 @@ S
 #11759
 In a Mysterious Cave~
    The cave leads in further and the light gets dimmer and dimmer with each foot
-inward.  There isn't much here to look at other than a gray rock wall and a
+inward.  There isn't much here to look at other than a grey rock wall and a
 couple of stalactices.  There is a wooden wall with a door that has a barred
 window to the east.  There are moaning sounds coming from inside the door.
 There is a putrid smell of urine in this room.

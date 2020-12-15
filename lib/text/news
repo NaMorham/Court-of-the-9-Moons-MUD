@@ -1,6 +1,19 @@
 (lib/text/news)
-               THE tbaMUD HERALD
-            "We addict players for their own enjoyment."
+                           THE 9 MOONS TIMES
+
+------------------------------------------------------------------
+**  Races are available for player characters.  Human, Trolloc, Ogier
+    and Fade races are available.  At this stage, the only differences
+    are a base stat adjustment, and class restrictions.
+      Humans: All classes - the most flexible of the races.
+      Trollocs: Warrior and Thief only - all about physical abilities.
+      Ogier: Warrior and Cleric - the Ogier are fierce but caring.
+      Fade: Warrior, Thief and Magic-User.
+    These class restrictions will be changed as the classes are updated
+    and classes are changed, added or maybe removed.
+
+			   THE tbaMUD HERALD
+   		 "We addict players for their own enjoyment."
 
 NEW COMMANDS AND NEW MUD BEHAVIOR:
 ---------------------------------

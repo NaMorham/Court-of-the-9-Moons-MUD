@@ -3,7 +3,7 @@ MouseRider's Temple~
    The inside of this temple is austere yet majestic.  The pillars of
 marble sweep up to the ceiling, melting into the dome overhead without
 a seam.  A blazing red carpet leads from the entrance to the throne in
-the center of the room.  This is truly the home of a great sage!
+the centre of the room.  This is truly the home of a great sage!
 ~
 292 28 0 0 0 0
 D0
@@ -88,7 +88,7 @@ door west~
 S
 #29202
 Plaza of Kerofk~
-   This is the center of Kerofk, physically and culturally.  Many
+   This is the centre of Kerofk, physically and culturally.  Many
 people are here, milling about and standing in line to enter the great
 white temple to your north.  To the south is a smaller blue temple,
 its doors locked by great bands of magic.  Several people glare at
@@ -135,7 +135,7 @@ D5
 0 -1 29300
 S
 #29204
-Center Road, East~
+Centre Road, East~
    This road is very busy with traffic.  It seems that all the
 citizens of Kerofk are here, bustling and jostling each other in an
 attempt to get all they have to do done as fast as possible.  Bump Oof
@@ -157,7 +157,7 @@ D3
 S
 #29205
 Intersection~
-   This is the intersection of Citizen Road and Center Road.  The
+   This is the intersection of Citizen Road and Centre Road.  The
 pedestrians file past each other with practiced ease.  You have no
 clue how to get across...  Wait, there's an opening!  Sprint, Turn,
 Jab!  Run, Run, Run...  you're across! You look up at the never-ending
@@ -182,7 +182,7 @@ D3
 0 -1 29204
 S
 #29206
-Center Road, East~
+Centre Road, East~
    The stars shine down on you blindly as you walk down Citizen's
 Road, and for a moment you forget what kind of strange place you're
 in.  A flowerbox filled with wilted flowers brings you back to
@@ -215,7 +215,7 @@ D0
 S
 #29208
 Intersection at the Cliff's Edge~
-   This is the intersection of Cliffside Road, and Center Road.
+   This is the intersection of Cliffside Road, and Centre Road.
    Cliffside?
    About fifteen feet ahead of you there is a sheer precipice that
 drops down about a thousand feet into the dark ocean.  You don't think
@@ -578,12 +578,12 @@ D2
 S
 #29224
 Intersection~
-   There are just too many people here at the intersection of Center
+   There are just too many people here at the intersection of Centre
 Road and Business Road!  Too many people, walking around hurriedly.
 You hustle to avoid getting bumped over only to nearly get pushed
 over.  Your reflexes save you, but you feel you better get out of this
 intersection soon.
-   Center Road is east-west, Business road is north-south.
+   Centre Road is east-west, Business road is north-south.
 ~
 292 8 0 0 0 1
 D0
@@ -604,13 +604,13 @@ D3
 0 -1 29238
 S
 #29225
-Center Road, West~
-   Center Road is a madhouse of people bumping into other people,
+Centre Road, West~
+   Centre Road is a madhouse of people bumping into other people,
 including you!  One of the main attractions here is the Town Hall to
 the north, which holds the city's jail, courtroom, and council
 chambers, not to mention Mayor Kell's office.  To the east you see a
 huge white temple with a line outside, and a smaller blue temple.
-   Center Road continues east and west.
+   Centre Road continues east and west.
 ~
 292 8 0 0 0 1
 D0
@@ -715,7 +715,7 @@ S
 #29230
 Business Road, South~
    Shops line this road , some open and some closed.  Northwards you
-see the intersection of of Center Road and Business Road, and
+see the intersection of of Centre Road and Business Road, and
 southwards is another intersection--Business Road and Moon Gate Road.
    There is a shop to the west, a dirty sign proclaiming it 'OPEN'.
 ~
@@ -796,13 +796,13 @@ D2
 S
 #29234
 Intersection~
-   Center Road starts here, running deep into the heart of Kerofk.
+   Centre Road starts here, running deep into the heart of Kerofk.
 You see all sorts of large buildings down its length, including a big
 white temple structure along the north side far to the east, with a
 smaller blue temple across the street from it.  With all of the grand
 architecture, and the majesty of the starry skies above, you know this
 is a sight you'll never forget.
-   Center Road leads east, Wall Side Road continues north-south.
+   Centre Road leads east, Wall Side Road continues north-south.
 ~
 292 8 0 0 0 1
 D0
@@ -879,12 +879,12 @@ D3
 0 -1 29236
 S
 #29238
-Center Road, West~
-   Center Road is lined with grand buildings up and down its entire
+Centre Road, West~
+   Centre Road is lined with grand buildings up and down its entire
 length; for instance, a huge temple of XXXX lies to the south.  Even
 for a temple, this building is big!  Perhaps it would be worth a look
 around?
-   Center Road continues to the east and west.
+   Centre Road continues to the east and west.
 ~
 292 8 0 0 0 1
 D1
@@ -1489,7 +1489,7 @@ S
 Captain's Office~
    This man's office is a testimonial to battle.  Exotic weapons that
 you've never seen before line the walls, and you notice some
-bloodstains on the floor.  A large area in the center is bared,
+bloodstains on the floor.  A large area in the centre is bared,
 allowing sparring room.
 ~
 292 8 0 0 0 0
@@ -1720,7 +1720,7 @@ S
 Fountain Area~
    Unpruned trees block out what little light there was outside the
 garden in this close area.  A small fountain/pool of tarnished marble
-sits in the center, with scum and algae covering its surface.  Small
+sits in the centre, with scum and algae covering its surface.  Small
 creatures flit deep in its depths, and you are not sure you want to
 know exactly what they are.
    You can head south, to the garden's entrance, or west, to a more
@@ -1916,7 +1916,7 @@ S
 #29294
 Bedroom~
    This bedroom has been made up for two people.  There are bunk beds
-in the center of the room, and different sets of run-down furniture on
+in the centre of the room, and different sets of run-down furniture on
 each side.  On the right is a rather neat desk, chair, a chest of
 drawers, and on the left there is just a mess of clothes, papers,
 books, and half-eaten food.  There isn't much interesting here,

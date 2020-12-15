@@ -7,7 +7,7 @@ faint sound of water running near by . Here lies a dirt path leading to the
 north.  To the east is a small garden.  To the west there are trees and a
 forested path.
 ~
-115 32768 0 0 0 0
+115 32768 0 0 0 3
 D0
 ~
 ~
@@ -59,7 +59,7 @@ D2
 0 0 11500
 S
 #11502
-The Center of Monastery~
+The Centre of Monastery~
    Once entered, there is a feeling as if being warded off by some unknown
 power.  This room looks as the one before it.  There are exits to the north,
 south, east, and west.
@@ -288,7 +288,7 @@ Forested Path~
 the trees to the north you can see the southern wall of an old monastery.  To
 the east and west the path continues.
 ~
-115 32768 0 0 0 0
+115 32768 0 0 0 3
 D0
 ~
 ~
@@ -687,7 +687,7 @@ S
 #11535
 The Garden~
    This section of the garden looks abandoned.  It appears that no one has cared
-for this section in a long time.  There is no apparant sign of life but it is
+for this section in a long time.  There is no apparent sign of life but it is
 noticed that there to the north lies the wall to the monestary .
 ~
 115 32768 0 0 0 0
@@ -916,7 +916,7 @@ Entrance to the Battlegrounds~
 monastery but older in many ways.  It looks as if this building wasn't quite
 completed before it was ransacked by someone.
 ~
-115 32772 0 0 0 0
+115 32772 0 0 0 2
 D0
 ~
 ~
@@ -1286,7 +1286,7 @@ S
 #11566
 The Battlegrounds~
    A trail of blood and body parts leads towards the east.  You are just about
-in the center of the battlefield.  The body count is highest here and you find
+in the centre of the battlefield.  The body count is highest here and you find
 it hard to believe so many monks have died.
 ~
 115 32768 0 0 0 0
@@ -1308,7 +1308,7 @@ D3
 0 0 11565
 S
 #11567
-The Center of the Battlegrounds~
+The Centre of the Battlegrounds~
    A pile of dead monks surround a large centaur corpse.  The monks seem to
 have overwhelmed the beast by sure numbers, and the majority seem to have died
 in the attempt.  The battlefield stretches around you in all directions.

@@ -280,7 +280,7 @@ The Southern Road~
    A large gate has been built into the inner city wall here to allow
 adventurers to pass between the temple and the southern half of the city.  The
 clerics' quarters lie to the west while the magi quarters are to the east.
-Within their centers rises the Tower of the High Council of Clerics and the
+Within their centres rises the Tower of the High Council of Clerics and the
 Tower of the Magi respectively.
 ~
 3 0 0 0 0 1
@@ -514,7 +514,7 @@ S
 #325
 A Training Room~
    A rug lines the floor where several clerics in training listen intently to a
-gray-haired man who is drawing something on a board.  He often uses words of a
+grey-haired man who is drawing something on a board.  He often uses words of a
 different language that are very hard to follow and impossible to understand.
 ~
 3 8 0 0 0 1
@@ -784,7 +784,7 @@ door~
 S
 #339
 The Tower of the High Council of Clerics~
-   A large archway leads into the center of the Clerics' Quarters just to the
+   A large archway leads into the centre of the Clerics' Quarters just to the
 west.  The Tower is bathed in bright white light that reflects off every
 surface.  All around, the soft murmur of healers in training or going about
 their daily routine can be heard.
@@ -1003,7 +1003,7 @@ The Tower of the Magi~
 marble, but upon closer examination has no grain within it.  Looking into the
 wood causes one to lose themselves as they peer further and further into the
 blackness.  It is impossible to tell if this is caused by magic or just a simple
-trick of the eye.  To the east is the center of the Magi Quarters.
+trick of the eye.  To the east is the centre of the Magi Quarters.
 ~
 3 0 0 0 0 1
 D0
@@ -1144,7 +1144,7 @@ S
 #354
 Clerics' Hallway~
    The smell of exotic medicines fills the entire tower.  A large open area to
-the north, the center of the tower, holds a set of stairs leading higher up into
+the north, the centre of the tower, holds a set of stairs leading higher up into
 the tower.  Small benches line the walls here, allowing people to rest from
 their adentures.
 ~
@@ -1215,7 +1215,7 @@ D1
 S
 #358
 A Tower Hallway~
-   Through a small door to the north one can see the center of the tower where a
+   Through a small door to the north one can see the centre of the tower where a
 set of spiral staircases lead to the second floor.  The Orb of Sanctum is
 protected somewhere within this tower.  The Master Magi have been given the task
 of ensuring its safety.
@@ -1373,7 +1373,7 @@ door~
 2 0 225
 E
 floor~
-   The stone floor is the same shade of gray as the sky and is completely plain
+   The stone floor is the same shade of grey as the sky and is completely plain
 and unscratched. It is probably too hard for anything to leave as much as a
 scratch on it.
 ~

@@ -191,11 +191,11 @@ Red portal entrance - 23862~
 1 c 100
 en~
 if %cmd.mudcommand% == enter && red /= %arg%
-  %send% %actor% You enter a large blue portal.
-  %echoaround% %actor% %actor.name% steps into a large blue portal.
+  %send% %actor% You enter a large red portal.
+  %echoaround% %actor% %actor.name% steps into a large red portal.
   %teleport% %actor% 23862
   %force% %actor% look
-  %echoaround% %actor% steps through a large blue portal.
+  %echoaround% %actor% steps through a large red portal.
 else
   %send% %actor% enter what?!
 end

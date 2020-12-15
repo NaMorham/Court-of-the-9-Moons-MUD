@@ -27,7 +27,7 @@ Objects      : 15
 Shops        : 0
 Triggers     : 0
 Theme        : Gladiator Arena
-Plot         : Modeled after a Roman amphitheater.
+Plot         : Modeled after a Roman amphitheatre.
 Links        : 00es
 
 ~
@@ -71,7 +71,7 @@ Gladiators Entrance~
    Five separate arenas are accessible here, one for each class and a fifth
 which can be used by any.  To the north is the Mages Arena, down is the Warriors
 Arena.  East is the Thieves Arena and west is the Clerics arena.  Stairs leading
-up take you into the Main arena in the center of the Amphitheater.
+up take you into the Main arena in the centre of the Amphitheatre.
 ~
 20 0 0 0 0 0
 D0
@@ -213,7 +213,7 @@ Gladiators Cell~
 war.  It would seem that for men of these categories it was a matter of going
 from the frying pan into the fire, but that is a misunderstanding.  Becoming a
 gladiator is obviously better fate than being put to death by being set upon by
-wild animals or being tortured in the amphitheater.
+wild animals or being tortured in the amphitheatre.
 ~
 20 0 0 0 0 0
 D0
@@ -607,7 +607,7 @@ D2
 S
 #2033
 Prisons~
-   The prison continues north out the back entrance of the amphitheater and
+   The prison continues north out the back entrance of the amphitheatre and
 south deeper into the prisons.  A trail of blood leads east.  Wheelbarrow
 treadmarks are visible in the blood.
 ~
@@ -1466,7 +1466,7 @@ D3
 S
 #2075
 Main Arena~
-   You stand in the center of the arena.  The crowd starts to calm down
+   You stand in the centre of the arena.  The crowd starts to calm down
 and silence blankets the arena as everyone waits in anticipation.  Are
 you ready to Rumble?
 ~
@@ -1562,7 +1562,7 @@ D3
 0 0 2076
 S
 #2080
-Roman Ampitheater~
+Roman Ampitheatre~
    The arena below you is empty right now, but from the shouting of the
 crowd you expect the games are about to begin.  The crowd that seems to
 be more of a mob than anything else is growing impatient.
@@ -1578,8 +1578,8 @@ D2
 0 0 2095
 S
 #2081
-Roman Ampitheater~
-   The amphitheater is a microcosm of Roman society.  The seating
+Roman Ampitheatre~
+   The amphitheatre is a microcosm of Roman society.  The seating
 arrangements reflect the stratification of Roman society.  The emperor
 has a special box for himself and his family.  Senators and knights sit in
 their own special section.  Soldiers are separated from civilians, married
@@ -1615,7 +1615,7 @@ D3
 0 0 2081
 S
 #2083
-Roman Amphitheater~
+Roman Amphitheatre~
    Certain criminals are executed here by being given to the wild beasts
 or are forced to fight to the death as gladiators.  It also represents the
 domination of Rome over its enemies: prisoners of war are either executed
@@ -1634,7 +1634,7 @@ D3
 0 0 2082
 S
 #2084
-Roman Amphitheater~
+Roman Amphitheatre~
    Several slaves walk into the arena with barrows of sand to cover over the
 blood stains and prepare for the next bout.  The populace is once again
 getting restless.
@@ -1650,9 +1650,9 @@ D3
 0 0 2083
 S
 #2085
-Roman Amphitheater~
+Roman Amphitheatre~
    Slaves, that had been forced to exhaust themselves helping to finish
-building the very amphitheater in which they are to die, are pushed into the
+building the very amphitheatre in which they are to die, are pushed into the
 arena.  As the mob screams, howls and roars, barred doors are lifted,
 releasing man-eating lions and tigers who have not been fed for quite a time.
 ~
@@ -1667,7 +1667,7 @@ D2
 0 0 2086
 S
 #2086
-Roman Amphitheater~
+Roman Amphitheatre~
    At last this fighting seems to have gone on long enough to satisfy,
 momentarily, the mob.  The few survivors retire to get their laurel crowns,
 their bags of gold and to anticipate the adulation of Rome.  Squads of
@@ -1688,7 +1688,7 @@ D2
 0 0 2087
 S
 #2087
-Roman Amphitheater~
+Roman Amphitheatre~
    Flashing swords, the clash of steel, and the first wounds arouse the
 passions, the hatred and the desperate fury of the gladiators and inflame
 the blood-lust of the mob.  The shouts and yells and screams of the
@@ -1709,7 +1709,7 @@ D2
 0 0 2088
 S
 #2088
-Roman Amphitheater~
+Roman Amphitheatre~
    Another fanfare of trumpets announces the entry of two teams of 24
 gladiators in charge of two renowned trainers, themselves former gladiators
 who, scarred and maimed, have somehow survived with their glory from many a
@@ -1730,7 +1730,7 @@ D3
 0 0 2089
 S
 #2089
-Roman Amphitheater~
+Roman Amphitheatre~
    A tremendous fanfare of trumpets follows the entrance of the Emperor.
 The Games begin.  It is the turn of the gladiators, men trained for battle,
 sworn to the gladiators' oath to suffer death by fire, in chains, under
@@ -1748,9 +1748,9 @@ D3
 0 0 2090
 S
 #2090
-Roman Amphitheater~
+Roman Amphitheatre~
    You walk under a spread of canvas which sailors of the fleet have slung
-as a partial roof from masts all around the amphitheater's rim, to serve
+as a partial roof from masts all around the amphitheatre's rim, to serve
 as a shield against the sun.  It makes a hothouse of the upper seats.
 After the solemn, long procession of civic dignitaries, priests and
 performers, together with images of the gods, the entry of the Emperor
@@ -1768,7 +1768,7 @@ D3
 0 0 2091
 S
 #2091
-Roman Amphitheater~
+Roman Amphitheatre~
    The first rows are filled with senators, priests, augurs, magistrates,
 and other officials of distinction.  Up to the first 17 rows are crammed
 with the worthy citizens of wealth and standing.  Above them and entirely
@@ -1786,8 +1786,8 @@ D3
 0 0 2092
 S
 #2092
-Roman Amphitheater~
-   The whole amphitheater and the lavish shows held in it are arranged to
+Roman Amphitheatre~
+   The whole amphitheatre and the lavish shows held in it are arranged to
 keep the populace of this city amused.  Excitable and noisy, the crowds
 near-animal instincts and passions, unrestrained by education, good manners
 or breeding, are squashed promiscuously together, men, women and children,
@@ -1804,7 +1804,7 @@ D1
 0 0 2091
 S
 #2093
-Roman Amphitheater~
+Roman Amphitheatre~
    It is here the Romans hold their gladiatorial games, with man against
 man or man against beast.  Trap doors in the floor allow famous gladiators
 to make grand entrances, or to allow the Caesar to spring animals into the
@@ -1821,8 +1821,8 @@ D2
 0 0 2092
 S
 #2094
-Roman Amphitheater~
-   You have entered a great oval amphitheater, also known as the Colosseum.
+Roman Amphitheatre~
+   You have entered a great oval amphitheatre, also known as the Colosseum.
 Crowds of people pour in through the entrance, pushing, shoving and
 scrambling to fill the top half of the immense number of seats looking down
 on the huge arena.  It looks like the whole of Rome is here.
@@ -1842,7 +1842,7 @@ D5
 0 0 2001
 S
 #2095
-Roman Amphitheater~
+Roman Amphitheatre~
    Thousands of people are crowded together, pushing, shoving, trying to
 find the best view of the arena below.  A bout must be getting started soon.
 Gladiators fight for money or in order to compensate for crimes they have
@@ -1872,8 +1872,8 @@ D3
 0 0 2033
 S
 #2097
-Outside the Amphitheater~
-   The amphitheater towers above you to the south and you stare at the impressive
+Outside the Amphitheatre~
+   The amphitheatre towers above you to the south and you stare at the impressive
 Roman architecture.  The smell of death hangs heavy in the air.  So many
 gladiators have fought and died in this place.
 ~

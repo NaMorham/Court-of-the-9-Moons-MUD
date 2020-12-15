@@ -26,7 +26,7 @@
 *                           Offensive Spells                              *
 ***************************************************************************
 
-* Burning Hands
+* burning hands 5
 M
 5
 You have burned $N to death!
@@ -42,7 +42,7 @@ Your attempt to burn $N nears BLASPHEMY!!!
 The pitiful creature before you tries to burn you.
 Unaware of the risks, $n tries to burn $N.
 
-* Call Lightning
+* call lightning 6
 M
 6
 Your lightning bolt kills $N!
@@ -58,7 +58,7 @@ $N stops your lightning with a single gesture, BEWARE!!!
 You stop $n's lightning with a sure hand, no time for children's games...
 $n's lightning disappears as $N makes a simple gesture.
 
-* Chill Touch
+* chill touch 8
 M
 8
 You chill $N, remember to put flowers on $S grave...
@@ -74,7 +74,7 @@ Are you trying to chill $N? -- what a joke!!
 $n tries to chill you, what a laugh...
 $N starts to laugh as $n turns chilly!
 
-* Color Spray
+* color spray 10
 M
 10
 YOU KILLED $N!!! -- don't you feel ashamed...
@@ -90,7 +90,7 @@ Your spray of colors turn into butterflies as $N frowns.
 Your frown is enough to turn $n's color spray into little butterflies.
 The air is filled with butterflies as $N frowns at $n's color spray.
 
-* Dispel Evil
+* dispel evil 22
 M
 22
 $N is dissolved by your goodness.
@@ -106,7 +106,7 @@ Did you really expect $M to suffer?
 $n unfruitfully tries to dispel you.
 $n is stupid...
 
-* Earthquake
+* earthquake 23
 M
 23
 The earth opens beneath $N's feet and swallows $M whole!
@@ -122,7 +122,7 @@ $N gracefully levitates as the earth shifts beneath $S feet under $M.
 You gracefully levitate as the earth shifts underneath you.
 $N gracefully levitates as the earth shifts beneath $S feet under $M.
 
-* Energy Drain
+* energy drain 25
 M
 25
 $N crumples as you kill $M by draining $S energy!
@@ -138,7 +138,7 @@ You waste energy trying to drain $N!
 How amusing -- $n tries to drain you!
 $N's eyes twinkle with laughter as $n tries to drain $M.
 
-* Fireball
+* fireball 26
 M
 26
 Your fireball hits $N with full force, causing an immediate death!
@@ -154,7 +154,7 @@ How shameful to throw fireballs at a GOD!!!
 You choose to ignore $n's shameful attempt to fireball you.
 $n's fireball is tactfully ignored by $N.
 
-* Harm
+* harm 27
 M
 27
 As you finish the incantation of the spell, $N falls dead due to the amount of harm $E takes!
@@ -170,7 +170,7 @@ Harm a god?  Are you serious?  Of course $N avoids it casually.
 $n tries to harm you.  Poor sod.
 What a buffoon!  $n looks somewhat perturbed as $N ignores the recently cast harm spell.
 
-* Lightning Bolt
+* lightning bolt 30
 M
 30
 Your lightning bolt shatters $N to pieces!
@@ -186,7 +186,7 @@ Your lightning bolt is extinguished as mighty $N moves $S ears!
 You move your ears to extinguish $n's lightning bolt.
 $N moves $S ears and $n's lightning bolt is extinguished!
 
-* Magic Missile
+* magic missile 32
 M
 32
 The magic missile tears away the remaining life of $N!
@@ -202,7 +202,7 @@ Your magic missile makes $N roar with laughter.
 You can't help laughing as $n sends a magic missile at you.
 $N starts to roar with laughter as $n sends a magic missile at $M.
 
-* Shocking Grasp
+* shocking grasp 37
 M
 37
 $N dies while looking rather shocked!
@@ -218,7 +218,7 @@ You shockingly realize you can't shock $N...
 These puny creatures are shocking at times...
 The atmosphere gets loaded as $n tries to shock $N!
 
-* Dispel Good
+* dispel good 46
 M
 46
 $N is dissolved by your evil.
@@ -238,7 +238,7 @@ $n is stupid...
 *                           Offensive Skills                              *
 ***************************************************************************
 
-* Backstab
+* backstab 131
 M
 131
 $N makes a strange sound but is suddenly very silent as you place $p in $S back.
@@ -254,7 +254,7 @@ $N sends you a look that makes you forget all about backstabbing.
 $n tries to backstab you, but changes $s mind.
 $n tries to backstab $N, but changes $s mind.
 
-* Bash
+* bash 132
 M
 132
 $N doesn't recover from your bash! -- $E is dead.
@@ -270,7 +270,7 @@ Your effort to bash $N sends YOU sprawling on the ground.
 $n fruitlessly tries to bash you and is sent sprawling.
 $n dares a bash at $N and is sent sprawling without touching $M.
 
-* Kick
+* kick 134
 M
 134
 Your kick at $N's face splits $S head open -- yummy!
@@ -305,7 +305,7 @@ $n starts kicking a huge stone which suddenly appears.
 *                           Weapon Attacks                                *
 ***************************************************************************
 
-* Hit
+* hit 300
 M
 300
 You hit $N with a blow that breaks $S spine!
@@ -366,7 +366,7 @@ Your fist flops as your body refuses to fight the mighty $N.
 $n seems to be having trouble getting $s body to fight you!!
 $n's body rebels against $m when $e tries to punch $N.
 
-* Sting
+* sting 301
 M
 301
 You violently sting $N repeatedly, causing $S death!
@@ -397,7 +397,7 @@ Sting -- God... What are you thinking?
 $n tries to sting you, somewhat comical to tell the truth.
 $n stings at $N, then looks horrified as $N grins at $m!
 
-* Whip
+* whip 302
 M
 302
 Your dexterous whip messily tears $N's torso right off!
@@ -428,7 +428,7 @@ You'd better stop before $N whips your butt.
 Pathetic little $n is trying to whip you... how cute.
 $n tries to whip $N - isn't he cute?
 
-* Slash
+* slash 303
 M
 303
 Your powerful slash cleanly cuts off $N's head, which rolls away with a look of horror on it.
@@ -489,7 +489,7 @@ Your cunning slash at $N is fruitless.
 You nimbly stop a slash from $n.
 $N stops a cunning slash from $n who looks disappointed.
 
-* Bite
+* bite 304
 M
 304
 You bite $N through $S ribcage and into $S heart -- $e falls to the ground in agony.
@@ -520,7 +520,7 @@ You attempt to bite $N.  Ouch!  That hurt!
 $n tries to bite you, how funny.
 $n tries to bite $N - funny, huh?
 
-* Bludgeon
+* bludgeon 305
 M
 305
 Your relentless bludgeoning of $N finally results in $S broken neck!
@@ -551,7 +551,7 @@ Your attempt to bludgeon $N fails, luckily for you $N has a good sense of humor!
 Your patience is tried when $n tries to clobber you.
 $N restrains $Mself from zapping $n when $e attempts to bludgeon the mighty one.
 
-* Crush
+* crush 306
 M
 306
 You crush $N's entire body, making a terrible mess!
@@ -582,7 +582,7 @@ A pox on thee and thy pitiful crush on $N!
 $n seems to have a crush on you...
 $n seems to have a crush on $N...
 
-* Pound
+* pound 307
 M
 307
 You pound on $N with reckless abandon when you realize that $E is dead.
@@ -613,7 +613,7 @@ You pound $N!  And $E thanks you for it?  *boggle*
 $n gives you a pound.  Wonder what the exchange rate is...
 $n starts giving pounds to $N who begins to count the money.
 
-* Claw
+* claw 308
 M
 308
 Your razor-sharp claws rip $N wide open!
@@ -644,7 +644,7 @@ You dummy!  Not the claw, the claw!
 $n must be crazy - trying to claw at you!
 $n must be crazy - trying to claw at $N!
 
-* Maul
+* maul 309
 M
 309
 You maul $N across the chest and $E screams in pain as $E falls lifeless to the ground.
@@ -660,7 +660,7 @@ Mauling a God?  What would your poor mother think?  Of course, you probably woul
 $n tries to maul you, and as $e fails, looks quite horrified.  How pleasant.
 $N laughs as $n tries to maul $M.  How comical.
 
-* Thrash
+* thrash 310
 M
 310
 You bring $N within the thrashing of $S life, and then thrash $M one last time, killing $M.
@@ -676,7 +676,7 @@ Thrash a God?  More likely that $N would thrash you, don't you think?
 What a fool, $n tried to thrash you.  *sigh*
 Looking rather silly, $n tries to thrash at $N.
 
-* Pierce
+* pierce 311
 M
 311
 You pierce $N's heart, you heartbreaker you...
@@ -707,7 +707,7 @@ The mighty $N begins to think you a nuisance!!!
 Your patience is almost gone when you stare back at $n.
 The air is loaded when $N angrily wards off a piercing attack from $n.
 
-* Blast
+* blast 312
 M
 312
 You blast $N with all of your might, killing $M!
@@ -723,7 +723,7 @@ Are you kidding?  What do you expect your feeble blast to do to $N?
 $n tried to blast you.  Good thing you have blastproof armour.
 $n looks afraid of the consequences as $e tries fruitlessly to blast $N.
 
-* Punch
+* punch 313
 M
 313
 You punch at $N causing $S face to collapse under the blow, blood everywhere.  Doesn't look like $N will recover.  Ever.
@@ -739,7 +739,7 @@ Punch a God?  May be smarter to punch a wall for a bit.  You might do more damag
 Is that a quiet whistling noise you hear as $n is swinging $s fist about?
 $n looks like $e would prefer to have punched a wall rather than trying to punch $N.
 
-* Stab
+* stab 314
 M
 314
 You stab forth towards $N, hitting $M in the abdomen causing a messy but mortal wound!
@@ -770,7 +770,7 @@ You stab at $N!  Too bad $E's a god, huh?
 $n stabs at you!  Lucky for you that you are immune to this kind of thing.
 You watch in pity as $n stabs towards $N missing in the most futile way possible!
 
-* Suffering
+* suffering 399
 M
 399
 #
@@ -801,7 +801,7 @@ $N lies helplessly on the ground and suffers...
 Suffer god victim - should never see.
 Suffer god room - should never see.
 
-* Poison
+* poison 33
 M
 33
 #
@@ -822,7 +822,7 @@ $N has somehow become poisoned.
 *                              NPC Attacks                                *
 ***************************************************************************
 
-* Fire Breath
+* fire breath 202 !UNUSED!
 M
 202
 $N is killed by fire breath.
@@ -838,7 +838,7 @@ $N, being immortal, is just warmed.
 $n warms you.
 $n warms $N.
 
-* Gas Breath
+* gas breath 203 !UNUSED!
 M
 203
 $N is killed by gas breath.
@@ -854,7 +854,7 @@ $N is immortal, so can't be gassed.
 $n wants to gas you, but can't.
 $n tries to gas $N, but can't.
 
-* Frost Breath
+* frost breath 204 !UNUSED!
 M
 204
 $N is killed by frost breath.
@@ -870,7 +870,7 @@ $N is immortal, and thus avoids your frost breath.
 $n supplies you with air conditioning.
 $n supplies $N with air conditioning.
 
-* Acid Breath
+* acid breath 205 !UNUSED!
 M
 205
 $N is killed by your acid breath.
@@ -886,7 +886,7 @@ $N is immortal, and thus is immune to acid.
 $n helps you clean your hands with a little acid.
 $n helps $N cleaning.
 
-* Lightning Breath
+* lightning breath 206 !UNUSED!
 M
 206
 $N is killed by your lightning breath.

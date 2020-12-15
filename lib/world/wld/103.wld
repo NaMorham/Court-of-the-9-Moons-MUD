@@ -41,7 +41,7 @@ D5
 S
 #10301
 Transportation Rooms~
-   @gThis room does not look to interesting, with its gray walls and black floor
+   @gThis room does not look to interesting, with its grey walls and black floor
 and ceiling.  Two sets of stairs sit in the middle of the room, one goes up, the
 other down.
 ~
@@ -57,7 +57,7 @@ D5
 S
 #10302
 Earth Teleporter~
-   @gThis room looks just like the other, it has gray walls and a black ceiling
+   @gThis room looks just like the other, it has grey walls and a black ceiling
 and floor.  But there is one difference, in the middle of the room sits a
 teleporter, this device is giving off a strange light, hums constantly.  A sign
 is nailed onto the wall.
@@ -70,7 +70,7 @@ D5
 S
 #10303
 Namek Teleporter~
-   @gThis room looks just like the other, it has gray walls and a black ceiling
+   @gThis room looks just like the other, it has grey walls and a black ceiling
 and floor.  But there is one difference, in the middle of the room sits a
 teleporter, this device is giving off a strange light, hums constantly.
 ~
@@ -275,7 +275,7 @@ D2
 S
 #10316
 Capsul Corp Front Desk~
-   @gThis is a small room, people are rapidly moving about here.  In the center
+   @gThis is a small room, people are rapidly moving about here.  In the centre
 of the room sits a small desk, a woman sits at this desk, a sign on the desk
 says that her name is Matilda.  Lots of chairs cover the wall of the room, it is
 clear that this is no ordinary place.
@@ -533,7 +533,7 @@ S
 #10330
 Kami House~
    @gThe house seems larger on the inside then it did on the out side, its walls
-are an off white, and a large couch in the center of the room.  Off to the north
+are an off white, and a large couch in the centre of the room.  Off to the north
 seems to be the kitchin, and south is back to the shore.
 ~
 103 8 0 0 0 0
@@ -550,7 +550,7 @@ S
 Kami Houses Kitchen~
    @gThe room smells of burnt food, a turtle is rummiging through the fridge,
 and whistling.  This room looks like the other but has a large table in the
-center of it, and counters around the edge.
+centre of it, and counters around the edge.
 ~
 103 8 0 0 0 0
 D2
@@ -694,7 +694,7 @@ S
 The Garden~
    @gA Large arch is here, it is positioned at the start of a garden.  Through
 the arch you are able to see a magnificent lush garden, anything you could
-possibly think of resides in this place, in the its center is a huge oak tree,
+possibly think of resides in this place, in the its centre is a huge oak tree,
 it provides shade for anyone who sits under it.
 ~
 103 16 0 0 0 3
@@ -1041,7 +1041,7 @@ S
 #10361
 Elders Room~
    @gThis is a huge room, at the front of the room sits the large round window
-you saw outside.  In the back center of the room is the Elder.  He is huge,
+you saw outside.  In the back centre of the room is the Elder.  He is huge,
 quite possibly the largest namek you have ever seen.  He sits in a huge white
 chair with a Dragon Ball atop it.
 ~
@@ -1171,7 +1171,7 @@ S
 #10369
 A Small Clearing~
    @gThe trees seem to suddenly stop growing, not even grass grows here, a large
-cylindricle rock lies in the center of this area, it seems to be the cause of
+cylindricle rock lies in the centre of this area, it seems to be the cause of
 the clearing.
 ~
 103 0 0 0 0 3
@@ -1383,8 +1383,8 @@ D2
 0 10300 10382
 S
 #10382
-Center of the Building~
-   @gThis room seems to be the exact center of the Villa, it has a tall ceiling
+Centre of the Building~
+   @gThis room seems to be the exact centre of the Villa, it has a tall ceiling
 and a wooden floor that looks to have been freshly polished.  @gAlthough the
 room is kept neat, it seems that no one has lived here for quite some time.
 ~
@@ -1409,7 +1409,7 @@ S
 #10383
 Piccolo's Bedroom~
    @gThis is a small room, with a bed only large enough for one person, there is
-a small mat in the center of the room, it looks to be used for meditation.
+a small mat in the centre of the room, it looks to be used for meditation.
 ~
 103 2056 0 0 0 0
 D1
@@ -1420,7 +1420,7 @@ S
 #10384
 The Villas Kitchen~
    @gThe room is small, but well lit, counters line the walls and a table sits
-in the center of the room, one chair is off to the corner of the room.  This
+in the centre of the room, one chair is off to the corner of the room.  This
 room seems to be well kempt.
 ~
 103 2056 0 0 0 0
@@ -1436,7 +1436,7 @@ S
 #10385
 A Dimly Lit Room~
    @gThere seems to be little light, the only light coming in seems to be
-distorted by the outline of your body in the doorframe.  In the center of the
+distorted by the outline of your body in the doorframe.  In the centre of the
 room is a hole only large enough for one person to fit in at a time.
 ~
 103 8 0 0 0 0

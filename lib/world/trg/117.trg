@@ -281,7 +281,7 @@ else
 end
 ~
 #11714
-Chieftan Attacks You - 11709~
+Chieftain Attacks You - 11709~
 0 g 100
 ~
 * This trigger has been exported 'as is'. This means that vnums
@@ -497,7 +497,7 @@ Give Ring - 11723~
 * in this file are not changed, and will have to be edited by hand.
 * This zone was number 117 on The Builder Academy, so you
 * should be looking for 117xx, where xx is 00-99.
-If %object.vnum% == 11700
+if %object.vnum% == 11700
   %purge% %object%
   say Oh, thank you, now I can finally go back!
   %echo% %self.name% Runs out of the tower screaming with joy!
@@ -521,7 +521,7 @@ comfort~
 * This zone was number 117 on The Builder Academy, so you
 * should be looking for 117xx, where xx is 00-99.
 if %cmd.mudcommand% == comfort && man =/ %arg%
-  %send% %sctor% The man says: Oh dear, can you healp me? I've lost a ring, my wedding ring! Please, find it for me!
+  %send% %sctor% The man says: Oh dear, can you help me? I've lost a ring, my wedding ring! Please, find it for me!
 else
   return 0
 end
@@ -584,7 +584,7 @@ if %actor.is_pc%
   %send% %actor% %self.name% gives you a small stone.
   %load% obj 11730 %actor% inv
   say Regrettably, your request must be denied.
-  Wait 1s
+  wait 1s
   %echo% Suddenly, the doors slam shut behing you!
   %door% 11720 south flags d
   wait 1s
@@ -595,16 +595,16 @@ if %actor.is_pc%
   %at% 11709 %purge%
   wait 2s
   say It seems to me That my council has failed to serve me right
-  Wait 1s
-  Say This city is now mine. Those who oppose me will be vanquished!
-  Wait 2s
+  wait 1s
+  say This city is now mine. Those who oppose me will be vanquished!
+  wait 2s
   %echo% %self.name% pulls out a gigantic claw that she kept hidden before.
-  Wait 2s
-  Say You will be the first. Good bye, %actor.name%!
+  wait 2s
+  say You will be the first. Good bye, %actor.name%!
   %echo% %self.name% lunges at you, aiming to slice you in two!
-  Wait 1s
+  wait 1s
   %echo% suddenly, the door opens, and a bright flash of light consumes the entire room, blinding both you and %self.name%!
-  Wait 3s
+  wait 3s
   %send% %actor% You wake up at the entrance to Los Torres, and everything seems normal for some reason. What the heck happened??
   %send% %actor% @g+@n@bQUEST COMPLETE@n@g+@n
   %teleport% %actor% 11701

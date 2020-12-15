@@ -68,7 +68,7 @@ the wall, just above the altar which is set against the western wall.  A well
 in the middle of the floor leads down into darkness.  Vile smells waft from
 the depths.
 ~
-30 12 0 0 0 0
+30 12 0 0 0 1
 D1
 You see your favorite place, the bar of divination.
 ~
@@ -129,7 +129,7 @@ The Temple Square~
    You are standing on the temple square.  Huge marble steps lead up to the
 temple gate.  The entrance to the Clerics' Guild is to the west, and the old
 Grunting Boar Inn, is to the east.  Just south of here you see the market
-square, the center of Midgaard.
+square, the centre of Midgaard.
 ~
 30 0 0 0 0 1
 D0
@@ -197,11 +197,6 @@ You see the exit to the entrance hall.
 ~
 0 -1 3006
 E
-writing carving carvings symbols symbol~
-   Although it is very hard to understand, you think it looks a lot like beer,
-poems about beer, and small beer-mugs.
-~
-E
 sign~
    The sign reads:
 Free instructions provided by the Grunting Boar Inn.
@@ -209,16 +204,21 @@ Free instructions provided by the Grunting Boar Inn.
    List - The bartender will show you all the different drinks and
           specialties, and tell the price of each.
 ~
+E
+writing carving carvings symbols symbol~
+   Although it is very hard to understand, you think it looks a lot like beer,
+poems about beer, and small beer-mugs.
+~
 S
 #3008
 The Reception~
    You are standing in the reception.  The staircase leads down to the
-entrance hall.  An exit to the north leads to the Cryogenic Center.
+entrance hall.  An exit to the north leads to the Cryogenic Centre.
 There is a small sign on the counter.
 ~
 30 8 0 0 0 0
 D0
-You see the Cryogenic Center.
+You see the Cryogenic Centre.
 ~
 ~
 0 -1 3064
@@ -255,19 +255,19 @@ You see the main street.
 ~
 0 -1 3013
 E
-sign~
-   Free instructions provided by the store:
-   Buy  - Will buy you some bread or pastry.
-   List - The baker will kindly tell you the price and sort of the bread in
-          his bakery.
-~
-E
 danish pastry~
    You see that this is truly delicious pastry.  Must be made by a Dane from
 Denmark (which surely is not the capital of Sweden!  ).  Former ruler of
 Scandinavia, England, Northern Germany, Northern France, Russia, Greenland,
 Iceland, Estonia etc.  Etc.  The sight of those large, wholesome chokoladeboller
 makes your mouth water and your soul sing.
+~
+E
+sign~
+   Free instructions provided by the store:
+   Buy  - Will buy you some bread or pastry.
+   List - The baker will kindly tell you the price and sort of the bread in
+          his bakery.
 ~
 S
 #3010
@@ -499,7 +499,8 @@ The Mages' Laboratory~
 over numerous huge oaken tables, most of these cluttered with strange- looking
 pipes and flasks.  The floor is covered with half-erased pentagrams and even
 weirder symbols, and a blackboard in a dark corner has only been partially
-cleaned, some painful-looking letters faintly visible.
+cleaned, some painful-looking letters faintly visible.  A well in the middle of
+the floor leads down into darkness.  Vile smells waft from the depths.
 ~
 30 12 0 0 0 0
 D3
@@ -544,6 +545,7 @@ You see the main street.
 ~
 0 -1 3016
 D2
+You see the swordsmen's bar, many noises comes from there.
 ~
 ~
 0 0 3022
@@ -556,10 +558,12 @@ to the west is the entrance hall.
 ~
 30 140 0 0 0 0
 D0
+You see the practice yard.
 ~
 ~
 0 0 3021
 D1
+You see the entrance hall to the warriors' guild.
 ~
 ~
 0 0 3023
@@ -571,6 +575,7 @@ A well leads down into darkness.
 ~
 30 12 0 0 0 0
 D3
+You see the bar.
 ~
 ~
 0 0 3022
@@ -785,6 +790,22 @@ You see the main street.
 ~
 0 -1 3012
 S
+#3034
+Along the Wall Road~
+   The massive stones of the western wall loom over the road as it follows along
+the inner edge.  Strange sounds and vapours drift in from the building to the
+east.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3042
+D2
+~
+~
+0 0 3043
+S
 #3040
 Inside The West Gate Of Midgaard~
    You are by two small towers that have been built into the city wall and
@@ -809,14 +830,9 @@ The city gate is to the west.
 gate~
 1 3112 3052
 E
-wall~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
-~
-E
-tower towers~
-   Both of the towers are built from large gray rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.
+bridge footbridge~
+   It is too high up to reach but it looks as if one easily could walk across it
+from one tower to the other.
 ~
 E
 gate~
@@ -825,9 +841,14 @@ reinforced with large iron bands to make them even more sturdy.  One of the
 doors is equipped with a very big lock.
 ~
 E
-bridge footbridge~
-   It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.
+tower towers~
+   Both of the towers are built from large grey rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
+~
+E
+wall~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3041
@@ -853,14 +874,9 @@ You see Main Street.
 ~
 0 -1 3016
 E
-wall~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
-~
-E
-tower towers~
-   Both of the towers are built from large gray rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.
+bridge footbridge~
+   It is too high up to reach but it looks as if one easily could walk across it
+from one tower to the other.
 ~
 E
 gate~
@@ -869,9 +885,14 @@ reinforced with large iron bands to make them even more sturdy.  One of the
 doors is equipped with a very big lock.
 ~
 E
-bridge footbridge~
-   It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.
+tower towers~
+   Both of the towers are built from large grey rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
+~
+E
+wall~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3042
@@ -892,7 +913,7 @@ The road continues further south.
 0 -1 3043
 E
 wall~
-   It is built from large gray rocks that have been fastened to each other with
+   It is built from large grey rocks that have been fastened to each other with
 some kind of mortar.  It is far too high to climb.
 ~
 S
@@ -919,13 +940,13 @@ The road continues further south.
 ~
 0 -1 3047
 E
-wall~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
-~
-E
 wall writing letters~
    It says 'Who watches the watchmen?  '
+~
+E
+wall~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3044
@@ -1003,7 +1024,7 @@ You see the bridge.
 0 -1 3051
 E
 wall~
-   It is built from large gray rocks that have been fastened to each other with
+   It is built from large grey rocks that have been fastened to each other with
 some kind of mortar.  It is far too high to climb.
 ~
 S
@@ -1066,18 +1087,18 @@ You see the Concourse.
 ~
 0 -1 3100
 E
-wall~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
+bridge~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar, just like the wall.
 ~
 E
 opening~
    You cannot really see it from here as it is somewhere beneath your feet.
 ~
 E
-bridge~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar, just like the wall.
+wall~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3052
@@ -1098,14 +1119,9 @@ The forest edge is to the west.
 ~
 0 -1 6092
 E
-wall~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
-~
-E
-tower towers~
-   Both of the towers are built from large gray rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.
+bridge footbridge~
+   It is too high up to reach but it looks as if one easily could walk across it
+from one tower to the other.
 ~
 E
 gate~
@@ -1114,9 +1130,14 @@ reinforced with large iron bands to make them even more sturdy.  One of the
 doors is equipped with a very big lock.
 ~
 E
-bridge footbridge~
-   It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.
+tower towers~
+   Both of the towers are built from large grey rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
+~
+E
+wall~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3053
@@ -1137,14 +1158,9 @@ You see the city gate.
 gate~
 1 3112 3041
 E
-wall~
-   It is built from large gray rocks that have been fastened to each other with
-some kind of mortar.  It is far too high to climb.
-~
-E
-tower towers~
-   Both of the towers are built from large gray rocks that have been fastened to
-each other with some kind of mortar, just like the city wall.
+bridge footbridge~
+   It is too high up to reach but it looks as if one easily could walk across it
+from one tower to the other.
 ~
 E
 gate~
@@ -1153,9 +1169,14 @@ reinforced with large iron bands to make them even more sturdy.  One of the
 doors is equipped with a very big lock.
 ~
 E
-bridge footbridge~
-   It is too high up to reach but it looks as if one easily could walk across it
-from one tower to the other.
+tower towers~
+   Both of the towers are built from large grey rocks that have been fastened to
+each other with some kind of mortar, just like the city wall.
+~
+E
+wall~
+   It is built from large grey rocks that have been fastened to each other with
+some kind of mortar.  It is far too high to climb.
 ~
 S
 #3054
@@ -1178,21 +1199,69 @@ You see the southern end of the temple.
 ~
 0 -1 3001
 E
-statue odin king god~
-   The statue represents the one-eyed Odin sitting on a his throne.  He has
-long, gray hair and beard and a strict look on his face.  On top of the throne,
-just above his shoulders, his two ravens Hugin and Munin are sitting and at his
-feet are his wolves Gere and Freke.
-~
-E
 altar~
    Even though the altar is more than ten feet long it appears to be made from a
 single block of white virgin marble.
 ~
+E
+statue odin king god~
+   The statue represents the one-eyed Odin sitting on a his throne.  He has
+long, grey hair and beard and a strict look on his face.  On top of the throne,
+just above his shoulders, his two ravens Hugin and Munin are sitting and at his
+feet are his wolves Gere and Freke.
+~
+S
+#3055
+On the Temple Steps~
+   The marble steps of the Midgaard temple climb from the square to the temple
+doors.  The sounds of the quare to the south drift in, echoing off the
+surrounding buildings and columns that line the stairs.  
+~
+30 0 0 0 0 1
+D0
+~
+doors~
+1 0 3001
+D2
+~
+~
+0 0 3005
+S
+#3056
+The Road Between the Squares~
+   The paved road stretches between the temple square to the north and market
+square to the south.  Tall stone columns line the road, supporting awnings that
+provide cover along the sides.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3005
+D2
+~
+~
+0 0 3014
+S
+#3057
+Approaching the Levee~
+   This narrow path stretches from the alley to the levee at the river side.  
+Rivulets of something trickle along the narrow drain that runs the length.  
+Harsh laughter occasionally drifts in from the building to the west.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3045
+D2
+~
+~
+0 0 3049
 S
 #3058
 Ye Olde Water Shoppe~
-   You are standing in the center of a small wooden shop whose walls are
+   You are standing in the centre of a small wooden shop whose walls are
 covered with racks upon racks of water jugs.  Several large barrels with
 spigots are stacked in the corner.
 ~
@@ -1297,29 +1366,6 @@ You see the entrance to the Grunting Boar Inn and Tavern.
 ~
 0 -1 3006
 E
-WANTED posters poster wall~
-   Faces of various known Killers and Thieves can barely be seen behind the
-crates on the west wall.  Some of them look quite familar, sorta like that guy
-who you saw in the Reception a minute ago...  But then again, they are rather
-hard to see past the crates.
-~
-E
-crates opened large~
-   As you know, it is illegal to send contraband items through the Midgaard
-Mail.  The customs agents use this as a great excuse to seize liquor, rare
-spices, and just about anything they might find useful or profitable.
-~
-E
-cobwebs~
-   They seem to cover everything here, even the Postmaster himself.
-~
-E
-letters envelopes assorted~
-   Envelopes of all sizes are heaped into hugh piles around the room.  As you
-look closer, you see a letter that you had posted a full week ago, laying
-unnoticed and slightly rat-chewed towards the bottom of the pile.
-~
-E
 sign~
    **********************************************************
    *                                                        *
@@ -1338,6 +1384,29 @@ sign~
    *         Type 'HELP MAIL' for more info                 *
    **********************************************************
 ~
+E
+letters envelopes assorted~
+   Envelopes of all sizes are heaped into hugh piles around the room.  As you
+look closer, you see a letter that you had posted a full week ago, laying
+unnoticed and slightly rat-chewed towards the bottom of the pile.
+~
+E
+cobwebs~
+   They seem to cover everything here, even the Postmaster himself.
+~
+E
+crates opened large~
+   As you know, it is illegal to send contraband items through the Midgaard
+Mail.  The customs agents use this as a great excuse to seize liquor, rare
+spices, and just about anything they might find useful or profitable.
+~
+E
+WANTED posters poster wall~
+   Faces of various known Killers and Thieves can barely be seen behind the
+crates on the west wall.  Some of them look quite familar, sorta like that guy
+who you saw in the Reception a minute ago...  But then again, they are rather
+hard to see past the crates.
+~
 S
 #3063
 The Midgaard Donation Room~
@@ -1353,7 +1422,7 @@ The busy temple is back west.
 0 -1 3001
 S
 #3064
-The Cryogenic Center~
+The Cryogenic Centre~
    You are standing in an impossibly white sterile room with cylindrical
 body-length canisters lined up against the walls.  The Reception is to the
 south.
@@ -1422,5 +1491,130 @@ There is a large rusty gate just to the west.
 ~
 ~
 0 -1 3600
+S
+#3067
+Along the Dark Alley~
+   The dark alley continues along here.  Shabby walls mark the back of the
+surrounding buildings and the peeling paint contributes to the general air of
+neglect in this area.
+~
+30 0 0 0 0 1
+D1
+~
+~
+0 0 3045
+D3
+~
+~
+0 0 3026
+S
+#3068
+Southern End of Temple Road~
+   The rough cobbles of Temple Road show gaps as the head south towards the
+common dirty and worn.  A faint whiff of rotting garbage wafts in from the
+south.  Square.  Small patches of grass grow in the cracks and the remaining
+stones are
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3069
+D2
+~
+~
+0 0 3025
+S
+#3069
+South Along Temple Road~
+   The temple road continues it's journey between the common and main squares.
+To the north is the main square which functions as a public forum, meeting place
+and shopping district for the busy city.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3014
+D2
+~
+~
+0 0 3068
+S
+#3070
+Wall Road Near the Bridge~
+   The stone bridge rises over the river to allow passage to the south.  To the
+west, massive stones make up the wall that towers around the city.  
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3047
+D4
+~
+~
+0 0 3071
+S
+#3071
+North End of the Bridge~
+   The stones of the bridge are firmly anchored to the wall rising to the west.
+The bridge to the south crosses the river on it's way to the park and concourse
+to the south.
+~
+30 0 0 0 0 1
+D2
+~
+~
+0 0 3051
+D5
+~
+~
+0 0 3070
+S
+#3072
+South End of the Bridge~
+   The stone bridge rises over the river to the north.  The sounds of the park
+and concourse drift in from the south and a giant chain rattles in the sky above
+the park.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3051
+D5
+~
+~
+0 0 3100
+S
+#3098
+A second test room~
+   This is a second test room to allow mapper configuration in CMUD.  This is a
+second test room to allow mapper configuration in CMUD.  This is a second test
+room to allow mapper configuration in CMUD.  This is a second test room to allow
+mapper configuration in CMUD.  This is a second test room to allow mapper
+configuration in CMUD.  This is a second test room to allow mapper configuration
+in CMUD.  This is a second test room to allow mapper configuration in CMUD.
+~
+30 0 0 0 0 1
+D0
+~
+~
+0 0 3099
+S
+#3099
+A test room~
+   This is a test room to allow configuration of the mapper in CMUD.  This is a
+test room to allow configuration of the mapper in CMUD.  This is a test room to
+allow configuration of the mapper in CMUD.  This is a test room to allow
+configuration of the mapper in CMUD.  This is a test room to allow configuration
+of the mapper in CMUD.
+~
+30 0 0 0 0 1
+D2
+~
+~
+0 0 3098
 S
 $~

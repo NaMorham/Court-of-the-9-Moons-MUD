@@ -4,10 +4,10 @@ Bottom of the Steps~
 huge house.  It appears that this place must once have been a very elegant
 place, possibly even the home of a socialite, but why a socialite would build a
 home in the midst of a forest such as this is beyond your comprehension.  Be
-careful on those steps, they are old and gray and appear to be rotted in many
+careful on those steps, they are old and grey and appear to be rotted in many
 places.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D0
 ~
 ~
@@ -44,7 +44,7 @@ Northeast Corner of the House~
 things that appear to be just about to fall into decay.  Listening for any sound
 from within the house reveals nothing, it appears that it may be deserted.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D2
 ~
 ~
@@ -62,7 +62,7 @@ be deserted, however you still have the sensation of being watched.  You cannot
 see any sort of entrance from here, save the windows, and just in case someone
 does live here, it would be best to leave those windows intact.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D0
 ~
 ~
@@ -82,7 +82,7 @@ Northwest Corner of the House~
 must be the doors that lead into the cellar.  No other entrances are visible to
 you from your current vantage point.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D1
 ~
 ~
@@ -97,10 +97,10 @@ West Side of the House - Cellar Entrance~
    A set of what were once white painted steel double doors are laying closed at
 your feet, doors that you assume would lead to the cellar.  The paint now has
 mostly chipped or worn away, leaving the doors a sort of dirty, brown and white
-and gray combo colour.  Leaves blow past you, the breeze which carries them
+and grey combo colour.  Leaves blow past you, the breeze which carries them
 smelling of something familiar - almost like blood.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D0
 ~
 ~
@@ -125,7 +125,7 @@ The walls of the house are of chipped wood siding, the paint that once covered
 the walls flaking and peeling,completely gone even in some places.  You cannot
 see any other ways into the house from here except the cellar.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D0
 ~
 ~
@@ -143,7 +143,7 @@ type which is built for politicians or persons of extreme wealth.  It has long
 since fallen into decay - a crumbling, wasted ruin.  There could be no chance
 that anyone might still live here - could there?
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D1
 ~
 ~
@@ -165,7 +165,7 @@ enter into this place?  There is obviously no one living here anymore - at least
 it seems that way.  You hear a small skittering and a thump from within.
 Probably just a rat or a squirrel.
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D0
 ~
 ~
@@ -353,7 +353,7 @@ S
 Kitchen~
    So far the only piece which you have seen here that has escaped the elements
 and the wild animals of the surrounding forest is the thick wooden carving table
-which sits dead center of this room.  It is filthy, covered in rat droppings and
+which sits dead centre of this room.  It is filthy, covered in rat droppings and
 cobwebbing so thick that you wouldn't know it was made of wood were it not for
 the holes drilled deep into the far side of it where the knives were to go.
 Steel tables line most of the walls, an old broken down cooler resting in the
@@ -454,7 +454,7 @@ Gaming Room~
    An old billiards table still rests upright in the southwest corner of the
 room, its surface torn to shreds by the forest vermin.  A dicing table has
 fallen into wooden clumps after having its legs all rot our from beneath it.  A
-dart board lays against the wall on the floor, askew and broken in the center
+dart board lays against the wall on the floor, askew and broken in the centre
 most probably by its fall from the wall where it must have hung.
 ~
 259 0 0 0 0 0
@@ -526,7 +526,7 @@ which line the walls of this immense chamber.  Tattered draperies hang at angles
 from the tops of these six foot high windows, ragged and stained from countless
 years of grit and grime.  The same immense chandeliers that line the ceiling in
 the outer hallway also ring this chamber, with an extremely large oen directly
-in the center.  The lights in this room must have been fantastic when they were
+in the centre.  The lights in this room must have been fantastic when they were
 all lit during a ball or masquerade.
 ~
 259 0 0 0 0 0
@@ -587,7 +587,7 @@ S
 #25928
 West End of the Hallway~
    The hallway ends at a set of double doors that appear to have been painted
-white when they were in their glory.  They now are the same dull brownish gray
+white when they were in their glory.  They now are the same dull brownish grey
 colour that so much of this building has adopted over the time since it was left
 deserted.  Two sconces are set into the wall on either side of the doors,
 marking this a bedroom fo importance, possibly even the Master Bedroom.  There
@@ -646,7 +646,7 @@ way the entire structure sways beneath you as you climb to the front door, you
 wonder if maybe this wasn't a bad idea.  Better hurry up that front door and get
 inside before the whole thing collapses!
 ~
-259 0 0 0 0 0
+259 0 0 0 0 3
 D4
 ~
 ~
@@ -662,7 +662,7 @@ Top of the Steps at the Front Door~
 creak and groan under your weight, swaying with every step that you take no
 matter how careful you are.
 ~
-259 4 0 0 0 0
+259 4 0 0 0 3
 D3
 ~
 door~
@@ -770,7 +770,7 @@ It must be told that many an adventurer has turned from this cellar in fear,
 without humiliation or any feelings of inadequacies - this is not a pleasant
 place.
 ~
-259 4 0 0 0 0
+259 4 0 0 0 3
 D4
 ~
 door~
@@ -874,7 +874,7 @@ S
 Canning Shelves~
    The north wall has been covered over by shelving with rows of canning jars -
 some filled, some not - from floor to ceiling.  The wood the shelves were built
-from seems to have stood the tests of time, bowing a bit in the center from the
+from seems to have stood the tests of time, bowing a bit in the centre from the
 weight of the jars, but not rotting away like so much else in this house.  You
 can attempt to chow on some of the goods in those jars, but it isn't recommended
 by the general staff here at Dibrova...

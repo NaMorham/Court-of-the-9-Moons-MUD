@@ -1,6 +1,15 @@
 (lib/text/credits)
 
-                          C  I  R  C  L  E  M  U  D
+                         @GCOURT OF THE NINE MOONS@n 
+
+A Wheel of time themed mud.  Originally started as a way of practicing C
+and then C++ skills, and inspired by WoTMUD and The Mirrors of the Wheel
+MUD.  Eventually the code was ported to C++ and then updated to include
+most of the changes and fixes from T B A M U D.  Resurected in 2019 as
+a nostalgia project, and updated again.
+
+                          @Y T  B  A  M  U  D @n
+                          C  I  R  C  L  E  M  U  D 
 
 
 CircleMUD was developed from DikuMUD (Gamma 0.0) by Jeremy "Ras" Elson at

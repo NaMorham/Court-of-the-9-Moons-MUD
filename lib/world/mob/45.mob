@@ -41,17 +41,17 @@ weird twitch.
 BareHandAttack: 4
 E
 #4504
-the assistant~
+assistant~
 the assistant~
 An assistant stands here nervously.
 ~
-   You see a rabbit wearing an apron.  He looks exhausted, and tired.  Maybe his
-shift has been a little too long...
+   You see a rabbit wearing an apron.  He looks exhausted and overworked.
+Maybe his shift has been a little too long...
 ~
 4234 0 0 0 0 0 0 0 1000 E
 10 17 4 2d2+100 1d2+1
 100 10000
-8 8 0
+8 8 1
 E
 #4509
 cook badger~
@@ -114,7 +114,7 @@ guard gate man~
 the guard~
 A guard stands here.
 ~
-   You see a clealy shaven man in a military uniform.  He is dressed in a green
+   You see a cleanly shaven man in a military uniform.  He is dressed in a green
 suit.  On his back hangs a quiver and a bow.  A sword hangs loosely by his side.
 He stares at you, waiting for a response.
 ~

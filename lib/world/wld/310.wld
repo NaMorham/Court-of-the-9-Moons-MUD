@@ -1,8 +1,8 @@
 #31000
 Aten's Zone Description Room~
-   Graye Area
+   Greye Area
 Written March 1994
-Graye consists of a forested area, a cliff to scale,
+Greye consists of a forested area, a cliff to scale,
 a small wooded area around a town, a small town, a small
 castle, some underground passageways, and a bunch of mid-level
 mobs and eq.
@@ -40,7 +40,7 @@ and sunlight surrounds you.  The air is filled with the sound of chirping birds
 happily building their nests in the depths of the knotted grass.  A wagon trail
 runs in an east-south direction.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D3
 ~
 ~
@@ -54,7 +54,7 @@ strangely enough it is still quite pleasant out.  Crickets chirp merrily, and
 the sun's rays warm your skin.  The wagon trail leads eastwards back into the
 grassland, and dissapears westwards into the forest.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D1
 ~
 ~
@@ -65,7 +65,7 @@ D3
 0 0 31004
 S
 #31004
-Entrance to the Forest of Graye~
+Entrance to the Forest of Greye~
    The trail passes into the shade here, and the temperature drops quite
 suddenly.  Great broad leaf trees gather the descending sunlight, and cover the
 leaf-strewn forest floor with dappled sunlight.  The wagon trail becomes much
@@ -73,7 +73,7 @@ wider here, showing signs of recent heavy use.  The wagon trail runs from west
 to east here, and it looks possible to venture into the forest to the north and
 south.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -92,10 +92,10 @@ D3
 0 0 31011
 S
 #31005
-The Forest of Graye~
+The Forest of Greye~
    You in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D2
 ~
 ~
@@ -106,10 +106,10 @@ D3
 0 0 31009
 S
 #31006
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -124,10 +124,10 @@ D3
 0 0 31010
 S
 #31007
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -142,10 +142,10 @@ D3
 0 0 31012
 S
 #31008
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -156,12 +156,12 @@ D3
 0 0 31013
 S
 #31009
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.  There is a
 sheer cliff face to the west, rising up above the forest.  There is a sign
 nailed neatly on the cliff wall.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D1
 ~
 ~
@@ -179,7 +179,7 @@ sign~
    The sign reads:
 ******************************
 *                            *
-*       The Graye Area       *
+*       The Greye Area       *
 *         Written By:        *
 *      Aten of GenericMUD    *
 *         April 1994         *
@@ -190,11 +190,11 @@ sign~
 ~
 S
 #31010
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.  There is a
 sheer cliff face to the west, rising above the forest.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -213,11 +213,11 @@ cliff sheer face~
 ~
 S
 #31011
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.  The wagon trail
 ends abruptly here.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -236,10 +236,10 @@ D3
 0 0 31014
 S
 #31012
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -258,10 +258,10 @@ D3
 0 0 31015
 S
 #31013
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -272,11 +272,11 @@ D1
 0 0 31008
 S
 #31014
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.  There is a
 sheer cliff face to the north, rising above the forest.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D1
 ~
 ~
@@ -295,10 +295,10 @@ cliff sheer face~
 ~
 S
 #31015
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -317,10 +317,10 @@ D3
 0 0 31018
 S
 #31016
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -335,11 +335,11 @@ D3
 0 0 31019
 S
 #31017
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.  There is a
 cliff face to the north.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D1
 ~
 ~
@@ -359,10 +359,10 @@ that you just might be able to climb it.
 ~
 S
 #31018
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -377,10 +377,10 @@ D2
 0 0 31019
 S
 #31019
-The Forest of Graye~
+The Forest of Greye~
    You are in a hardwood forest, walking through noisy leaves.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 3
 D0
 ~
 ~
@@ -396,7 +396,7 @@ The Cliff Wall~
 Sweat stings your eyes, and your breathing becomes ragged.  You can still drop
 safely to the forest floor, or madly continue upwards.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 5
 D4
 ~
 ~
@@ -412,7 +412,7 @@ The Overhang~
 be a nice place to stop an rest..  If you weren't underneath it.  You glance
 around for an alternate path..
 ~
-310 0 0 0 0 0
+310 0 0 0 0 5
 D1
 ~
 ~
@@ -430,7 +430,7 @@ desperately to the rock face with your other hand.  Returning back west is out
 of the question, but you might be able to pull yourself upwards onto a very
 thin ledge.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 5
 D4
 ~
 ~
@@ -493,7 +493,7 @@ moments just turning around, taking in all that you see.  To the south and east
 you see the forest sweeping outwards from the cliff wall, and to the north you
 see a clearing surrounding a small town.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D0
 ~
 ~
@@ -508,7 +508,7 @@ The Clearing~
    You are in a wide clearing between the city walls and the forest.  You see
 men atop the walls pointing at you and gesturing frantically.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D0
 ~
 ~
@@ -527,7 +527,7 @@ The Clearing~
    You are in a wide clearing between the city walls and the forest.  You see
 men atop the walls pointing at you and gesturing frantically.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D0
 ~
 ~
@@ -550,7 +550,7 @@ The Clearing~
    You are in a wide clearing between the city walls and the forest.  You see
 men atop the walls pointing at you and gesturing frantically.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D0
 ~
 ~
@@ -569,7 +569,7 @@ The Clearing~
    You are in a wide clearing between the city walls and the forest.  You see
 men atop the walls pointing at you and gesturing frantically.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D2
 ~
 ~
@@ -580,11 +580,11 @@ The forest looks VERY dark.~
 0 0 31034
 S
 #31031
-Entrance to the City of Graye~
-   You are standing before the great gate of Graye.  Crimson plumed soldiers
+Entrance to the City of Greye~
+   You are standing before the great gate of Greye.  Crimson plumed soldiers
 raise the portcullis and urge you the enter quickly.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D0
 Looks like safety.~
 ~
@@ -595,7 +595,7 @@ The Clearing~
    You are in a wide clearing between the city walls and the forest.  You see
 men atop the walls pointing at you and gesturing frantically.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 2
 D1
 The forest look VERY dark.~
 ~
@@ -610,7 +610,7 @@ The Demon's Wood~
    You find yourself among the twisted, gnarled trunks of giant thorn trees.
 Mist covers the forest floor and everything is completely silent.
 ~
-310 1 0 0 0 0
+310 1 0 0 0 3
 D0
 ~
 ~
@@ -625,7 +625,7 @@ The Demon's Wood~
    You find yourself among the twisted, gnarled trunks of giant thorn trees.
 Mist covers the forest floor and everything is completely silent.
 ~
-310 1 0 0 0 0
+310 1 0 0 0 3
 D1
 Safety!~
 ~
@@ -640,7 +640,7 @@ The Demon's Wood~
    You find yourself among the twisted, gnarled trunks of giant thorn trees.
 Mist covers the forest floor, and everything is completely silent.
 ~
-310 1 0 0 0 0
+310 1 0 0 0 3
 D2
 ~
 ~
@@ -655,7 +655,7 @@ The Demon's Wood~
    You find yourself among the twisted, gnarled trunks of giant thorn trees.
 Mist covers the forest floor, and everything is completely silent.
 ~
-310 1 0 0 0 0
+310 1 0 0 0 3
 D0
 ~
 ~
@@ -671,7 +671,7 @@ The City Street~
 junction.  There is a castle to the north, and more streets to the east and
 west.  There is a large sign posted on a wall here.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 1
 D0
 You see the castle.~
 ~
@@ -695,7 +695,7 @@ the 7 pm curfew!  Those out on the streets after
 dark run the risk of being mistaken for the enemy
 and killed!
 signed,
-The Graye Guard
+The Greye Guard
 ~
 S
 #31038
@@ -703,7 +703,7 @@ The City Streets~
    Small houses line both sides of the street, and armed guards are posted at
 every junction.  You see a small poster pasted to the wall here.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 1
 D1
 ~
 ~
@@ -720,7 +720,7 @@ The City Streets~
    Small houses line both sides of the street, and armed guards are posted at
 every junction.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 1
 D3
 ~
 ~
@@ -731,7 +731,7 @@ Inside the Castle~
    Everything here is a mess.  Furniture has been overturned, paintings
 slashed, even the gold inlaid tiles have been torn up.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 1
 D1
 ~
 ~
@@ -742,7 +742,7 @@ Entrance to Relnar's Castle~
    You stand before the ajar gate of the castle.  You here complete silence
 from inside.  City life continues to bustle around you.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 1
 D0
 ~
 ~
@@ -887,7 +887,7 @@ you can just barely see one of the castle's towers over the trees.  To the
 north, the land sloped downward, and thick, gnarled thorn trees prevent
 movement to the east or west.
 ~
-310 4 0 0 0 0
+310 4 0 0 0 4
 D0
 ~
 ~
@@ -905,7 +905,7 @@ thick choking vegetation grabbing your boots.  The path back to the south
 disappears in darkness, and your path continues to dip as you head to the
 north.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 4
 D0
 ~
 ~
@@ -921,7 +921,7 @@ The Valley Floor~
 the east and west.  A sudden gust of wind brings you the smell of sulphur from
 the north.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 4
 D0
 ~
 ~
@@ -937,7 +937,7 @@ The Rift~
 waft their way upwards, stinging your nose sharply.  You sense that a great
 evil is near.
 ~
-310 0 0 0 0 0
+310 0 0 0 0 4
 D2
 ~
 ~
@@ -966,7 +966,7 @@ S
 The Tunnel~
    The tunnel leads north and south, and to either side of you are great cells.
 Peeking in a smudged window, you see human prisoners, many of them wearing the
-uniform of the Graye Guard.
+uniform of the Greye Guard.
 ~
 310 1 0 0 0 0
 D0
@@ -1052,7 +1052,7 @@ S
 #31060
 The Catacombs~
    You walk along the passage, and notice the remains of all the previous kings
-of Graye are buried on either side of you.  You can see in the room, but there
+of Greye are buried on either side of you.  You can see in the room, but there
 is no discernable source of light.  The passage continues on to the north and
 south.
 ~
@@ -1067,10 +1067,10 @@ D2
 0 0 31059
 S
 #31061
-The Tomb of Graye~
-   You enter a huge circular room.  A guilded gold coffin rests in the center
+The Tomb of Greye~
+   You enter a huge circular room.  A guilded gold coffin rests in the centre
 atop at stone tablet.  Treasure is piled high against all the walls.  You have
-found the final resting place of the paladin knight Graye.
+found the final resting place of the paladin knight Greye.
 ~
 310 0 0 0 0 0
 D2
@@ -1079,11 +1079,11 @@ D2
 0 0 31060
 E
 coffin~
-   The coffin holds the remains of Graye.  His gift to you is not within it.
+   The coffin holds the remains of Greye.  His gift to you is not within it.
 ~
 E
 stone tablet~
-   It is a giant stone tablet supporting the coffin of Graye.
+   It is a giant stone tablet supporting the coffin of Greye.
 ~
 S
 $~

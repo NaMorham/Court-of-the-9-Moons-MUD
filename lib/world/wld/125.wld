@@ -6,7 +6,7 @@ shrills coming from within the city.  You think to yourself that you need to be
 ready for anything as you enter the gates.  An old sign is here, depicting a
 map of the city.
 ~
-125 4 0 0 0 0
+125 4 0 0 0 1
 D0
 Nothing.
 ~
@@ -50,7 +50,7 @@ Intersection of Trenton Avenue and Main Street.~
    You have entered what was once the great city of Hannah.  Main street leads
 to the north, while Trenton avenue leads east and west
 ~
-125 0 0 0 0 0
+125 0 0 0 0 1
 D0
 ~
 ~
@@ -102,7 +102,7 @@ D2
 S
 #12504
 Temple Square~
-   You have reached the center most part of the city of Hannah.  Beautifully
+   You have reached the centre most part of the city of Hannah.  Beautifully
 designed shops and marketplaces line the streets.  Although they are in ruins
 you can tell that someone took a lot of time designing and building them.  As
 you sit back and sip the cool, clear water from the fountain you silently

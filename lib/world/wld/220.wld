@@ -433,7 +433,7 @@ plastic forks, spoons and thin saucers float around on the surface.
 There are metal utensils sunk to the bottom, though they are covered
 in @Ggreen @gmold@y.  Unrecognizable chunks of food are also drifting past.@n
 ~
-220 8 0 0 0 0
+220 8 0 0 0 6
 D2
 @DA big cutting board lies to the south.  @n
 ~
@@ -501,7 +501,7 @@ D3
 0 0 22017
 E
 lid~
-   The tin lid reads @BCreamy@W-@BBrand @WMayo!  @n A gray growth is forming on
+   The tin lid reads @BCreamy@W-@BBrand @WMayo!  @n A grey growth is forming on
 the rim.
 ~
 S

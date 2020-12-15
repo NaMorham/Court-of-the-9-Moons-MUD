@@ -29,14 +29,14 @@ There is a rickety ladder leading down.
 trapdoor~
 1 12033 12002
 E
-scorecards~
-   The cards all have been filled in with the judges evaluations of today's
-combatants.  It seems that Sparticus is having a good day.
-~
-E
 pencils pencil~
    An ordinary #2 lead pencil.  Judging by the teeth marks on the shaft, the
 user should see a dentist very soon!
+~
+E
+scorecards~
+   The cards all have been filled in with the judges evaluations of today's
+combatants.  It seems that Sparticus is having a good day.
 ~
 S
 #12002
@@ -66,7 +66,7 @@ everywhere and the smell makes you want to puke.  Stairs lead up to Caesar's
 private box, a small ramp leads down to the playing field and a hallway
 leads south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D2
 You see a small hallway that leads to a larger area.
 ~
@@ -96,7 +96,7 @@ here are made of stone and are probably centuries old.  A few scratches on
 one of the benches catch your eye.  An acrid smell is coming from the east
 and a tunnel leads off to the north.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 The tunnel looks like it leads to another seating area.
 ~
@@ -121,7 +121,7 @@ bars, it hasn't been open for years.  Looking through the gate at the barren
 landscape that lies beyond, you can see why.  A dirt road leads off to the east,
 and a store is directly south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D1
 Through the clouds of dust, you can make out a passable road.
 ~
@@ -197,7 +197,7 @@ on here; just bare dirty stone.  The view of the surrounding country is
 spectacular.  Unfortunately you can barely see the playing field.  There is
 a set of steps here, leading down.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D5
 Watch your step!
 ~
@@ -218,7 +218,7 @@ up in preparation for the games.  The dust rising from the parched earth makes
 you want to sneeze.  A short tunnel leads east and the thunder of pounding
 hooves and the clash of weapons can be heard coming from the south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 2
 D1
 There is a large oval dirt-track in that direction.
 ~
@@ -231,13 +231,8 @@ direction.
 ~
 0 -1 12010
 E
-gladiator~
-   He is a big muscular man with lots of armour.  He sizes you up and decides
-that you aren't worth his time or trouble.
-~
-E
-driver~
-   The driver is too busy changing a wheel on his chariot to notice you.
+coach trainer~
+   The coach tell you "Stop bothering my athletes and get lost!  "
 ~
 E
 chariot~
@@ -247,8 +242,13 @@ the chariot as belonging to Drucilis 'Lightning-whip' Octavious, a favorite
 driver of the masses.
 ~
 E
-coach trainer~
-   The coach tell you "Stop bothering my athletes and get lost!  "
+driver~
+   The driver is too busy changing a wheel on his chariot to notice you.
+~
+E
+gladiator~
+   He is a big muscular man with lots of armour.  He sizes you up and decides
+that you aren't worth his time or trouble.
 ~
 S
 #12010
@@ -257,7 +257,7 @@ The Jousting Arena~
 skewered by a gladiator's lance as he makes his charge.  A practicing
 area is due north.
 ~
-120 4 0 0 0 0
+120 4 0 0 0 2
 D0
 Through a small tunnel you can see athletes stretching and warming up for
 the games.
@@ -306,7 +306,7 @@ A Dirt Road~
    You are on a parched and dusty rural road which runs east and west.  There
 is a structure lying to the south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 2
 D1
 Through the dust, you see a paved road.
 ~
@@ -394,7 +394,7 @@ prints everywhere, and you see a large cloud of dust approaching.  You had
 better move before you get run over.  A small tunnel leads west, you can see
 the crowd to the east.  You can hear loud snarls and roars coming from below.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 2
 D3
 You see athletes warming up and stretching.
 ~
@@ -433,7 +433,7 @@ statue of Caligula the Mad Emperor overlooks the area.  There are long
 lines standing to the east, and an acrid smell is coming from the west.
 A busy road lies to the south.
 ~
-120 4 0 0 0 0
+120 4 0 0 0 1
 D1
 The lines are very long and people look impatient.
 ~
@@ -461,7 +461,7 @@ The Main Highway~
    This is a well built and heavily traveled road running from east to west
 and there is a large structure built entirely of stone to the north.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 You can hear the roar of a large crowd of people coming from that direction.
 ~
@@ -495,17 +495,17 @@ around and go that way??!!  Please?
 ~
 0 -1 12013
 E
+roll paper~
+   Hey!!  This is first-class stuff!!  - White Cloud brand with lotion.  The
+roll is about half-used.
+~
+E
 hole toilet~
    You walk over to the hole and see that there is a large turd floating in a
 pool black water about 2 feet below the surface of the ground.  As you lean
 closer to get a better look, your nose catches a concentrated dose of the
 fragrant aroma wafting upwards.  Your stomach decides that it has had enough of
 this shoddy treatment and you puke until it is empty.
-~
-E
-roll paper~
-   Hey!!  This is first-class stuff!!  - White Cloud brand with lotion.  The
-roll is about half-used.
 ~
 S
 #12021
@@ -529,7 +529,7 @@ areas, this place could stand extensive renovation and a thorough cleaning.
 This area extends to the south and a much more elegant seating area can be
 seen to the west.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D2
 The common seating area continues.
 ~
@@ -548,7 +548,7 @@ games.  Like the other commoners' areas in the coliseum, it could use
 extensive renovation and cleaning.  This area extends to the north and
 lots of noise can be heard coming from the south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 The common seating area continues.
 ~
@@ -568,7 +568,7 @@ Emperor of a time long since passed, stands here looking out over the crowd.
 There is a passage to the north, the ticket booth is to the south and a gate
 opening to the city lies to the east.
 ~
-120 4 0 0 0 0
+120 4 0 0 0 1
 D0
 You see rows upon rows of dilapidated wooden bleachers.
 ~
@@ -621,7 +621,7 @@ A Paved Road~
 looking estate to the south and to the north-west, off in the distance, you
 can see a very large stone structure.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D1
 The road leads off to the east.
 ~
@@ -653,7 +653,7 @@ situated to enhance and adorn the three statues of dedicated to gods Jupiter,
 Venus and Neptune.  A tranquil path leads east and west, there is a paved road
 to the north and an extravagant house lies to the south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 2
 D0
 You see a paved road in the distance.
 ~
@@ -675,9 +675,16 @@ Off through the trees, you see a small, plain hut.
 ~
 0 -1 12021
 E
-Venus~
-   Venus, the Roman goddess of beauty and knowledge is displayed in a all of her
-splendor.
+trees tree shrubs shrub plants plant~
+   All of the plants, trees and shrubs are perfectly trimmed, without so much as
+a dead leaf anywhere to be seen.  You welcome the shade that they give from the
+harsh sun above.
+~
+E
+Neptune~
+   The statue of Neptune is made of pure jade and is holding a crystal trident.
+It is sitting in the centre of a small pond which has hundreds of beautiful fish
+swimming in it.
 ~
 E
 Jupiter~
@@ -685,16 +692,9 @@ Jupiter~
 looks like it is made of silver.
 ~
 E
-Neptune~
-   The statue of Neptune is made of pure jade and is holding a crystal trident.
-It is sitting in the center of a small pond which has hundreds of beautiful fish
-swimming in it.
-~
-E
-trees tree shrubs shrub plants plant~
-   All of the plants, trees and shrubs are perfectly trimmed, without so much as
-a dead leaf anywhere to be seen.  You welcome the shade that they give from the
-harsh sun above.
+Venus~
+   Venus, the Roman goddess of beauty and knowledge is displayed in a all of her
+splendor.
 ~
 S
 #12028
@@ -713,9 +713,9 @@ You see a well manicured path that winds through the estate.
 ~
 0 -1 12027
 E
-floor tile~
-   Very expensive!  A lot of master craftsmen labored long and hard to produce
-such a work of art.
+furniture~
+   You hope to eventually be able to own a piece of furniture just like these
+someday.  These are only dreams, of course.
 ~
 E
 windows~
@@ -723,9 +723,9 @@ windows~
 the gods.
 ~
 E
-furniture~
-   You hope to eventually be able to own a piece of furniture just like these
-someday.  These are only dreams, of course.
+floor tile~
+   Very expensive!  A lot of master craftsmen labored long and hard to produce
+such a work of art.
 ~
 S
 #12029
@@ -734,7 +734,7 @@ The Great North Gate~
 to be closed and locked against intrusion.  A large road muddy road runs
 through the gate and into the countryside.  Nero Drive runs south from here.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 The gate is made of solid iron and is well maintained.
 ~
@@ -746,12 +746,12 @@ Nero Drive continues in that direction.
 ~
 0 -1 12030
 E
-gate~
-   The gate is made of solid iron and is well maintained.
-~
-E
 road~
    The road is wide and very muddy.
+~
+E
+gate~
+   The gate is made of solid iron and is well maintained.
 ~
 S
 #12030
@@ -760,7 +760,7 @@ Nero Drive~
 A great gate is directly north of here.  The Roman citizens are very friendly
 and tip their hats or say hello as you pass.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 To the north, you can see a gate leading out of the city.
 ~
@@ -785,7 +785,7 @@ to say hello.  Most of the people are either coming from or going to the
 town square.  Nero Drive continues to the north, and you can see a large
 open area to the south.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 Nero drive continues in that direction.
 ~
@@ -813,7 +813,7 @@ southeast, off in the distance, you can see the aqueduct and the buildings
 of the Roman government lie to the northwest.  Nero Drive leads north and
 south from here and Clay Avenue runs east.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 Nero Drive heads in the direction of the northern gate.
 ~
@@ -831,15 +831,15 @@ aqueduct and buildings of the Roman government.
 ~
 0 -1 12033
 E
+aqueduct~
+   To the southeast, off in the distance, stands a large stone structure that is
+used to channel water into the city.
+~
+E
 vendor vendors~
    There are several sidewalk vendors here, selling fresh fruits and vegetables,
 home baked goods, fine jewelry and other items.  Most of the items for sale are
 of very high quality.
-~
-E
-aqueduct~
-   To the southeast, off in the distance, stands a large stone structure that is
-used to channel water into the city.
 ~
 S
 #12033
@@ -850,7 +850,7 @@ them are either coming from or going to the town square which lies to the
 north.  Nero Drive continues to the south.  There is an observation area
 overlooking the aqueduct to the east and a paved road leads west.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 The town square lies in that direction.
 ~
@@ -880,7 +880,7 @@ the city lies to the south and a small path goes west towards a nobleman's
 estate.  To the east, off in the distance, lies the great mountain.  It is
 rumored that the Gods watch over and protect the empire from there.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 Nero Drive leads in that direction.
 ~
@@ -905,9 +905,9 @@ closed and locked.  Looking through the bars, you see a heavily traveled
 road leading out of the city.  Nero Drive starts here and runs north and
 a wizard's shop lies to the east.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
-Nero Drive leads towards the center of town.
+Nero Drive leads towards the centre of town.
 ~
 ~
 0 -1 12034
@@ -951,15 +951,8 @@ The south door leads directly to the senate chambers.
 door wooden~
 2 12035 12037
 E
-desk~
-   The desk is made of solid walnut and gold inlay.  It is exquisitely carved
-with superior craftsmanship, the likes of which has rarely been seen.  It was
-probably brought to Rome from Gaul.
-~
-E
-documents decrees paperwork document decree papers paper~
-   The documents are all written on reed scrolls made in Egypt and have been
-sealed with wax.
+flowers plants flower plant~
+   The plants contribute to a very relaxing atmosphere.
 ~
 E
 bookcase books~
@@ -967,8 +960,15 @@ bookcase books~
 entire Roman empire.  They appear to be collecting dust.
 ~
 E
-flowers plants flower plant~
-   The plants contribute to a very relaxing atmosphere.
+documents decrees paperwork document decree papers paper~
+   The documents are all written on reed scrolls made in Egypt and have been
+sealed with wax.
+~
+E
+desk~
+   The desk is made of solid walnut and gold inlay.  It is exquisitely carved
+with superior craftsmanship, the likes of which has rarely been seen.  It was
+probably brought to Rome from Gaul.
 ~
 S
 #12037
@@ -1014,7 +1014,7 @@ Clay Avenue~
 heart of Rome.  There are large crowds of people to the west and the road
 continues to the east.  The aqueduct is directly south of here.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D1
 Clay Avenue continues in that direction.
 ~
@@ -1044,23 +1044,12 @@ hear the gurgle of water as it is channeled into the city.  Off in
 the distance, you can see the Mountain of the Gods.
 There is a sign mounted to the railing and a ramp leads west.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D3
 You can see a busy street in that direction.
 ~
 ~
 0 -1 12033
-E
-telescope~
-   If it were operational, it would offer a spectacular view of the Mountain of
-the Gods.  Unfortunately, it appears to have been vandalized.
-~
-E
-aqueduct~
-   The aqueduct is a massive stone structure that channels water into Rome from
-the Mountain of the Gods.  During the rainy season, it is filled to the top.
-However, due to recent drought, the water level appears to be very low.
-~
 E
 sign~
    ********************************************
@@ -1072,6 +1061,17 @@ sign~
    *           Magic Platform Company         *
    *                                          *
    ********************************************
+~
+E
+aqueduct~
+   The aqueduct is a massive stone structure that channels water into Rome from
+the Mountain of the Gods.  During the rainy season, it is filled to the top.
+However, due to recent drought, the water level appears to be very low.
+~
+E
+telescope~
+   If it were operational, it would offer a spectacular view of the Mountain of
+the Gods.  Unfortunately, it appears to have been vandalized.
 ~
 S
 #12041
@@ -1203,7 +1203,7 @@ Building.  There are several statues, none of any real significance,
 at the entrance to the building.  The main entrance to the building
 is at the top of the steps.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D4
 The steps lead into the Capitol Building.
 ~
@@ -1215,12 +1215,12 @@ The steps terminate onto Clay Avenue.
 ~
 0 -1 12046
 E
-stairs stairway steps~
-   The stairs are immaculately polished and made of white marble.
-~
-E
 statue statues~
    There is really nothing noteworthy about them.
+~
+E
+stairs stairway steps~
+   The stairs are immaculately polished and made of white marble.
 ~
 S
 #12046
@@ -1230,7 +1230,7 @@ through the heart of the city.  There are marble steps leading up.  To the
 south, off in the distance, you can see a large stone structure and a mountain
 that is partially obscured by the haze.  There is a general store to the north.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D0
 The general store lies in that direction.
 ~
@@ -1252,14 +1252,14 @@ There are some white marble steps leading up.
 ~
 0 -1 12045
 E
-stone structure aqueduct~
-   You see a massive stone structure, built several centuries ago, that is used
-to channel water into the city.
-~
-E
 mountain~
    Off to the southwest, you can see a huge mountain that is partially obscured
 by the haze.  It is rumored that the gods reside there and protect the city.
+~
+E
+stone structure aqueduct~
+   You see a massive stone structure, built several centuries ago, that is used
+to channel water into the city.
 ~
 S
 #12047
@@ -1340,14 +1340,14 @@ There is a door, reinforced with steel, in that direction.
 door~
 2 12038 12042
 E
+cinders ashes pile~
+   The ashes are a very fine greyish white powder that seems to be the only
+worldly remains of Froboz's "test specimens".
+~
+E
 workbench workbenches tubes beakers crucibles dishes~
    These are all tools of great power.  You cannot even begin to understand what
 any of this stuff does.
-~
-E
-cinders ashes pile~
-   The ashes are a very fine grayish white powder that seems to be the only
-worldly remains of Froboz's "test specimens".
 ~
 S
 #12050
@@ -1377,14 +1377,14 @@ The waiting room lies in that direction.
 ~
 0 -1 12043
 E
+seal~
+   The seal of the Emperor is mounted above the judge's stand.
+~
+E
 bench stand box jury~
    You see large wooden structures that are designed to separate the judge, jury
 and witnesses from the rest of the courtroom.  They are made of polished oak and
 are strictly functional.
-~
-E
-seal~
-   The seal of the Emperor is mounted above the judge's stand.
 ~
 S
 #12051
@@ -1395,7 +1395,7 @@ eastern side of the city.  The gate is currently open and to the east,
 there is a heavily used road, made of packed clay, that leads out of Rome.
 Another road leads westward into the city.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 1
 D1
 The clay road heads eastwards.
 ~
@@ -1407,14 +1407,14 @@ The clay street leads into the city.
 ~
 0 -1 12046
 E
-spires towers~
-   There are two tall spires on either side of the gate and are constantly
-manned by the city guards.  They are made of stone and stand about 40 feet tall.
-~
-E
 gate~
    The gate is fabricated from iron and has been designed to keep intruders out
 of the city.
+~
+E
+spires towers~
+   There are two tall spires on either side of the gate and are constantly
+manned by the city guards.  They are made of stone and stand about 40 feet tall.
 ~
 S
 #12052
@@ -1488,14 +1488,14 @@ The courtroom lies in that direction.
 door~
 1 12039 12050
 E
-tombs books~
-   The books are very large and filled with Roman legal precedent.
-~
-E
 papers documents~
    There are hundreds of pages of petitions, lawsuits and court orders sitting
 on the desk.  One particularly interesting case involves a nobleman, a slave and
 a roll of toilet paper.
+~
+E
+tombs books~
+   The books are very large and filled with Roman legal precedent.
 ~
 S
 #12056
@@ -1517,13 +1517,13 @@ You see a small trail, leading down.
 ~
 0 -1 12059
 E
+trail path~
+   The path is a little muddy, possibly due to a recent thundershower.
+~
+E
 tree trees vegetation~
    All of the vegetation is lush, green and in full bloom.  You wish that you
 could take the time to stop and enjoy it properly.
-~
-E
-trail path~
-   The path is a little muddy, possibly due to a recent thundershower.
 ~
 S
 #12057
@@ -1571,7 +1571,7 @@ through the valley and enters a large stone structure that lies to the west.
 There are birds singing and every now and then a ripple breaks the surface
 of the stream.  You can see a path leading through the trees to the up.
 ~
-120 0 0 0 0 0
+120 0 0 0 0 4
 D0
 A small path winds its way through the trees.
 ~
@@ -1583,19 +1583,19 @@ You see a path leading up the mountain.
 ~
 0 -1 12059
 E
-stream brook~
-   A stream of the clearest, cleanest water that you have ever seen winds its
-way through the valley.
+trees fruit~
+   The fruit trees, nourished by the fertile ground at the edge of the stream
+and sustained by the brilliant sunshine, line the banks of the stream and are
+laden with fruit.
 ~
 E
 fish~
    A variety of species swims peacefully in the cool, clear water.
 ~
 E
-trees fruit~
-   The fruit trees, nourished by the fertile ground at the edge of the stream
-and sustained by the brilliant sunshine, line the banks of the stream and are
-laden with fruit.
+stream brook~
+   A stream of the clearest, cleanest water that you have ever seen winds its
+way through the valley.
 ~
 S
 #12059
@@ -1689,7 +1689,7 @@ abreast.  It is packed hard through heavy use.  To the west stands the
 Gates of Rome inviting you to enter and partake of all the glory and
 splendor that is Rome.
 ~
-120 8 0 0 0 0
+120 8 0 0 0 1
 D1
 ~
 ~
@@ -1705,7 +1705,7 @@ Clay Road~
 abreast.  It is packed hard through heavy use.  To the west, your eyes
 catch the splendors of a mighty city.
 ~
-120 8 0 0 0 0
+120 8 0 0 0 1
 D1
 ~
 ~
@@ -1758,7 +1758,7 @@ there is a city or settlement in that direction.
    You cannot see any breaks in the horizon of the sand which fills your
 vision as you look to the east, it seems to stretch forever.
 ~
-120 4 0 0 0 0
+120 4 0 0 0 1
 D1
 The expanse of the Great Eastern Desert opens up before you.
 ~

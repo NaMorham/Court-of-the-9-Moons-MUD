@@ -206,7 +206,7 @@ door~
 1 0 1621
 S
 #1609
-Center Lane~
+Centre Lane~
    Tall stone walls rise above you to the east and west.  Guards are patrolling
 the battlements above you.  This area seems to be deserted.  The guards look
 down at you distrustfully.  You get the feeling that they don't want you here.
@@ -631,7 +631,7 @@ D3
 0 0 1634
 S
 #1634
-Center Lane~
+Centre Lane~
    A tall stone wall rises above you to the west.  Guards patrolling the
 battlements above you stare down distrustfully.  An open doorway to the east
 carries the delicious smell of baking bread and roasted meat.
@@ -756,7 +756,7 @@ Feast Hall~
    You have arrived in the feast hall of Camelot.  You are in luck.  A feast is
 in progress.  There are many open bench-type tables with servants scurrying to
 and fro.  The smell is intoxicating and you are drawn towards the huge table
-running through the center of the room, laden with food.
+running through the centre of the room, laden with food.
 ~
 16 8 0 0 0 0
 D1
@@ -867,7 +867,7 @@ D5
 S
 #1648
 Hidden Room~
-   Dust covers the floor, except for a few footprints that lead to the center of
+   Dust covers the floor, except for a few footprints that lead to the centre of
 the room and disappear.  The rest of the room is empty, the walls are bare.
 ~
 16 8 0 0 0 0

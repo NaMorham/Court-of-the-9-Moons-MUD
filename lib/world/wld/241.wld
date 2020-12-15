@@ -393,7 +393,7 @@ E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
 'deck 1' (engineering, transporter, the brig and the school)
-'deck 2' (Ten forward, sick bay and the security center)
+'deck 2' (Ten forward, sick bay and the security centre)
 'deck 3' (the science labs, the gym and the main shuttle bay)
 'deck 4' (The Bridge)
 ~
@@ -418,7 +418,7 @@ E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
 'deck 1' (engineering, transporter, the brig and the school)
-'deck 2' (Ten forward, sick bay and the security center)
+'deck 2' (Ten forward, sick bay and the security centre)
 'deck 3' (the science labs, the gym and the main shuttle bay)
 'deck 4' (The Bridge)
 ~
@@ -666,7 +666,7 @@ D0
 ~
 0 -1 24121
 D1
-   The security center is to the east.
+   The security centre is to the east.
 ~
 ~
 0 -1 24120
@@ -702,7 +702,7 @@ S
 T 24119
 #24121
 Ten Forward~
-   This is the center of the Enterprise's entertainment.  The entire northern
+   This is the centre of the Enterprise's entertainment.  The entire northern
 wall is covered with windows looking out into space, while two large wooden
 doors with the Starfleet insignia stamped on them face south.  Many round metal
 tables are scattered around the room, surrounded by metal chairs.  A long bar
@@ -723,7 +723,7 @@ Shuttle Bay~
 direct route to the ship's outer shell, when the ship is docked mind.  It's
 quite a large room, with a very high ceiling and a lot of floor space.  There
 are three different shuttle-crafts hovering just to the west, waiting to be
-flown into the very depths of space itself.  A large gray door leads into space,
+flown into the very depths of space itself.  A large grey door leads into space,
 becareful about opening it.
 ~
 241 8 0 0 0 0
@@ -733,13 +733,13 @@ A corridor is North.
 ~
 0 -1 24124
 D2
-   Some very large gray doors block the view north.
+   Some very large grey doors block the view north.
 ~
-door gray doors~
+door grey doors~
 1 -1 24139
 E
 door~
-   The large gray shuttle bay door that leads into deep space.  Make sure you
+   The large grey shuttle bay door that leads into deep space.  Make sure you
 have a spacesuit in your inventory!
 ~
 S
@@ -819,7 +819,7 @@ bedroom to the east.
 ~
 241 8 0 0 0 0
 D3
-   A gray-looking corridor is to the west.
+   A grey-looking corridor is to the west.
 ~
 ~
 0 -1 24124
@@ -827,7 +827,7 @@ S
 #24126
 Enterprise Gym~
    You emerge into the Enterprise gym. The room is quite large, with a soft
-gray floor. A set of lockers against the southern wall contain all of the
+grey floor. A set of lockers against the southern wall contain all of the
 necessary equipment needed for using the gym. A thick stack of mats have been
 piled high in one corner, which can be used for different activities. Captain
 Picard likes to come here to practice his fencing.
@@ -1003,7 +1003,7 @@ E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
 'deck 1' (engineering, transporter, the brig and the school)
-'deck 2' (Ten forward, sick bay and the security center)
+'deck 2' (Ten forward, sick bay and the security centre)
 'deck 3' (the science labs, the gym and the main shuttle bay)
 'deck 4' (The Bridge)
 ~
@@ -1028,7 +1028,7 @@ E
 instructional panel~
    To operate the turbolift, say the name of the location you wish to get to:
 'deck 1' (engineering, transporter, the brig and the school)
-'deck 2' (Ten forward, sick bay and the security center)
+'deck 2' (Ten forward, sick bay and the security centre)
 'deck 3' (the science labs, the gym and the main shuttle bay)
 'deck 4' (The Bridge)
 ~
@@ -1132,13 +1132,13 @@ Outer Space by the Enterprise~
    You are floating in outerspace, right beside the USS Enterprise.  Billions of
 stars glitter and sparkle from every direction, originating from the vast
 expanses of deep space.  Without a spacesuit, one would surely perish out here.
-A large gray door leads into the Enterprise's Shuttle Bay.
+A large grey door leads into the Enterprise's Shuttle Bay.
 ~
 241 0 0 0 0 9
 D0
 The Shuttle Bay is North.
 ~
-door doors gray~
+door doors grey~
 1 -1 24122
 D4
    All you can see is the massive expanse of deep space.
@@ -1237,7 +1237,7 @@ T 24129
 A Genetic Scientific Laboratory~
    Everything is white or silver and kept perfectly clean.  Many chemicals are
 layed out in a specific order all around the room on laboratory tables.  There
-is a large dentist-like chair in the center of the room.  It's slightly longer
+is a large dentist-like chair in the centre of the room.  It's slightly longer
 and is suited more for being left in a horizontal configuration.  There are
 loops of metal encircling it, each with complex computer circuits and scanning
 equipment.  To the east are four large, circular booths, about the size of a

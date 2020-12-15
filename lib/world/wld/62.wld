@@ -156,7 +156,7 @@ In The Forest~
    The woods thicken here, and surpisingly, you see a tree
 completely cut in half by the magical barrier running
 north-south here.  The tree looks healthy and unaffected
-by the energy field passing right through its center.
+by the energy field passing right through its centre.
 Odd...
 ~
 62 0 0 0 0 3
@@ -357,7 +357,7 @@ S
 #6214
 The River's Edge~
    A beautiful river flows swiftly by, the current looking
-quite dangerous in fact.  Out in the center of the river
+quite dangerous in fact.  Out in the centre of the river
 you spot the energy barrier enclosure... no way out here.
 Looking up, you see a bird fly right through the barrier
 overhead and wonder as to the force field's nature.  This
@@ -377,7 +377,7 @@ S
 #6215
 The River's Edge~
    The river flows on its course, unhampered by the energy
-barrier passing right down its center for as far as you
+barrier passing right down its centre for as far as you
 can see in both directions.  The path you are on travels
 along the length of the river to the east and west
 in between the water and the forest's edge.  Once again you
@@ -862,7 +862,7 @@ A River's Edge~
 The trail you are on leads on by the water's edge to the
 west, and back into the forest to the south.  A large
 boulder is just to the west, blocking all travel in that
-direction.  Out in the center of the river, the 'roof' of
+direction.  Out in the centre of the river, the 'roof' of
 the energy field meets the northern 'wall'.  The water
 passes right on through the magical barrier, however...
 the barrier is obviously porous to some materials.
@@ -1232,7 +1232,7 @@ D2
 0 -1 6243
 D3
 A large steel door.  There seems to be no hinges or knob,
-but there is a small keyhole in the exact center of it.
+but there is a small keyhole in the exact centre of it.
 ~
 door steel~
 2 6200 6256
@@ -1305,7 +1305,7 @@ with a full set of restraints.  A ledge nearby has a whole
 array of sterile medical equipment on it, covered over by
 a clear lid.  There's a drain in the floor with gradients
 leading to it to carry away the blood.  For some reason,
-you don't imagine this as a voluntary operating theater...
+you don't imagine this as a voluntary operating theatre...
 ~
 62 8 0 0 0 0
 D1
