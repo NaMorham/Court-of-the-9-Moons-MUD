@@ -16,7 +16,12 @@
 #include <math.h>
 
 #include "../conf.h"
-#include "../sysdep.h"s
+#include "../sysdep.h"
+
+#ifdef _WIN32
+#include <Windows.h>
+#include <winternl.h>
+#endif
 
 // general utility
 #define TIME_BUF_SZ 64
@@ -306,8 +311,7 @@ int main(int argc, char *argv[])
 //---------------------------------------------------------------------------
 void init_colour(int argc, char *argv[]) {
 #ifdef _WIN32
-#include <Windows.h>
-#include <winternl.h>
+
 
     HANDLE cmd = GetStdHandle(STD_OUTPUT_HANDLE);
     unsigned long ir = 0;
