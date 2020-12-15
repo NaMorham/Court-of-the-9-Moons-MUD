@@ -1762,3 +1762,114 @@ const char *racetitle_female(int chrace, int level)
     // Default title for racees which do not have titles defined
     return "the Raceless";
 }
+
+/*
+ * Adjust stats to suit the race of the charater.
+ */
+void adjust_abils_for_race(struct char_data *ch) {
+    // basic version.  stat generation eeds a redo anyway
+    int irand = 0;
+
+    /*
+    CLASSB_ANYPC,                       //<! RACE_HUMAN,
+    CLASSB_WARRIOR | CLASSB_THIEF,      //<! RACE_TROLLOC,
+    CLASSB_CLERIC | CLASSB_WARRIOR,     //<! RACE_OGIER,
+    CLASSB_MAGIC_USER | CLASSB_THIEF    //<! RACE_FADE,
+    */
+    switch (ch->player.chrace) {
+    case RACE_HUMAN:
+        mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Adjust stats for human player '%s'", GET_NAME(ch));
+        // nope, humans are middle of the road
+        break;
+    case RACE_TROLLOC:
+        mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Adjust stats for trolloc player '%s'", GET_NAME(ch));
+        // trollocs are big, strong or fast and dumb
+        // allow for class choice?
+        switch (ch->player.chclass) {
+        case CLASS_WARRIOR:
+            // str and con up.
+            // stronger or tougher?
+            irand = rand_number(1, 3);
+
+            // if we have a 1, clearly stronger
+            // if we have a 2 and are already stronger, enhance it
+            if ((irand == 1) || ((irand == 2) && (GET_STR(ch)>GET_CON(ch)))) {
+                // stronger
+                // str up by 2-3
+                ch->real_abils.setStr(LIMIT(ch->real_abils.getStr()+rand_number(2,3), 7, 21));
+                ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() + rand_number(1, 2), 6, 21));
+            }
+            else {  // equivalent to (irand == 3) || ((irand == 2) && (GET_CON(ch)>=GET_STR(ch)))
+                // tougher
+                ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(1, 2), 6, 21));
+                ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() + rand_number(2, 3), 7, 21));
+            }
+            break;
+        case CLASS_THIEF:
+            // dex and str up.
+            ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() + rand_number(2, 3), 8, 21));
+            ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(1, 2), 5, 20));
+            break;
+        default:
+            WriteLogf("SYSERR: adjust_abils_for_race: Trolloc character '%s' has invalid class [%u]", GET_NAME(ch), ch->player.chclass);
+        }
+        //ch->real_abils.setStrAdd(LIMIT(ch->real_abils.getStrAdd()+rand_number(2,3), 7, 21));  // todo - adjust str add
+
+        // regardless, wis down quite a lot - they cannot resist anything
+        ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() - rand_number(3, 5), 1, 12));  // if they are lucky they MIGHT reach average human
+        // regardless, int down quite a bit
+        ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() - rand_number(2, 3), 3, 14));  // if they are lucky they MIGHT reach average human
+        // regardless, cha down a bit
+        ch->real_abils.setCha(LIMIT(ch->real_abils.getWis() - rand_number(2, 4), 1, 13));  // if they are lucky they MIGHT reach average human
+        break;
+
+    case RACE_OGIER:
+        // Ogier are strong and intelligent, but not quick
+        // allow for class choice?
+        switch (ch->player.chclass) {
+        case CLASS_CLERIC:
+            // wis and con up
+            ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() + rand_number(2, 4), 14, 21));
+            ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() + rand_number(1, 2), 11, 20));
+            break;
+        case CLASS_WARRIOR:
+            // wis and str up
+            ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(2, 4), 14, 21));
+            ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() + rand_number(1, 2), 11, 20));
+            break;
+        default:
+            WriteLogf("SYSERR: adjust_abils_for_race: Ogier character '%s' has invalid class [%u]", GET_NAME(ch), ch->player.chclass);
+        }
+        //ch->real_abils.setStrAdd(LIMIT(ch->real_abils.getStrAdd()+rand_number(2,3), 7, 21));  // todo - adjust str add
+
+        // regardless, dex down quite a lot
+        ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() - rand_number(2, 4), 2, 16));
+        // regardless, int up a little
+        ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() + rand_number(1, 2), 12, 20));
+        break;
+    case RACE_FADE:
+        // Fades are quick, dangerous and resistant to magical effects
+        switch (ch->player.chclass) {
+        case CLASS_WARRIOR:
+            ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() + rand_number(2, 3), 14, 21));
+            ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(1, 3), 10, 18));
+            break;
+        case CLASS_THIEF:
+            ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() + rand_number(4, 5), 17, 21));
+        default:
+            WriteLogf("SYSERR: adjust_abils_for_race: Fade character '%s' has invalid class [%u]", GET_NAME(ch), ch->player.chclass);
+        }
+        //ch->real_abils.setStrAdd(LIMIT(ch->real_abils.getStrAdd()+rand_number(2,3), 7, 21));  // todo - adjust str add
+
+        // regardless, wis up a little
+        ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() + rand_number(0, 1), 12, 19));
+        // cha 3 - nothing likes a fade
+        ch->real_abils.setCha(3);  // @todo: D&D players option would make this better, fades are VERY intimidating, just not liked by anything
+        // con down a bit - fast and dangerous, but for balance, not robust
+        ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() - rand_number(1, 5), 3, 13));
+        break;
+    default:
+        WriteLogf("SYSERR: adjust_abils_for_race: Character '%s' has invalid race [%u]", GET_NAME(ch), ch->player.chrace);
+        //mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "Failure to AddRecentPlayer (returned FALSE).");
+    }
+}

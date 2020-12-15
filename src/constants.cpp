@@ -1065,8 +1065,8 @@ wear_bits_count = sizeof(wear_bits) / sizeof(wear_bits[0]) - 1;
 
 // bits for each race, specifying which classes are allowed
 extern ush_int classes_for_race[] = {
-    CLASSB_ANYPC,                                   //<! RACE_HUMAN,
-    CLASSB_WARRIOR | CLASSB_THIEF,                  //<! RACE_TROLLOC,
-    CLASSB_CLERIC | CLASSB_THIEF | CLASSB_WARRIOR,  //<! RACE_OGIER,
-    CLASSB_WARRIOR | CLASSB_THIEF                   //<! RACE_FADE,
+    CLASSB_ANYPC,                       //<! RACE_HUMAN,
+    CLASSB_WARRIOR | CLASSB_THIEF,      //<! RACE_TROLLOC,
+    CLASSB_CLERIC | CLASSB_WARRIOR,     //<! RACE_OGIER,
+    CLASSB_MAGIC_USER | CLASSB_THIEF    //<! RACE_FADE,
 };
