@@ -29,6 +29,56 @@
 #define TIME_BUF_SZ 64
 #define DEFAULT_STR_BUF 1024
 
+#define C_NRM_ON "\033[0m"
+#define C_BLD_ON "\033[1m"
+#define C_ITL_ON "\033[3m"
+#define C_UND_ON "\033[4m"
+#define C_BLK_ON "\033[30m"
+#define C_RED_ON "\033[31m"
+#define C_GRN_ON "\033[32m"
+#define C_YEL_ON "\033[33m"
+#define C_BLU_ON "\033[34m"
+#define C_MAG_ON "\033[35m"
+#define C_CYN_ON "\033[36m"
+#define C_WHT_ON "\033[37m"
+#define C_BBLK_ON "\033[90m"
+#define C_BRED_ON "\033[91m"
+#define C_BGRN_ON "\033[92m"
+#define C_BYEL_ON "\033[93m"
+#define C_BBLU_ON "\033[94m"
+#define C_BMAG_ON "\033[95m"
+#define C_BCYN_ON "\033[96m"
+#define C_BWHT_ON "\033[97m"
+
+#define FAILED_STR_ON C_BRED_ON"FAIL"C_NRM_ON
+#define PASSED_STR_ON C_BGRN_ON"PASS"C_NRM_ON
+
+#define C_NRM_OFF ""
+#define C_BLD_OFF ""
+#define C_ITL_OFF ""
+#define C_UND_OFF ""
+#define C_BLK_OFF ""
+#define C_RED_OFF ""
+#define C_GRN_OFF ""
+#define C_YEL_OFF ""
+#define C_BLU_OFF ""
+#define C_MAG_OFF ""
+#define C_CYN_OFF ""
+#define C_WHT_OFF ""
+#define C_BBLK_OFF ""
+#define C_BRED_OFF ""
+#define C_BGRN_OFF ""
+#define C_BYEL_OFF ""
+#define C_BBLU_OFF ""
+#define C_BMAG_OFF ""
+#define C_BCYN_OFF ""
+#define C_BWHT_OFF ""
+
+#define FAILED_STR_OFF "FAIL"
+#define PASSED_STR_OFF "PASS"
+
+
+// temp, these will become constants
 #define C_NRM "\033[0m"
 #define C_BLD "\033[1m"
 #define C_ITL "\033[3m"
@@ -49,6 +99,9 @@
 #define C_BMAG "\033[95m"
 #define C_BCYN "\033[96m"
 #define C_BWHT "\033[97m"
+
+#define FAILED_STR C_BRED"FAIL"C_NRM
+#define PASSED_STR C_BGRN"PASS"C_NRM
 
 void basic_log(const char *format, ...);
 void basic_vlog(const char *format, va_list args);
@@ -259,9 +312,6 @@ struct char_data {
 #define GET_CON(ch) (ch->real_abils.getCon())
 #define GET_RACE(ch) (ch->chrace)
 #define GET_CLASS(ch) (ch->chclass)
-
-#define FAILED_STR C_BRED"FAIL"C_NRM
-#define PASSED_STR C_BGRN"PASS"C_NRM
 
 void init_colour(int argc, char *argv[]);
 
@@ -687,7 +737,7 @@ void basic_vlog(const char *format, va_list args)
 #ifdef CIRCLE_WINDOWS
     time_t ct = time(0);
     //strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%b %d %H:%M:%S %Y", localtime(&ct));
-    strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%%Y-%%m-%%dT%%H:%%M:%%S", gmtime(&ct));
+    strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%Y-%m-%dT%H:%M:%S", gmtime(&ct));
 #else
     long            ms; // Milliseconds
     time_t          s;  // Seconds
