@@ -15,10 +15,12 @@
 #include <string.h>
 #include <math.h>
 
+#ifdef _WIN32
+#pragma comment(lib, "ntdll")
+
 #include "../conf.h"
 #include "../sysdep.h"
 
-#ifdef _WIN32
 #include <Windows.h>
 #include <winternl.h>
 #endif
@@ -318,6 +320,14 @@ void init_colour(int argc, char *argv[]) {
     NtQueryObject(cmd, ObjectTypeInformation, NULL, 0, &ir);
     PPUBLIC_OBJECT_TYPE_INFORMATION info = (PPUBLIC_OBJECT_TYPE_INFORMATION)(malloc(ir));
     NtQueryObject(cmd, ObjectTypeInformation, info, ir, &ir);
+
+    printf("Running as Typename [");
+    int bullshit = 0;  // fucking M$, just use fucking strings
+    do {
+        printf("%c", info->TypeName.Buffer[bullshit++]);
+    } while (info->TypeName.Buffer[bullshit] != 0);
+    printf("]\n");
+
     if (info->TypeName.Buffer[0] == 'K' && info->TypeName.Buffer[1] == 'e' && info->TypeName.Buffer[2] == 'y') {
         /*cmd*/
         printf("Running as cmd\n");
