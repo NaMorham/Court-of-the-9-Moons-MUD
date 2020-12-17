@@ -17,6 +17,12 @@
 
 #include "test_utils.h"
 
+#ifdef _WIN32
+// sigh, more windows string fucker needs this
+# include "../conf.h"
+# include "../sysdep.h"
+#endif
+
 // class and race stuff
 /*
  *  PC classes
@@ -195,6 +201,7 @@ bool max_tests(size_t &pass_count, size_t &test_count);
 bool limit_tests(size_t &pass_count, size_t &test_count);
 
 bool rand_tests(size_t &pass_count, size_t &test_count);
+bool roll_tests(size_t &pass_count, size_t &test_count);
 
 // messy, but idgaf
 Colours_t &C = GetColoursObj();
@@ -224,6 +231,10 @@ int main(int argc, char *argv[])
     basic_log("%s--- Test Min/Max/Limit ---%s", C.BYEL(), C.NRM());
 
     rand_tests(pass_count, test_count);
+    total_pass += pass_count;
+    total_count += test_count;
+
+    roll_tests(pass_count, test_count);
     total_pass += pass_count;
     total_count += test_count;
 
@@ -404,7 +415,8 @@ bool limit_tests(size_t &pass_count, size_t &test_count) {
 }
 
 
-bool rand_tests(size_t &pass_count, size_t &test_count) {
+bool rand_tests(size_t &pass_count, size_t &test_count)
+{
     size_t test_num = 0;
     double pct_pass = 0.0;
 
@@ -428,12 +440,16 @@ bool rand_tests(size_t &pass_count, size_t &test_count) {
     //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
     //basic_log("%s##%s", C.BMAG(), C.NRM());
     basic_log("%s##%s \n%s", C.BMAG(), C.NRM(), foo.graph());
+    test_count++;
+    pass_count += ((foo.m_numAbove+foo.m_numBelow) == 0 ? 1 : 0);
 
     histo_t foo2(1, 6);
     for (int i = 0; i < 300; ++i) {
     	foo2.increment(rand_number(1,6));
     }
     basic_log("%s##%s \n%s", C.BMAG(), C.NRM(), foo2.graph());
+    test_count++;
+    pass_count += ((foo2.m_numAbove + foo2.m_numBelow) == 0 ? 1 : 0);
 
     if (test_count < 1) {
         pct_pass = 0;
@@ -516,3 +532,31 @@ void roll_real_abils(struct char_data *ch)
     ch->aff_abils = ch->real_abils;
 }
 
+bool roll_tests(size_t &pass_count, size_t &test_count)
+{
+    size_t test_num = 0;
+    double pct_pass = 0.0;
+
+    char buf1[DEFAULT_STR_BUF+1];
+
+    test_count = 0;
+    pass_count = 0;
+
+    for (size_t num_gen = 0; num_gen < 100; num_gen++) {
+        snprintf(buf1, DEFAULT_STR_BUF, "Hu_Wa_%03d", num_gen + 1);
+        char_data ch(buf1, CLASS_WARRIOR, RACE_HUMAN);
+
+        roll_real_abils(&ch);
+        basic_log(ch);
+    }
+
+    if (test_count < 1) {
+        pct_pass = 0;
+    }
+    else {
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
+    }
+    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
+
+    return pass_count == test_count;
+}
