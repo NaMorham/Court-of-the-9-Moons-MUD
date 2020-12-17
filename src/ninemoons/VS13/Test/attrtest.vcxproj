@@ -12,6 +12,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\test\attrtest.cpp" />
+    <ClCompile Include="..\..\..\test\test_utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\test\test_utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B700DCAB-474C-4712-98CD-44F2FD777B57}</ProjectGuid>

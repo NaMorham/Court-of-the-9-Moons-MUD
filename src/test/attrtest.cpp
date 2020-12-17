@@ -15,130 +15,7 @@
 #include <string.h>
 #include <math.h>
 
-#ifdef _WIN32
-#pragma comment(lib, "ntdll")
-
-#include "../conf.h"
-#include "../sysdep.h"
-
-#include <Windows.h>
-#include <winternl.h>
-#endif
-
-// general utility
-#define TIME_BUF_SZ 64
-#define DEFAULT_STR_BUF 1024
-
-#define C_NRM_ON "\033[0m"
-#define C_BLD_ON "\033[1m"
-#define C_ITL_ON "\033[3m"
-#define C_UND_ON "\033[4m"
-#define C_BLK_ON "\033[30m"
-#define C_RED_ON "\033[31m"
-#define C_GRN_ON "\033[32m"
-#define C_YEL_ON "\033[33m"
-#define C_BLU_ON "\033[34m"
-#define C_MAG_ON "\033[35m"
-#define C_CYN_ON "\033[36m"
-#define C_WHT_ON "\033[37m"
-#define C_BBLK_ON "\033[90m"
-#define C_BRED_ON "\033[91m"
-#define C_BGRN_ON "\033[92m"
-#define C_BYEL_ON "\033[93m"
-#define C_BBLU_ON "\033[94m"
-#define C_BMAG_ON "\033[95m"
-#define C_BCYN_ON "\033[96m"
-#define C_BWHT_ON "\033[97m"
-
-#define FAILED_STR_ON C_BRED_ON"FAIL"C_NRM_ON
-#define PASSED_STR_ON C_BGRN_ON"PASS"C_NRM_ON
-
-#define C_NRM_OFF ""
-#define C_BLD_OFF ""
-#define C_ITL_OFF ""
-#define C_UND_OFF ""
-#define C_BLK_OFF ""
-#define C_RED_OFF ""
-#define C_GRN_OFF ""
-#define C_YEL_OFF ""
-#define C_BLU_OFF ""
-#define C_MAG_OFF ""
-#define C_CYN_OFF ""
-#define C_WHT_OFF ""
-#define C_BBLK_OFF ""
-#define C_BRED_OFF ""
-#define C_BGRN_OFF ""
-#define C_BYEL_OFF ""
-#define C_BBLU_OFF ""
-#define C_BMAG_OFF ""
-#define C_BCYN_OFF ""
-#define C_BWHT_OFF ""
-
-#define FAILED_STR_OFF "FAIL"
-#define PASSED_STR_OFF "PASS"
-
-
-// temp, these will become constants
-#define C_NRM "\033[0m"
-#define C_BLD "\033[1m"
-#define C_ITL "\033[3m"
-#define C_UND "\033[4m"
-#define C_BLK "\033[30m"
-#define C_RED "\033[31m"
-#define C_GRN "\033[32m"
-#define C_YEL "\033[33m"
-#define C_BLU "\033[34m"
-#define C_MAG "\033[35m"
-#define C_CYN "\033[36m"
-#define C_WHT "\033[37m"
-#define C_BBLK "\033[90m"
-#define C_BRED "\033[91m"
-#define C_BGRN "\033[92m"
-#define C_BYEL "\033[93m"
-#define C_BBLU "\033[94m"
-#define C_BMAG "\033[95m"
-#define C_BCYN "\033[96m"
-#define C_BWHT "\033[97m"
-
-#define FAILED_STR C_BRED"FAIL"C_NRM
-#define PASSED_STR C_BGRN"PASS"C_NRM
-
-void basic_log(const char *format, ...);
-void basic_vlog(const char *format, va_list args);
-
-#define WriteLogf basic_log
-
-typedef signed char sbyte;          //!< 1 byte; vals = -127 to 127
-typedef unsigned char ubyte;        //!< 1 byte; vals = 0 to 255
-typedef signed short int sh_int;    //!< 2 bytes; vals = -32,768 to 32,767
-typedef unsigned short int ush_int; //!< 2 bytes; vals = 0 to 65,535
-
-#if !defined(__cplusplus)   // Anyone know a portable method?
-typedef char bool;          //!< Technically 1 signed byte; vals should only = TRUE or FALSE.
-#endif
-
-#if !defined(CIRCLE_WINDOWS) || defined(LCC_WIN32)    // Hm, sysdep.h?
-typedef signed char byte;   //!< Technically 1 signed byte; vals should only = TRUE or FALSE.
-#endif
-
-inline int MIN(const int a, const int b) { return (a < b ? a : b); }
-inline int MAX(const int a, const int b) { return (a > b ? a : b); }
-inline int LIMIT(const int val, const int minv, const int maxv) {
-    return (maxv >= minv ? MAX(minv, MIN(maxv, val)) : LIMIT(val, maxv, minv));
-}
-
-// random.cpp and utils.cpp
-#define    m  (unsigned long)2147483647
-#define    q  (unsigned long)127773
-
-#define    a (unsigned int)16807
-#define    r (unsigned int)2836
-
-static unsigned long seed;
-
-void circle_srandom(unsigned long initial_seed);
-unsigned long circle_random(void);
-const int rand_number(const int from, const int to);
+#include "test_utils.h"
 
 // class and race stuff
 /*
@@ -167,18 +44,18 @@ const int rand_number(const int from, const int to);
 
 const char *class_name(const sbyte chclass) {
     switch (chclass) {
-    case CLASS_UNDEFINED:     return "Undefined";
-    case CLASS_MAGIC_USER:     return "Magic User";
-    case CLASS_CLERIC:         return "Cleric";
-    case CLASS_THIEF:         return "Thief";
+    case CLASS_UNDEFINED:   return "Undefined";
+    case CLASS_MAGIC_USER:  return "Magic User";
+    case CLASS_CLERIC:      return "Cleric";
+    case CLASS_THIEF:       return "Thief";
     case CLASS_WARRIOR:     return "Warrior";
-    case CLASS_OTHER:         return "Other";
-    case CLASS_UNDEAD:         return "Undead";
-    case CLASS_HUMANOID:     return "Humanoid";
-    case CLASS_ANIMAL:         return "Animal";
-    case CLASS_DRAGON:         return "Dragon";
-    case CLASS_GIANT:         return "Giant";
-    default:                 return "**UNKNOWN**";
+    case CLASS_OTHER:       return "Other";
+    case CLASS_UNDEAD:      return "Undead";
+    case CLASS_HUMANOID:    return "Humanoid";
+    case CLASS_ANIMAL:      return "Animal";
+    case CLASS_DRAGON:      return "Dragon";
+    case CLASS_GIANT:       return "Giant";
+    default:                return "**UNKNOWN**";
     }
 }
 
@@ -313,12 +190,14 @@ struct char_data {
 #define GET_RACE(ch) (ch->chrace)
 #define GET_CLASS(ch) (ch->chclass)
 
-void init_colour(int argc, char *argv[]);
-
 bool min_tests(size_t &pass_count, size_t &test_count);
 bool max_tests(size_t &pass_count, size_t &test_count);
 bool limit_tests(size_t &pass_count, size_t &test_count);
+
 bool rand_tests(size_t &pass_count, size_t &test_count);
+
+// messy, but idgaf
+Colours_t &C = GetColoursObj();
 
 //---------------------------------------------------------------------------
 int main(int argc, char *argv[])
@@ -326,12 +205,9 @@ int main(int argc, char *argv[])
     size_t pass_count,  test_count, total_count = 0, total_pass = 0;
     double total_pct_pass = 0.0;
 
-    init_colour(argc, argv);
+    circle_srandom((unsigned long)time(0));
 
-    circle_srandom(time(0));
-
-    printf("Wooo?\n");
-    basic_log("%s--- Test Min/Max/Limit ---%s", C_BYEL, C_NRM);
+    basic_log("%s--- Test Min/Max/Limit ---%s", C.BYEL(), C.NRM());
 
     min_tests(pass_count, test_count);
     total_pass += pass_count;
@@ -345,56 +221,23 @@ int main(int argc, char *argv[])
     total_pass += pass_count;
     total_count += test_count;
 
-    basic_log("%s--- Test Min/Max/Limit ---%s", C_BYEL, C_NRM);
+    basic_log("%s--- Test Min/Max/Limit ---%s", C.BYEL(), C.NRM());
 
     rand_tests(pass_count, test_count);
     total_pass += pass_count;
     total_count += test_count;
 
-    total_pct_pass = ((double)total_pass / (double)total_count) * 100.0;
-    basic_log("===== %u/%u tests passed (%s%.2f%%%s) =====\n", total_pass, total_count,
-        (total_pct_pass >= 90.0 ? C_GRN : (total_pct_pass >= 75 ? C_YEL : (total_pct_pass >= 25.0 ? C_RED : C_BRED))),
-        total_pct_pass, C_NRM);
+    if (total_count < 1) {
+        total_pct_pass = 0;
+    }
+    else {
+        total_pct_pass = ((double)total_pass / (double)total_count) * 100.0;
+    }
+    basic_log("===== %u/%u tests passed (%s) =====\n", total_pass, total_count, C.ColPct(total_pct_pass));
 
     return 0;
 }
 
-
-//---------------------------------------------------------------------------
-void init_colour(int argc, char *argv[]) {
-#ifdef _WIN32
-
-
-    HANDLE cmd = GetStdHandle(STD_OUTPUT_HANDLE);
-    unsigned long ir = 0;
-    NtQueryObject(cmd, ObjectTypeInformation, NULL, 0, &ir);
-    PPUBLIC_OBJECT_TYPE_INFORMATION info = (PPUBLIC_OBJECT_TYPE_INFORMATION)(malloc(ir));
-    NtQueryObject(cmd, ObjectTypeInformation, info, ir, &ir);
-
-    printf("Running as Typename [");
-    int bullshit = 0;  // fucking M$, just use fucking strings
-    do {
-        printf("%c", info->TypeName.Buffer[bullshit++]);
-    } while (info->TypeName.Buffer[bullshit] != 0);
-    printf("]\n");
-
-    if (info->TypeName.Buffer[0] == 'K' && info->TypeName.Buffer[1] == 'e' && info->TypeName.Buffer[2] == 'y') {
-        /*cmd*/
-        printf("Running as cmd\n");
-    }
-    else if (info->TypeName.Buffer[0] == 'F' && info->TypeName.Buffer[1] == 'i' && info->TypeName.Buffer[2] == 'l' && info->TypeName.Buffer[3] == 'e') {
-        /*cygwin*/
-        printf("Running as cygwin\n");
-    }
-    else{
-        /*dont know*/
-        printf("Running as unknown [%s]\n", info->TypeName);
-    }
-    free(info);
-#else
-    printf("Running on non windows\n");
-#endif
-}
 
 //---------------------------------------------------------------------------
 struct test_minmax {
@@ -431,14 +274,18 @@ bool min_tests(size_t &pass_count, size_t &test_count) {
         struct test_minmax &test = min_tests[test_num];
         int result = MIN(test.val1, test.val2);
         basic_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
-            C_CYN, test_num+1, test_count, C_NRM, test.name, (result == test.expected ? PASSED_STR : FAILED_STR),
-            C_BBLK, test.val1, C_NRM, C_BBLK, test.val2, C_NRM, C_BBLK, result, C_NRM, C_BBLK, test.expected, C_NRM);
+            C.CYN(), test_num+1, test_count, C.NRM(), test.name, (result == test.expected ? C.PASSED_STR() : C.FAILED_STR()),
+            C.BBLK(), test.val1, C.NRM(), C.BBLK(), test.val2, C.NRM(), C.BBLK(), result, C.NRM(), C.BBLK(), test.expected, C.NRM());
         pass_count += (result == test.expected ? 1 : 0);
     }
-    pct_pass = ((double)pass_count / (double)test_count) * 100.0;
-    basic_log("> %u/%u tests passed (%s%.2f%%%s)\n", pass_count, test_count,
-        (pct_pass >= 90.0 ? C_GRN : (pct_pass >= 75 ? C_YEL : (pct_pass >= 25.0 ? C_RED : C_BRED))),
-        pct_pass, C_NRM);
+
+    if (test_count < 1) {
+        pct_pass = 0;
+    }
+    else {
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
+    }
+    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -470,14 +317,18 @@ bool max_tests(size_t &pass_count, size_t &test_count) {
         struct test_minmax &test = max_tests[test_num];
         int result = MAX(test.val1, test.val2);
         basic_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
-            C_CYN, test_num + 1, test_count, C_NRM, test.name, (result == test.expected ? PASSED_STR : FAILED_STR),
-            C_BBLK, test.val1, C_NRM, C_BBLK, test.val2, C_NRM, C_BBLK, result, C_NRM, C_BBLK, test.expected, C_NRM);
+            C.CYN(), test_num + 1, test_count, C.NRM(), test.name, (result == test.expected ? C.PASSED_STR() : C.FAILED_STR()),
+            C.BBLK(), test.val1, C.NRM(), C.BBLK(), test.val2, C.NRM(), C.BBLK(), result, C.NRM(), C.BBLK(), test.expected, C.NRM());
         pass_count += (result == test.expected ? 1 : 0);
     }
-    pct_pass = ((double)pass_count / (double)test_count) * 100.0;
-    basic_log("> %u/%u tests passed (%s%.2f%%%s)\n", pass_count, test_count,
-        (pct_pass >= 90.0 ? C_GRN : (pct_pass >= 75 ? C_YEL : (pct_pass >= 25.0 ? C_RED : C_BRED))),
-        pct_pass, C_NRM);
+
+    if (test_count < 1) {
+        pct_pass = 0;
+    }
+    else {
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
+    }
+    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -535,153 +386,23 @@ bool limit_tests(size_t &pass_count, size_t &test_count) {
         struct test_limit &test = limit_tests[test_num];
         int result = LIMIT(test.val, test.minv, test.maxv);
         basic_log("%s[%2u/%2u] %s %24.24s: %s - Min [%s%3d%s], Val [%s%3d%s], Max [%s%3d%s] -> Got [%s%3d%s], Expected [%s%3d%s]",
-            C_CYN, test_num + 1, test_count, C_NRM, test.name, (result == test.expected ? PASSED_STR : FAILED_STR),
-            C_BBLK, test.minv, C_NRM, C_BBLK, test.val, C_NRM, C_BBLK, test.maxv, C_NRM,
-            C_BBLK, result, C_NRM, C_BBLK, test.expected, C_NRM);
+            C.CYN(), test_num + 1, test_count, C.NRM(), test.name, (result == test.expected ? C.PASSED_STR() : C.FAILED_STR()),
+            C.BBLK(), test.minv, C.NRM(), C.BBLK(), test.val, C.NRM(), C.BBLK(), test.maxv, C.NRM(),
+            C.BBLK(), result, C.NRM(), C.BBLK(), test.expected, C.NRM());
         pass_count += (result == test.expected ? 1 : 0);
     }
-    pct_pass = ((double)pass_count / (double)test_count) * 100.0;
-    basic_log("> %u/%u tests passed (%s%.2f%%%s)\n", pass_count, test_count,
-        (pct_pass >= 90.0 ? C_GRN : (pct_pass >= 75 ? C_YEL : (pct_pass >= 25.0 ? C_RED : C_BRED))),
-        pct_pass, C_NRM);
+
+    if (test_count < 1) {
+        pct_pass = 0;
+    }
+    else {
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
+    }
+    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
 
     return pass_count == test_count;
 }
 
-struct histo_t {
-private:
-    const char *gline(const size_t line_len) {
-        basic_log("a. gline %lu", line_len);
-        static char linebuf[81];
-        memset(linebuf, 0, 81+sizeof(char));
-        if (line_len > 80) {
-            memset(linebuf, 'X', 73+sizeof(char));
-            snprintf(linebuf+73, 7, " %5lu", line_len);
-        }
-        else {
-            for (int idx = 0; idx < line_len; ++idx) {
-                if ((idx>0) && ((idx % 10) == 0)) {
-                    strcat(linebuf,"+");
-                } else {
-                    strcat(linebuf,"-");
-                }
-            }
-        }
-        return linebuf;
-    }
-public:
-    histo_t(int minv, int maxv) {
-        if (minv<maxv) {
-            m_base = minv;
-            m_top = maxv;
-        }
-        else {
-            m_base = maxv;
-            m_top = minv;
-        }
-        m_minVal = 0;
-        m_maxVal = 0;
-        m_numBelow = 0;
-        m_numAbove = 0;
-        m_count = 0;
-        m_numVals = ((m_top - m_base)+1);
-        if (m_numVals<=0) {
-            m_histo = NULL;
-        }
-        else {
-            m_histo = new size_t[m_numVals];
-            for (int i =0; i < m_numVals; ++i) {
-                m_histo[i] = 0;
-            }
-        }
-        basic_log("%s# new%s base: %d, top %d, numv %d, data 0x%p", C_MAG, C_NRM, m_base, m_top, m_numVals, (void*)m_histo);
-    }
-    ~histo_t() {
-        if (m_histo) {
-            delete[] m_histo;
-            m_histo = NULL;
-        }
-        m_numVals = m_minVal = m_maxVal = m_numBelow = m_numAbove = 0;
-        m_base = m_top = 0;
-    }
-
-    histo_t &increment(const int val, const size_t amt = 1) {
-        if (val < m_base) {
-            m_numBelow += amt;
-        } else if (val > m_top) {
-            m_numAbove += amt;
-        }
-        else {
-            m_histo[val-m_base] += amt;
-        }
-        m_count += amt;
-        return *this;
-    }
-    const char *str() const {
-        static char buf[DEFAULT_STR_BUF+1];
-        size_t len = 0;
-
-        memset(buf, 0, sizeof(char)*(DEFAULT_STR_BUF+1));
-        if (!m_histo) {
-            strncpy(buf, "NONE", DEFAULT_STR_BUF);
-        }
-        else {
-            len = snprintf(buf, DEFAULT_STR_BUF, "[b:%lu], ", m_numBelow);
-
-            for (int i = 0; i < m_numVals; i++) {
-                //basic_log("%s#%s i: %d, v: %d", C_MAG, C_NRM, i, m_base+i);
-                len += snprintf(buf+len, DEFAULT_STR_BUF-len,"[%d:%lu], ", m_base+i, m_histo[i]);
-            }
-
-            len += snprintf(buf+len, DEFAULT_STR_BUF-len, "[a:%lu] - total: %lu, range (%d -> %d)",
-                m_numAbove, m_count, m_base, m_top);
-        }
-
-        return buf;
-    }
-    operator const char *() const { return this->str(); }
-    const char *graph() {
-	    //basic_log("a. graph");
-        static char gbuf[DEFAULT_STR_BUF+1];
-        size_t len = 0;
-
-        memset(gbuf, 0, sizeof(char)*(DEFAULT_STR_BUF+1));
-        if (!m_histo) {
-    	    //basic_log("b. no graph");
-            strncpy(gbuf, "NONE", DEFAULT_STR_BUF);
-        }
-        else {
-            //basic_log("c. start graph");
-
-            len = snprintf(gbuf, DEFAULT_STR_BUF, "---------------------------------------------\n");
-            if ((m_numBelow+m_numAbove)>0) {
-                len += snprintf(gbuf+len, DEFAULT_STR_BUF-len, "Below: %s\n", gline(m_numBelow));
-                len += snprintf(gbuf+len, DEFAULT_STR_BUF-len, "---------------------------------------------\n");
-            }
-            for (int i = 0; i < m_numVals; ++i) {
-                len += snprintf(gbuf+len, DEFAULT_STR_BUF-len, "[%3d]: %s\n", i+m_base, gline(m_histo[i]));
-            }
-            if ((m_numBelow+m_numAbove)>0) {
-                len += snprintf(gbuf+len, DEFAULT_STR_BUF-len, "---------------------------------------------\n");
-                len += snprintf(gbuf+len, DEFAULT_STR_BUF-len, "Above: %s\n", gline(m_numAbove));
-            }
-            len += snprintf(gbuf+len, DEFAULT_STR_BUF-len, "---------------------------------------------\n");
-        }
-        return gbuf;
-    }
-
-    size_t m_numVals;
-    size_t *m_histo;
-
-    int m_base;
-    int m_top;
-
-    size_t m_count;
-    size_t m_minVal;
-    size_t m_maxVal;
-    size_t m_numBelow;
-    size_t m_numAbove;
-};
 
 bool rand_tests(size_t &pass_count, size_t &test_count) {
     size_t test_num = 0;
@@ -696,141 +417,33 @@ bool rand_tests(size_t &pass_count, size_t &test_count) {
     // }
 
     histo_t foo(1, 3);
-    basic_log("%s##%s Histo: %s", C_BMAG, C_NRM, (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
     foo.increment(1);
-    basic_log("%s##%s Histo: %s", C_BMAG, C_NRM, (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
     foo.increment(1);
-    basic_log("%s##%s Histo: %s", C_BMAG, C_NRM, (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
     foo.increment(3);
-    basic_log("%s##%s Histo: %s", C_BMAG, C_NRM, (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
     foo.increment(2, 5);
-    basic_log("%s##%s Histo: %s", C_BMAG, C_NRM, (const char *)foo);
-    basic_log("%s##%s", C_BMAG, C_NRM);
-    basic_log("%s##%s \n%s", C_BMAG, C_NRM, foo.graph());
+    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
+    //basic_log("%s##%s", C.BMAG(), C.NRM());
+    basic_log("%s##%s \n%s", C.BMAG(), C.NRM(), foo.graph());
 
     histo_t foo2(1, 6);
-    for (int i = 0; i < 500; ++i) {
+    for (int i = 0; i < 300; ++i) {
     	foo2.increment(rand_number(1,6));
     }
-    basic_log("%s##%s \n%s", C_BMAG, C_NRM, foo2.graph());
+    basic_log("%s##%s \n%s", C.BMAG(), C.NRM(), foo2.graph());
 
-    pct_pass = ((double)pass_count / (double)test_count) * 100.0;
-    basic_log("> %u/%u tests passed (%s%.2f%%%s)\n", pass_count, test_count,
-        (pct_pass >= 90.0 ? C_GRN : (pct_pass >= 75 ? C_YEL : (pct_pass >= 25.0 ? C_RED : C_BRED))),
-        pct_pass, C_NRM);
-
-    return pass_count == test_count;
-}
-
-
-//---------------------------------------------------------------------------
-void basic_vlog(const char *format, va_list args)
-{
-    if (format == NULL)
-    {
-        format = "SYSERR: received a NULL format.";
-    }
-
-    char timeBuf[TIME_BUF_SZ];
-    char timeFmt[TIME_BUF_SZ];
-
-#ifdef CIRCLE_WINDOWS
-    time_t ct = time(0);
-    //strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%b %d %H:%M:%S %Y", localtime(&ct));
-    strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%Y-%m-%dT%H:%M:%S", gmtime(&ct));
-#else
-    long            ms; // Milliseconds
-    time_t          s;  // Seconds
-    struct timespec spec;
-
-    /* Clear buffers */
-    memset(timeBuf, 0, sizeof(char)*TIME_BUF_SZ);
-    memset(timeFmt, 0, sizeof(char)*TIME_BUF_SZ);
-
-    /* Get the current system time using the realtime clock */
-    clock_gettime(CLOCK_REALTIME, &spec);
-
-    s  = spec.tv_sec;
-    ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
-    if (ms > 999)
-    {
-        s++;
-        ms = 0;
-    }
-
-    sprintf(timeFmt, "%%Y-%%m-%%dT%%H:%%M:%%S.%03.3ld %%Z", ms);
-    (void)strftime(timeBuf, TIME_BUF_SZ, timeFmt, gmtime(&s));
-#endif
-
-    fprintf(stderr, "[%s] ", timeBuf);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
-    
-    fflush(stderr);
-}
-
-void basic_log(const char *format, ...)
-{
-    va_list args;
-
-    va_start(args, format);
-    basic_vlog(format, args);
-    va_end(args);
-}
-
-/*
- * F(z)    = (az)%m
-**    = az-m(az/m)
-**
-** F(z)  = G(z)+mT(z)
-** G(z)  = a(z%q)- r(z/q)
-** T(z)  = (z/q) - (az/m)
-**
-** F(z)  = a(z%q)- rz/q+ m((z/q) - a(z/m))
-**      = a(z%q)- rz/q+ m(z/q) - az
-*/
-
-void circle_srandom(unsigned long initial_seed)
-{
-    seed = initial_seed;
-}
-
-unsigned long circle_random(void)
-{
-    int lo, hi, test;
-
-    hi = seed / q;
-    lo = seed % q;
-
-    test = a*lo - r*hi;
-
-    if (test > 0) {
-        seed = test;
+    if (test_count < 1) {
+        pct_pass = 0;
     }
     else {
-        seed = test + m;
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
+    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
 
-    return (seed);
-}
-
-const int rand_number(const int from, const int to)
-{
-    // error checking in case people call this incorrectly
-    if (from > to) {
-        WriteLogf("SYSERR: rand_number() should be called with lowest, then highest. (%d, %d), not (%d, %d).", from, to, to, from);
-        return rand_number(to, from);
-    }
-    else
-    {
-        // This should always be of the form: ((float)(to - from + 1) * rand() /
-        // (float)(RAND_MAX + from) + from); If you are using rand() due to historical
-        // non-randomness of the lower bits in older implementations.  We always use
-        // circle_random() though, which shouldn't have that problem. Mean and
-        // standard deviation of both are identical (within the realm of statistical
-        // identity) if the rand() implementation is non-broken.
-        return ((circle_random() % (to - from + 1)) + from);
-    }
+    return pass_count == test_count;
 }
 
 
