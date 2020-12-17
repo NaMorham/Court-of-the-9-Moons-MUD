@@ -187,6 +187,13 @@ struct char_data {
         static char buf[DEFAULT_STR_BUF*2];  // we are not multithreaded here, so this should be safe(ish)
         memset(buf, 0, sizeof(char)*(DEFAULT_STR_BUF*2));
 
+        snprintf(buf, DEFAULT_STR_BUF, "Name [%s], Class [%d], Race [%d],\n"
+            "\tStr [%d], Dex [%d] Con [%d],\n"
+            "\tInt [%d], Wis [%d], Cha [%d]",
+            name, chclass, chrace,
+            real_abils.getStr(), real_abils.getDex(), real_abils.getCon(),
+            real_abils.getIntel(), real_abils.getWis(), real_abils.getCha());
+
         return buf;
     }
 };
