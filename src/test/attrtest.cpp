@@ -16,6 +16,7 @@
 #include <math.h>
 
 #include "test_utils.h"
+#include "argparse.h"
 
 #ifdef _WIN32
 // sigh, more windows string fucker needs this
@@ -265,10 +266,10 @@ Colours_t *C = &C_def;
 
 extern eLogLevels g_logLevel;
 
-int parse_args(int argc, char *argv[]);
+int parse_args(int argc, const char *argv[]);
 
 //---------------------------------------------------------------------------
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
     int rc = parse_args(argc, argv);
     if (rc != 0)
@@ -324,19 +325,93 @@ int main(int argc, char *argv[])
 }
 
 //---------------------------------------------------------------------------
-int parse_args(int argc, char *argv[])
+static const char *const ap_usages[] = {
+    "attrtest [options]",
+    NULL,
+};
+
+int parse_args(int argc, const char *argv[])
 {
     int rc = -1;
 
-    g_logLevel = LL_DEVTRC;// LL_INFO; // default level is info
+    g_logLevel = LL_INFO; // default level is info
+    //g_logLevel = LL_DEVTRC;
     C = &C_def;  // use the terminal default colour
 
-    if (argc == 1) {
-        return 0;
-    }
+    const char *ll_str = NULL;
+    int no_colour = 0;  // parser is C so use an int for boolean stuff
 
-    for (int i = 1; i < argc; i++) {
-        dev_log("arg [%d/%d]: %s", i, argc, argv[i]);
+    struct argparse_option ap_options[] = {
+        OPT_HELP(),
+        //OPT_GROUP("Basic options"),
+        OPT_STRING('l', "loglevel", &ll_str, "Set the log level to use (fatal,error,warn,info,debug,trace,dev).", NULL, 0, 0),
+        OPT_BOOLEAN('n', "no-colour", &no_colour, "Disable colour display", NULL, 0, 0),
+        OPT_END(),
+    };
+
+    struct argparse ap;
+    argparse_init(&ap, ap_options, ap_usages, 0);
+    argparse_describe(&ap, "\nTest attribute generation and adjustment for race and class", "\n");
+    rc = argparse_parse(&ap, argc, argv);
+
+    if (rc < 0)
+    {
+        fprintf(stderr, "Usage:\n");
+        // @todo: actually do this as a function
+    }
+    else {
+        // log level
+        if (ll_str == NULL) {
+            // not passed
+        }
+        else if (strlen(ll_str) == 0) {
+            // not passed?
+            dev_log("got empty log level string.");
+        }
+        else {
+            const char *_ll_val = strrchr(ll_str, '=');
+            if (_ll_val && (*_ll_val == '=')) {
+                _ll_val++;
+            }
+            if (strlen(_ll_val) == 0) {
+                // not passed?
+                dev_log("got empty log level string.");
+            }
+            else if (_stricmp(_ll_val, "none") == 0) {
+                g_logLevel = LL_NONE;  // diable logging - not much point, but...
+            }
+            else if (_stricmp(_ll_val, "fatal") == 0) {
+                g_logLevel = LL_FATAL;
+            }
+            else if (_stricmp(_ll_val, "error") == 0) {
+                g_logLevel = LL_ERROR;
+            }
+            else if (_stricmp(_ll_val, "warn") == 0) {
+                g_logLevel = LL_WARN;
+            }
+            else if (_stricmp(_ll_val, "info") == 0) {
+                g_logLevel = LL_INFO;
+            }
+            else if (_stricmp(_ll_val, "debug") == 0) {
+                g_logLevel = LL_DEBUG;
+            }
+            else if (_stricmp(_ll_val, "trace") == 0) {
+                g_logLevel = LL_TRACE;
+            }
+            else if (_stricmp(_ll_val, "dev") == 0) {
+                g_logLevel = LL_DEVTRC;
+            }
+            else {
+                error_log("Invalid log level [%s]", _ll_val);
+                rc = -1;
+            }
+        }
+
+        // colour off
+        if (no_colour == 1) {
+            dev_log("disable colour");
+            C = &C_none;
+        }
     }
 
     return rc;

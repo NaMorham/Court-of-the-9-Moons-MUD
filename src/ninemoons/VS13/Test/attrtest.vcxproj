@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\test\argparse.c" />
     <ClCompile Include="..\..\..\test\attrtest.cpp" />
     <ClCompile Include="..\..\..\test\test_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\test\argparse.h" />
     <ClInclude Include="..\..\..\test\test_utils.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

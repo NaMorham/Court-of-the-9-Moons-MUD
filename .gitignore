@@ -70,3 +70,7 @@ src/**/Debug/*
 src/**Release/*
 *.tlog
 bak*.zip
+**/Debug/*
+**/Release/*
+**/*.vcxproj.user
+**/*.vcxproj.filters

@@ -355,7 +355,7 @@ const char *LL_Str[] = {
     "DVTRC"
 };
 
-const char *getLogLevelTest(eLogLevels ll)
+const char *getLogLevelText(eLogLevels ll)
 {
     // sanity check?  it's not like we can accidently not use the enum
     return LL_Str[ll];
@@ -374,7 +374,11 @@ void basic_vlog(eLogLevels level, const char *format, va_list args)
         level = LL_ERROR;
     }
 
-    if (level <= g_logLevel) {
+    if (g_logLevel == LL_NONE) {
+        // nothing to do
+        return;
+    }
+    else if (level <= g_logLevel) {
         char timeBuf[TIME_BUF_SZ];
 
 #ifdef CIRCLE_WINDOWS
@@ -410,7 +414,7 @@ void basic_vlog(eLogLevels level, const char *format, va_list args)
         (void)strftime(timeBuf, TIME_BUF_SZ, timeFmt, gmtime(&s));
 #endif
 
-        fprintf(stderr, "[%s] ", timeBuf);
+        fprintf(stderr, "[%s] [%s] ", timeBuf, getLogLevelText(level));
         vfprintf(stderr, format, args);
         fprintf(stderr, "\n");
 
