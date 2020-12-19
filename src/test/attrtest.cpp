@@ -65,6 +65,23 @@ const char *class_name(const sbyte chclass) {
     }
 }
 
+const char *class_abbrev(const sbyte chclass) {
+    switch (chclass) {
+    case CLASS_UNDEFINED:   return "??";
+    case CLASS_MAGIC_USER:  return "Mg";
+    case CLASS_CLERIC:      return "Cl";
+    case CLASS_THIEF:       return "Th";
+    case CLASS_WARRIOR:     return "Wa";
+    case CLASS_OTHER:       return "Ot";
+    case CLASS_UNDEAD:      return "Ud";
+    case CLASS_HUMANOID:    return "Hd";
+    case CLASS_ANIMAL:      return "An";
+    case CLASS_DRAGON:      return "Dg";
+    case CLASS_GIANT:       return "Gt";
+    default:                return "XX";
+    }
+}
+
 // does not need to be an enum, but...
 enum eClassBits {
     CLASSB_NONE = 0,
@@ -95,6 +112,28 @@ enum eRaces {
     NUM_RACES    // Must be last
 };
 
+const char *race_name(const sbyte chrace) {
+    switch (chrace) {
+    case RACE_UNKNOWN:  return "Unknown";
+    case RACE_HUMAN:    return "Human";
+    case RACE_TROLLOC:  return "Trolloc";
+    case RACE_OGIER:    return "Ogier";
+    case RACE_FADE:     return "Fade";
+    default:            return "**UNKNOWN**";
+    }
+}
+
+const char *race_abbrev(const sbyte chrace) {
+    switch (chrace) {
+    case RACE_UNKNOWN:  return "??";
+    case RACE_HUMAN:    return "Hu";
+    case RACE_TROLLOC:  return "Tr";
+    case RACE_OGIER:    return "Og";
+    case RACE_FADE:     return "Fa";
+    default:            return "XX";
+    }
+}
+
 enum eRaceBits {
     RACEB_NONE      = 0,
     RACEB_HUMAN     = (1 << RACE_HUMAN),
@@ -105,6 +144,13 @@ enum eRaceBits {
     // races that *can* be dark or light, not a must or should map
     RACEB_DARK      = (RACEB_HUMAN | RACEB_TROLLOC | RACEB_FADE),
     RACEB_LIGHT     = (RACEB_HUMAN | RACEB_OGIER)
+};
+
+ush_int classes_for_race[] = {
+    CLASSB_ANYPC,                       //<! RACE_HUMAN,
+    CLASSB_WARRIOR | CLASSB_THIEF,      //<! RACE_TROLLOC,
+    CLASSB_CLERIC | CLASSB_WARRIOR,     //<! RACE_OGIER,
+    CLASSB_MAGIC_USER | CLASSB_THIEF    //<! RACE_FADE,
 };
 
 // Sex
@@ -187,9 +233,10 @@ struct char_data {
         static char buf[DEFAULT_STR_BUF*2];  // we are not multithreaded here, so this should be safe(ish)
         memset(buf, 0, sizeof(char)*(DEFAULT_STR_BUF*2));
 
-        snprintf(buf, DEFAULT_STR_BUF, "Name [%s], Class [%d], Race [%d],\n"
+        snprintf(buf, DEFAULT_STR_BUF, "Name [%s],\n"
+            "\tClass [%d], Race [%d],\n"
             "\tStr [%d], Dex [%d] Con [%d],\n"
-            "\tInt [%d], Wis [%d], Cha [%d]",
+            "\tInt [%d], Wis [%d], Cha [%d]\n",
             name, chclass, chrace,
             real_abils.getStr(), real_abils.getDex(), real_abils.getCon(),
             real_abils.getIntel(), real_abils.getWis(), real_abils.getCha());
@@ -211,17 +258,31 @@ bool rand_tests(size_t &pass_count, size_t &test_count);
 bool roll_tests(size_t &pass_count, size_t &test_count);
 
 // messy, but idgaf
-Colours_t &C = GetColoursObj();
+Colours_t &C_def = GetColoursObj();
+Colours_t &C_none = GetColoursObj(COL_OFF);
+Colours_t &C_on = GetColoursObj(COL_ON);
+Colours_t *C = &C_def;
+
+extern eLogLevels g_logLevel;
+
+int parse_args(int argc, char *argv[]);
 
 //---------------------------------------------------------------------------
 int main(int argc, char *argv[])
 {
+    int rc = parse_args(argc, argv);
+    if (rc != 0)
+    {
+        basic_log(LL_ERROR, "Could not parse arguments.");
+        return rc;
+    }
+
     size_t pass_count,  test_count, total_count = 0, total_pass = 0;
     double total_pct_pass = 0.0;
 
     circle_srandom((unsigned long)time(0));
 
-    basic_log("%s--- Test Min/Max/Limit ---%s", C.BYEL(), C.NRM());
+    info_log("%s--- Test Min/Max/Limit ---%s", C->BYEL(), C->NRM());
 
     min_tests(pass_count, test_count);
     total_pass += pass_count;
@@ -235,11 +296,13 @@ int main(int argc, char *argv[])
     total_pass += pass_count;
     total_count += test_count;
 
-    basic_log("%s--- Test Min/Max/Limit ---%s", C.BYEL(), C.NRM());
+    info_log("%s--- Test random numbers ---%s", C->BYEL(), C->NRM());
 
     rand_tests(pass_count, test_count);
     total_pass += pass_count;
     total_count += test_count;
+
+    info_log("%s--- Test roll by class ---%s", C->BYEL(), C->NRM());
 
     roll_tests(pass_count, test_count);
     total_pass += pass_count;
@@ -251,11 +314,33 @@ int main(int argc, char *argv[])
     else {
         total_pct_pass = ((double)total_pass / (double)total_count) * 100.0;
     }
-    basic_log("===== %u/%u tests passed (%s) =====\n", total_pass, total_count, C.ColPct(total_pct_pass));
+    basic_log(LL_INFO, "===== %u/%u tests passed (%s) =====\n", total_pass, total_count, C->ColPct(total_pct_pass));
 
+    fprintf(stderr, "");
+    fprintf(stdout, "");
+    fflush(stderr);
+    fflush(stdout);
     return 0;
 }
 
+//---------------------------------------------------------------------------
+int parse_args(int argc, char *argv[])
+{
+    int rc = -1;
+
+    g_logLevel = LL_DEVTRC;// LL_INFO; // default level is info
+    C = &C_def;  // use the terminal default colour
+
+    if (argc == 1) {
+        return 0;
+    }
+
+    for (int i = 1; i < argc; i++) {
+        dev_log("arg [%d/%d]: %s", i, argc, argv[i]);
+    }
+
+    return rc;
+}
 
 //---------------------------------------------------------------------------
 struct test_minmax {
@@ -287,13 +372,13 @@ bool min_tests(size_t &pass_count, size_t &test_count) {
     };
 
     test_count = sizeof(min_tests)/sizeof(test_minmax);
-    basic_log("> Run [%lu] min val tests", test_count);
+    debug_log("> Run [%lu] min val tests", test_count);
     for (test_num = 0; test_num < test_count; ++test_num) {
         struct test_minmax &test = min_tests[test_num];
         int result = MIN(test.val1, test.val2);
-        basic_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
-            C.CYN(), test_num+1, test_count, C.NRM(), test.name, (result == test.expected ? C.PASSED_STR() : C.FAILED_STR()),
-            C.BBLK(), test.val1, C.NRM(), C.BBLK(), test.val2, C.NRM(), C.BBLK(), result, C.NRM(), C.BBLK(), test.expected, C.NRM());
+        debug_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
+            C->CYN(), test_num+1, test_count, C->NRM(), test.name, (result == test.expected ? C->PASSED_STR() : C->FAILED_STR()),
+            C->BBLK(), test.val1, C->NRM(), C->BBLK(), test.val2, C->NRM(), C->BBLK(), result, C->NRM(), C->BBLK(), test.expected, C->NRM());
         pass_count += (result == test.expected ? 1 : 0);
     }
 
@@ -303,7 +388,7 @@ bool min_tests(size_t &pass_count, size_t &test_count) {
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
+    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -330,13 +415,13 @@ bool max_tests(size_t &pass_count, size_t &test_count) {
     };
 
     test_count = sizeof(max_tests)/sizeof(test_minmax);
-    basic_log("> Run [%lu] max val tests", test_count);
+    debug_log("> Run [%lu] max val tests", test_count);
     for (test_num = 0; test_num < test_count; ++test_num) {
         struct test_minmax &test = max_tests[test_num];
         int result = MAX(test.val1, test.val2);
-        basic_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
-            C.CYN(), test_num + 1, test_count, C.NRM(), test.name, (result == test.expected ? C.PASSED_STR() : C.FAILED_STR()),
-            C.BBLK(), test.val1, C.NRM(), C.BBLK(), test.val2, C.NRM(), C.BBLK(), result, C.NRM(), C.BBLK(), test.expected, C.NRM());
+        debug_log("%s[%2u/%2u] %s %24.24s: %s - Val 1 [%s%3d%s], Val 2 [%s%3d%s], Got [%s%3d%s], Expected [%s%3d%s]",
+            C->CYN(), test_num + 1, test_count, C->NRM(), test.name, (result == test.expected ? C->PASSED_STR() : C->FAILED_STR()),
+            C->BBLK(), test.val1, C->NRM(), C->BBLK(), test.val2, C->NRM(), C->BBLK(), result, C->NRM(), C->BBLK(), test.expected, C->NRM());
         pass_count += (result == test.expected ? 1 : 0);
     }
 
@@ -346,7 +431,7 @@ bool max_tests(size_t &pass_count, size_t &test_count) {
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
+    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -399,14 +484,14 @@ bool limit_tests(size_t &pass_count, size_t &test_count) {
     };
 
     test_count = sizeof(limit_tests)/sizeof(test_limit);
-    basic_log("> Run [%lu] limit val tests", test_count);
+    debug_log("> Run [%lu] limit val tests", test_count);
     for (test_num = 0; test_num < test_count; ++test_num) {
         struct test_limit &test = limit_tests[test_num];
         int result = LIMIT(test.val, test.minv, test.maxv);
-        basic_log("%s[%2u/%2u] %s %24.24s: %s - Min [%s%3d%s], Val [%s%3d%s], Max [%s%3d%s] -> Got [%s%3d%s], Expected [%s%3d%s]",
-            C.CYN(), test_num + 1, test_count, C.NRM(), test.name, (result == test.expected ? C.PASSED_STR() : C.FAILED_STR()),
-            C.BBLK(), test.minv, C.NRM(), C.BBLK(), test.val, C.NRM(), C.BBLK(), test.maxv, C.NRM(),
-            C.BBLK(), result, C.NRM(), C.BBLK(), test.expected, C.NRM());
+        debug_log("%s[%2u/%2u] %s %24.24s: %s - Min [%s%3d%s], Val [%s%3d%s], Max [%s%3d%s] -> Got [%s%3d%s], Expected [%s%3d%s]",
+            C->CYN(), test_num + 1, test_count, C->NRM(), test.name, (result == test.expected ? C->PASSED_STR() : C->FAILED_STR()),
+            C->BBLK(), test.minv, C->NRM(), C->BBLK(), test.val, C->NRM(), C->BBLK(), test.maxv, C->NRM(),
+            C->BBLK(), result, C->NRM(), C->BBLK(), test.expected, C->NRM());
         pass_count += (result == test.expected ? 1 : 0);
     }
 
@@ -416,11 +501,10 @@ bool limit_tests(size_t &pass_count, size_t &test_count) {
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
+    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
-
 
 bool rand_tests(size_t &pass_count, size_t &test_count)
 {
@@ -436,17 +520,17 @@ bool rand_tests(size_t &pass_count, size_t &test_count)
     // }
 
     histo_t foo(1, 3);
-    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C->BMAG(), C->NRM(), (const char *)foo);
     foo.increment(1);
-    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C->BMAG(), C->NRM(), (const char *)foo);
     foo.increment(1);
-    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C->BMAG(), C->NRM(), (const char *)foo);
     foo.increment(3);
-    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
+    //basic_log("%s##%s Histo: %s", C->BMAG(), C->NRM(), (const char *)foo);
     foo.increment(2, 5);
-    //basic_log("%s##%s Histo: %s", C.BMAG(), C.NRM(), (const char *)foo);
-    //basic_log("%s##%s", C.BMAG(), C.NRM());
-    basic_log("%s##%s \n%s", C.BMAG(), C.NRM(), foo.graph());
+    //basic_log("%s##%s Histo: %s", C->BMAG(), C->NRM(), (const char *)foo);
+    //basic_log("%s##%s", C->BMAG(), C->NRM());
+    debug_log("%s##%s \n%s", C->BMAG(), C->NRM(), foo.graph());
     test_count++;
     pass_count += ((foo.m_numAbove+foo.m_numBelow) == 0 ? 1 : 0);
 
@@ -454,7 +538,7 @@ bool rand_tests(size_t &pass_count, size_t &test_count)
     for (int i = 0; i < 300; ++i) {
     	foo2.increment(rand_number(1,6));
     }
-    basic_log("%s##%s \n%s", C.BMAG(), C.NRM(), foo2.graph());
+    debug_log("%s##%s \n%s", C->BMAG(), C->NRM(), foo2.graph());
     test_count++;
     pass_count += ((foo2.m_numAbove + foo2.m_numBelow) == 0 ? 1 : 0);
 
@@ -464,11 +548,10 @@ bool rand_tests(size_t &pass_count, size_t &test_count)
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
+    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
-
 
 void roll_real_abils(struct char_data *ch)
 {
@@ -539,6 +622,33 @@ void roll_real_abils(struct char_data *ch)
     ch->aff_abils = ch->real_abils;
 }
 
+struct roll_class_race {
+    const char *prefix;
+    eRaces chrace;
+    sbyte chclass;
+}
+roll_race_class_data[] = {
+    // RACE_HUMAN - ANY CLASS
+    { "Hu_Wa", RACE_HUMAN, CLASS_WARRIOR },
+    { "Hu_Cl", RACE_HUMAN, CLASS_CLERIC },
+    { "Hu_Th", RACE_HUMAN, CLASS_THIEF },
+    { "Hu_Mg", RACE_HUMAN, CLASS_MAGIC_USER },
+
+    // RACE_TROLLOC - CLASSB_WARRIOR | CLASSB_THIEF
+    { "Tr_Wa", RACE_TROLLOC, CLASS_WARRIOR },
+    { "Tr_Th", RACE_TROLLOC, CLASS_THIEF },
+
+    // RACE_OGIER - CLASSB_CLERIC | CLASSB_WARRIOR
+    { "Og_Wa", RACE_OGIER, CLASS_WARRIOR },
+    { "Og_Cl", RACE_OGIER, CLASS_CLERIC },
+
+    // RACE_FADE - CLASSB_MAGIC_USER | CLASSB_THIEF
+    { "Fa_Th", RACE_FADE, CLASS_THIEF },
+    { "Fa_Mg", RACE_FADE, CLASS_MAGIC_USER },
+
+    { "", RACE_UNKNOWN, CLASS_UNDEFINED }  // MUST BE LAST
+};
+
 bool roll_tests(size_t &pass_count, size_t &test_count)
 {
     size_t test_num = 0;
@@ -549,13 +659,43 @@ bool roll_tests(size_t &pass_count, size_t &test_count)
     test_count = 0;
     pass_count = 0;
 
-    for (size_t num_gen = 0; num_gen < 100; num_gen++) {
-        snprintf(buf1, DEFAULT_STR_BUF, "Hu_Wa_%03d", num_gen + 1);
-        char_data ch(buf1, CLASS_WARRIOR, RACE_HUMAN);
+    debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+    size_t num_rc_combo = sizeof(roll_race_class_data) / sizeof(struct roll_class_race);
 
-        roll_real_abils(&ch);
-        basic_log(ch);
-    }
+    for (size_t rc_idx = 0; rc_idx < num_rc_combo; ++rc_idx) {
+        roll_class_race &rcData = roll_race_class_data[rc_idx];
+        if (rcData.chrace == RACE_UNKNOWN) {
+            break;
+        }
+        info_log("h_test: %sRace: %s%s%s, Class: %s%s%s",
+            C->YEL(), C->CYN(), race_name(rcData.chrace), C->YEL(), C->CYN(), class_name(rcData.chclass), C->NRM());
+
+        histo_t h_str(3, 18), h_dex(3, 18), h_con(3, 18), h_int(3, 18), h_wis(3, 18), h_cha(3, 18);
+        for (size_t num_gen = 0; num_gen < 5000; num_gen++) {
+            snprintf(buf1, DEFAULT_STR_BUF, "%s_%03d", rcData.prefix, num_gen + 1);
+            char_data ch(buf1, rcData.chclass, rcData.chrace);
+
+            roll_real_abils(&ch);
+            dev_log(ch);
+            h_str.increment(ch.real_abils.getStr());
+            h_dex.increment(ch.real_abils.getDex());
+            h_con.increment(ch.real_abils.getCon());
+            h_int.increment(ch.real_abils.getIntel());
+            h_wis.increment(ch.real_abils.getWis());
+            h_cha.increment(ch.real_abils.getCha());
+        }  // for (num_gen ...
+        info_log("h_str: %s", h_str.str());
+        info_log("h_dex: %s", h_dex.str());
+        info_log("h_con: %s", h_con.str());
+        info_log("h_int: %s", h_int.str());
+        info_log("h_wis: %s", h_wis.str());
+        info_log("h_cha: %s", h_cha.str());
+        debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+
+        test_count++;
+        pass_count += ((h_str.m_numAbove + h_str.m_numBelow + h_dex.m_numAbove + h_dex.m_numBelow + h_con.m_numAbove + h_con.m_numBelow +
+            h_int.m_numAbove + h_int.m_numBelow + h_wis.m_numAbove + h_wis.m_numBelow + h_cha.m_numAbove + h_cha.m_numBelow) == 0 ? 1 : 0);
+    }  // for (rc_idx ...
 
     if (test_count < 1) {
         pct_pass = 0;
@@ -563,7 +703,7 @@ bool roll_tests(size_t &pass_count, size_t &test_count)
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    basic_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C.ColPct(pct_pass));
+    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }

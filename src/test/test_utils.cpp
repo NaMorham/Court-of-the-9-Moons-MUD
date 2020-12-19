@@ -87,15 +87,30 @@ Colours_t &GetColoursObj(eColoursType colType /*= COL_DEFAULT*/) {
 }
 
 Colours_t::Colours_t(eColoursType colType) {
-    switch (colType) {
-    case COL_ON:
-        m_theColourVals = &g_colOn;
-        break;
-    case COL_OFF:
+    init_colour();
+
+    if (m_supportColour) {
+        switch (colType) {
+        case COL_ON:
+            // supported and explicity off
+            m_theColourVals = &g_colOn;
+            break;
+        case COL_OFF:
+            // supported but explicity off
+            m_theColourVals = &g_colOff;
+            break;
+        case COL_DEFAULT:
+            // supported, and default is on
+            m_theColourVals = &g_colOn;
+            break;
+        default:
+            warn_log("Unknown colour type [%ld]", (long)colType);
+            m_theColourVals = &g_colOff;
+        }
+    }
+    else {
+        // no supported, do not try - all off
         m_theColourVals = &g_colOff;
-        break;
-    default:
-        init_colour();
     }
 }
 
@@ -104,6 +119,7 @@ Colours_t::~Colours_t() {
 }
 
 void Colours_t::init_colour() {
+    m_supportColour = true;
 #ifdef _WIN32
     HANDLE cmd = GetStdHandle(STD_OUTPUT_HANDLE);
     unsigned long ir = 0;
@@ -111,32 +127,43 @@ void Colours_t::init_colour() {
     PPUBLIC_OBJECT_TYPE_INFORMATION info = (PPUBLIC_OBJECT_TYPE_INFORMATION)(malloc(ir));
     NtQueryObject(cmd, ObjectTypeInformation, info, ir, &ir);
 
-    printf("Running as Typename [");
-    int bullshit = 0;  // fucking M$, just use fucking strings
-    do {
-        printf("%c", info->TypeName.Buffer[bullshit++]);
-    } while (info->TypeName.Buffer[bullshit] != 0);
-    printf("]\n");
+    size_t len = 0;
+    char buf[DEFAULT_STR_BUF + 1];
+    memset(buf, 0, sizeof(char)*(DEFAULT_STR_BUF + 1));
+
+    if (g_logLevel >= LL_TRACE) {
+        len += snprintf(buf, DEFAULT_STR_BUF, "Running as Typename [");
+        int bullshit = 0;  // fucking M$, just use fucking strings
+        do {
+            len += snprintf(buf, DEFAULT_STR_BUF-len, "%c", info->TypeName.Buffer[bullshit++]);
+        } while (info->TypeName.Buffer[bullshit] != 0);
+        snprintf(buf, DEFAULT_STR_BUF - len, "]\n");
+        dev_log(buf);
+    }
 
     if (info->TypeName.Buffer[0] == 'K' && info->TypeName.Buffer[1] == 'e' && info->TypeName.Buffer[2] == 'y') {
         /*cmd*/
-        //printf("Running as cmd\n");
-        m_theColourVals = &g_colOff;
+        m_supportColour = false;
+        dev_log("Running as cmd");
+        //m_theColourVals = &g_colOff;
     }
     else if (info->TypeName.Buffer[0] == 'F' && info->TypeName.Buffer[1] == 'i' && info->TypeName.Buffer[2] == 'l' && info->TypeName.Buffer[3] == 'e') {
         /*cygwin*/
-        //printf("Running as cygwin\n");
-        m_theColourVals = &g_colOn;
+        m_supportColour = true;
+        dev_log("Running as xterm");
+        //m_theColourVals = &g_colOn;
     }
     else{
         /*dont know*/
-        //printf("Running as unknown [%s]\n", info->TypeName);
-        m_theColourVals = &g_colOff;
+        m_supportColour = false;
+        dev_log("Running as unknown");
+        //m_theColourVals = &g_colOff;
     }
     free(info);
 #else
-    //printf("Running on non windows\n");
-    m_theColourVals = &g_colOn;
+    m_supportColour = true;
+    dev_log("Running on non windows\n");
+    //m_theColourVals = &g_colOn;
 #endif
 }
 
@@ -188,8 +215,8 @@ const char *histo_t::gline(const size_t line_len) {
     static char linebuf[81];
     memset(linebuf, 0, 81 + sizeof(char));
     if (line_len > 80) {
-        memset(linebuf, 'X', 73 + sizeof(char));
-        snprintf(linebuf + 73, 7, " %5lu", line_len);
+        memset(linebuf, 'X', 74 + sizeof(char));
+        snprintf(linebuf + 74, 6, " %5lu", line_len);
     }
     else {
         for (size_t idx = 0; idx < line_len; ++idx) {
@@ -230,7 +257,7 @@ histo_t::histo_t(int minv, int maxv) {
             m_histo[i] = 0;
         }
     }
-    basic_log("%s# new%s base: %d, top %d, numv %d, data 0x%p", C.MAG(), C.NRM(), m_base, m_top, m_numVals, (void*)m_histo);
+    //basic_log("%s# new%s base: %d, top %d, numv %d, data 0x%p", C.MAG(), C.NRM(), m_base, m_top, m_numVals, (void*)m_histo);
 }
 
 histo_t::~histo_t() {
@@ -317,7 +344,26 @@ const char *histo_t::graph() {
 }
 
 //---------------------------------------------------------------------------
-void basic_vlog(const char *format, va_list args)
+const char *LL_Str[] = {
+    "NONE ",
+    "FATAL",
+    "ERROR",
+    "WARN",
+    "INFO ",
+    "DEBUG",
+    "TRACE",
+    "DVTRC"
+};
+
+const char *getLogLevelTest(eLogLevels ll)
+{
+    // sanity check?  it's not like we can accidently not use the enum
+    return LL_Str[ll];
+}
+
+eLogLevels g_logLevel = LL_INFO;  // default to info
+
+void basic_vlog(eLogLevels level, const char *format, va_list args)
 {
     const size_t TIME_BUF_SZ = 64;
     const size_t DEFAULT_STR_BUF = 1024;
@@ -325,59 +371,120 @@ void basic_vlog(const char *format, va_list args)
     if (format == NULL)
     {
         format = "SYSERR: received a NULL format.";
+        level = LL_ERROR;
     }
 
-    char timeBuf[TIME_BUF_SZ];
+    if (level <= g_logLevel) {
+        char timeBuf[TIME_BUF_SZ];
 
 #ifdef CIRCLE_WINDOWS
-    // not prepared to fuck around with the high frequency counter or any of the other MSVC bullshit to get ms value.
-    time_t ct = time(0);
-    //strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%b %d %H:%M:%S %Y", localtime(&ct));
-    strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%Y-%m-%dT%H:%M:%S %Z", gmtime(&ct));
+        // not prepared to fuck around with the high frequency counter or any of the other MSVC bullshit to get ms value.
+        time_t ct = time(0);
+        //strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%b %d %H:%M:%S %Y", localtime(&ct));
+        strftime(timeBuf, sizeof(char)*TIME_BUF_SZ, "%Y-%m-%dT%H:%M:%S", gmtime(&ct));
 #else
-    // OSX/Linux this seems ok
+        // OSX/Linux this seems ok
 
-    char timeFmt[TIME_BUF_SZ];
-    long ms; // Milliseconds
-    time_t s;  // Seconds
-    struct timespec spec;
+        char timeFmt[TIME_BUF_SZ];
+        long ms; // Milliseconds
+        time_t s;  // Seconds
+        struct timespec spec;
 
-    /* Clear buffers */
-    memset(timeBuf, 0, sizeof(char)*TIME_BUF_SZ);
-    memset(timeFmt, 0, sizeof(char)*TIME_BUF_SZ);
+        /* Clear buffers */
+        memset(timeBuf, 0, sizeof(char)*TIME_BUF_SZ);
+        memset(timeFmt, 0, sizeof(char)*TIME_BUF_SZ);
 
-    /* Get the current system time using the realtime clock */
-    clock_gettime(CLOCK_REALTIME, &spec);
+        /* Get the current system time using the realtime clock */
+        clock_gettime(CLOCK_REALTIME, &spec);
 
-    s = spec.tv_sec;
-    ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
-    if (ms > 999)
-    {
-        s++;
-        ms = 0;
-    }
+        s = spec.tv_sec;
+        ms = round(spec.tv_nsec / 1.0e6); // Convert nanoseconds to milliseconds
+        if (ms > 999)
+        {
+            s++;
+            ms = 0;
+        }
 
-    //sprintf(timeFmt, "%%Y-%%m-%%dT%%H:%%M:%%S.%03.3ld %%Z", ms);
-    strcpy(timeFmt, "%%Y-%%m-%%dT%%H:%%M:%%S %%Z");
-    (void)strftime(timeBuf, TIME_BUF_SZ, timeFmt, gmtime(&s));
+        //sprintf(timeFmt, "%%Y-%%m-%%dT%%H:%%M:%%S.%03.3ld %%Z", ms);
+        strcpy(timeFmt, "%%Y-%%m-%%dT%%H:%%M:%%S %%Z");
+        (void)strftime(timeBuf, TIME_BUF_SZ, timeFmt, gmtime(&s));
 #endif
 
-    fprintf(stderr, "[%s] ", timeBuf);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
+        fprintf(stderr, "[%s] ", timeBuf);
+        vfprintf(stderr, format, args);
+        fprintf(stderr, "\n");
 
-    fflush(stderr);
+        fflush(stderr);
+    }
 }
 
-void basic_log(const char *format, ...)
+void basic_log(eLogLevels level, const char *format, ...)
 {
     va_list args;
 
     va_start(args, format);
-    basic_vlog(format, args);
+    basic_vlog(level, format, args);
     va_end(args);
 }
 
+void fatal_log(const char *format, ...)
+{    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_FATAL, format, args);
+    va_end(args);
+}
+
+void error_log(const char *format, ...)
+{    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_ERROR, format, args);
+    va_end(args);
+}
+
+void warn_log(const char *format, ...)
+{
+    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_WARN, format, args);
+    va_end(args);
+}
+
+void info_log(const char *format, ...)
+{    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_INFO, format, args);
+    va_end(args);
+}
+
+void debug_log(const char *format, ...)
+{    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_DEBUG, format, args);
+    va_end(args);
+}
+
+void trace_log(const char *format, ...)
+{    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_TRACE, format, args);
+    va_end(args);
+}
+
+void dev_log(const char *format, ...)
+{    va_list args;
+
+    va_start(args, format);
+    basic_vlog(LL_DEVTRC, format, args);
+    va_end(args);
+}
+
+//-----------------------------------------------------------------------------
 /*
 * F(z)    = (az)%m
 **    = az-m(az/m)
@@ -418,7 +525,7 @@ const int rand_number(const int from, const int to)
 {
     // error checking in case people call this incorrectly
     if (from > to) {
-        basic_log("SYSERR: rand_number() should be called with lowest, then highest. (%d, %d), not (%d, %d).", from, to, to, from);
+        warn_log("SYSERR: rand_number() should be called with lowest, then highest. (%d, %d), not (%d, %d).", from, to, to, from);
         return rand_number(to, from);
     }
     else

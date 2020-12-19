@@ -1,9 +1,7 @@
+#ifndef __TBA__TEST_UTILS_H__
+#define __TBA__TEST_UTILS_H__
 
-void basic_log(const char *format, ...);
-void basic_vlog(const char *format, va_list args);
-
-#define WriteLogf basic_log
-
+//-----------------------------------------------------------------------------
 typedef signed char sbyte;          //!< 1 byte; vals = -127 to 127
 typedef unsigned char ubyte;        //!< 1 byte; vals = 0 to 255
 typedef signed short int sh_int;    //!< 2 bytes; vals = -32,768 to 32,767
@@ -16,6 +14,38 @@ typedef signed char byte;   //!< Technically 1 signed byte; vals should only = T
 # endif
 #endif
 
+//-----------------------------------------------------------------------------
+enum eLogLevels {
+    LL_NONE = 0,
+    LL_FATAL,
+    LL_ERROR,
+    LL_WARN,
+    LL_INFO,
+    LL_DEBUG,
+    LL_TRACE,
+    LL_DEVTRC
+};
+
+extern eLogLevels g_logLevel;
+
+extern const char *LL_Str[];
+
+const char *getLogLevelTest(eLogLevels ll);
+
+void basic_log(eLogLevels level, const char *format, ...);
+void basic_vlog(eLogLevels level, const char *format, va_list args);
+
+void fatal_log(const char *format, ...);
+void error_log(const char *format, ...);
+void warn_log(const char *format, ...);
+void info_log(const char *format, ...);
+void debug_log(const char *format, ...);
+void trace_log(const char *format, ...);
+void dev_log(const char *format, ...);
+
+#define WriteLogf basic_log
+
+//-----------------------------------------------------------------------------
 const size_t DEFAULT_STR_BUF = 1024;
 
 // @todo: template this
@@ -124,6 +154,9 @@ private:
 
     void init_colour();
     _ColourVals_t *m_theColourVals;
+    bool m_supportColour;
 };
 
 Colours_t& GetColoursObj(eColoursType colType = COL_DEFAULT);
+
+#endif // __TBA__TEST_UTILS_H__
