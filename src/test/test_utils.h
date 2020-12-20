@@ -43,7 +43,9 @@ void debug_log(const char *format, ...);
 void trace_log(const char *format, ...);
 void dev_log(const char *format, ...);
 
-#define WriteLogf basic_log
+#ifdef __NEED_WRITELOGF
+# define WriteLogf basic_log
+#endif // __NEED_WRITELOGF
 
 //-----------------------------------------------------------------------------
 const size_t DEFAULT_STR_BUF = 1024;
@@ -68,8 +70,11 @@ public:
     ~histo_t();
     histo_t &increment(const int val, const size_t amt = 1);
     const char *str() const;
+    const char *csv(char sep = ',', bool header = true, bool showOOB = true);
+    const char *csvHeader(char sep = ',', bool showOOB = true);
     operator const char *() const { return this->str(); }
-    const char *graph();
+    const char *graph(const char *lnPrefix = "");
+
     size_t m_numVals;
     size_t *m_histo;
 
@@ -83,6 +88,8 @@ public:
     size_t m_numAbove;
 
     static const size_t DEFAULT_STR_BUF;
+
+    void debug_dump();
 };
 
 //-----------------------------------------------------------------------------

@@ -1818,9 +1818,9 @@ void adjust_abils_for_race(struct char_data *ch) {
         // regardless, wis down quite a lot - they cannot resist anything
         ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() - rand_number(3, 5), 1, 12));  // if they are lucky they MIGHT reach average human
         // regardless, int down quite a bit
-        ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() - rand_number(2, 3), 3, 14));  // if they are lucky they MIGHT reach average human
+        ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() - rand_number(2, 3), 2, 14));  // if they are lucky they MIGHT reach average human
         // regardless, cha down a bit
-        ch->real_abils.setCha(LIMIT(ch->real_abils.getWis() - rand_number(2, 4), 1, 13));  // if they are lucky they MIGHT reach average human
+        ch->real_abils.setCha(LIMIT(ch->real_abils.getCha() - rand_number(2, 4), 1, 13));  // if they are lucky they MIGHT reach average human
         break;
 
     case RACE_OGIER:
@@ -1847,6 +1847,7 @@ void adjust_abils_for_race(struct char_data *ch) {
         // regardless, int up a little
         ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() + rand_number(1, 2), 12, 20));
         break;
+
     case RACE_FADE:
         // Fades are quick, dangerous and resistant to magical effects
         switch (ch->player.chclass) {

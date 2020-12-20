@@ -208,7 +208,7 @@ const char *Colours_t::ColPct(double pctVal){
 static unsigned long seed;
 
 //-----------------------------------------------------------------------------
-const size_t DEFAULT_HISTO_STR_BUF = 1024;
+const size_t DEFAULT_HISTO_STR_BUF = 2048;
 
 const char *histo_t::gline(const size_t line_len) {
     //basic_log("a. gline %lu", line_len);
@@ -313,7 +313,53 @@ const char *histo_t::str() const {
     return buf;
 }
 
-const char *histo_t::graph() {
+const char *histo_t::csv(char sep /*= ','*/, bool header /*= true*/, bool showOOB /*= true*/) {
+    static char buf[DEFAULT_HISTO_STR_BUF + 1];
+    size_t len = 0;
+
+    memset(buf, 0, sizeof(char)*(DEFAULT_HISTO_STR_BUF + 1));
+    if (m_histo && sep && m_numVals) {
+        if (showOOB) {
+            len += snprintf(buf, DEFAULT_HISTO_STR_BUF - len, "%lu%c", m_numBelow, sep);
+        }
+        for (size_t i = 0; i < m_numVals; i++) {
+            if (i) {
+                len += snprintf(buf + len, DEFAULT_HISTO_STR_BUF - len, "%c", sep);
+            }
+            len += snprintf(buf + len, DEFAULT_HISTO_STR_BUF - len, "%lu", m_histo[i]);
+        }  // for each data point ... the count
+        if (showOOB) {
+            len += snprintf(buf + len, DEFAULT_HISTO_STR_BUF - len, "%c%lu", sep, m_numAbove);
+        }
+    }  // have data and a separator
+
+    return buf;
+}
+
+const char *histo_t::csvHeader(char sep /*= ','*/, bool showOOB /*= true*/) {
+    static char buf[DEFAULT_HISTO_STR_BUF + 1];
+    size_t len = 0;
+
+    memset(buf, 0, sizeof(char)*(DEFAULT_HISTO_STR_BUF + 1));
+    if (m_histo && sep && m_numVals) {
+        if (showOOB) {
+            len += snprintf(buf, DEFAULT_HISTO_STR_BUF - len, "Below%c", sep);
+        }
+        for (size_t i = 0; i < m_numVals; i++) {
+            if (i) {
+                len += snprintf(buf + len, DEFAULT_HISTO_STR_BUF - len, "%c", sep);
+            }
+            len += snprintf(buf + len, DEFAULT_HISTO_STR_BUF - len, "%d", m_base + i);
+        }  // for each data point ... the header
+        if (showOOB) {
+            len += snprintf(buf + len, DEFAULT_HISTO_STR_BUF - len, "%cAbove", sep);
+        }
+    }  // have data and a separator
+
+    return buf;
+}
+
+const char *histo_t::graph(const char *lnPrefix /*= ""*/) {
     //basic_log("a. graph");
     static char gbuf[DEFAULT_HISTO_STR_BUF + 1];
     size_t len = 0;
@@ -321,26 +367,51 @@ const char *histo_t::graph() {
     memset(gbuf, 0, sizeof(char)*(DEFAULT_HISTO_STR_BUF + 1));
     if (!m_histo) {
         //basic_log("b. no graph");
-        strncpy(gbuf, "NONE", DEFAULT_HISTO_STR_BUF);
+        snprintf(gbuf, DEFAULT_HISTO_STR_BUF, "%sNONE", lnPrefix);
     }
     else {
         //basic_log("c. start graph");
-
-        len = snprintf(gbuf, DEFAULT_HISTO_STR_BUF, "---------------------------------------------\n");
-        if ((m_numBelow + m_numAbove)>0) {
-            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "Below: %3u: %s\n", m_numBelow, gline(m_numBelow));
-            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "---------------------------------------------\n");
+        bool hasOOB = ((m_numBelow + m_numAbove)>0);
+        //len = snprintf(gbuf, DEFAULT_HISTO_STR_BUF, "%s---------------------------------------------\n", lnPrefix);
+        if (hasOOB) {
+            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "%sBelow: %3u: %s", lnPrefix, m_numBelow, gline(m_numBelow));
+            //len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "\n%s---------------------------------------------", lnPrefix);
         }
         for (size_t i = 0; i < m_numVals; ++i) {
-            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "[%3d]: %3u: %s\n", i + m_base, m_histo[i], gline(m_histo[i]));
+            if ((i > 0) || hasOOB) {
+                len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "\n");
+            }
+            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "%s[%3d]: %3u: %s", lnPrefix, i + m_base, m_histo[i], gline(m_histo[i]));
         }
-        if ((m_numBelow + m_numAbove)>0) {
-            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "---------------------------------------------\n");
-            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "Above: %3u: %s\n", m_numAbove, gline(m_numAbove));
+        if (hasOOB) {
+            //len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "\n%s---------------------------------------------", lnPrefix);
+            len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "\n%sAbove: %3u: %s", lnPrefix, m_numAbove, gline(m_numAbove));
         }
-        len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "---------------------------------------------\n");
+        //len += snprintf(gbuf + len, DEFAULT_HISTO_STR_BUF - len, "\n%s---------------------------------------------", lnPrefix);
     }
     return gbuf;
+}
+
+void histo_t::debug_dump()
+{
+    if (g_logLevel >= LL_DEBUG) {
+        if (m_histo) {
+            debug_log("--------------------------------------");
+            debug_log("Histogram object: 0x%p", m_histo);
+            debug_log("--------------------------------------");
+            debug_log("  Base: %lu, Top: %lu", m_base, m_top);
+            debug_log("  Num buckets: %lu", m_numVals);
+            debug_log("  Num data points: %lu", m_count);
+            debug_log("  Min value: %ld", m_minVal);
+            debug_log("  Max value: %ld", m_maxVal);
+            debug_log("  Count below: %lu", m_numBelow);
+            debug_log("  Count above: %lu", m_numAbove);
+            debug_log("--------------------------------------");
+        }
+        else {
+            debug_log("No histogram object");
+        }
+    }  // is it even worth it?
 }
 
 //---------------------------------------------------------------------------

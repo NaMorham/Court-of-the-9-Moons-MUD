@@ -246,17 +246,22 @@ struct char_data {
     }
 };
 
+const char *HISTO_DEF_PREFIX = "[...................] [.....] ";
+
 #define GET_STR(ch) (ch->real_abils.getStr())
 #define GET_CON(ch) (ch->real_abils.getCon())
 #define GET_RACE(ch) (ch->chrace)
 #define GET_CLASS(ch) (ch->chclass)
+#define GET_NAME(ch) (ch->name)
 
 bool min_tests(size_t &pass_count, size_t &test_count);
 bool max_tests(size_t &pass_count, size_t &test_count);
 bool limit_tests(size_t &pass_count, size_t &test_count);
-
+bool histo_tests(size_t &pass_count, size_t &test_count);
 bool rand_tests(size_t &pass_count, size_t &test_count);
+
 bool roll_tests(size_t &pass_count, size_t &test_count);
+bool roll_adj_tests(size_t &pass_count, size_t &test_count);
 
 // messy, but idgaf
 Colours_t &C_def = GetColoursObj();
@@ -265,6 +270,17 @@ Colours_t &C_on = GetColoursObj(COL_ON);
 Colours_t *C = &C_def;
 
 extern eLogLevels g_logLevel;
+bool g_do_mintests = false;
+bool g_do_maxtests = false;
+bool g_do_limittests = false;
+bool g_do_histotests = true;
+bool g_do_randtests = false;
+bool g_do_class_roll_tests = true;
+bool g_do_race_adj_tests = true;
+
+// reports for analysis
+bool g_do_abil_histo_report = false;
+bool g_do_raceadj_histo_report = false;
 
 int parse_args(int argc, const char *argv[]);
 
@@ -283,31 +299,61 @@ int main(int argc, const char *argv[])
 
     circle_srandom((unsigned long)time(0));
 
-    info_log("%s--- Test Min/Max/Limit ---%s", C->BYEL(), C->NRM());
+    if (g_do_mintests) {
+        info_log("%s--- Test Min funcs ---%s", C->BYEL(), C->NRM());
 
-    min_tests(pass_count, test_count);
-    total_pass += pass_count;
-    total_count += test_count;
+        min_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
 
-    max_tests(pass_count, test_count);
-    total_pass += pass_count;
-    total_count += test_count;
+    if (g_do_maxtests) {
+        info_log("%s--- Test Max funcs ---%s", C->BYEL(), C->NRM());
 
-    limit_tests(pass_count, test_count);
-    total_pass += pass_count;
-    total_count += test_count;
+        max_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
 
-    info_log("%s--- Test random numbers ---%s", C->BYEL(), C->NRM());
+    if (g_do_limittests) {
+        info_log("%s--- Test Limit funcs ---%s", C->BYEL(), C->NRM());
 
-    rand_tests(pass_count, test_count);
-    total_pass += pass_count;
-    total_count += test_count;
+        limit_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
 
-    info_log("%s--- Test roll by class ---%s", C->BYEL(), C->NRM());
+    if (g_do_histotests) {
+        info_log("%s--- Test histo type ---%s", C->BYEL(), C->NRM());
 
-    roll_tests(pass_count, test_count);
-    total_pass += pass_count;
-    total_count += test_count;
+        histo_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
+
+    if (g_do_randtests) {
+        info_log("%s--- Test random numbers ---%s", C->BYEL(), C->NRM());
+
+        rand_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
+
+    if (g_do_class_roll_tests) {
+        info_log("%s--- Test roll by class ---%s", C->BYEL(), C->NRM());
+
+        roll_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
+
+    if (g_do_race_adj_tests) {
+        info_log("%s--- Test roll adjusted by race ---%s", C->BYEL(), C->NRM());
+
+        roll_adj_tests(pass_count, test_count);
+        total_pass += pass_count;
+        total_count += test_count;
+    }
 
     if (total_count < 1) {
         total_pct_pass = 0;
@@ -315,7 +361,17 @@ int main(int argc, const char *argv[])
     else {
         total_pct_pass = ((double)total_pass / (double)total_count) * 100.0;
     }
-    basic_log(LL_INFO, "===== %u/%u tests passed (%s) =====\n", total_pass, total_count, C->ColPct(total_pct_pass));
+    basic_log((total_pass == total_count && total_count >= 1 ? LL_INFO : LL_WARN),
+        "===== %u/%u tests passed (%s) =====\n", total_pass, total_count, C->ColPct(total_pct_pass));
+
+    /*
+    histo_t hv(3, 8);
+    for (size_t n = 0; n < 150; n++) {
+        hv.increment(rand_number(1, 10));
+    }
+    debug_log("%s##%s\n%s", C->BWHT(), C->NRM(), hv.str());
+    debug_log("%s##%s\n%s", C->BWHT(), C->NRM(), hv.graph(HISTO_DEF_PREFIX));
+     */
 
     fprintf(stderr, "");
     fprintf(stdout, "");
@@ -340,12 +396,32 @@ int parse_args(int argc, const char *argv[])
 
     const char *ll_str = NULL;
     int no_colour = 0;  // parser is C so use an int for boolean stuff
+    int do_min = 0;
+    int do_max = 0;
+    int do_limit = 0;
+    int do_histo = 0;
+    int do_rand = 0;
+    int skip_abil_test = 0;
+    int do_abil_data = 0;
+    int skip_adj_test = 0;
+    int do_adj_data = 0;
 
     struct argparse_option ap_options[] = {
         OPT_HELP(),
-        //OPT_GROUP("Basic options"),
-        OPT_STRING('l', "loglevel", &ll_str, "Set the log level to use (fatal,error,warn,info,debug,trace,dev).", NULL, 0, 0),
-        OPT_BOOLEAN('n', "no-colour", &no_colour, "Disable colour display", NULL, 0, 0),
+        OPT_GROUP("Basic options"),
+        OPT_STRING('v', "log-level", &ll_str, "Set the log level to use (fatal,error,warn,info,debug,trace,dev).", NULL, 0, 0),
+        OPT_BOOLEAN('c', "no-colour", &no_colour, "Disable colour display", NULL, 0, 0),
+        OPT_GROUP("Test options"),
+        OPT_BOOLEAN('i', "do-min", &do_min, "Run the min value tests", NULL, 0, 0),
+        OPT_BOOLEAN('x', "do-max", &do_max, "Run the max value tests", NULL, 0, 0),
+        OPT_BOOLEAN('l', "do-limit", &do_limit, "Run the limit value tests", NULL, 0, 0),
+        OPT_BOOLEAN(0, "do-histo", &do_histo, "Run the histo type tests", NULL, 0, 0),
+        OPT_BOOLEAN('r', "do-rand", &do_rand, "Run the rand value tests", NULL, 0, 0),
+        OPT_BOOLEAN('a', "skip-abil-test", &skip_abil_test, "Skip the roll abils class test", NULL, 0, 0),
+        OPT_BOOLEAN('j', "skip-adj-test", &skip_adj_test, "Skip the race adjusted roll abils test", NULL, 0, 0),
+        OPT_GROUP("Report options"),
+        OPT_BOOLEAN('A', "do-abil-data", &do_abil_data, "Print the roll abils data to std out", NULL, 0, 0),
+        OPT_BOOLEAN('J', "do-abil-data", &do_adj_data, "Print the race adjusted roll abils data to std out", NULL, 0, 0),
         OPT_END(),
     };
 
@@ -412,6 +488,51 @@ int parse_args(int argc, const char *argv[])
             dev_log("disable colour");
             C = &C_none;
         }
+
+        if (do_min == 1) {
+            dev_log("Perform min value tests");
+            g_do_mintests = true;
+        }
+
+        if (do_max == 1) {
+            dev_log("Perform max value tests");
+            g_do_maxtests = true;
+        }
+
+        if (do_limit == 1) {
+            dev_log("Perform limit value tests");
+            g_do_limittests = true;
+        }
+
+        if (do_histo == 1) {
+            dev_log("Perform histogram type tests");
+            g_do_histotests = true;
+        }
+
+        if (do_rand == 1) {
+            dev_log("Perform random value tests");
+            g_do_randtests = true;
+        }
+
+        if (skip_abil_test == 1) {
+            dev_log("Skip ability roll test");
+            g_do_class_roll_tests = false;
+        }
+
+        if (skip_adj_test == 1) {
+            dev_log("Skip race adjusted attribute roll test");
+            g_do_race_adj_tests = false;
+        }
+
+        if (do_abil_data == 1) {
+            dev_log("Generate the ability generation report");
+            g_do_abil_histo_report = true;
+        }
+
+        if (do_adj_data == 1) {
+            dev_log("Generate the attributes adjusted for race report");
+            g_do_raceadj_histo_report = true;
+        }
     }
 
     return rc;
@@ -463,7 +584,7 @@ bool min_tests(size_t &pass_count, size_t &test_count) {
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -506,7 +627,7 @@ bool max_tests(size_t &pass_count, size_t &test_count) {
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -576,7 +697,237 @@ bool limit_tests(size_t &pass_count, size_t &test_count) {
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+
+    return pass_count == test_count;
+}
+
+struct hist_test_data_t;
+
+typedef void(*fDoTestVals)(histo_t &h, hist_test_data_t &);
+
+void simpleTest(histo_t &h, hist_test_data_t &td);
+void simpleTest10(histo_t &h, hist_test_data_t &td);
+void simpleTestBelow(histo_t &h, hist_test_data_t &td);
+void simpleTestAbove(histo_t &h, hist_test_data_t &td);
+
+struct hist_test_data_t {
+    const char *name;
+    int base;
+    int top;
+
+    struct {
+        size_t numBuckets;
+        size_t numBelow;
+        size_t numAbove;
+        size_t numVals;
+
+        int minVal;
+        int maxVal;
+    } exp;
+
+    fDoTestVals testValsFunc;
+}
+hist_test_data[] = {
+    { "Empty test", 0, 0, { 1, 0, 0, 0, INT_MAX, INT_MIN }, NULL },
+    { "Simple empty test 1", 1, 3, { 3, 0, 0, 0, INT_MAX, INT_MIN }, NULL },
+    { "Simple empty test 2", 2, 5, { 4, 0, 0, 0, INT_MAX, INT_MIN }, NULL },
+    { "Reverse bounds test 3", 5, 2, { 4, 0, 0, 0, INT_MAX, INT_MIN }, NULL },
+    { "Simple test 1", 1, 3, { 3, 0, 0, 4, 1, 3 }, &simpleTest },
+    { "Simple test 2 (in range)", 1, 3, { 3, 0, 0, 30, 1, 3 }, &simpleTest10 },
+    { "Simple test (below range)", 1, 3, { 3, 2, 0, 5, -1, 3 }, &simpleTestBelow },
+    { "Simple test (above range)", 1, 3, { 3, 0, 2, 5, 1, 9000 }, &simpleTestAbove },
+};
+
+void simpleTest(histo_t &h, hist_test_data_t &td) {
+    h.increment(1);
+    h.increment(1);
+    h.increment(3);
+}
+
+void simpleTest10(histo_t &h, hist_test_data_t &td) {
+    for (size_t val = 0; val < h.m_numVals; ++val) {
+        for (size_t i = 0; i < 10; ++i) {
+            h.increment(val+h.m_base);
+        }
+    }
+}
+
+void simpleTestBelow(histo_t &h, hist_test_data_t &td) {
+    h.increment(1);
+    h.increment(2);
+    h.increment(3);
+
+    h.increment(0);
+    h.increment(-1);
+}
+
+void simpleTestAbove(histo_t &h, hist_test_data_t &td) {
+    h.increment(1);
+    h.increment(2);
+    h.increment(3);
+
+    h.increment(4);
+    h.increment(9000);
+}
+
+bool histo_tests(size_t &pass_count, size_t &test_count)
+{
+    size_t test_num = 0;
+    size_t num_tests = 0;
+    double pct_pass = 0.0;
+    bool pass = false;
+
+    test_count = 0;
+    pass_count = 0;
+
+    // -------------------------------------------
+    //{
+    //    pass = true;
+    //    test_count++;
+    //    debug_log("%sSimple test 1:%s 1 -> 3, empty", C->BMAG(), C->NRM());
+    //    histo_t t1(1, 3);
+    //    t1.debug_dump();
+    //    if (t1.m_histo) {
+    //        debug_log("  Has data object: %s", C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Has data object: %s", C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    if (t1.m_base == 1) {
+    //        debug_log("  Base value (%ld == %ld): %s", t1.m_base, 1, C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Base value (%ld == %ld): %s", t1.m_base, 1, C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    if (t1.m_top == 3) {
+    //        debug_log("  Top value (%ld == %ld): %s", t1.m_top, 3, C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Top value (%ld == %ld): %s", t1.m_top, 3, C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    if (t1.m_numVals == 3) {
+    //        debug_log("  Num buckets (%ld == %ld): %s", t1.m_numVals, 3, C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Num buckets (%ld == %ld): %s", t1.m_numVals, 3, C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    pass_count += (pass ? 1 : 0);
+    //    debug_log("--------------------------------------\n");
+    //}
+
+    //// -------------------------------------------
+    //{
+    //    pass = true;
+    //    test_count++;
+    //    debug_log("%sSimple test 2:%s 2 -> 5, empty", C->BMAG(), C->NRM());
+    //    histo_t t2(2, 5);
+    //    t2.debug_dump();
+    //    if (t2.m_histo) {
+    //        debug_log("  Has data object: %s", C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Has data object: %s", C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    if (t2.m_base == 2) {
+    //        debug_log("  Base value (%ld == %ld): %s", t2.m_base, 2, C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Base value (%ld == %ld): %s", t2.m_base, 2, C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    if (t2.m_top == 5) {
+    //        debug_log("  Top value (%ld == %ld): %s", t2.m_top, 5, C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Top value (%ld == %ld): %s", t2.m_top, 5, C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    if (t2.m_numVals == 4) {
+    //        debug_log("  Num buckets (%ld == %ld): %s", t2.m_numVals, 4, C->PASSED_STR());
+    //    }
+    //    else {
+    //        debug_log("  Num buckets (%ld == %ld): %s", t2.m_numVals, 4, C->FAILED_STR());
+    //        pass = false;
+    //    }
+    //    pass_count += (pass ? 1 : 0);
+    //    debug_log("--------------------------------------\n");
+    //}
+
+    // -------------------------------------------
+    num_tests = sizeof(hist_test_data) / sizeof(hist_test_data_t);
+    debug_log("%s=============== %u ===============%s", C->YEL(), num_tests, C->NRM());
+    for (test_num = 0; test_num < num_tests; test_num++) {
+        test_count++;
+        hist_test_data_t &htd = hist_test_data[test_num];
+        debug_log("%s## Histo test [%lu/%lu] -%s \"%s%s%s\" (%ld, %ld)",
+            C->BMAG(), test_num+1, num_tests, C->NRM(),
+            C->CYN(), htd.name, C->NRM(), htd.base, htd.top);
+
+        histo_t tdata(htd.base, htd.top);
+        //tdata.debug_dump();
+
+        debug_log("  Has data object: %s",
+            (tdata.m_histo ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = (tdata.m_histo != NULL);
+
+        debug_log("  Base value (%ld == %ld): %s", tdata.m_base, (htd.base < htd.top ? htd.base : htd.top),
+            ((tdata.m_base == (htd.base < htd.top ? htd.base : htd.top)) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_base == (htd.base < htd.top ? htd.base : htd.top));
+
+        debug_log("  Top value (%ld == %ld): %s", tdata.m_top, (htd.top > htd.base ? htd.top : htd.base),
+            ((tdata.m_top == (htd.top > htd.base ? htd.top : htd.base)) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_top == (htd.top > htd.base ? htd.top : htd.base));
+
+        debug_log("  Num buckets (%ld == %ld): %s", tdata.m_numVals, htd.exp.numBuckets,
+            ((tdata.m_numVals == htd.exp.numBuckets) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_numVals == htd.exp.numBuckets);
+
+        // apply the test data
+        if (htd.testValsFunc) {
+            debug_log("  %sTest data func %s = Found", C->GRN(), C->NRM());
+            htd.testValsFunc(tdata, htd);
+        } else {
+            debug_log("  %sTest data func %s = Not Found", C->YEL(), C->NRM());
+        }
+
+        debug_log("  Num above (%ld == %ld): %s", tdata.m_numAbove, htd.exp.numAbove,
+            ((tdata.m_numAbove == htd.exp.numAbove) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_numAbove == htd.exp.numAbove);
+
+        debug_log("  Num below (%ld == %ld): %s", tdata.m_numBelow, htd.exp.numBelow,
+            ((tdata.m_numBelow == htd.exp.numBelow) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_numBelow == htd.exp.numBelow);
+
+        debug_log("  Min val (%ld == %ld): %s", tdata.m_minVal, htd.exp.minVal,
+            ((tdata.m_minVal == htd.exp.minVal) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_minVal == htd.exp.minVal);
+
+        debug_log("  Max val (%ld == %ld): %s", tdata.m_maxVal, htd.exp.maxVal,
+            ((tdata.m_maxVal == htd.exp.maxVal) ? C->PASSED_STR() : C->FAILED_STR()));
+        pass = pass && (tdata.m_maxVal == htd.exp.maxVal);
+
+        tdata.debug_dump();
+        debug_log("%s data:%s %s", C->MAG(), C->NRM(), tdata.str());
+        debug_log("%sgraph:%s\n%s", C->MAG(), C->NRM(), tdata.graph(HISTO_DEF_PREFIX));
+
+        pass_count += (pass ? 1 : 0);
+        debug_log("%s--------------------------------------%s", C->YEL(), C->NRM());
+    }
+
+    // -------------------------------------------
+    if (test_count < 1) {
+        pct_pass = 0;
+    }
+    else {
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
+    }
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
@@ -623,9 +974,31 @@ bool rand_tests(size_t &pass_count, size_t &test_count)
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
+}
+
+#define C_YEL C->YEL()
+#define C_CYN C->CYN()
+#define C_NRM C->NRM()
+
+void dump_stats(struct char_data &ch)
+{
+    trace_log("%sName:%s \"%s%s%s\", "
+        "%sClass:%s \"%s%s%s\", "
+        "%sRace:%s \"%s%s%s\", "
+        "%sStr%s [%s%u%s/%s%u%s], %sDex%s [%s%u%s], %sCon%s [%s%u%s], "
+        "%sInt%s [%s%u%s], %sWis%s [%s%u%s], %sCha%s [%s%u%s]",
+        C_YEL, C_NRM, C_CYN, ch.name, C_NRM,
+        C_YEL, C_NRM, C_CYN, class_name(ch.chclass), C_NRM,
+        C_YEL, C_NRM, C_CYN, race_name(ch.chrace), C_NRM,
+        C_YEL, C_NRM, C_CYN, ch.real_abils.getStr(), C_NRM, C_CYN, ch.real_abils.getStrAdd(), C_NRM,
+        C_YEL, C_NRM, C_CYN, ch.real_abils.getDex(), C_NRM,
+        C_YEL, C_NRM, C_CYN, ch.real_abils.getCon(), C_NRM,
+        C_YEL, C_NRM, C_CYN, ch.real_abils.getIntel(), C_NRM,
+        C_YEL, C_NRM, C_CYN, ch.real_abils.getWis(), C_NRM,
+        C_YEL, C_NRM, C_CYN, ch.real_abils.getCha(), C_NRM);
 }
 
 void roll_real_abils(struct char_data *ch)
@@ -701,25 +1074,27 @@ struct roll_class_race {
     const char *prefix;
     eRaces chrace;
     sbyte chclass;
+    attr_data minvals;
+    attr_data maxvals;
 }
 roll_race_class_data[] = {
     // RACE_HUMAN - ANY CLASS
-    { "Hu_Wa", RACE_HUMAN, CLASS_WARRIOR },
-    { "Hu_Cl", RACE_HUMAN, CLASS_CLERIC },
-    { "Hu_Th", RACE_HUMAN, CLASS_THIEF },
-    { "Hu_Mg", RACE_HUMAN, CLASS_MAGIC_USER },
+    //{ "Hu_Wa", RACE_HUMAN, CLASS_WARRIOR, { 3, 3, 3, 3, 3, 3, 3 }, { 18, 18, 18, 18, 18, 18, 18 } },
+    //{ "Hu_Cl", RACE_HUMAN, CLASS_CLERIC, { 3, 3, 3, 3, 3, 3, 3 }, { 18, 18, 18, 18, 18, 18, 18 } },
+    //{ "Hu_Th", RACE_HUMAN, CLASS_THIEF, { 3, 3, 3, 3, 3, 3, 3 }, { 18, 18, 18, 18, 18, 18, 18 } },
+    //{ "Hu_Mg", RACE_HUMAN, CLASS_MAGIC_USER, { 3, 3, 3, 3, 3, 3, 3 }, { 18, 18, 18, 18, 18, 18, 18 } },
 
-    // RACE_TROLLOC - CLASSB_WARRIOR | CLASSB_THIEF
-    { "Tr_Wa", RACE_TROLLOC, CLASS_WARRIOR },
-    { "Tr_Th", RACE_TROLLOC, CLASS_THIEF },
+    //// RACE_TROLLOC - CLASSB_WARRIOR | CLASSB_THIEF
+    { "Tr_Wa", RACE_TROLLOC, CLASS_WARRIOR, { 6, 3, 6, 3, 3, 3, 3 }, { 21, 18, 21, 18, 18, 18, 18 } },
+    //{ "Tr_Th", RACE_TROLLOC, CLASS_THIEF },
 
-    // RACE_OGIER - CLASSB_CLERIC | CLASSB_WARRIOR
-    { "Og_Wa", RACE_OGIER, CLASS_WARRIOR },
-    { "Og_Cl", RACE_OGIER, CLASS_CLERIC },
+    //// RACE_OGIER - CLASSB_CLERIC | CLASSB_WARRIOR
+    //{ "Og_Wa", RACE_OGIER, CLASS_WARRIOR },
+    //{ "Og_Cl", RACE_OGIER, CLASS_CLERIC },
 
-    // RACE_FADE - CLASSB_MAGIC_USER | CLASSB_THIEF
-    { "Fa_Th", RACE_FADE, CLASS_THIEF },
-    { "Fa_Mg", RACE_FADE, CLASS_MAGIC_USER },
+    //// RACE_FADE - CLASSB_MAGIC_USER | CLASSB_THIEF
+    //{ "Fa_Th", RACE_FADE, CLASS_THIEF },
+    //{ "Fa_Mg", RACE_FADE, CLASS_MAGIC_USER },
 
     { "", RACE_UNKNOWN, CLASS_UNDEFINED }  // MUST BE LAST
 };
@@ -751,7 +1126,8 @@ bool roll_tests(size_t &pass_count, size_t &test_count)
             char_data ch(buf1, rcData.chclass, rcData.chrace);
 
             roll_real_abils(&ch);
-            dev_log(ch);
+            dump_stats(ch);
+
             h_str.increment(ch.real_abils.getStr());
             h_dex.increment(ch.real_abils.getDex());
             h_con.increment(ch.real_abils.getCon());
@@ -759,13 +1135,31 @@ bool roll_tests(size_t &pass_count, size_t &test_count)
             h_wis.increment(ch.real_abils.getWis());
             h_cha.increment(ch.real_abils.getCha());
         }  // for (num_gen ...
-        info_log("h_str: %s", h_str.str());
-        info_log("h_dex: %s", h_dex.str());
-        info_log("h_con: %s", h_con.str());
-        info_log("h_int: %s", h_int.str());
-        info_log("h_wis: %s", h_wis.str());
-        info_log("h_cha: %s", h_cha.str());
+        debug_log("%sh_str%s: %s", C->MAG(), C->NRM(), h_str.str());
+        debug_log("%sh_dex%s: %s", C->MAG(), C->NRM(), h_dex.str());
+        debug_log("%sh_con%s: %s", C->MAG(), C->NRM(), h_con.str());
+        debug_log("%sh_int%s: %s", C->MAG(), C->NRM(), h_int.str());
+        debug_log("%sh_wis%s: %s", C->MAG(), C->NRM(), h_wis.str());
+        debug_log("%sh_cha%s: %s", C->MAG(), C->NRM(), h_cha.str());
         debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+        debug_log("%sh_str%s:\n%s", C->MAG(), C->NRM(), h_str.graph(HISTO_DEF_PREFIX));
+        debug_log("%sh_dex%s:\n%s", C->MAG(), C->NRM(), h_dex.graph(HISTO_DEF_PREFIX));
+        debug_log("%sh_con%s:]n%s", C->MAG(), C->NRM(), h_con.graph(HISTO_DEF_PREFIX));
+        debug_log("%sh_int%s:\n%s", C->MAG(), C->NRM(), h_int.graph(HISTO_DEF_PREFIX));
+        debug_log("%sh_wis%s:\n%s", C->MAG(), C->NRM(), h_wis.graph(HISTO_DEF_PREFIX));
+        debug_log("%sh_cha%s:\n%s", C->MAG(), C->NRM(), h_cha.graph(HISTO_DEF_PREFIX));
+        debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+
+
+        if (g_do_abil_histo_report) {
+            printf("\n\n%s,%s\n", "Class,Race,Attribute,Total", h_str.csvHeader(',', true));
+            printf("%s,%s,%s,%lu,%s\n", "Str", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_str.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Dex", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_dex.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Con", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_con.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Int", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_int.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Wis", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_wis.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Cha", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_cha.csv(',', false, true));
+        }
 
         test_count++;
         pass_count += ((h_str.m_numAbove + h_str.m_numBelow + h_dex.m_numAbove + h_dex.m_numBelow + h_con.m_numAbove + h_con.m_numBelow +
@@ -778,7 +1172,203 @@ bool roll_tests(size_t &pass_count, size_t &test_count)
     else {
         pct_pass = ((double)pass_count / (double)test_count) * 100.0;
     }
-    info_log("> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
+
+    return pass_count == test_count;
+}
+
+void adjust_abils_for_race(struct char_data *ch) {
+    // basic version.  stat generation eeds a redo anyway
+    int irand = 0;
+
+    /*
+    CLASSB_ANYPC,                       //<! RACE_HUMAN,
+    CLASSB_WARRIOR | CLASSB_THIEF,      //<! RACE_TROLLOC,
+    CLASSB_CLERIC | CLASSB_WARRIOR,     //<! RACE_OGIER,
+    CLASSB_MAGIC_USER | CLASSB_THIEF    //<! RACE_FADE,
+    */
+    //switch (ch->player.chrace) {
+    switch (ch->chrace) {
+    case RACE_HUMAN:
+        //mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Adjust stats for human player '%s'", GET_NAME(ch));
+        dev_log("Adjust stats for human player '%s'", GET_NAME(ch));
+        // nope, humans are middle of the road
+        break;
+    case RACE_TROLLOC:
+        //mudlog(CMP, MAX(LVL_IMMORT, GET_INVIS_LEV(ch)), TRUE, "Adjust stats for trolloc player '%s'", GET_NAME(ch));
+        // trollocs are big, strong or fast and dumb
+        // allow for class choice?
+        //switch (ch->player.chclass) {
+        switch (ch->chclass) {
+        case CLASS_WARRIOR:
+            // str and con up.
+            // stronger or tougher?
+            irand = rand_number(1, 3);
+
+            // if we have a 1, clearly stronger
+            // if we have a 2 and are already stronger, enhance it
+            if ((irand == 1) || ((irand == 2) && (GET_STR(ch)>GET_CON(ch)))) {
+                // stronger
+                // str up by 2-3
+                ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(2, 3), 7, 21));
+                ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() + rand_number(1, 2), 6, 21));
+            }
+            else {  // equivalent to (irand == 3) || ((irand == 2) && (GET_CON(ch)>=GET_STR(ch)))
+                // tougher
+                ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(1, 2), 6, 21));
+                ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() + rand_number(2, 3), 7, 21));
+            }
+            break;
+        case CLASS_THIEF:
+            // dex and str up.
+            ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() + rand_number(2, 3), 8, 21));
+            ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(1, 2), 5, 20));
+            break;
+        default:
+            warn_log("SYSERR: adjust_abils_for_race: Trolloc character '%s' has invalid class [%u]", GET_NAME(ch), ch->chclass);
+        }
+        //ch->real_abils.setStrAdd(LIMIT(ch->real_abils.getStrAdd()+rand_number(2,3), 7, 21));  // todo - adjust str add
+
+        // regardless, wis down quite a lot - they cannot resist anything
+        ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() - rand_number(3, 5), 1, 12));  // if they are lucky they MIGHT reach average human
+        // regardless, int down quite a bit
+        ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() - rand_number(2, 3), 2, 14));  // if they are lucky they MIGHT reach average human
+        // regardless, cha down a bit
+        ch->real_abils.setCha(LIMIT(ch->real_abils.getCha() - rand_number(2, 4), 1, 13));  // if they are lucky they MIGHT reach average human
+        break;
+
+    case RACE_OGIER:
+        // Ogier are strong and intelligent, but not quick
+        // allow for class choice?
+        //switch (ch->player.chclass) {
+        switch (ch->chclass) {
+        case CLASS_CLERIC:
+            // wis and con up
+            ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() + rand_number(2, 4), 14, 21));
+            ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() + rand_number(1, 2), 11, 20));
+            break;
+        case CLASS_WARRIOR:
+            // wis and str up
+            ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(2, 4), 14, 21));
+            ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() + rand_number(1, 2), 11, 20));
+            break;
+        default:
+            warn_log("SYSERR: adjust_abils_for_race: Ogier character '%s' has invalid class [%u]", GET_NAME(ch), ch->chclass);
+        }
+        //ch->real_abils.setStrAdd(LIMIT(ch->real_abils.getStrAdd()+rand_number(2,3), 7, 21));  // todo - adjust str add
+
+        // regardless, dex down quite a lot
+        ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() - rand_number(2, 4), 2, 16));
+        // regardless, int up a little
+        ch->real_abils.setIntel(LIMIT(ch->real_abils.getIntel() + rand_number(1, 2), 12, 20));
+        break;
+    case RACE_FADE:
+        // Fades are quick, dangerous and resistant to magical effects
+        //switch (ch->player.chclass) {
+        switch (ch->chclass) {
+        case CLASS_WARRIOR:
+            ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() + rand_number(2, 3), 14, 21));
+            ch->real_abils.setStr(LIMIT(ch->real_abils.getStr() + rand_number(1, 3), 10, 18));
+            break;
+        case CLASS_THIEF:
+            ch->real_abils.setDex(LIMIT(ch->real_abils.getDex() + rand_number(4, 5), 17, 21));
+        default:
+            warn_log("SYSERR: adjust_abils_for_race: Fade character '%s' has invalid class [%u]", GET_NAME(ch), ch->chclass);
+        }
+        //ch->real_abils.setStrAdd(LIMIT(ch->real_abils.getStrAdd()+rand_number(2,3), 7, 21));  // todo - adjust str add
+
+        // regardless, wis up a little
+        ch->real_abils.setWis(LIMIT(ch->real_abils.getWis() + rand_number(0, 1), 12, 19));
+        // cha 3 - nothing likes a fade
+        ch->real_abils.setCha(3);  // @todo: D&D players option would make this better, fades are VERY intimidating, just not liked by anything
+        // con down a bit - fast and dangerous, but for balance, not robust
+        ch->real_abils.setCon(LIMIT(ch->real_abils.getCon() - rand_number(1, 5), 3, 13));
+        break;
+    default:
+        warn_log("SYSERR: adjust_abils_for_race: Character '%s' has invalid race [%u]", GET_NAME(ch), ch->chrace);
+        //mudlog(BRF, MAX(LVL_IMMORT, GET_INVIS_LEV(d->character)), TRUE, "Failure to AddRecentPlayer (returned FALSE).");
+    }
+}
+
+bool roll_adj_tests(size_t &pass_count, size_t &test_count)
+{
+    size_t test_num = 0;
+    double pct_pass = 0.0;
+
+    char buf1[DEFAULT_STR_BUF + 1];
+
+    test_count = 0;
+    pass_count = 0;
+
+    debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+    size_t num_rc_combo = sizeof(roll_race_class_data) / sizeof(struct roll_class_race);
+
+    for (size_t rc_idx = 0; rc_idx < num_rc_combo; ++rc_idx) {
+        roll_class_race &rcData = roll_race_class_data[rc_idx];
+        if (rcData.chrace == RACE_UNKNOWN) {
+            break;
+        }
+        info_log("h_test: %sRace: %s%s%s, Class: %s%s%s",
+            C->YEL(), C->CYN(), race_name(rcData.chrace), C->YEL(), C->CYN(), class_name(rcData.chclass), C->NRM());
+
+        histo_t h_str(rcData.minvals.getStr(), rcData.maxvals.getStr());
+        histo_t h_dex(rcData.minvals.getDex(), rcData.maxvals.getDex());
+        histo_t h_con(rcData.minvals.getCon(), rcData.maxvals.getCon());
+        histo_t h_int(rcData.minvals.getIntel(), rcData.maxvals.getIntel());
+        histo_t h_wis(rcData.minvals.getWis(), rcData.maxvals.getWis());
+        histo_t h_cha(rcData.minvals.getCha(), rcData.maxvals.getCha());
+        for (size_t num_gen = 0; num_gen < 5000; num_gen++) {
+            snprintf(buf1, DEFAULT_STR_BUF, "%s_%03d", rcData.prefix, num_gen + 1);
+            char_data ch(buf1, rcData.chclass, rcData.chrace);
+
+            roll_real_abils(&ch);
+            adjust_abils_for_race(&ch);
+            dump_stats(ch);
+
+            h_str.increment(ch.real_abils.getStr());
+            h_dex.increment(ch.real_abils.getDex());
+            h_con.increment(ch.real_abils.getCon());
+            h_int.increment(ch.real_abils.getIntel());
+            h_wis.increment(ch.real_abils.getWis());
+            h_cha.increment(ch.real_abils.getCha());
+        }  // for (num_gen ...
+        debug_log("%sh_str%s: %s", C->MAG(), C->NRM(), h_str.str());
+        debug_log("%sh_dex%s: %s", C->MAG(), C->NRM(), h_dex.str());
+        debug_log("%sh_con%s: %s", C->MAG(), C->NRM(), h_con.str());
+        debug_log("%sh_int%s: %s", C->MAG(), C->NRM(), h_int.str());
+        debug_log("%sh_wis%s: %s", C->MAG(), C->NRM(), h_wis.str());
+        debug_log("%sh_cha%s: %s", C->MAG(), C->NRM(), h_cha.str());
+        debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+        //debug_log("%sh_str%s: %s", C->MAG(), C->NRM(), h_str.graph(HISTO_DEF_PREFIX));
+        //debug_log("%sh_dex%s: %s", C->MAG(), C->NRM(), h_dex.graph(HISTO_DEF_PREFIX));
+        //debug_log("%sh_con%s: %s", C->MAG(), C->NRM(), h_con.graph(HISTO_DEF_PREFIX));
+        //debug_log("%sh_int%s: %s", C->MAG(), C->NRM(), h_int.graph(HISTO_DEF_PREFIX));
+        //debug_log("%sh_wis%s: %s", C->MAG(), C->NRM(), h_wis.graph(HISTO_DEF_PREFIX));
+        //debug_log("%sh_cha%s: %s", C->MAG(), C->NRM(), h_cha.graph(HISTO_DEF_PREFIX));
+        //debug_log("%s-------------------------------------------------------%s", C->MAG(), C->NRM());
+
+        if (g_do_raceadj_histo_report) {
+            printf("\n\n%s,%s\n", "Class,Race,Attribute,Total", h_str.csvHeader(',', true));
+            printf("%s,%s,%s,%lu,%s\n", "Str", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_str.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Dex", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_dex.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Con", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_con.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Int", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_int.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Wis", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_wis.csv(',', false, true));
+            printf("%s,%s,%s,%lu,%s\n", "Cha", class_name(rcData.chclass), race_name(rcData.chrace), h_str.m_numVals, h_cha.csv(',', false, true));
+        }
+
+        test_count++;
+        pass_count += ((h_str.m_numAbove + h_str.m_numBelow + h_dex.m_numAbove + h_dex.m_numBelow + h_con.m_numAbove + h_con.m_numBelow +
+            h_int.m_numAbove + h_int.m_numBelow + h_wis.m_numAbove + h_wis.m_numBelow + h_cha.m_numAbove + h_cha.m_numBelow) == 0 ? 1 : 0);
+    }  // for (rc_idx ...
+
+    if (test_count < 1) {
+        pct_pass = 0;
+    }
+    else {
+        pct_pass = ((double)pass_count / (double)test_count) * 100.0;
+    }
+    basic_log((pass_count == test_count ? LL_INFO : LL_WARN), "> %u/%u tests passed (%s)\n", pass_count, test_count, C->ColPct(pct_pass));
 
     return pass_count == test_count;
 }
