@@ -207,7 +207,7 @@ ACMD(do_tell)
         }
         //snprintf(buf, sizeof(buf), "../bin/webster %s %d &", word, (int)GetProcessID());
         snprintf(buf, sizeof(buf), "../bin/webster %s %d &", word, (int)getpid());
-        i = system(buf);
+        int i = system(buf);
         last_webster_teller = GET_IDNUM(ch);
         send_to_char(ch, "You look up '%s' in Merriam-Webster.\r\n", word);
 #endif // platform specific part

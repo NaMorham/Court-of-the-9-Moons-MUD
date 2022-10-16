@@ -479,7 +479,7 @@ void copyover_recover()
     i = fscanf(fp, "%ld\n", (long *)&boot_time);
 
     if (i != 1) {
-        log("SYSERR: Error reading boot time.");
+        WriteLogf("SYSERR: Error reading boot time.");
     }
 
     for (;;) {
@@ -487,9 +487,9 @@ void copyover_recover()
         if (fscanf(fp, "%d %ld %s %s %s\n", &desc, &pref, name, host, guiopt) != 5) {
             if (!feof(fp)) {
                 if (ferror(fp))
-                    log("SYSERR: error reading copyover file %s: %s", COPYOVER_FILE, strerror(errno));
+                    WriteLogf("SYSERR: error reading copyover file %s: %s", COPYOVER_FILE, strerror(errno));
                 else if (!feof(fp))
-                    log("SYSERR: could not scan line in copyover file %s.", COPYOVER_FILE);
+                    WriteLogf("SYSERR: could not scan line in copyover file %s.", COPYOVER_FILE);
                 exit(1);
             }
         }
@@ -1362,7 +1362,7 @@ static size_t proc_colors(char *txt, size_t maxlen, int parse)
     }  // for (; *s && ...
 
     // make sure txt is NULL - terminated
-    d = '\0';
+    *d = '\0';
     strncpy(txt, p, maxlen - 1);
 
     free(p);

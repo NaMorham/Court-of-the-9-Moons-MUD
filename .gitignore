@@ -70,3 +70,8 @@ src/**/Debug/*
 src/**Release/*
 *.tlog
 bak*.zip
+
+src/.accepted
+src/depend
+src/*.o
+

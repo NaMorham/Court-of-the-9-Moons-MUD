@@ -313,7 +313,8 @@ else {                                     \
         temp = temp->next;                 \
     if (temp)                              \
         temp->next = (item)->next;         \
-}
+}                                          \
+
 
 /**
  * Connect 'link' to the end of a double-linked list
@@ -347,7 +348,8 @@ do {                                        \
  * @param prev  The variable name pointing to the previous in the list.
  */
 #define UNLINK(link, first, last, next, prev)   \
-do {                                            \
+do                                              \
+{                                               \
     if (!(link)->prev)                          \
       (first) = (link)->next;                   \
     else                                        \
@@ -363,11 +365,16 @@ do {                                            \
  * @param point The pointer to be free'd.
  */
 #define DISPOSE(point)                                                    \
-do {                                                                      \
+do                                                                        \
+{                                                                         \
     if (!(point))                                                         \
+    {                                                                     \
         WriteLogf( "SYSERR: Freeing null pointer %s:%d", __FILE__, __LINE__ );  \
+    }                                                                     \
     else                                                                  \
+    {                                                                     \
         free(point);                                                      \
+    }                                                                     \
     point = NULL;                                                         \
 } while(0)
 
@@ -1055,20 +1062,12 @@ inline const bool isFade(struct char_data *ch)
 
 #if !defined(FALSE)
 // Just in case FALSE is not defined.
-#  if defined(__cplusplus)    // Anyone know a portable method?
-#    define FALSE               false
-#  else
-#    define FALSE               0
-#  endif // __cplusplus
+# define FALSE               0
 #endif
 
 #if !defined(TRUE)
 // Just in case TRUE is not defined.
-#  if defined(__cplusplus)    // Anyone know a portable method?
-#    define TRUE                true
-#  else
-#    define TRUE                1
-#  endif // __cplusplus
+# define TRUE                1
 #endif
 
 #if !defined(YES)
@@ -1258,3 +1257,4 @@ inline const bool isFade(struct char_data *ch)
 #define CONFIG_MIN_WIZLIST_LEV  config_info.autowiz.min_wizlist_lev
 
 #endif      // __TBAMUD__UTILS_H__
+

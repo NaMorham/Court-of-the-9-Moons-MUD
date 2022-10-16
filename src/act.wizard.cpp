@@ -4688,7 +4688,7 @@ ACMD(do_copyover)
 
     // Ugh, seems it is expected we are 1 step above lib - this may be dangerous!
     if (chdir("..") != 0) {
-        log("Error changing working directory: %s", strerror(errno));
+        WriteLogf("Error changing working directory: %s", strerror(errno));
         send_to_char(ch, "Error changing working directory: %s.", strerror(errno));
         exit(1);
     }
